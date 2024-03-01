@@ -1,0 +1,18 @@
+[submodule "Libs/glfw"]
+	path = Libs/glfw/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "Libs/glm"]
+	path = Libs/glm/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Libs/imgui"]
+	path = Libs/imgui/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "Libs/glfw/glfw"]
+	path = Libs/glfw/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "Libs/glm/glm"]
+	path = Libs/glm/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Libs/imgui/imgui"]
+	path = Libs/imgui/imgui
+	url = https://github.com/ocornut/imgui.git

@@ -1,0 +1,18 @@
+# Build folders
+Bin/
+Obj/
+
+# CMake files
+**.cmake
+**/CMakeLists.txt
+
+# Visual Studio files
+**/*.sln
+**/*.vcxproj
+**/*.vcxproj.user
+**/*.vcxproj.filters
+
+# IDE folders
+.vs/
+.vscode/
+.idea/
