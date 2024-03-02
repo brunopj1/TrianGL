@@ -2,7 +2,6 @@
 
 #include "Window.h"
 #include "EntityManager.h"
-#include "Exceptions/Core/GameModeAlreadySetException.h"
 
 // Forward declarations
 namespace Engine::Game
@@ -12,16 +11,25 @@ namespace Engine::Game
 
 namespace Engine::Core
 {
+    struct ApplicationConfig
+    {
+        // ReSharper disable CppInconsistentNaming
+
+        std::string Title = "TrianGL";
+        glm::uvec2 Resolution = {1600, 900};
+        bool Vsync = true;
+
+        // ReSharper restore CppInconsistentNaming
+    };
+
     class Application final
     {
     private:
-        // TODO pass the window parameters as arguments
-        Window m_Window{"TrianGL", 1600, 900, true};
-
+        Window m_Window;
         EntityManager m_EntityManager;
 
     public:
-        Application();
+        Application(const ApplicationConfig& config = {});
         ~Application();
 
     public:
@@ -30,9 +38,9 @@ namespace Engine::Core
     private:
         void Init();
         void Loop();
-        void Update();
-        void Render();
-        void Terminate();
+        void Update() const;
+        void Render() const;
+        void Terminate() const;
 
     public:
         template <typename T>

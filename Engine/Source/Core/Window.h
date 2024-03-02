@@ -4,15 +4,20 @@
 #include <glm/vec2.hpp>
 
 // Forward declarations
+// ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
 
 namespace Engine::Core
 {
     struct WindowData
     {
-        const char* m_Title;
-        glm::uvec2 m_Resolution;
-        bool m_Vsync;
+        // ReSharper disable CppInconsistentNaming
+
+        std::string Title;
+        glm::uvec2 Resolution;
+        bool Vsync;
+
+        // ReSharper restore CppInconsistentNaming
     };
 
     class Window
@@ -25,30 +30,30 @@ namespace Engine::Core
         WindowData m_Data;
 
     private:
-        Window(const char* title, unsigned int width, unsigned int height, bool vsync);
+        Window(std::string title, glm::uvec2 resolution, bool vsync);
         ~Window() = default;
 
     private:
         void Init();
-        void Terminate();
+        void Terminate() const;
 
-        void UpdateBuffers();
+        void UpdateBuffers() const;
         void PollEvents();
 
-        bool ShouldClose();
+        bool ShouldClose() const;
 
     public:
         std::string GetTitle();
-        void SetTitle(const char* title);
+        void SetTitle(std::string title);
 
-        bool IsVsync();
+        bool IsVsync() const;
         void SetVsync(bool vsync);
 
-        void SetResolution(glm::uvec2 resolution);
-        glm::uvec2 GetResolution();
+        void SetResolution(glm::uvec2 resolution) const;
+        glm::uvec2 GetResolution() const;
 
     private:
-        GLFWwindow* GetGlfwWindow();
+        GLFWwindow* GetGlfwWindow() const;
         WindowData* GetDataPointer();
     };
 }

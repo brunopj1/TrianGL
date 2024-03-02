@@ -1,9 +1,10 @@
 #include "Application.h"
 
+#include <glad/glad.h>
+
 #include "Game/Entity.h"
 #include "Game/GameMode.h"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "Exceptions/Core/GameModeMissingException.h"
 
 #ifdef DEBUG
 #include <imgui.h>
@@ -14,7 +15,8 @@
 
 using namespace Engine::Core;
 
-Application::Application()
+Application::Application(const ApplicationConfig& config)
+    : m_Window(config.Title, config.Resolution, config.Vsync)
 {
     Init();
 }
@@ -28,8 +30,12 @@ Application::~Application()
 
 void Application::Run()
 {
-    m_EntityManager.
-        m_GameMode->OnStart();
+    if (!m_EntityManager.m_GameMode)
+    {
+        throw Exceptions::Core::GameModeMissingException();
+    }
+
+    m_EntityManager.m_GameMode->OnStart();
 
     Loop();
 }
@@ -61,7 +67,7 @@ void Application::Loop()
     }
 }
 
-void Application::Update()
+void Application::Update() const
 {
     m_EntityManager.m_GameMode->OnEarlyUpdate();
 
@@ -73,7 +79,7 @@ void Application::Update()
     m_EntityManager.m_GameMode->OnLateUpdate();
 }
 
-void Application::Render()
+void Application::Render() const
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.31f, 0.37f, 0.56f, 1.0f);
@@ -92,7 +98,7 @@ void Application::Render()
     m_Window.UpdateBuffers();
 }
 
-void Application::Terminate()
+void Application::Terminate() const
 {
     // ImGui
 #ifdef DEBUG

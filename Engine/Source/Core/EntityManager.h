@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Exceptions/Core/GameModeAlreadySetException.h"
+#include "../Exceptions/Core/GameModeAlreadySpecifiedException.h"
 #include <vector>
 
 namespace Engine::Game
@@ -34,7 +34,7 @@ namespace Engine::Core
         void Terminate();
 
     public:
-        Game::GameMode* GetGameMode();
+        Game::GameMode* GetGameMode() const;
 
         // Instantiation methods
     private:
@@ -44,7 +44,7 @@ namespace Engine::Core
             static_assert(std::is_base_of_v<Game::GameMode, T>, "The specified class does not derive Engine::Game::Entity");
             static_assert(std::is_default_constructible_v<T>, "The specified class does not implement a default constructor");
 
-            if (m_GameMode) throw Exceptions::Core::GameModeAlreadySetException();
+            if (m_GameMode) throw Exceptions::Core::GameModeAlreadySpecifiedException();
 
             T* instance = new T();
             m_GameMode = instance;

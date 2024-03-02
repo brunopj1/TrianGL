@@ -39,7 +39,7 @@ void EntityManager::Terminate()
     m_Entities.clear();
 }
 
-Engine::Game::GameMode* EntityManager::GetGameMode()
+Engine::Game::GameMode* EntityManager::GetGameMode() const
 {
     return m_GameMode;
 }

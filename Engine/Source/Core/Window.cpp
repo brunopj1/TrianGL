@@ -1,20 +1,29 @@
-#include "window.h"
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Window.h"
 
+#define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #include "glad/glad.h"
+
+#define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
-#include "Util/DebugFeatures.hpp"
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Exceptions/Core/OpenGlException.h"
+#include <iostream>
 
 using namespace Engine::Core;
 using namespace Engine::Exceptions::Core;
 
-Window::Window(const char* title, unsigned int width, unsigned int height, bool vsync = true)
-    : m_Data({title, {width, height}, vsync})
+Window::Window(std::string title, const glm::uvec2 resolution, const bool vsync = true)
+    : m_Data({std::move(title), resolution, vsync})
 {}
 
 void Window::Init()
 {
+    glfwSetErrorCallback([](const int error, const char* description)
+    {
+        throw OpenGlException(error, description);
+    });
+
     if (!glfwInit())
     {
         throw FailedToInitializeEngineException("Failed to init GLFW");
@@ -24,9 +33,7 @@ void Window::Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
-
-    m_WindowPtr = glfwCreateWindow(m_Data.m_Resolution.x, m_Data.m_Resolution.y, m_Data.m_Title, nullptr, nullptr);
+    m_WindowPtr = glfwCreateWindow(m_Data.Resolution.x, m_Data.Resolution.y, m_Data.Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 
     if (m_WindowPtr == nullptr)
     {
@@ -35,13 +42,13 @@ void Window::Init()
 
     glfwSetWindowUserPointer(m_WindowPtr, &m_Data);
 
-    glfwSetWindowSizeLimits(m_WindowPtr, 800, 450, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    glfwSetWindowSizeLimits(m_WindowPtr, 400, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwSetWindowPos(m_WindowPtr, 50, 50);
 
     glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* window, int width, int height)
     {
         WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-        data->m_Resolution = {width, height};
+        data->Resolution = {width, height};
         glViewport(0, 0, width, height);
     });
 
@@ -52,65 +59,71 @@ void Window::Init()
         throw FailedToInitializeEngineException("Failed to init GLAD");
     }
 
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
+    SetVsync(m_Data.Vsync);
 
-    SetVsync(m_Data.m_Vsync);
+#ifdef DEBUG
+    std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
+#endif
 }
 
-void Window::Terminate()
+void Window::Terminate() const
 {
     glfwDestroyWindow(m_WindowPtr);
     glfwTerminate();
 }
 
-void Window::UpdateBuffers()
+void Window::UpdateBuffers() const
 {
     glfwSwapBuffers(m_WindowPtr);
 }
+
+// ReSharper disable once CppMemberFunctionMayBeStatic
 
 void Window::PollEvents()
 {
     glfwPollEvents();
 }
 
-bool Window::ShouldClose()
+bool Window::ShouldClose() const
 {
     return glfwWindowShouldClose(m_WindowPtr);
 }
 
 std::string Window::GetTitle()
 {
-    return m_Data.m_Title;
+    return m_Data.Title;
 }
 
 
-void Window::SetTitle(const char* title)
+void Window::SetTitle(std::string title)
 {
-    glfwSetWindowTitle(m_WindowPtr, title);
+    m_Data.Title = std::move(title);
+    glfwSetWindowTitle(m_WindowPtr, m_Data.Title.c_str());
 }
 
-bool Window::IsVsync()
+bool Window::IsVsync() const
 {
-    return m_Data.m_Vsync;
+    return m_Data.Vsync;
 }
 
-void Window::SetVsync(bool vsync)
+void Window::SetVsync(const bool vsync)
 {
-    m_Data.m_Vsync = vsync;
+    m_Data.Vsync = vsync;
     glfwSwapInterval(vsync);
 }
 
-void Window::SetResolution(glm::uvec2 resolution)
+void Window::SetResolution(const glm::uvec2 resolution) const
 {
-    glfwSetWindowSize(m_WindowPtr, resolution.x, resolution.y);
+    glfwSetWindowSize(m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 }
 
-glm::uvec2 Window::GetResolution()
+glm::uvec2 Window::GetResolution() const
 {
-    return m_Data.m_Resolution;
+    return m_Data.Resolution;
 }
 
-GLFWwindow* Window::GetGlfwWindow()
+GLFWwindow* Window::GetGlfwWindow() const
 {
     return m_WindowPtr;
 }
