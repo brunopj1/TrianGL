@@ -1,10 +1,10 @@
 project "GLFW"
 	kind "StaticLib"
 	language "C"
+		
+	targetdir ("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
+	objdir    ("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
 
-    targetdir ("../../Bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}")
-    objdir    ("../../Obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}")
-	
 	includedirs { "glfw/include/" }
 
 	files {
@@ -32,9 +32,6 @@ project "GLFW"
     
 	filter "system:linux"
 		pic "On"
-		systemversion "latest"
-		staticruntime "On"
-
 		files {
 	        "glfw/src/x11_init.c",
 	        "glfw/src/x11_monitor.c",
@@ -47,15 +44,11 @@ project "GLFW"
 	        "glfw/src/osmesa_context.c",
 	        "glfw/src/linux_joystick.c"
 	    }
-
 	    defines {
 	        "_GLFW_X11"
 	    }
 
 	filter "system:windows"
-		systemversion "latest"
-		staticruntime "On"
-
 		files {
 	        "glfw/src/win32_init.c",
 	        "glfw/src/win32_module.c",
@@ -70,16 +63,7 @@ project "GLFW"
 	        "glfw/src/egl_context.c",
 	        "glfw/src/osmesa_context.c"
 	    }
-
 	    defines { 
 	        "_GLFW_WIN32",
 	        "_CRT_SECURE_NO_WARNINGS"
 	    }
-
-	filter "configurations:Debug*"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release*"
-		runtime "Release"
-		optimize "on"

@@ -1,11 +1,18 @@
 # Task list
 
-### Project setup
+## Entity system
+
+- [X] Add a GameMode class
+- [X] Add an Entity class
+- [ ] Add a Component class
+- [ ] Add a Scene class
+- [X] Add Instancing methods and automatic update / render
+
+## Project setup
 
 - [X] Add all the dependencies (if needed)
 - [X] Set the engine as a static lib and change the startup project
-- [ ] Remove unecessary filters from the lib premake files
-- [ ] Fixed 32 bit version not working
-- [ ] Set the Application as an abtract class with virtual methods for the callbacks
-- [ ] Only include ImGui in DEBUG config (use macros)
-- [ ] Use interfaces instead of friend classes
+- [X] Remove unnecessary filters from the lib premake files
+- [X] Fixed 32 bit version not working
+- [X] Only include ImGui in DEBUG config (use macros)
+- [ ] Set the Application as an abstract class with virtual methods for the callbacks

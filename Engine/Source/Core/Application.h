@@ -1,24 +1,44 @@
 #pragma once
 
-#include "Core/Window.h"
+#include "Window.h"
+#include "EntityManager.h"
+#include "Exceptions/Core/GameModeAlreadySetException.h"
+
+// Forward declarations
+namespace Engine::Game
+{
+    class GameMode;
+}
 
 namespace Engine::Core
 {
-	class Application
-	{
-	private:
-		Window m_Window{"TrianGL", 1600, 900, false};
+    class Application final
+    {
+    private:
+        // TODO pass the window parameters as arguments
+        Window m_Window{"TrianGL", 1600, 900, true};
 
-	public:
-		Application() = default;
-		~Application() = default;
+        EntityManager m_EntityManager;
 
-	public:
-		void Run();
+    public:
+        Application();
+        ~Application();
 
-	private:
-		bool Init();
-		void Loop();
-		void Terminate();
-	};
+    public:
+        void Run();
+
+    private:
+        void Init();
+        void Loop();
+        void Update();
+        void Render();
+        void Terminate();
+
+    public:
+        template <typename T>
+        void SetGameMode()
+        {
+            m_EntityManager.InstantiateGameMode<T>();
+        }
+    };
 }

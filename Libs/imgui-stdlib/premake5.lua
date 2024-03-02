@@ -2,9 +2,9 @@ project "ImGui-Stdlib"
 	kind "StaticLib"
 	language "C++"
 
-    targetdir ("../../Bin/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}")
-    objdir    ("../../Obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}/%{prj.name}")
-    
+	targetdir ("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
+	objdir    ("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
+
     includedirs { "../imgui/imgui/" }
 
 	files { 
@@ -15,11 +15,3 @@ project "ImGui-Stdlib"
 	links {
         "ImGui"
     }
-
-	filter "configurations:Debug*"
-		runtime "Debug"
-		symbols "on"
-
-	filter "configurations:Release*"
-		runtime "Release"
-		optimize "on"

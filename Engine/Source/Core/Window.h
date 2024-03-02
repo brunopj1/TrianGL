@@ -1,48 +1,54 @@
 #pragma once
 
+#include <string>
 #include <glm/vec2.hpp>
 
-// Forward Declarations
+// Forward declarations
 struct GLFWwindow;
 
 namespace Engine::Core
 {
-	struct WindowData
-	{
-		const char* m_Title;
-		glm::uvec2 m_Resolution;
-		bool m_Vsync;
-	};
+    struct WindowData
+    {
+        const char* m_Title;
+        glm::uvec2 m_Resolution;
+        bool m_Vsync;
+    };
 
-	class Window
-	{
-	private:
-		friend class Application;
-		
-	private:
-		GLFWwindow* m_WindowPtr = nullptr;
-		WindowData m_Data;
+    class Window
+    {
+    private:
+        friend class Application;
 
-	public:
-		Window(const char* title, unsigned int width, unsigned int height, bool vsync);
-		~Window() = default;
+    private:
+        GLFWwindow* m_WindowPtr = nullptr;
+        WindowData m_Data;
 
-	private:
-		bool Init();
-		void Update();
-		void Terminate();
+    private:
+        Window(const char* title, unsigned int width, unsigned int height, bool vsync);
+        ~Window() = default;
 
-	public:
-		bool ShouldClose();
+    private:
+        void Init();
+        void Terminate();
 
-		bool IsVsync();
-		void SetVsync(bool vsync);
+        void UpdateBuffers();
+        void PollEvents();
 
-		void SetResolution(glm::uvec2 resolution);
-		glm::uvec2 GetResolution();
+        bool ShouldClose();
 
-	private:
-		GLFWwindow* GetGlfwWindow();
-		WindowData* GetDataPointer();
-	};
+    public:
+        std::string GetTitle();
+        void SetTitle(const char* title);
+
+        bool IsVsync();
+        void SetVsync(bool vsync);
+
+        void SetResolution(glm::uvec2 resolution);
+        glm::uvec2 GetResolution();
+
+    private:
+        GLFWwindow* GetGlfwWindow();
+        WindowData* GetDataPointer();
+    };
 }

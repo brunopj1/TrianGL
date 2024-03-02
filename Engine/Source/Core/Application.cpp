@@ -1,70 +1,107 @@
 #include "Application.h"
 
+#include "Game/Entity.h"
+#include "Game/GameMode.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#ifdef DEBUG
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_internal.h>
+#endif
 
 using namespace Engine::Core;
 
-void Application::Run()
+Application::Application()
 {
-	if (Init())
-	{
-		Loop();
-		Terminate();
-	}
+    Init();
 }
 
-bool Application::Init()
+Application::~Application()
 {
-	// GLFW
-	m_Window.Init();
-	m_Window.SetVsync(true);
+    m_EntityManager.Terminate();
 
-	// ImGui
-	IMGUI_CHECKVERSION();
-	ImGuiContext* context = ImGui::CreateContext();
-	ImGui::SetCurrentContext(context);
-	ImGui::GetIO().IniFilename = nullptr;
+    Terminate();
+}
 
-	ImGui::StyleColorsDark();
+void Application::Run()
+{
+    m_EntityManager.
+        m_GameMode->OnStart();
 
-	ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true);
-	ImGui_ImplOpenGL3_Init("#version 130");
+    Loop();
+}
 
-	return true;
+void Application::Init()
+{
+    m_Window.Init();
+
+#ifdef DEBUG
+    IMGUI_CHECKVERSION();
+    ImGuiContext* context = ImGui::CreateContext();
+    ImGui::SetCurrentContext(context);
+    ImGui::GetIO().IniFilename = nullptr;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+#endif
 }
 
 void Application::Loop()
 {
-	while (!m_Window.ShouldClose())
-	{
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.31f, 0.37f, 0.56f, 1.0f);
+    while (!m_Window.ShouldClose())
+    {
+        Update();
+        Render();
+        m_Window.PollEvents();
+    }
+}
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+void Application::Update()
+{
+    m_EntityManager.m_GameMode->OnEarlyUpdate();
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    for (Game::Entity* entity : m_EntityManager.m_Entities)
+    {
+        entity->OnUpdate();
+    }
 
-		m_Window.Update();
-	}
+    m_EntityManager.m_GameMode->OnLateUpdate();
+}
+
+void Application::Render()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.31f, 0.37f, 0.56f, 1.0f);
+
+#ifdef DEBUG
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+#endif
+
+#ifdef DEBUG
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+#endif
+
+    m_Window.UpdateBuffers();
 }
 
 void Application::Terminate()
 {
-	// ImGui
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::Shutdown();
-	ImGui::DestroyContext();
+    // ImGui
+#ifdef DEBUG
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::Shutdown();
+    ImGui::DestroyContext();
+#endif
 
-	// GLFW
-	m_Window.Terminate();
+    // GLFW
+    m_Window.Terminate();
 }

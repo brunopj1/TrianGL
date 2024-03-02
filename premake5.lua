@@ -1,15 +1,17 @@
 workspace "TrianGL"
     startproject "Snake"
+    
+    cppdialect "C++17"
 
     configurations { "Debug", "Release"}
     platforms { "Win32", "Win64" }
 
-    filter "configurations:Debug*"
+    filter "configurations:Debug"
         runtime "Debug"
         symbols "On"
         defines { "DEBUG", "DEBUG_SHADER" }
 
-    filter "configurations:Release*"
+    filter "configurations:Release"
         runtime "Release"
         optimize "Speed"
         defines { "RELEASE" }
@@ -23,9 +25,10 @@ workspace "TrianGL"
         system "Windows"
         architecture "x86_64"
 
-    flags { "MultiProcessorCompile" }
+    systemversion "latest"
+	staticruntime "On"
     
-    cppdialect "C++17"
+    flags { "MultiProcessorCompile" }
 
 include "Engine/premake5.lua"
 

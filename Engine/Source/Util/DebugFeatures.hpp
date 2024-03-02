@@ -18,20 +18,3 @@
 #else
 #define DEBUG_MEMORY_LEAKS() ;
 #endif
-
-// GL Errors
-#ifdef DEBUG
-#define GL(x)                                                                                                  \
-    x;                                                                                                         \
-    {                                                                                                          \
-        int glError = glGetError();                                                                            \
-        if (glError != GL_NO_ERROR)                                                                            \
-        {                                                                                                      \
-			std::cerr << "OpenGL Error: " << glError << " near '" << __FILE__ << ":" << __LINE__ << std::endl; \
-            exit(glError);                                                                                     \
-        }                                                                                                      \
-    }																										   \
-	(void) 0
-#else
-#define GL(x) x
-#endif
