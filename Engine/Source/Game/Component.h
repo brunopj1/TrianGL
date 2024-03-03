@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "IUpdatable.h"
-#include <vector>
 
-// Forward declarations
+#include "IUpdatable.h"
+
 namespace Engine::Core
 {
     class EntityManager;
@@ -11,18 +10,21 @@ namespace Engine::Core
 namespace Engine::Game
 {
     // Forward declarations
-    class Component;
+    class Entity;
 
-    class Entity : public IUpdatable
+    class Component : public IUpdatable
     {
     private:
         friend class Core::EntityManager;
 
     private:
-        std::vector<Component*> m_Components;
+        Entity* m_Parent = nullptr;
 
     protected:
-        Entity(bool shouldUpdate);
-        ~Entity() override = default;
+        Component(bool shouldUpdate);
+        ~Component() override = default;
+
+    public:
+        Entity* GetParent() const;
     };
 }

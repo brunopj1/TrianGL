@@ -1,5 +1,5 @@
 #include "Core/Application.h"
-#include <SnakeGameMode.h>
+#include <GameMode/SnakeGameMode.h>
 #include "Util/DebugFeatures.hpp"
 
 int main()

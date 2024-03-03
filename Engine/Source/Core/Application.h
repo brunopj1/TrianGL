@@ -37,8 +37,7 @@ namespace Engine::Core
 
     private:
         void Init();
-        void Loop();
-        void Update() const;
+        void Update();
         void Render() const;
         void Terminate() const;
 
@@ -46,7 +45,7 @@ namespace Engine::Core
         template <typename T>
         void SetGameMode()
         {
-            m_EntityManager.InstantiateGameMode<T>();
+            m_EntityManager.CreateGameMode<T>();
         }
     };
 }

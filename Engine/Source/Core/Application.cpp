@@ -23,8 +23,6 @@ Application::Application(const ApplicationConfig& config)
 
 Application::~Application()
 {
-    m_EntityManager.Terminate();
-
     Terminate();
 }
 
@@ -37,7 +35,10 @@ void Application::Run()
 
     m_EntityManager.m_GameMode->OnStart();
 
-    Loop();
+    while (!m_Window.ShouldClose())
+    {
+        Update();
+    }
 }
 
 void Application::Init()
@@ -57,26 +58,13 @@ void Application::Init()
 #endif
 }
 
-void Application::Loop()
+void Application::Update()
 {
-    while (!m_Window.ShouldClose())
-    {
-        Update();
-        Render();
-        m_Window.PollEvents();
-    }
-}
+    m_EntityManager.Update();
 
-void Application::Update() const
-{
-    m_EntityManager.m_GameMode->OnEarlyUpdate();
+    Render();
 
-    for (Game::Entity* entity : m_EntityManager.m_Entities)
-    {
-        entity->OnUpdate();
-    }
-
-    m_EntityManager.m_GameMode->OnLateUpdate();
+    m_Window.PollEvents();
 }
 
 void Application::Render() const
@@ -89,6 +77,8 @@ void Application::Render() const
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 #endif
+
+    m_EntityManager.Render();
 
 #ifdef DEBUG
     ImGui::Render();

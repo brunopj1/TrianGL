@@ -2,6 +2,7 @@
 
 using namespace Engine::Game;
 
-void Entity::OnStart() {}
+Entity::Entity(const bool shouldUpdate)
+    : IUpdatable(shouldUpdate)
 
-void Entity::OnUpdate() {}
+{}

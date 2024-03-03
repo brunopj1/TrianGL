@@ -1,12 +1,16 @@
 ﻿#pragma once
 
 #include "../Exceptions/Core/GameModeAlreadySpecifiedException.h"
+#include "Game/Entity.h"
 #include <vector>
+#include <unordered_set>
 
 namespace Engine::Game
 {
     class GameMode;
+    class IUpdatable;
     class Entity;
+    class Component;
 }
 
 namespace Engine::Core
@@ -21,7 +25,12 @@ namespace Engine::Core
 
     private:
         Game::GameMode* m_GameMode = nullptr;
-        std::vector<Game::Entity*> m_Entities;
+
+        std::unordered_set<Game::Entity*> m_Entities;
+        std::unordered_set<Game::Component*> m_Components;
+
+        std::vector<Game::IUpdatable*> m_OnUpdateQueue;
+        std::vector<Game::IUpdatable*> m_OnStartQueue;
 
     private:
         EntityManager();
@@ -31,15 +40,19 @@ namespace Engine::Core
         static EntityManager* GetInstance();
 
     private:
-        void Terminate();
+        void Update();
+        void Render() const;
+
+    private:
+        static void AddToQueue(Game::IUpdatable* updatable, std::vector<Game::IUpdatable*>& queue);
 
     public:
         Game::GameMode* GetGameMode() const;
 
-        // Instantiation methods
+        // Instantiation methods (GameMode)
     private:
         template <typename T>
-        T* InstantiateGameMode()
+        T* CreateGameMode()
         {
             static_assert(std::is_base_of_v<Game::GameMode, T>, "The specified class does not derive Engine::Game::Entity");
             static_assert(std::is_default_constructible_v<T>, "The specified class does not implement a default constructor");
@@ -53,18 +66,46 @@ namespace Engine::Core
 
         void DestroyGameMode();
 
+        // Instantiation methods (Entity)
     public:
         template <typename T>
-        T* InstantiateEntity()
+        T* CreateEntity()
         {
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
             static_assert(std::is_default_constructible_v<T>, "The specified class does not implement a default constructor");
 
             T* instance = new T();
-            m_Entities.push_back(instance);
+
+            m_Entities.insert(instance);
+
+            AddToQueue(instance, m_OnStartQueue);
+            AddToQueue(instance, m_OnUpdateQueue);
+
             return instance;
         }
 
-        void DestroyEntity(const Game::Entity* entity);
+        void DestroyEntity(Game::Entity* entity);
+
+        // Instantiation methods (Component)
+        template <typename T>
+        T* AttachComponent(Game::Entity* parent)
+        {
+            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
+            static_assert(std::is_default_constructible_v<T>, "The specified class does not implement a default constructor");
+
+            T* instance = new T();
+
+            m_Components.insert(instance);
+
+            AddToQueue(instance, m_OnStartQueue);
+            AddToQueue(instance, m_OnUpdateQueue);
+
+            parent->m_Components.push_back(instance);
+            instance->m_Parent = parent;
+
+            return instance;
+        }
+
+        void DetachComponent(Game::Component* component);
     };
 }

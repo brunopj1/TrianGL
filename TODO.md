@@ -10,9 +10,10 @@
 
 - [X] Add a GameMode class
 - [X] Add an Entity class
-- [ ] Add a Component class
+- [X] Add a Component class
 - [ ] Add a Scene class
 - [X] Add Instancing methods and automatic update / render
+- [ ] Add lookup / find methods for the entities and components
 
 ## Project setup
 
