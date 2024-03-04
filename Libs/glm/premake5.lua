@@ -8,6 +8,7 @@ project "GLM"
     includedirs { "glm/" }
 
 	files {
+        "premake5.lua",
 		"glm/glm/**.cpp",
 		"glm/glm/**.hpp",
 		"glm/glm/**.h"

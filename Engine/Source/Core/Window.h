@@ -9,37 +9,41 @@ struct GLFWwindow;
 
 namespace Engine::Core
 {
-    struct WindowData
-    {
-        // ReSharper disable CppInconsistentNaming
-
-        std::string Title;
-        glm::uvec2 Resolution;
-        bool Vsync;
-
-        // ReSharper restore CppInconsistentNaming
-    };
-
     class Window
     {
     private:
         friend class Application;
 
     private:
+        inline static Window* s_Instance = nullptr;
+
+    private:
         GLFWwindow* m_WindowPtr = nullptr;
-        WindowData m_Data;
+
+    private:
+        std::string m_Title;
+        glm::uvec2 m_Resolution;
+        float m_AspectRatio;
+        bool m_Vsync;
 
     private:
         Window(std::string title, glm::uvec2 resolution, bool vsync);
         ~Window() = default;
 
+    public:
+        static Window* GetInstance();
+
     private:
         void Init();
         void Terminate() const;
 
-        void UpdateBuffers() const;
-        void PollEvents();
+    private:
+        [[noreturn]] static void ErrorCallback(int error, const char* description);
+        void ResizeCallback(int width, int height);
 
+    private:
+        void UpdateBuffers() const;
+        void PollEvents() const;
         bool ShouldClose() const;
 
     public:
@@ -49,11 +53,12 @@ namespace Engine::Core
         bool IsVsync() const;
         void SetVsync(bool vsync);
 
-        void SetResolution(glm::uvec2 resolution) const;
         glm::uvec2 GetResolution() const;
+        void SetResolution(glm::uvec2 resolution) const;
+
+        float GetAspectRatio() const;
 
     private:
         GLFWwindow* GetGlfwWindow() const;
-        WindowData* GetDataPointer();
     };
 }

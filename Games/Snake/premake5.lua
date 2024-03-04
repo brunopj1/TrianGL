@@ -12,7 +12,7 @@ project "Snake"
     }
 
     files {
-        -- C++ files
+        "premake5.lua",
         "Source/**.cpp",
         "Source/**.hpp",
         "Source/**.h"

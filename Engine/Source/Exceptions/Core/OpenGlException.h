@@ -1,14 +1,14 @@
 ﻿#pragma once
 
 #include <exception>
+#include <string>
 
 namespace Engine::Exceptions::Core
 {
-    class OpenGlException : public std::exception
+    class OpenGlException final : public std::exception
     {
     private:
-        int m_Error;
-        const char* m_Description;
+        std::string m_Message;
 
     public:
         OpenGlException(int error, const char* description);

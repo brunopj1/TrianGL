@@ -8,21 +8,21 @@ namespace Engine::Core
 
 namespace Engine::Game
 {
-    // Forward declarations
     class Component;
     class Entity;
+}
 
+namespace Engine::Game::Internal
+{
     class IUpdatable
     {
     private:
         friend class Core::EntityManager;
-        friend class Entity;
-        friend class Component;
 
     private:
         bool m_ShouldUpdate;
 
-    private:
+    public:
         IUpdatable(bool shouldUpdate);
         virtual ~IUpdatable() = default;
 

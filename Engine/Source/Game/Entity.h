@@ -1,5 +1,7 @@
 ﻿#pragma once
-#include "IUpdatable.h"
+
+#include "Internal/IUpdatable.h"
+#include "Transform.h"
 #include <vector>
 
 // Forward declarations
@@ -13,10 +15,13 @@ namespace Engine::Game
     // Forward declarations
     class Component;
 
-    class Entity : public IUpdatable
+    class Entity : public Internal::IUpdatable
     {
     private:
         friend class Core::EntityManager;
+
+    private:
+        Transform m_Transform;
 
     private:
         std::vector<Component*> m_Components;
@@ -24,5 +29,9 @@ namespace Engine::Game
     protected:
         Entity(bool shouldUpdate);
         ~Entity() override = default;
+
+    public:
+        Transform& GetTransform();
+        const Transform& GetTransform() const;
     };
 }

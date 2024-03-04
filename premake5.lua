@@ -1,7 +1,7 @@
 workspace "TrianGL"
     startproject "Snake"
     
-    cppdialect "C++17"
+    cppdialect "C++20"
 
     configurations { "Debug", "Release"}
     platforms { "Win32", "Win64" }
@@ -41,3 +41,4 @@ group "Dependencies"
 
 group "Games"
     include "Games/Snake/premake5.lua"
+

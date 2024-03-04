@@ -13,6 +13,7 @@ project "ImGui"
 	}
 
 	files {
+        "premake5.lua",
 		"imgui/*.cpp",
 		"imgui/backends/imgui_impl_glfw.cpp",
 		"imgui/backends/imgui_impl_opengl3.cpp"

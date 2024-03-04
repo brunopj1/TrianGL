@@ -8,6 +8,7 @@ project "GLFW"
 	includedirs { "glfw/include/" }
 
 	files {
+        "premake5.lua",
 	    "glfw/include/GLFW/glfw3.h",
 	    "glfw/include/GLFW/glfw3native.h",
 	    "glfw/src/internal.h",

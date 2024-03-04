@@ -4,25 +4,32 @@
 #include "glad/glad.h"
 
 #define GLFW_INCLUDE_NONE
+#include "EntityManager.h"
+#include "Entities/Camera.h"
 #include "GLFW/glfw3.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include "Exceptions/Core/OpenGlException.h"
 #include <iostream>
+#include <utility>
 
 using namespace Engine::Core;
 using namespace Engine::Exceptions::Core;
 
 Window::Window(std::string title, const glm::uvec2 resolution, const bool vsync = true)
-    : m_Data({std::move(title), resolution, vsync})
-{}
+    : m_Title(std::move(title)), m_Resolution(resolution), m_AspectRatio(static_cast<float>(resolution.x) / static_cast<float>(resolution.y)), m_Vsync(vsync)
+{
+    s_Instance = this;
+}
+
+Window* Window::GetInstance()
+{
+    return s_Instance;
+}
 
 void Window::Init()
 {
-    glfwSetErrorCallback([](const int error, const char* description)
-    {
-        throw OpenGlException(error, description);
-    });
+    glfwSetErrorCallback(ErrorCallback);
 
     if (!glfwInit())
     {
@@ -33,23 +40,20 @@ void Window::Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_WindowPtr = glfwCreateWindow(m_Data.Resolution.x, m_Data.Resolution.y, m_Data.Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+    m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 
     if (m_WindowPtr == nullptr)
     {
         throw FailedToInitializeEngineException("Failed to create GLFW window");
     }
 
-    glfwSetWindowUserPointer(m_WindowPtr, &m_Data);
-
     glfwSetWindowSizeLimits(m_WindowPtr, 400, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwSetWindowPos(m_WindowPtr, 50, 50);
 
-    glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* window, int width, int height)
+    glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* _, const int width, const int height)
     {
-        WindowData* data = static_cast<WindowData*>(glfwGetWindowUserPointer(window));
-        data->Resolution = {width, height};
-        glViewport(0, 0, width, height);
+        Window* window = GetInstance();
+        window->ResizeCallback(width, height);
     });
 
     glfwMakeContextCurrent(m_WindowPtr);
@@ -59,7 +63,7 @@ void Window::Init()
         throw FailedToInitializeEngineException("Failed to init GLAD");
     }
 
-    SetVsync(m_Data.Vsync);
+    SetVsync(m_Vsync);
 
 #ifdef DEBUG
     std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
@@ -73,6 +77,23 @@ void Window::Terminate() const
     glfwTerminate();
 }
 
+void Window::ErrorCallback(const int error, const char* description)
+{
+    throw OpenGlException(error, description);
+}
+
+void Window::ResizeCallback(int width, int height)
+{
+    m_Resolution = {width, height};
+    m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    glViewport(0, 0, width, height);
+
+    for (const auto camera : EntityManager::GetInstance()->FindEntities<Entities::Camera>())
+    {
+        camera->SetAspectRatio(m_AspectRatio);
+    }
+}
+
 void Window::UpdateBuffers() const
 {
     glfwSwapBuffers(m_WindowPtr);
@@ -80,7 +101,7 @@ void Window::UpdateBuffers() const
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
 
-void Window::PollEvents()
+void Window::PollEvents() const
 {
     glfwPollEvents();
 }
@@ -92,25 +113,30 @@ bool Window::ShouldClose() const
 
 std::string Window::GetTitle()
 {
-    return m_Data.Title;
+    return m_Title;
 }
 
 
 void Window::SetTitle(std::string title)
 {
-    m_Data.Title = std::move(title);
-    glfwSetWindowTitle(m_WindowPtr, m_Data.Title.c_str());
+    m_Title = std::move(title);
+    glfwSetWindowTitle(m_WindowPtr, m_Title.c_str());
 }
 
 bool Window::IsVsync() const
 {
-    return m_Data.Vsync;
+    return m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    m_Data.Vsync = vsync;
+    m_Vsync = vsync;
     glfwSwapInterval(vsync);
+}
+
+glm::uvec2 Window::GetResolution() const
+{
+    return m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution) const
@@ -118,17 +144,12 @@ void Window::SetResolution(const glm::uvec2 resolution) const
     glfwSetWindowSize(m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 }
 
-glm::uvec2 Window::GetResolution() const
+float Window::GetAspectRatio() const
 {
-    return m_Data.Resolution;
+    return m_AspectRatio;
 }
 
 GLFWwindow* Window::GetGlfwWindow() const
 {
     return m_WindowPtr;
-}
-
-WindowData* Window::GetDataPointer()
-{
-    return &m_Data;
 }

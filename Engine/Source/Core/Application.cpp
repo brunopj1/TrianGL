@@ -1,10 +1,11 @@
 #include "Application.h"
 
+#include "Entities/Camera.h"
 #include <glad/glad.h>
 
-#include "Game/Entity.h"
 #include "Game/GameMode.h"
 #include "Exceptions/Core/GameModeMissingException.h"
+#include "Exceptions/Core/MissingMainCameraException.h"
 
 #ifdef DEBUG
 #include <imgui.h>
@@ -26,21 +27,6 @@ Application::~Application()
     Terminate();
 }
 
-void Application::Run()
-{
-    if (!m_EntityManager.m_GameMode)
-    {
-        throw Exceptions::Core::GameModeMissingException();
-    }
-
-    m_EntityManager.m_GameMode->OnStart();
-
-    while (!m_Window.ShouldClose())
-    {
-        Update();
-    }
-}
-
 void Application::Init()
 {
     m_Window.Init();
@@ -56,21 +42,58 @@ void Application::Init()
     ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 #endif
+
+    m_EntityManager.InitializeComponents();
+}
+
+void Application::Terminate()
+{
+    m_EntityManager.TerminateComponents();
+
+#ifdef DEBUG
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::Shutdown();
+    ImGui::DestroyContext();
+#endif
+
+    m_Window.Terminate();
+}
+
+void Application::Run()
+{
+    if (!m_EntityManager.m_GameMode)
+    {
+        throw Exceptions::Core::GameModeMissingException();
+    }
+
+    m_EntityManager.m_GameMode->OnStart();
+
+    while (!m_Window.ShouldClose())
+    {
+        Update();
+
+        Render();
+
+        PollEvents();
+    }
 }
 
 void Application::Update()
 {
     m_EntityManager.Update();
-
-    Render();
-
-    m_Window.PollEvents();
 }
 
 void Application::Render() const
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.31f, 0.37f, 0.56f, 1.0f);
+    const Entities::Camera* camera = Entities::Camera::GetMainCamera();
+    if (camera == nullptr)
+    {
+        throw Exceptions::Core::MissingMainCameraException();
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_NewFrame();
@@ -88,16 +111,7 @@ void Application::Render() const
     m_Window.UpdateBuffers();
 }
 
-void Application::Terminate() const
+void Application::PollEvents() const
 {
-    // ImGui
-#ifdef DEBUG
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::Shutdown();
-    ImGui::DestroyContext();
-#endif
-
-    // GLFW
-    m_Window.Terminate();
+    m_Window.PollEvents();
 }

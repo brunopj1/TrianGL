@@ -1,6 +1,6 @@
 ﻿#include "IUpdatable.h"
 
-using namespace Engine::Game;
+using namespace Engine::Game::Internal;
 
 IUpdatable::IUpdatable(const bool shouldUpdate)
     : m_ShouldUpdate(shouldUpdate)

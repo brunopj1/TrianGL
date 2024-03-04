@@ -7,7 +7,8 @@ project "ImGui-Stdlib"
 
     includedirs { "../imgui/imgui/" }
 
-	files { 
+	files {
+        "premake5.lua",
 		"imgui-stdlib/imgui_stdlib.cpp",
 		"imgui-stdlib/imgui_stdlib.h"
 	}

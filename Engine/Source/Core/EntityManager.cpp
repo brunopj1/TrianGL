@@ -1,9 +1,11 @@
 ﻿#include "EntityManager.h"
 
+#include "Components/TextureRenderer.h"
+#include "Entities/Camera.h"
 #include "Game/GameMode.h"
-#include "Game/IUpdatable.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
+#include "Game/Internal/IUpdatable.h"
 
 using namespace Engine::Core;
 
@@ -31,6 +33,7 @@ EntityManager::~EntityManager()
 
     m_OnStartQueue.clear();
     m_OnUpdateQueue.clear();
+    m_RenderQueue.clear();
 }
 
 EntityManager* EntityManager::GetInstance()
@@ -38,9 +41,23 @@ EntityManager* EntityManager::GetInstance()
     return s_Instance;
 }
 
+// ReSharper disable CppMemberFunctionMayBeStatic
+
+void EntityManager::InitializeComponents()
+{
+    Components::TextureRenderer::Initialize();
+}
+
+void EntityManager::TerminateComponents()
+{
+    Components::TextureRenderer::Terminate();
+}
+
+// ReSharper restore CppMemberFunctionMayBeStatic
+
 void EntityManager::Update()
 {
-    for (Game::IUpdatable* updatable : m_OnStartQueue)
+    for (Game::Internal::IUpdatable* updatable : m_OnStartQueue)
     {
         updatable->OnStart();
     }
@@ -48,7 +65,7 @@ void EntityManager::Update()
 
     m_GameMode->OnEarlyUpdate();
 
-    for (Game::IUpdatable* updatable : m_OnUpdateQueue)
+    for (Game::Internal::IUpdatable* updatable : m_OnUpdateQueue)
     {
         if (updatable->m_ShouldUpdate)
         {
@@ -60,9 +77,17 @@ void EntityManager::Update()
 }
 
 void EntityManager::Render() const
-{}
+{
+    const Entities::Camera* mainCamera = Entities::Camera::GetMainCamera();
+    const glm::mat4 projectionViewMatrix = mainCamera->GetProjectionViewMatrix();
 
-void EntityManager::AddToQueue(Game::IUpdatable* updatable, std::vector<Game::IUpdatable*>& queue)
+    for (const Game::Internal::IRenderable* renderable : m_RenderQueue)
+    {
+        renderable->Render(projectionViewMatrix);
+    }
+}
+
+void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vector<Game::Internal::IUpdatable*>& queue)
 {
     const auto order = updatable->GetOrderOfExecution();
 
@@ -91,42 +116,33 @@ void EntityManager::DestroyGameMode()
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
-    // Remove from the EntityManager
-
     m_Entities.erase(entity);
 
-    m_OnStartQueue.erase(std::remove(m_OnStartQueue.begin(), m_OnStartQueue.end(), entity), m_OnStartQueue.end());
-
-    m_OnUpdateQueue.erase(std::remove(m_OnUpdateQueue.begin(), m_OnUpdateQueue.end(), entity), m_OnUpdateQueue.end());
-
-    // Detach all components
+    std::erase(m_OnStartQueue, entity);
+    std::erase(m_OnUpdateQueue, entity);
 
     while (!entity->m_Components.empty())
     {
         DetachComponent(entity->m_Components.front());
     }
 
-    // Delete the entity
-
     delete entity;
 }
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
-    // Remove from the EntityManager
-
     m_Components.erase(component);
 
-    m_OnStartQueue.erase(std::remove(m_OnStartQueue.begin(), m_OnStartQueue.end(), component), m_OnStartQueue.end());
-
-    m_OnUpdateQueue.erase(std::remove(m_OnUpdateQueue.begin(), m_OnUpdateQueue.end(), component), m_OnUpdateQueue.end());
-
-    // Remove from the parent Entity
+    std::erase(m_OnStartQueue, component);
+    std::erase(m_OnUpdateQueue, component);
 
     auto& parentComponents = component->m_Parent->m_Components;
-    parentComponents.erase(std::remove(parentComponents.begin(), parentComponents.end(), component), parentComponents.end());
+    std::erase(parentComponents, component);
 
-    // Delete the component
+    if (const auto renderable = dynamic_cast<Game::Internal::IRenderable*>(component))
+    {
+        std::erase(m_RenderQueue, renderable);
+    }
 
     delete component;
 }

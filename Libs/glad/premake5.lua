@@ -7,7 +7,10 @@ project "GLAD"
 
     includedirs { "glad/include/" }
 
-	files { "glad/src/glad.c" }
+files {
+    "premake5.lua",
+    "glad/src/glad.c"
+}
     
 	filter "system:linux"
 		pic "On"

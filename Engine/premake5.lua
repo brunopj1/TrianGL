@@ -13,6 +13,7 @@ project "Engine"
     }
     
     files {
+        "premake5.lua",
         "Source/**.cpp",
         "Source/**.hpp",
         "Source/**.h"

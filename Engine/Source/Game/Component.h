@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "IUpdatable.h"
+#include "Internal/IUpdatable.h"
 
 namespace Engine::Core
 {
@@ -12,7 +12,7 @@ namespace Engine::Game
     // Forward declarations
     class Entity;
 
-    class Component : public IUpdatable
+    class Component : public Internal::IUpdatable
     {
     private:
         friend class Core::EntityManager;
