@@ -44,26 +44,23 @@ namespace Engine::Core
         ~InputSystem();
 
     public:
-        static InputSystem* GetInstance();
+        static bool IsKeyDown(KeyCode key);
+        static bool WasKeyPressed(KeyCode key);
+        static bool WasKeyRepeated(KeyCode key);
+        static bool WasKeyReleased(KeyCode key);
 
-    public:
-        bool IsKeyDown(KeyCode key) const;
-        bool WasKeyPressed(KeyCode key) const;
-        bool WasKeyRepeated(KeyCode key) const;
-        bool WasKeyReleased(KeyCode key) const;
+        static bool IsMouseButtonDown(MouseButton button);
+        static bool WasMouseButtonPressed(MouseButton button);
+        static bool WasMouseButtonReleased(MouseButton button);
 
-        bool IsMouseButtonDown(MouseButton button) const;
-        bool WasMouseButtonPressed(MouseButton button) const;
-        bool WasMouseButtonReleased(MouseButton button) const;
+        static glm::ivec2 GetMousePosition();
+        static glm::ivec2 GetMouseDelta();
+        static void SetMousePosition(glm::ivec2 position);
 
-        glm::ivec2 GetMousePosition() const;
-        glm::ivec2 GetMouseDelta() const;
-        void SetMousePosition(glm::ivec2 position);
+        static int GetMouseScroll();
 
-        int GetMouseScroll() const;
-
-        MouseMode GetMouseMode() const;
-        void SetMouseMode(MouseMode mode);
+        static MouseMode GetMouseMode();
+        static void SetMouseMode(MouseMode mode);
 
     private:
         void Init(GLFWwindow* windowPtr);

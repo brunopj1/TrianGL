@@ -20,11 +20,6 @@ Window::Window(std::string title, const glm::uvec2 resolution, const bool vsync 
     s_Instance = this;
 }
 
-Window* Window::GetInstance()
-{
-    return s_Instance;
-}
-
 void Window::Init()
 {
     m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
@@ -39,8 +34,7 @@ void Window::Init()
 
     glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* _, const int width, const int height)
     {
-        Window* window = GetInstance();
-        window->ResizeCallback(width, height);
+        s_Instance->ResizeCallback(width, height);
     });
 
     glfwMakeContextCurrent(m_WindowPtr);
@@ -60,7 +54,7 @@ void Window::ResizeCallback(int width, int height)
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
-    for (const auto camera : EntityManager::GetInstance()->FindEntities<Entities::Camera>())
+    for (const auto camera : EntityManager::FindEntities<Entities::Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
     }
@@ -85,40 +79,40 @@ bool Window::ShouldClose() const
 
 std::string Window::GetTitle()
 {
-    return m_Title;
+    return s_Instance->m_Title;
 }
 
 
 void Window::SetTitle(std::string title)
 {
-    m_Title = std::move(title);
-    glfwSetWindowTitle(m_WindowPtr, m_Title.c_str());
+    s_Instance->m_Title = std::move(title);
+    glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
 }
 
-bool Window::IsVsync() const
+bool Window::IsVsync()
 {
-    return m_Vsync;
+    return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    m_Vsync = vsync;
+    s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);
 }
 
-glm::uvec2 Window::GetResolution() const
+glm::uvec2 Window::GetResolution()
 {
-    return m_Resolution;
+    return s_Instance->m_Resolution;
 }
 
-void Window::SetResolution(const glm::uvec2 resolution) const
+void Window::SetResolution(const glm::uvec2 resolution)
 {
-    glfwSetWindowSize(m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 }
 
-float Window::GetAspectRatio() const
+float Window::GetAspectRatio()
 {
-    return m_AspectRatio;
+    return s_Instance->m_AspectRatio;
 }
 
 GLFWwindow* Window::GetGlfwWindow() const

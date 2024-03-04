@@ -117,8 +117,7 @@ void Application::Update()
 
 void Application::Render() const
 {
-    const Entities::Camera* camera = Entities::Camera::GetMainCamera();
-    if (camera == nullptr)
+    if (const Entities::Camera* camera = Entities::Camera::GetMainCamera(); camera == nullptr)
     {
         throw Exceptions::Core::MissingMainCameraException();
     }

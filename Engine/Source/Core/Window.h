@@ -30,9 +30,6 @@ namespace Engine::Core
         Window(std::string title, glm::uvec2 resolution, bool vsync);
         ~Window() = default;
 
-    public:
-        static Window* GetInstance();
-
     private:
         void Init();
         void Terminate() const;
@@ -46,16 +43,16 @@ namespace Engine::Core
         bool ShouldClose() const;
 
     public:
-        std::string GetTitle();
-        void SetTitle(std::string title);
+        static std::string GetTitle();
+        static void SetTitle(std::string title);
 
-        bool IsVsync() const;
-        void SetVsync(bool vsync);
+        static bool IsVsync();
+        static void SetVsync(bool vsync);
 
-        glm::uvec2 GetResolution() const;
-        void SetResolution(glm::uvec2 resolution) const;
+        static glm::uvec2 GetResolution();
+        static void SetResolution(glm::uvec2 resolution);
 
-        float GetAspectRatio() const;
+        static float GetAspectRatio();
 
     private:
         GLFWwindow* GetGlfwWindow() const;

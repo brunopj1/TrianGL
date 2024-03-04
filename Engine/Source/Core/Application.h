@@ -49,7 +49,7 @@ namespace Engine::Core
 
     public:
         template <typename T>
-        void SetGameMode()
+        void SetGameMode() const
         {
             m_EntityManager.CreateGameMode<T>();
         }

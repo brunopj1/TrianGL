@@ -9,8 +9,7 @@ using namespace Engine::Entities;
 Camera::Camera()
     : Entity(false)
 {
-    const Core::Window* window = Core::Window::GetInstance();
-    m_AspectRatio = window ? window->GetAspectRatio() : 1;
+    m_AspectRatio = Core::Window::GetAspectRatio();
 }
 
 Camera::~Camera()

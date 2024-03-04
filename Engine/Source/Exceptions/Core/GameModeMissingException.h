@@ -8,7 +8,6 @@ namespace Engine::Exceptions::Core
     {
     public:
         GameModeMissingException() = default;
-        ~GameModeMissingException() override = default;
 
     public:
         [[nodiscard]] const char* what() const override;

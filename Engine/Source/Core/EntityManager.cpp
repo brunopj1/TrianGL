@@ -31,11 +31,6 @@ EntityManager::~EntityManager()
     s_Instance = nullptr;
 }
 
-EntityManager* EntityManager::GetInstance()
-{
-    return s_Instance;
-}
-
 // ReSharper disable CppMemberFunctionMayBeStatic
 
 void EntityManager::InitializeComponents()
@@ -105,16 +100,16 @@ Engine::Game::GameMode* EntityManager::GetGameMode() const
 
 void EntityManager::DestroyGameMode()
 {
-    delete m_GameMode;
-    m_GameMode = nullptr;
+    delete s_Instance->m_GameMode;
+    s_Instance->m_GameMode = nullptr;
 }
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
-    m_Entities.erase(entity);
+    s_Instance->m_Entities.erase(entity);
 
-    std::erase(m_OnStartQueue, entity);
-    std::erase(m_OnUpdateQueue, entity);
+    std::erase(s_Instance->m_OnStartQueue, entity);
+    std::erase(s_Instance->m_OnUpdateQueue, entity);
 
     while (!entity->m_Components.empty())
     {
@@ -126,17 +121,17 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
-    m_Components.erase(component);
+    s_Instance->m_Components.erase(component);
 
-    std::erase(m_OnStartQueue, component);
-    std::erase(m_OnUpdateQueue, component);
+    std::erase(s_Instance->m_OnStartQueue, component);
+    std::erase(s_Instance->m_OnUpdateQueue, component);
 
     auto& parentComponents = component->m_Parent->m_Components;
     std::erase(parentComponents, component);
 
     if (const auto renderable = dynamic_cast<Game::Internal::IRenderable*>(component))
     {
-        std::erase(m_RenderQueue, renderable);
+        std::erase(s_Instance->m_RenderQueue, renderable);
     }
 
     delete component;

@@ -12,7 +12,6 @@ namespace Engine::Exceptions::Core
 
     public:
         FailedToInitializeEngineException(std::string message);
-        ~FailedToInitializeEngineException() override = default;
 
     public:
         [[nodiscard]] const char* what() const override;
