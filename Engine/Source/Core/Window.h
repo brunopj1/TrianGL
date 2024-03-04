@@ -38,7 +38,6 @@ namespace Engine::Core
         void Terminate() const;
 
     private:
-        [[noreturn]] static void ErrorCallback(int error, const char* description);
         void ResizeCallback(int width, int height);
 
     private:

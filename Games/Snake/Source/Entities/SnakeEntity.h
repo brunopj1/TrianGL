@@ -13,4 +13,5 @@ protected:
 
 protected:
     void OnStart() override;
+    void OnUpdate() override;
 };

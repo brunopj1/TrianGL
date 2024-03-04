@@ -9,8 +9,6 @@
 #include "GLFW/glfw3.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include "Exceptions/Core/OpenGlException.h"
-#include <iostream>
 #include <utility>
 
 using namespace Engine::Core;
@@ -29,17 +27,6 @@ Window* Window::GetInstance()
 
 void Window::Init()
 {
-    glfwSetErrorCallback(ErrorCallback);
-
-    if (!glfwInit())
-    {
-        throw FailedToInitializeEngineException("Failed to init GLFW");
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
     m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
 
     if (m_WindowPtr == nullptr)
@@ -58,28 +45,13 @@ void Window::Init()
 
     glfwMakeContextCurrent(m_WindowPtr);
 
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))  // NOLINT
-    {
-        throw FailedToInitializeEngineException("Failed to init GLAD");
-    }
-
     SetVsync(m_Vsync);
-
-#ifdef DEBUG
-    std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
-#endif
 }
 
 void Window::Terminate() const
 {
     glfwDestroyWindow(m_WindowPtr);
     glfwTerminate();
-}
-
-void Window::ErrorCallback(const int error, const char* description)
-{
-    throw OpenGlException(error, description);
 }
 
 void Window::ResizeCallback(int width, int height)

@@ -28,12 +28,7 @@ EntityManager::~EntityManager()
         delete component;
     }
 
-    m_Entities.clear();
-    m_Components.clear();
-
-    m_OnStartQueue.clear();
-    m_OnUpdateQueue.clear();
-    m_RenderQueue.clear();
+    s_Instance = nullptr;
 }
 
 EntityManager* EntityManager::GetInstance()

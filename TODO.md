@@ -10,10 +10,12 @@
 
 ## Input System
 
-- [ ] Create the Input System class
-- [ ] Create an abstraction over the keycodes, mouse buttons, etc
-- [ ] Create the methods to check for key down, key press and key release
-- [ ] Create methods to change the mouse behaviour (visible, hidden, locked)
+- [X] Create the Input System class
+- [X] Create the methods to check for key down, key press and key release
+- [X] Create the methods to check for mouse down, mouse press and mouse release
+- [X] Create the methods to check for mouse movement and scroll
+- [X] Create methods to change the mouse behaviour (visible, hidden, locked)
+- [ ] Use raw mouse motion when the mouse is locked (if available)
 
 ## Rendering
 

@@ -1,10 +1,11 @@
 ﻿#include "SnakeEntity.h"
 
-#include "OrderOfExecution.hpp"
+#include "Core/InputSystem.h"
+#include "GameMode/OrderOfExecution.hpp"
 #include <iostream>
 
 SnakeEntity::SnakeEntity()
-    : Entity(false)
+    : Entity(true)
 {}
 
 int SnakeEntity::GetOrderOfExecution() const
@@ -16,3 +17,6 @@ void SnakeEntity::OnStart()
 {
     std::cout << "I am the snake\n";
 }
+
+void SnakeEntity::OnUpdate()
+{}

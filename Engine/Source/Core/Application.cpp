@@ -1,11 +1,16 @@
 #include "Application.h"
 
+#include "InputSystem.h"
 #include "Entities/Camera.h"
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include <glad/glad.h>
 
 #include "Game/GameMode.h"
 #include "Exceptions/Core/GameModeMissingException.h"
 #include "Exceptions/Core/MissingMainCameraException.h"
+#include "Exceptions/Core/OpenGlException.h"
+#include "GLFW/glfw3.h"
+#include <iostream>
 
 #ifdef DEBUG
 #include <imgui.h>
@@ -29,7 +34,23 @@ Application::~Application()
 
 void Application::Init()
 {
+    glfwSetErrorCallback(ErrorCallback);
+
+    if (!glfwInit())
+    {
+        throw Exceptions::Core::FailedToInitializeEngineException("Failed to init GLFW");
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     m_Window.Init();
+
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))  // NOLINT(clang-diagnostic-cast-function-type-strict)
+    {
+        throw Exceptions::Core::FailedToInitializeEngineException("Failed to init GLAD");
+    }
 
 #ifdef DEBUG
     IMGUI_CHECKVERSION();
@@ -42,6 +63,14 @@ void Application::Init()
     ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 130");
 #endif
+
+#ifdef DEBUG
+    std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
+    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
+    std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
+#endif
+
+    m_InputSystem.Init(m_Window.GetGlfwWindow());
 
     m_EntityManager.InitializeComponents();
 }
@@ -74,6 +103,8 @@ void Application::Run()
         Update();
 
         Render();
+
+        m_InputSystem.OnEndOfFrame();
 
         PollEvents();
     }
@@ -114,4 +145,9 @@ void Application::Render() const
 void Application::PollEvents() const
 {
     m_Window.PollEvents();
+}
+
+void Application::ErrorCallback(const int error, const char* description)
+{
+    throw Exceptions::Core::OpenGlException(error, description);
 }

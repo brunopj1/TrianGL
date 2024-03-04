@@ -1,6 +1,6 @@
 ﻿#include "FoodEntity.h"
 
-#include "OrderOfExecution.hpp"
+#include "GameMode/OrderOfExecution.hpp"
 #include <iostream>
 
 FoodEntity::FoodEntity()

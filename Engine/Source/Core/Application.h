@@ -2,6 +2,7 @@
 
 #include "Window.h"
 #include "EntityManager.h"
+#include "InputSystem.h"
 
 // TODO check if I can prevent the forward declarations from being included in the header
 
@@ -25,6 +26,7 @@ namespace Engine::Core
     private:
         Window m_Window;
         EntityManager m_EntityManager;
+        InputSystem m_InputSystem;
 
     public:
         Application(const ApplicationConfig& config = {});
@@ -41,6 +43,9 @@ namespace Engine::Core
         void Update();
         void Render() const;
         void PollEvents() const;
+
+    private:
+        [[noreturn]] static void ErrorCallback(int error, const char* description);
 
     public:
         template <typename T>
