@@ -2,6 +2,7 @@
 
 #include "Game/Entity.h"
 #include "glad/glad.h"
+#include "Graphics/Texture.h"
 #include <iostream>
 
 using namespace Engine::Components;
@@ -73,13 +74,15 @@ void TextureRenderer::Initialize()
     constexpr const char* fragmentShaderSource = R"(
         #version 430 core
 
+        uniform sampler2D uMainTexture;
+
         in vec2 TexCoord;
 
         out vec4 FragColor;
 
         void main()
         {
-            FragColor = vec4(TexCoord, 0.0, 1.0);
+            FragColor = texture(uMainTexture, TexCoord);
         }
     )";
 
@@ -95,6 +98,11 @@ void TextureRenderer::Initialize()
     glAttachShader(s_ShaderProgram, s_VertexShader);
     glAttachShader(s_ShaderProgram, s_FragmentShader);
     glLinkProgram(s_ShaderProgram);
+
+    Graphics::TextureParameters parameters;
+    parameters.Filter = Graphics::TextureFilterMode::Nearest;
+
+    s_Texture = new Graphics::Texture("Assets/Textures/ugly_smile.png", parameters);
 }
 
 void TextureRenderer::Terminate()
@@ -115,10 +123,18 @@ void TextureRenderer::Terminate()
     glDeleteShader(s_FragmentShader);
 
     glDeleteProgram(s_ShaderProgram);
+
+    delete s_Texture;
 }
 
 void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
 {
+    if (s_Texture->HasTransparency())
+    {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     const glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
     const glm::mat4 pvmMatrix = projectionViewMatrix * modelMatrix;
 
@@ -129,8 +145,19 @@ void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
         glUniformMatrix4fv(location, 1, GL_FALSE, &pvmMatrix[0][0]);
     }
 
+    if (const int location = glGetUniformLocation(s_ShaderProgram, "uMainTexture"); location != -1)
+    {
+        s_Texture->Bind();
+        glUniform1i(location, 0);
+    }
+
     glBindVertexArray(s_QuadVao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_QuadEbo);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+    if (s_Texture->HasTransparency())
+    {
+        glDisable(GL_BLEND);
+    }
 }

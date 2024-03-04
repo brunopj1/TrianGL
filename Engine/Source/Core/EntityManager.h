@@ -45,8 +45,8 @@ namespace Engine::Core
         ~EntityManager();
 
     private:
-        void InitializeComponents();
-        void TerminateComponents();
+        static void InitializeComponents();
+        static void TerminateComponents();
 
     private:
         void Update();
@@ -182,6 +182,40 @@ namespace Engine::Core
             std::vector<T*> components;
 
             for (auto component : s_Instance->m_Components)
+            {
+                if (T* casted = dynamic_cast<T*>(component))
+                {
+                    components.push_back(casted);
+                }
+            }
+
+            return components;
+        }
+
+        template <typename T>
+        static T* FindComponentInEntity(Game::Entity* entity)
+        {
+            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
+
+            for (auto component : entity->m_Components)
+            {
+                if (T* casted = dynamic_cast<T*>(component))
+                {
+                    return casted;
+                }
+            }
+
+            return nullptr;
+        }
+
+        template <typename T>
+        static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
+        {
+            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
+
+            std::vector<T*> components;
+
+            for (auto component : entity->m_Components)
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {

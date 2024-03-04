@@ -1,23 +1,67 @@
 #include "Window.h"
 
-#define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #include "glad/glad.h"
-
-#define GLFW_INCLUDE_NONE
-#include "EntityManager.h"
-#include "Entities/Camera.h"
 #include "GLFW/glfw3.h"
 
+#include "EntityManager.h"
+#include "Entities/Camera.h"
+
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include <format>
+#include <stdexcept>
 #include <utility>
 
 using namespace Engine::Core;
 using namespace Engine::Exceptions::Core;
 
+constexpr int minimun_window_resolution = 400;
+
 Window::Window(std::string title, const glm::uvec2 resolution, const bool vsync = true)
     : m_Title(std::move(title)), m_Resolution(resolution), m_AspectRatio(static_cast<float>(resolution.x) / static_cast<float>(resolution.y)), m_Vsync(vsync)
 {
     s_Instance = this;
+}
+
+std::string Window::GetTitle()
+{
+    return s_Instance->m_Title;
+}
+
+void Window::SetTitle(std::string title)
+{
+    s_Instance->m_Title = std::move(title);
+    glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
+}
+
+bool Window::IsVsync()
+{
+    return s_Instance->m_Vsync;
+}
+
+void Window::SetVsync(const bool vsync)
+{
+    s_Instance->m_Vsync = vsync;
+    glfwSwapInterval(vsync);
+}
+
+glm::uvec2 Window::GetResolution()
+{
+    return s_Instance->m_Resolution;
+}
+
+void Window::SetResolution(const glm::uvec2 resolution)
+{
+    if (resolution.x == 0 || resolution.y == 0)
+    {
+        throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
+    }
+
+    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+}
+
+float Window::GetAspectRatio()
+{
+    return s_Instance->m_AspectRatio;
 }
 
 void Window::Init()
@@ -29,7 +73,7 @@ void Window::Init()
         throw FailedToInitializeEngineException("Failed to create GLFW window");
     }
 
-    glfwSetWindowSizeLimits(m_WindowPtr, 400, 400, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    glfwSetWindowSizeLimits(m_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwSetWindowPos(m_WindowPtr, 50, 50);
 
     glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* _, const int width, const int height)
@@ -75,44 +119,6 @@ void Window::PollEvents() const
 bool Window::ShouldClose() const
 {
     return glfwWindowShouldClose(m_WindowPtr);
-}
-
-std::string Window::GetTitle()
-{
-    return s_Instance->m_Title;
-}
-
-
-void Window::SetTitle(std::string title)
-{
-    s_Instance->m_Title = std::move(title);
-    glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
-}
-
-bool Window::IsVsync()
-{
-    return s_Instance->m_Vsync;
-}
-
-void Window::SetVsync(const bool vsync)
-{
-    s_Instance->m_Vsync = vsync;
-    glfwSwapInterval(vsync);
-}
-
-glm::uvec2 Window::GetResolution()
-{
-    return s_Instance->m_Resolution;
-}
-
-void Window::SetResolution(const glm::uvec2 resolution)
-{
-    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
-}
-
-float Window::GetAspectRatio()
-{
-    return s_Instance->m_AspectRatio;
 }
 
 GLFWwindow* Window::GetGlfwWindow() const

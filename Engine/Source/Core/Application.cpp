@@ -1,15 +1,22 @@
 #include "Application.h"
 
+#define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
+#include "glad/glad.h"
+
+#define GLFW_INCLUDE_NONE
+#include "GLFW/glfw3.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "InputSystem.h"
 #include "Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include <glad/glad.h>
 
 #include "Game/GameMode.h"
 #include "Exceptions/Core/GameModeMissingException.h"
 #include "Exceptions/Core/MissingMainCameraException.h"
 #include "Exceptions/Core/OpenGlException.h"
-#include "GLFW/glfw3.h"
 #include <iostream>
 
 #ifdef DEBUG
@@ -30,6 +37,27 @@ Application::Application(const ApplicationConfig& config)
 Application::~Application()
 {
     Terminate();
+}
+
+void Application::Run()
+{
+    if (!m_EntityManager.m_GameMode)
+    {
+        throw Exceptions::Core::GameModeMissingException();
+    }
+
+    m_EntityManager.m_GameMode->OnStart();
+
+    while (!m_Window.ShouldClose())
+    {
+        Update();
+
+        Render();
+
+        m_InputSystem.OnEndOfFrame();
+
+        PollEvents();
+    }
 }
 
 void Application::Init()
@@ -64,6 +92,8 @@ void Application::Init()
     ImGui_ImplOpenGL3_Init("#version 130");
 #endif
 
+    stbi_set_flip_vertically_on_load(true);
+
 #ifdef DEBUG
     std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
@@ -72,12 +102,12 @@ void Application::Init()
 
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
-    m_EntityManager.InitializeComponents();
+    EntityManager::InitializeComponents();
 }
 
-void Application::Terminate()
+void Application::Terminate() const
 {
-    m_EntityManager.TerminateComponents();
+    EntityManager::TerminateComponents();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();
@@ -87,27 +117,6 @@ void Application::Terminate()
 #endif
 
     m_Window.Terminate();
-}
-
-void Application::Run()
-{
-    if (!m_EntityManager.m_GameMode)
-    {
-        throw Exceptions::Core::GameModeMissingException();
-    }
-
-    m_EntityManager.m_GameMode->OnStart();
-
-    while (!m_Window.ShouldClose())
-    {
-        Update();
-
-        Render();
-
-        m_InputSystem.OnEndOfFrame();
-
-        PollEvents();
-    }
 }
 
 void Application::Update()

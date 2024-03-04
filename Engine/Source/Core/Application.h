@@ -32,12 +32,12 @@ namespace Engine::Core
         Application(const ApplicationConfig& config = {});
         ~Application();
 
-    private:
-        void Init();
-        void Terminate();
-
     public:
         void Run();
+
+    private:
+        void Init();
+        void Terminate() const;
 
     private:
         void Update();

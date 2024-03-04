@@ -9,6 +9,7 @@ project "Engine"
         "../Libs/glad/glad/include/",
         "../Libs/glfw/glfw/include/",
         "../Libs/glm/glm/",
+        "../Libs/stb_image/stb_image/",
         "Source/"
     }
     
@@ -22,7 +23,8 @@ project "Engine"
     links {
         "GLAD",
         "GLFW",
-        "GLM"
+        "GLM",
+        "STB-Image"
     }
 
     defines {

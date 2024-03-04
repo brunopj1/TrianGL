@@ -3,6 +3,7 @@
 #include "Core/Window.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include <stdexcept>
 
 using namespace Engine::Entities;
 
@@ -37,6 +38,11 @@ float Camera::GetHorizontalSize() const
 
 void Camera::SetHorizontalSize(const float size, const bool lock)
 {
+    if (size <= 0.0f)
+    {
+        throw std::invalid_argument("The size must be greater than 0");
+    }
+
     m_HorizontalSize = size;
     if (lock) m_LockHorizontalSize = true;
 }
@@ -48,6 +54,11 @@ float Camera::GetVerticalSize() const
 
 void Camera::SetVerticalSize(const float size, const bool lock)
 {
+    if (size <= 0.0f)
+    {
+        throw std::invalid_argument("The size must be greater than 0");
+    }
+
     m_HorizontalSize = size * m_AspectRatio;
     if (lock) m_LockHorizontalSize = false;
 }
@@ -59,6 +70,11 @@ bool Camera::IsSizeLockedHorizontally() const
 
 void Camera::SetAspectRatio(const float aspectRatio)
 {
+    if (aspectRatio <= 0.0f)
+    {
+        throw std::invalid_argument("The aspect ratio must be greater than 0");
+    }
+
     m_AspectRatio = aspectRatio;
 }
 

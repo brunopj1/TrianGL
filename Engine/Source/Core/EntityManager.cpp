@@ -31,8 +31,6 @@ EntityManager::~EntityManager()
     s_Instance = nullptr;
 }
 
-// ReSharper disable CppMemberFunctionMayBeStatic
-
 void EntityManager::InitializeComponents()
 {
     Components::TextureRenderer::Initialize();
@@ -42,8 +40,6 @@ void EntityManager::TerminateComponents()
 {
     Components::TextureRenderer::Terminate();
 }
-
-// ReSharper restore CppMemberFunctionMayBeStatic
 
 void EntityManager::Update()
 {

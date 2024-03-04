@@ -38,6 +38,7 @@ group "Dependencies"
     include "Libs/glm/premake5.lua"
     include "Libs/imgui/premake5.lua"
     include "Libs/imgui-stdlib/premake5.lua"
+    include "Libs/stb_image/premake5.lua"
 
 group "Games"
     include "Games/Snake/premake5.lua"

@@ -33,5 +33,7 @@ namespace Engine::Game
     public:
         Transform& GetTransform();
         const Transform& GetTransform() const;
+
+        const std::vector<Component*>& GetComponents() const;
     };
 }

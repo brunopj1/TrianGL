@@ -9,6 +9,7 @@ project "GLAD"
 
 files {
     "premake5.lua",
+	"glad/include/glad/glad.h",
     "glad/src/glad.c"
 }
     

@@ -16,3 +16,6 @@
 [submodule "Libs/imgui/imgui"]
 	path = Libs/imgui/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "Libs/stb_image/stb_image"]
+	path = Libs/stb_image/stb_image
+	url = https://github.com/nothings/stb.git

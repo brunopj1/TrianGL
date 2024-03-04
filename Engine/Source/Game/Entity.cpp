@@ -16,3 +16,8 @@ const Transform& Entity::GetTransform() const
 {
     return m_Transform;
 }
+
+const std::vector<Component*>& Entity::GetComponents() const
+{
+    return m_Components;
+}

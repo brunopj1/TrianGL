@@ -8,6 +8,13 @@
 - [ ] Create a layer of abstraction for ImGui (and use it to display debug info)
 - [ ] Try unit testing
 
+## Resource Manager
+
+- [ ] Create a resource manager class
+- [ ] Automatically delete resources when the application is closed
+- [ ] Create a method to load textures
+- [ ] Create a method to load shaders
+
 ## Input System
 
 - [X] Create the Input System class
@@ -21,7 +28,7 @@
 
 - [X] Texture Renderer class
 - [X] Add the default mesh
-- [ ] Add the default shader (as a file)
+- [ ] Add the default shader
 - [ ] Custom material system (with instances)
 - [X] Implement automatic rendering
 - [ ] Implement View Frustum Culling
