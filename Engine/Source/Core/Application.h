@@ -5,8 +5,6 @@
 #include "EntityManager.h"
 #include "InputSystem.h"
 
-// TODO check if I can prevent the forward declarations from being included in the header
-
 // Forward declarations
 namespace Engine::Game
 {
@@ -17,8 +15,10 @@ namespace Engine::Core
 {
     struct ApplicationConfig
     {
-        std::string Title = "TrianGL";
-        glm::uvec2 Resolution = {1600, 900};
+        std::string WindowTitle = "TrianGL";
+        glm::ivec2 WindowPosition = {0, 0};
+        glm::uvec2 WindowResolution = {1280, 720};
+        bool Fullscreen = false;
         bool Vsync = true;
     };
 

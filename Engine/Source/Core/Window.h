@@ -7,8 +7,6 @@
 // ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
 
-// TODO add fullscreen and borderless support
-
 namespace Engine::Core
 {
     class Window
@@ -24,31 +22,40 @@ namespace Engine::Core
 
     private:
         std::string m_Title;
+        glm::ivec2 m_Position;
         glm::uvec2 m_Resolution;
         float m_AspectRatio;
+        bool m_Fullscreen;
         bool m_Vsync;
 
     private:
-        Window(std::string title, glm::uvec2 resolution, bool vsync);
+        Window(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
         ~Window() = default;
 
     public:
+        static bool IsFullscreen();
+        static void SetFullscreen(bool fullscreen);
+
         static std::string GetTitle();
         static void SetTitle(std::string title);
 
-        static bool IsVsync();
-        static void SetVsync(bool vsync);
+        static glm::ivec2 GetPosition();
+        static void SetPosition(glm::ivec2 position);
 
         static glm::uvec2 GetResolution();
         static void SetResolution(glm::uvec2 resolution);
 
         static float GetAspectRatio();
 
+        static bool IsVsync();
+        static void SetVsync(bool vsync);
+
     private:
         void Init();
         void Terminate() const;
 
     private:
+        void PositionCallback(int x, int y);
         void ResizeCallback(int width, int height);
 
     private:

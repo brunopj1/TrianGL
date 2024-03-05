@@ -29,7 +29,7 @@
 using namespace Engine::Core;
 
 Application::Application(const ApplicationConfig& config)
-    : m_Window(config.Title, config.Resolution, config.Vsync)
+    : m_Window(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync)
 {
     Init();
 }
