@@ -1,8 +1,9 @@
 ﻿#include "TextureRenderer.h"
 
+#include "Core/ResourceManager.h"
 #include "Game/Entity.h"
 #include "glad/glad.h"
-#include "Graphics/Texture.h"
+#include "Resources/Texture.h"
 #include <iostream>
 
 using namespace Engine::Components;
@@ -99,10 +100,10 @@ void TextureRenderer::Initialize()
     glAttachShader(s_ShaderProgram, s_FragmentShader);
     glLinkProgram(s_ShaderProgram);
 
-    Graphics::TextureParameters parameters;
-    parameters.Filter = Graphics::TextureFilterMode::Nearest;
+    Resources::TextureParameters parameters;
+    parameters.Filter = Resources::TextureFilterMode::Nearest;
 
-    s_Texture = new Graphics::Texture("Assets/Textures/ugly_smile.png", parameters);
+    s_Texture = Core::ResourceManager::LoadTexture("Assets/Textures/ugly_smile.png", parameters);
 }
 
 void TextureRenderer::Terminate()
@@ -124,7 +125,7 @@ void TextureRenderer::Terminate()
 
     glDeleteProgram(s_ShaderProgram);
 
-    delete s_Texture;
+    //Core::ResourceManager::Unload(s_Texture);
 }
 
 void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const

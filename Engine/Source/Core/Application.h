@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window.h"
+#include "ResourceManager.h"
 #include "EntityManager.h"
 #include "InputSystem.h"
 
@@ -25,6 +26,7 @@ namespace Engine::Core
     {
     private:
         Window m_Window;
+        ResourceManager m_ResourceManager;
         EntityManager m_EntityManager;
         InputSystem m_InputSystem;
 

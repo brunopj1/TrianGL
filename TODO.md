@@ -10,9 +10,9 @@
 
 ## Resource Manager
 
-- [ ] Create a resource manager class
-- [ ] Automatically delete resources when the application is closed
-- [ ] Create a method to load textures
+- [X] Create a resource manager class
+- [X] Automatically delete resources when the application is closed
+- [X] Create a method to load textures
 - [ ] Create a method to load shaders
 
 ## Input System

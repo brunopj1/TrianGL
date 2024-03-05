@@ -6,7 +6,7 @@
 
 #include "Exceptions/Common/FileNotFoundException.h"
 
-using namespace Engine::Graphics;
+using namespace Engine::Resources;
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))

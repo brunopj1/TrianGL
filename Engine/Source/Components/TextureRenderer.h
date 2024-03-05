@@ -4,7 +4,7 @@
 #include "Game/Internal/IRenderable.h"
 #include <glm/mat4x4.hpp>
 
-namespace Engine::Graphics
+namespace Engine::Resources
 {
     class Texture;
 }
@@ -26,7 +26,7 @@ namespace Engine::Components
         static inline unsigned int s_VertexShader = 0;
         static inline unsigned int s_FragmentShader = 0;
 
-        static inline Graphics::Texture* s_Texture = nullptr;
+        static inline Resources::Texture* s_Texture = nullptr;
 
     public:
         TextureRenderer();

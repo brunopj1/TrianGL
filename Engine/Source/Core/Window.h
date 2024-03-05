@@ -7,6 +7,8 @@
 // ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
 
+// TODO add fullscreen and borderless support
+
 namespace Engine::Core
 {
     class Window

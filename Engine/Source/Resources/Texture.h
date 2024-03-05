@@ -1,28 +1,27 @@
 ﻿#pragma once
 
+#include "Internal/ManagedResource.h"
 #include "TextureParameters.hpp"
 #include "glm/vec2.hpp"
 #include <string>
 
 // Forward declaration
+namespace Engine::Core
+{
+    class ResourceManager;
+}
+
 namespace Engine::Components
 {
     class TextureRenderer;
 }
 
-namespace Engine::Graphics
+namespace Engine::Resources
 {
-    struct TextureParameters
-    {
-        bool GenerateMipmaps = true;
-        TextureWrapMode Wrap = TextureWrapMode::Repeat;
-        TextureFilterMode Filter = TextureFilterMode::Linear;
-        TextureFilterMode MipmapFilter = TextureFilterMode::Linear;
-    };
-
-    class Texture
+    class Texture final : public Internal::ManagedResource
     {
     private:
+        friend class Core::ResourceManager;
         friend class Components::TextureRenderer;
 
     private:
@@ -33,7 +32,7 @@ namespace Engine::Graphics
 
     private:
         Texture(std::string filePath, const TextureParameters& parameters = {});
-        ~Texture();
+        ~Texture() override;
 
     public:
         std::string GetFilePath() const;
