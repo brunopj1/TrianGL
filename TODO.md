@@ -2,6 +2,7 @@
 
 ## Future ideas
 
+- [ ] Copy the asset folders to the output directory instead of modifying the working directory
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
 - [ ] Enable attaching entities to other entities
 - [ ] Implement a garbage collector like the one from UE5 (with strong and weak pointers)
@@ -27,9 +28,11 @@
 ## Rendering
 
 - [X] Texture Renderer class
+- [ ] Shader class (internal)
+- [ ] Material class (abstract)
 - [X] Add the default mesh
-- [ ] Add the default shader
-- [ ] Custom material system (with instances)
+- [ ] Add the default material
+- [ ] Use uniform buffers for the shaders
 - [X] Implement automatic rendering
 - [ ] Implement View Frustum Culling
 - [ ] Add a transform to the Texture Renderer

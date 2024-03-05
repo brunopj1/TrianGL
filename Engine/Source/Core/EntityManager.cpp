@@ -6,6 +6,7 @@
 #include "Game/Entity.h"
 #include "Game/Component.h"
 #include "Game/Internal/IUpdatable.h"
+#include "Util/DebugFeatures.hpp"
 
 using namespace Engine::Core;
 
@@ -33,7 +34,7 @@ EntityManager::~EntityManager()
 
 void EntityManager::InitializeComponents()
 {
-    Components::TextureRenderer::Initialize();
+    Components::TextureRenderer::Init();
 }
 
 void EntityManager::TerminateComponents()
@@ -91,17 +92,23 @@ void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vecto
 
 Engine::Game::GameMode* EntityManager::GetGameMode() const
 {
+    DEBUG_SINGLETON(s_Instance, "EntityManager");
+
     return m_GameMode;
 }
 
 void EntityManager::DestroyGameMode()
 {
+    DEBUG_SINGLETON(s_Instance, "EntityManager");
+
     delete s_Instance->m_GameMode;
     s_Instance->m_GameMode = nullptr;
 }
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
+    DEBUG_SINGLETON(s_Instance, "EntityManager");
+
     s_Instance->m_Entities.erase(entity);
 
     std::erase(s_Instance->m_OnStartQueue, entity);
@@ -117,6 +124,8 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
+    DEBUG_SINGLETON(s_Instance, "EntityManager");
+
     s_Instance->m_Components.erase(component);
 
     std::erase(s_Instance->m_OnStartQueue, component);

@@ -3,6 +3,7 @@
 #include "Core/ResourceManager.h"
 #include "Game/Entity.h"
 #include "glad/glad.h"
+#include "Resources/Shader.h"
 #include "Resources/Texture.h"
 #include <iostream>
 
@@ -12,7 +13,7 @@ TextureRenderer::TextureRenderer()
     : Component(false)
 {}
 
-void TextureRenderer::Initialize()
+void TextureRenderer::Init()
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -55,54 +56,10 @@ void TextureRenderer::Initialize()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    constexpr const char* vertexShaderSource = R"(
-        #version 430 core
-
-        uniform mat4 uPVMMatrix;
-
-        layout (location = 0) in vec3 aPos;
-        layout (location = 1) in vec2 aTexCoord;
-
-        out vec2 TexCoord;
-
-        void main()
-        {
-            gl_Position = uPVMMatrix * vec4(aPos, 1.0);
-            TexCoord = aTexCoord;
-        }
-    )";
-
-    constexpr const char* fragmentShaderSource = R"(
-        #version 430 core
-
-        uniform sampler2D uMainTexture;
-
-        in vec2 TexCoord;
-
-        out vec4 FragColor;
-
-        void main()
-        {
-            FragColor = texture(uMainTexture, TexCoord);
-        }
-    )";
-
-    s_VertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(s_VertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(s_VertexShader);
-
-    s_FragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(s_FragmentShader, 1, &fragmentShaderSource, nullptr);
-    glCompileShader(s_FragmentShader);
-
-    s_ShaderProgram = glCreateProgram();
-    glAttachShader(s_ShaderProgram, s_VertexShader);
-    glAttachShader(s_ShaderProgram, s_FragmentShader);
-    glLinkProgram(s_ShaderProgram);
+    s_Shader = Core::ResourceManager::LoadShader("Assets/Shaders/default.vert", "Assets/Shaders/default.frag");
 
     Resources::TextureParameters parameters;
     parameters.Filter = Resources::TextureFilterMode::Nearest;
-
     s_Texture = Core::ResourceManager::LoadTexture("Assets/Textures/ugly_smile.png", parameters);
 }
 
@@ -117,15 +74,8 @@ void TextureRenderer::Terminate()
     glDeleteVertexArrays(1, &s_QuadVao);
     s_QuadVao = 0;
 
-    glDetachShader(s_ShaderProgram, s_VertexShader);
-    glDeleteShader(s_VertexShader);
-
-    glDetachShader(s_ShaderProgram, s_FragmentShader);
-    glDeleteShader(s_FragmentShader);
-
-    glDeleteProgram(s_ShaderProgram);
-
-    //Core::ResourceManager::Unload(s_Texture);
+    Core::ResourceManager::Unload(s_Shader);
+    Core::ResourceManager::Unload(s_Texture);
 }
 
 void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
@@ -139,14 +89,14 @@ void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
     const glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
     const glm::mat4 pvmMatrix = projectionViewMatrix * modelMatrix;
 
-    glUseProgram(s_ShaderProgram);
+    s_Shader->Use();
 
-    if (const int location = glGetUniformLocation(s_ShaderProgram, "uPVMMatrix"); location != -1)
+    if (const int location = glGetUniformLocation(s_Shader->m_ProgramId, "uPVMMatrix"); location != -1)
     {
         glUniformMatrix4fv(location, 1, GL_FALSE, &pvmMatrix[0][0]);
     }
 
-    if (const int location = glGetUniformLocation(s_ShaderProgram, "uMainTexture"); location != -1)
+    if (const int location = glGetUniformLocation(s_Shader->m_ProgramId, "uMainTexture"); location != -1)
     {
         s_Texture->Bind();
         glUniform1i(location, 0);

@@ -5,7 +5,7 @@
 using namespace Engine::Exceptions::Core;
 
 OpenGlException::OpenGlException(const int error, const char* description)
-    : m_Message(std::format("OpenGL error [{}]: {}!", error, description))
+    : m_Message(std::format("OpenGL error {}: {}", error, description))
 {}
 
 const char* OpenGlException::what() const

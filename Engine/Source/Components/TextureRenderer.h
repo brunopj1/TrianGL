@@ -6,6 +6,7 @@
 
 namespace Engine::Resources
 {
+    class Shader;
     class Texture;
 }
 
@@ -22,10 +23,7 @@ namespace Engine::Components
         static inline unsigned int s_QuadVbo = 0;
         static inline unsigned int s_QuadEbo = 0;
 
-        static inline unsigned int s_ShaderProgram = 0;
-        static inline unsigned int s_VertexShader = 0;
-        static inline unsigned int s_FragmentShader = 0;
-
+        static inline Resources::Shader* s_Shader = nullptr;
         static inline Resources::Texture* s_Texture = nullptr;
 
     public:
@@ -33,7 +31,7 @@ namespace Engine::Components
         ~TextureRenderer() override = default;
 
     private:
-        static void Initialize();
+        static void Init();
         static void Terminate();
 
     private:

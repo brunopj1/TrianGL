@@ -7,6 +7,7 @@
 #include "Entities/Camera.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Util/DebugFeatures.hpp"
 #include <format>
 #include <stdexcept>
 #include <utility>
@@ -24,33 +25,45 @@ Window::Window(std::string title, const glm::uvec2 resolution, const bool vsync 
 
 std::string Window::GetTitle()
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     return s_Instance->m_Title;
 }
 
 void Window::SetTitle(std::string title)
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     s_Instance->m_Title = std::move(title);
     glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
 }
 
 bool Window::IsVsync()
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);
 }
 
 glm::uvec2 Window::GetResolution()
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     return s_Instance->m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     if (resolution.x == 0 || resolution.y == 0)
     {
         throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
@@ -61,6 +74,8 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
 float Window::GetAspectRatio()
 {
+    DEBUG_SINGLETON(s_Instance, "Window");
+
     return s_Instance->m_AspectRatio;
 }
 

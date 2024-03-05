@@ -5,7 +5,6 @@ project "Snake"
     targetdir ("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
     objdir    ("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
 
-filter { "configurations:Debug" }
 debugdir "."
 
     includedirs {

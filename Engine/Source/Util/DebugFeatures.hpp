@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "Exceptions/Core/ServiceNotYetInitialized.h"
 
 // Memory Leaks
 #ifdef DEBUG
@@ -17,5 +18,17 @@
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR); \
 	_CrtDumpMemoryLeaks()
 #else
-#define DEBUG_MEMORY_LEAKS() ;
+#define DEBUG_MEMORY_LEAKS() static_assert(true, "")
+#endif
+
+// Singleton validation
+#ifdef DEBUG
+#define DEBUG_SINGLETON(ptr, name)                              \
+	if ((ptr) == nullptr)			                            \
+	{                                                           \
+		throw Exceptions::Core::ServiceNotYetInitialized(name); \
+	}                                                           \
+	static_assert(true, "")
+#else
+#define DEBUG_SINGLETON(ptr, name) static_assert(true, "")
 #endif

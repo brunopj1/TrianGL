@@ -2,8 +2,6 @@
 #include <string>
 #include <vector>
 
-// TODO error message when using singletons before creating the APP (Debug only)
-
 #include "Resources/TextureParameters.hpp"
 
 // Forward declaration
@@ -14,6 +12,7 @@ namespace Engine::Resources::Internal
 
 namespace Engine::Resources
 {
+    class Shader;
     class Texture;
 }
 
@@ -35,6 +34,7 @@ namespace Engine::Core
         ~ResourceManager();
 
     public:
+        static Resources::Shader* LoadShader(std::string vertexShaderPath, std::string fragmentShaderPath);
         static Resources::Texture* LoadTexture(std::string filePath, const Resources::TextureParameters& parameters = {});
 
         static void Unload(Resources::Internal::ManagedResource* resource);

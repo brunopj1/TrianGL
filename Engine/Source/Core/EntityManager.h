@@ -2,6 +2,7 @@
 
 #include "Exceptions/Core/GameModeAlreadySpecifiedException.h"
 #include "Game/Entity.h"
+#include "Util/DebugFeatures.hpp"
 #include <vector>
 #include <unordered_set>
 
@@ -63,6 +64,8 @@ namespace Engine::Core
         template <typename T>
         static T* CreateGameMode()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::GameMode, T>, "The specified class does not derive Engine::Game::Entity");
             static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
 
@@ -80,6 +83,8 @@ namespace Engine::Core
         template <typename T>
         static T* SpawnEntity()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
             static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
 
@@ -99,6 +104,8 @@ namespace Engine::Core
         template <typename T>
         static T* AttachComponent(Game::Entity* parent)
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
             static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
 
@@ -126,6 +133,8 @@ namespace Engine::Core
         template <typename T>
         static T* FindEntity()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
             for (auto entity : s_Instance->m_Entities)
@@ -142,6 +151,8 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindEntities()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
             std::vector<T*> entities;
@@ -161,6 +172,8 @@ namespace Engine::Core
         template <typename T>
         static T* FindComponent()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             for (auto component : s_Instance->m_Components)
@@ -177,6 +190,8 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindComponents()
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             std::vector<T*> components;
@@ -195,6 +210,8 @@ namespace Engine::Core
         template <typename T>
         static T* FindComponentInEntity(Game::Entity* entity)
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             for (auto component : entity->m_Components)
@@ -211,6 +228,8 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
         {
+            DEBUG_SINGLETON(s_Instance, "EntityManager");
+
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             std::vector<T*> components;
