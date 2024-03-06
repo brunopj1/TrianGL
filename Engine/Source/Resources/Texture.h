@@ -22,7 +22,7 @@ namespace Engine::Resources
     {
     private:
         friend class Core::ResourceManager;
-        friend class Components::TextureRenderer;
+        friend class TextureMaterialAttribute;
 
     private:
         std::string m_FilePath;
@@ -44,6 +44,6 @@ namespace Engine::Resources
         void Free();
 
     private:
-        void Bind(int slot = 0) const;
+        void Bind(unsigned int slot) const;
     };
 }

@@ -12,11 +12,6 @@ namespace Engine::Core
     class ResourceManager;
 }
 
-// TODO ensure that these classes are only called from the respective singleton (DEBUG ONLY)
-// TODO Add a bool that is set to true before creating the the instance and use the controller to check if the bool is true (two way friendship)
-
-// TODO use the default attributes in every material if they are used in the shader (PVM matrix, etc)
-
 namespace Engine::Resources
 {
     // Forward declaration
@@ -26,35 +21,44 @@ namespace Engine::Resources
     {
     private:
         friend class Core::ResourceManager;
-        friend class Components::TextureRenderer; // TODO remove friend class
+        friend class Components::TextureRenderer;
 
     private:
         Shader m_Shader;
         std::vector<MaterialAttribute*> m_Attributes;
+
+    private:
+        Mat4MaterialAttribute* m_PvmMatrix;
 
     protected:
         Material(std::string vertexShader, std::string fragmentShader, bool isFilePath);
         ~Material() override;
 
     protected:
+        virtual void OnRenderSetup() const;
+
+    protected:
         template <typename T>
-        T* AddAttribute(const std::string name)
+        T* AddAttribute(const std::string& name)
         {
             static_assert(!std::is_same_v<MaterialAttribute, T>, "Cannot instantiate the abstract class Engine::Resources::MaterialAttribute");
             static_assert(std::is_base_of_v<MaterialAttribute, T>, "The specified class does not derive Engine::Resources::MaterialAttribute");
+            static_assert(!std::is_same_v<TextureMaterialAttribute, T>, "To create a texture attribute use the 'AddTextureAttribute' method instead");
             static_assert(std::is_constructible_v<T, int>, "The specified class does not implement a valid constructor");
 
-            // Get the location of the attribute
-            int location = m_Shader.GetUniformLocation(name);
-
-            // TODO in debug mode give a warning if the location is -1
+            const int location = m_Shader.GetUniformLocation(name);
 
             T* attribute = new T(location);
             m_Attributes.push_back(attribute);
             return attribute;
         }
 
+        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot);
+
     private:
-        void Use() const;
+        void Use(const glm::mat4& modelMatrix) const;
+
+        void CreateEngineAttributes();
+        void UpdateEngineAttributes(const glm::mat4& modelMatrix) const;
     };
 }

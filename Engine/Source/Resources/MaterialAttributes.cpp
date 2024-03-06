@@ -1,5 +1,6 @@
 ﻿#include "MaterialAttributes.h"
 
+#include "Texture.h"
 #include "glad/glad.h"
 
 using namespace Engine::Resources;
@@ -12,6 +13,36 @@ void MaterialAttribute::Bind() const
 {
     if (m_Location == -1) return;
     BindInternal();
+}
+
+TextureMaterialAttribute::TextureMaterialAttribute(const int location, const unsigned slot)
+    : MaterialAttribute(location), m_Value(nullptr), m_Slot(slot) {}
+
+Texture* TextureMaterialAttribute::GetValue() const
+{
+    return m_Value;
+}
+
+void TextureMaterialAttribute::SetValue(Texture* const value)
+{
+    m_Value = value;
+}
+
+unsigned TextureMaterialAttribute::GetSlot() const
+{
+    return m_Slot;
+}
+
+void TextureMaterialAttribute::SetSlot(const unsigned slot)
+{
+    m_Slot = slot;
+}
+
+void TextureMaterialAttribute::BindInternal() const
+{
+    if (m_Value == nullptr) return;
+    m_Value->Bind(m_Slot);
+    glUniform1i(m_Location, m_Slot); // NOLINT
 }
 
 void IntMaterialAttribute::BindInternal() const

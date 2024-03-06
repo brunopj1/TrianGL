@@ -9,12 +9,19 @@
 - [ ] Create a layer of abstraction for ImGui (and use it to display debug info)
 - [ ] Try unit testing
 
+## Rendering with transparency
+- [ ] In the material enable the alpha blending dynamically
+- [ ] Enable alpha blending automatically based on each texture
+- [ ] Add an option to manually enable alpha blending (for user materials)
+- [ ] Sort the rendering based on the Z coordinate (listen for changes in positions to re-sort)
+- [ ] Add an option to specify if a texture has premultiplied alpha
+
 ## Resource Manager
 
 - [X] Create a resource manager class
 - [X] Automatically delete resources when the application is closed
 - [X] Create a method to load textures
-- [ ] Create a method to load shaders
+- [X] Create a method to load materials
 
 ## Input System
 
@@ -29,16 +36,18 @@
 
 - [X] Texture Renderer class
 - [X] Shader class (internal)
-- [ ] Material class (abstract)
+- [X] Material class (abstract)
 - [X] Material Attribute class
-- [ ] Material Instance class
+- [ ] Material instances (using new instances of the material, but without duplicating the shader in the GPU)
 - [X] Add the default mesh
-- [ ] Add the default material
+- [X] Add the default material
 - [ ] Use uniform buffers for the shaders
+- [ ] Validate the material attributes (repeated names, invalid type)
 - [X] Implement automatic rendering
 - [ ] Implement View Frustum Culling
 - [ ] Add a transform to the Texture Renderer
 - [ ] Add a pivot to the Texture Renderer
+- [ ] Add batch rendering (for the same material)
 
 ## Entity system
 

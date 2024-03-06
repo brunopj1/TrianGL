@@ -20,6 +20,7 @@ Texture::Texture(std::string filePath, const TextureParameters& parameters)
 
 Texture::~Texture()
 {
+#pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
     DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Texture");
 
     Free();
@@ -109,7 +110,7 @@ void Texture::Free()
     m_TextureId = 0;
 }
 
-void Texture::Bind(const int slot) const
+void Texture::Bind(const unsigned int slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);

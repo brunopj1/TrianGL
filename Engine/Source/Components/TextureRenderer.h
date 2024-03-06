@@ -10,6 +10,11 @@ namespace Engine::Resources
     class Texture;
 }
 
+namespace Engine::DefaultResources
+{
+    class DefaultMaterial;
+}
+
 namespace Engine::Components
 {
     class TextureRenderer final : public Game::Component, public Game::Internal::IRenderable
@@ -22,19 +27,23 @@ namespace Engine::Components
         static inline unsigned int s_QuadVbo = 0;
         static inline unsigned int s_QuadEbo = 0;
 
-        static inline Resources::Material* s_Material = nullptr;
-        // TODO put the texture in the default material
-        static inline Resources::Texture* s_Texture = nullptr;
+    private:
+        Resources::Material* m_Material = nullptr;
 
     public:
         TextureRenderer();
         ~TextureRenderer() override = default;
+
+    public:
+        Resources::Material* GetMaterial() const;
+        void SetMaterial(Resources::Material* material, bool unloadPreviousMaterial = false);
+        DefaultResources::DefaultMaterial* UseDefaultMaterial(bool unloadPreviousMaterial = false);
 
     private:
         static void Init();
         static void Terminate();
 
     private:
-        void Render(const glm::mat4& projectionViewMatrix) const override;
+        void Render() const override;
     };
 }

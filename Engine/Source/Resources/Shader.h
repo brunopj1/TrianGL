@@ -24,7 +24,6 @@ namespace Engine::Resources
     {
     private:
         friend class Core::ResourceManager;
-        friend class Components::TextureRenderer; // TODO remove friend class
         friend class Material;
 
     private:

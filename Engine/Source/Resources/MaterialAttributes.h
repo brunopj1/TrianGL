@@ -2,10 +2,13 @@
 
 #include "glm/glm.hpp"
 
+// TODO prevent users from manually creating / deleting these classes
+
 namespace Engine::Resources
 {
     // Forward declaration
     class Material;
+    class Texture;
 
     // Base class
     class MaterialAttribute
@@ -20,15 +23,43 @@ namespace Engine::Resources
         MaterialAttribute(int location);
         virtual ~MaterialAttribute() = default;
 
+    public:
+        MaterialAttribute(const MaterialAttribute&) = delete;
+        MaterialAttribute& operator=(const MaterialAttribute&) = delete;
+        MaterialAttribute(MaterialAttribute&&) = delete;
+        MaterialAttribute& operator=(MaterialAttribute&&) = delete;
+
     private:
         void Bind() const;
         virtual void BindInternal() const = 0;
     };
 
-    // Macro
-    // @formatter:off
+    // Texture attribute
 
-    // TODO prevent users from manually creating / deleting these classes
+    class TextureMaterialAttribute final : public MaterialAttribute
+    {
+    private:
+        Texture* m_Value;
+        unsigned int m_Slot;
+
+    public:
+        TextureMaterialAttribute(int location, unsigned int slot);
+        ~TextureMaterialAttribute() override = default;
+
+    public:
+        Texture* GetValue() const;
+        void SetValue(Texture* value);
+
+        unsigned int GetSlot() const;
+        void SetSlot(unsigned int slot);
+
+    private:
+        void BindInternal() const override;
+    };
+
+    // Macro
+
+    // @formatter:off
     
     #define MATERIAL_ATTRIBUTE_IMPLEMENTATION(name, type, val) \
         class name final : public MaterialAttribute            \
@@ -37,9 +68,8 @@ namespace Engine::Resources
             type m_Value;                                      \
                                                                \
         public:                                                \
-            name(int location)                                 \
-                : MaterialAttribute(location), m_Value(val)    \
-            {}                                                 \
+            name(const int location)                           \
+                : MaterialAttribute(location), m_Value(val) {} \
             ~name() override = default;                        \
                                                                \
         public:                                                \
@@ -59,7 +89,7 @@ namespace Engine::Resources
 
     // @formatter:on
 
-    // Implementations
+    // Regular implementations
 
     MATERIAL_ATTRIBUTE_IMPLEMENTATION(IntMaterialAttribute, int, 0);
 

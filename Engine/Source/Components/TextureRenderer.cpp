@@ -15,6 +15,34 @@ TextureRenderer::TextureRenderer()
     : Component(false)
 {}
 
+Engine::Resources::Material* TextureRenderer::GetMaterial() const
+{
+    return m_Material;
+}
+
+void TextureRenderer::SetMaterial(Resources::Material* material, const bool unloadPreviousMaterial)
+{
+    if (unloadPreviousMaterial && m_Material != nullptr)
+    {
+        Core::ResourceManager::Unload(m_Material);
+    }
+
+    m_Material = material;
+}
+
+Engine::DefaultResources::DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMaterial)
+{
+    if (unloadPreviousMaterial && m_Material != nullptr)
+    {
+        Core::ResourceManager::Unload(m_Material);
+    }
+
+    const auto material = Core::DefaultResourcesCollection::GetDefaultMaterial();
+    m_Material = material;
+
+    return material;
+}
+
 void TextureRenderer::Init()
 {
     glEnable(GL_DEPTH_TEST);
@@ -57,12 +85,6 @@ void TextureRenderer::Init()
     // ReSharper disable once CppCStyleCast, performance-no-int-to-ptr
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-
-    s_Material = Core::DefaultResourcesCollection::GetDefaultMaterial();
-
-    Resources::TextureParameters parameters;
-    parameters.Filter = Resources::TextureFilterMode::Nearest;
-    s_Texture = Core::ResourceManager::LoadTexture("Assets/Textures/ugly_smile.png", parameters);
 }
 
 void TextureRenderer::Terminate()
@@ -75,42 +97,22 @@ void TextureRenderer::Terminate()
 
     glDeleteVertexArrays(1, &s_QuadVao);
     s_QuadVao = 0;
-
-    Core::ResourceManager::Unload(s_Material);
-    Core::ResourceManager::Unload(s_Texture);
 }
 
-void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
+void TextureRenderer::Render() const
 {
-    if (s_Texture->HasTransparency())
+    if (m_Material == nullptr)
     {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // TODO throw an error
     }
 
     const glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
-    const glm::mat4 pvmMatrix = projectionViewMatrix * modelMatrix;
 
-    s_Material->m_Shader.Use();
-
-    if (const int location = glGetUniformLocation(s_Material->m_Shader.m_ProgramId, "uPVMMatrix"); location != -1)
-    {
-        glUniformMatrix4fv(location, 1, GL_FALSE, &pvmMatrix[0][0]);
-    }
-
-    if (const int location = glGetUniformLocation(s_Material->m_Shader.m_ProgramId, "uMainTexture"); location != -1)
-    {
-        s_Texture->Bind();
-        glUniform1i(location, 0);
-    }
+    m_Material->Use(modelMatrix);
+    m_Material->OnRenderSetup();
 
     glBindVertexArray(s_QuadVao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_QuadEbo);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-    if (s_Texture->HasTransparency())
-    {
-        glDisable(GL_BLEND);
-    }
 }

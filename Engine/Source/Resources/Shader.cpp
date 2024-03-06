@@ -143,6 +143,7 @@ void Shader::LoadUniformLocations()
 
 int Shader::GetUniformLocation(const std::string& name) const
 {
+    // TODO in debug mode give a warning if the location is -1
     const auto it = m_UniformLocations.find(name);
     return it != m_UniformLocations.end() ? it->second : -1;
 }

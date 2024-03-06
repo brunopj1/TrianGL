@@ -2,9 +2,28 @@
 
 using namespace Engine::DefaultResources;
 
-DefaultMaterial::DefaultMaterial() // TODO move these files to the engine project and copy them to the Bin directory
-    : Material("Assets/Shaders/default.vert", "Assets/Shaders/default.frag", true)
+DefaultMaterial::DefaultMaterial()
+    : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag", true)
 {
-    // TODO add attributes here (texture, color, etc)
-    // TODO add attributes in the base class (PVMMatrix, etc)
+    m_Texture = AddTextureAttribute("uTexture", 0);
+
+    m_Color = AddAttribute<Resources::Float4MaterialAttribute>("uColor");
+    m_Color->SetValue({1.0f, 1.0f, 1.0f, 1.0f});
+
+    m_IsTextureValid = AddAttribute<Resources::IntMaterialAttribute>("uIsTextureValid");
+}
+
+Engine::Resources::TextureMaterialAttribute* DefaultMaterial::GetTextureAttr() const
+{
+    return m_Texture;
+}
+
+Engine::Resources::Float4MaterialAttribute* DefaultMaterial::GetColorAttr() const
+{
+    return m_Color;
+}
+
+void DefaultMaterial::OnRenderSetup() const
+{
+    m_IsTextureValid->SetValue(m_Texture->GetValue() != nullptr ? 1 : 0);
 }

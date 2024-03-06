@@ -23,6 +23,6 @@ namespace Engine::Game::Internal
         virtual ~IRenderable() = default;
 
     protected:
-        virtual void Render(const glm::mat4& projectionViewMatrix) const = 0;
+        virtual void Render() const = 0;
     };
 }

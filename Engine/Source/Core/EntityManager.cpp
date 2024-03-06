@@ -69,12 +69,9 @@ void EntityManager::Update()
 
 void EntityManager::Render() const
 {
-    const Entities::Camera* mainCamera = Entities::Camera::GetMainCamera();
-    const glm::mat4 projectionViewMatrix = mainCamera->GetProjectionViewMatrix();
-
     for (const Game::Internal::IRenderable* renderable : m_RenderQueue)
     {
-        renderable->Render(projectionViewMatrix);
+        renderable->Render();
     }
 }
 

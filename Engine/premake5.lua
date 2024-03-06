@@ -48,3 +48,8 @@ project "Engine"
 
     filter "system:windows"
         defines { "_WINDOWS" }
+
+postbuildcommands {
+    -- "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/",
+    "{COPYDIR} Assets/ ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
+}

@@ -9,13 +9,18 @@ namespace Engine::Core
     class Window;
 }
 
+namespace Engine::Resources
+{
+    class Material;
+}
+
 namespace Engine::Entities
 {
     class Camera final : public Game::Entity
     {
     private:
-        friend class Core::EntityManager;
         friend class Core::Window;
+        friend class Resources::Material;
 
     private:
         static inline Camera* s_MainCamera = nullptr;
@@ -50,5 +55,7 @@ namespace Engine::Entities
         glm::mat4 GetViewMatrix() const;
         glm::mat4 GetProjectionMatrix() const;
         glm::mat4 GetProjectionViewMatrix() const;
+
+        // TODO update the matrix once per frame and save it in a member variable
     };
 }

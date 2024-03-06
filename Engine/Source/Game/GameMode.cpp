@@ -12,6 +12,7 @@ GameMode::GameMode()
 
 GameMode::~GameMode()
 {
+#pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
     DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::GameMode");
 }
 
