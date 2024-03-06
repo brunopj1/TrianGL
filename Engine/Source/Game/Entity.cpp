@@ -1,11 +1,20 @@
 ﻿#include "Entity.h"
 
+#include "Core/EntityManager.h"
+#include "Util/DebugFeatures.hpp"
+
 using namespace Engine::Game;
 
 Entity::Entity(const bool shouldUpdate)
     : IUpdatable(shouldUpdate)
+{
+    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::Entity");
+}
 
-{}
+Entity::~Entity()
+{
+    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::Entity");
+}
 
 Transform& Entity::GetTransform()
 {

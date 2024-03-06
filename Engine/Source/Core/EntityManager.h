@@ -26,9 +26,13 @@ namespace Engine::Core
     {
     private:
         friend class Application;
+        friend class Game::GameMode;
+        friend class Game::Entity;
+        friend class Game::Component;
 
     private:
         inline static EntityManager* s_Instance = nullptr;
+        DEBUG_SINGLETON_DECLARE_USAGE_VAR();
 
     private:
         Game::GameMode* m_GameMode = nullptr;
@@ -64,15 +68,21 @@ namespace Engine::Core
         template <typename T>
         static T* CreateGameMode()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::GameMode, T>, "The specified class does not derive Engine::Game::Entity");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
+            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
+            static_assert(!std::is_same_v<T, Game::GameMode>, "Cannot instantiate the abstract class Engine::Game::GameMode");
 
             if (s_Instance->m_GameMode) throw Exceptions::Core::GameModeAlreadySpecifiedException();
 
+            DEBUG_DO(s_IsCurrentlyInUse = true);
+
             T* instance = new T();
             s_Instance->m_GameMode = instance;
+
+            DEBUG_DO(s_IsCurrentlyInUse = false);
+
             return instance;
         }
 
@@ -83,10 +93,12 @@ namespace Engine::Core
         template <typename T>
         static T* SpawnEntity()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
+            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
+
+            DEBUG_DO(s_IsCurrentlyInUse = true);
 
             T* instance = new T();
 
@@ -94,6 +106,8 @@ namespace Engine::Core
 
             AddToQueue(instance, s_Instance->m_OnStartQueue);
             AddToQueue(instance, s_Instance->m_OnUpdateQueue);
+
+            DEBUG_DO(s_IsCurrentlyInUse = false);
 
             return instance;
         }
@@ -104,10 +118,12 @@ namespace Engine::Core
         template <typename T>
         static T* AttachComponent(Game::Entity* parent)
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement a default constructor");
+            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
+
+            DEBUG_DO(s_IsCurrentlyInUse = true);
 
             T* instance = new T();
 
@@ -124,6 +140,8 @@ namespace Engine::Core
                 s_Instance->m_RenderQueue.push_back(instance);
             }
 
+            DEBUG_DO(s_IsCurrentlyInUse = false);
+
             return instance;
         }
 
@@ -133,7 +151,7 @@ namespace Engine::Core
         template <typename T>
         static T* FindEntity()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
@@ -151,7 +169,7 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindEntities()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
@@ -172,7 +190,7 @@ namespace Engine::Core
         template <typename T>
         static T* FindComponent()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
@@ -190,7 +208,7 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindComponents()
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
@@ -210,7 +228,7 @@ namespace Engine::Core
         template <typename T>
         static T* FindComponentInEntity(Game::Entity* entity)
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
@@ -228,7 +246,7 @@ namespace Engine::Core
         template <typename T>
         static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
         {
-            DEBUG_SINGLETON(s_Instance, "EntityManager");
+            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
             static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 

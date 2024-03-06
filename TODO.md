@@ -28,8 +28,10 @@
 ## Rendering
 
 - [X] Texture Renderer class
-- [ ] Shader class (internal)
+- [X] Shader class (internal)
 - [ ] Material class (abstract)
+- [X] Material Attribute class
+- [ ] Material Instance class
 - [X] Add the default mesh
 - [ ] Add the default material
 - [ ] Use uniform buffers for the shaders

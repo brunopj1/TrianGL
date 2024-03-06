@@ -17,70 +17,70 @@ InputSystem::~InputSystem()
 
 bool InputSystem::IsKeyDown(const KeyCode key)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_KeysDown.contains(key);
 }
 
 bool InputSystem::WasKeyPressed(const KeyCode key)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_KeysPressedThisFrame.contains(key);
 }
 
 bool InputSystem::WasKeyRepeated(const KeyCode key)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_KeysRepeatedThisFrame.contains(key);
 }
 
 bool InputSystem::WasKeyReleased(const KeyCode key)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_KeysReleasedThisFrame.contains(key);
 }
 
 bool InputSystem::IsMouseButtonDown(const MouseButton button)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseButtonsDown.contains(button);
 }
 
 bool InputSystem::WasMouseButtonPressed(const MouseButton button)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseButtonsPressedThisFrame.contains(button);
 }
 
 bool InputSystem::WasMouseButtonReleased(const MouseButton button)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseButtonsReleasedThisFrame.contains(button);
 }
 
 glm::ivec2 InputSystem::GetMousePosition()
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MousePosition;
 }
 
 glm::ivec2 InputSystem::GetMouseDelta()
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseDelta;
 }
 
 void InputSystem::SetMousePosition(const glm::ivec2 position)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     glfwSetCursorPos(s_Instance->m_WindowPtr, position.x, position.y);
     s_Instance->m_MousePosition = position;
@@ -88,21 +88,21 @@ void InputSystem::SetMousePosition(const glm::ivec2 position)
 
 int InputSystem::GetMouseScroll()
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseScroll;
 }
 
 MouseMode InputSystem::GetMouseMode()
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     return s_Instance->m_MouseMode;
 }
 
 void InputSystem::SetMouseMode(MouseMode mode)
 {
-    DEBUG_SINGLETON(s_Instance, "InputSystem");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "InputSystem");
 
     const int glfwMode = static_cast<int>(mode);
     glfwSetInputMode(s_Instance->m_WindowPtr, GLFW_CURSOR, glfwMode);

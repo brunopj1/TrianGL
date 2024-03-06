@@ -4,11 +4,9 @@ namespace Engine::Game
 {
     class GameMode
     {
-    protected:
-        GameMode() = default;
-
     public:
-        virtual ~GameMode() = default;
+        GameMode();
+        virtual ~GameMode();
 
     public:
         virtual void OnStart();

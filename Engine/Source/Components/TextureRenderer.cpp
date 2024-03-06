@@ -1,8 +1,10 @@
 ﻿#include "TextureRenderer.h"
 
+#include "Core/DefaultResourcesCollection.h"
 #include "Core/ResourceManager.h"
 #include "Game/Entity.h"
 #include "glad/glad.h"
+#include "Resources/Material.h"
 #include "Resources/Shader.h"
 #include "Resources/Texture.h"
 #include <iostream>
@@ -56,7 +58,7 @@ void TextureRenderer::Init()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    s_Shader = Core::ResourceManager::LoadShader("Assets/Shaders/default.vert", "Assets/Shaders/default.frag");
+    s_Material = Core::DefaultResourcesCollection::GetDefaultMaterial();
 
     Resources::TextureParameters parameters;
     parameters.Filter = Resources::TextureFilterMode::Nearest;
@@ -74,7 +76,7 @@ void TextureRenderer::Terminate()
     glDeleteVertexArrays(1, &s_QuadVao);
     s_QuadVao = 0;
 
-    Core::ResourceManager::Unload(s_Shader);
+    Core::ResourceManager::Unload(s_Material);
     Core::ResourceManager::Unload(s_Texture);
 }
 
@@ -89,14 +91,14 @@ void TextureRenderer::Render(const glm::mat4& projectionViewMatrix) const
     const glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
     const glm::mat4 pvmMatrix = projectionViewMatrix * modelMatrix;
 
-    s_Shader->Use();
+    s_Material->m_Shader.Use();
 
-    if (const int location = glGetUniformLocation(s_Shader->m_ProgramId, "uPVMMatrix"); location != -1)
+    if (const int location = glGetUniformLocation(s_Material->m_Shader.m_ProgramId, "uPVMMatrix"); location != -1)
     {
         glUniformMatrix4fv(location, 1, GL_FALSE, &pvmMatrix[0][0]);
     }
 
-    if (const int location = glGetUniformLocation(s_Shader->m_ProgramId, "uMainTexture"); location != -1)
+    if (const int location = glGetUniformLocation(s_Material->m_Shader.m_ProgramId, "uMainTexture"); location != -1)
     {
         s_Texture->Bind();
         glUniform1i(location, 0);

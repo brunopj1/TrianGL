@@ -17,7 +17,9 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-    DestroyGameMode();
+    DEBUG_DO(s_IsCurrentlyInUse = true);
+
+    delete s_Instance->m_GameMode;
 
     for (const Game::Entity* entity : m_Entities)
     {
@@ -30,6 +32,8 @@ EntityManager::~EntityManager()
     }
 
     s_Instance = nullptr;
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }
 
 void EntityManager::InitializeComponents()
@@ -92,22 +96,28 @@ void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vecto
 
 Engine::Game::GameMode* EntityManager::GetGameMode() const
 {
-    DEBUG_SINGLETON(s_Instance, "EntityManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
     return m_GameMode;
 }
 
 void EntityManager::DestroyGameMode()
 {
-    DEBUG_SINGLETON(s_Instance, "EntityManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+
+    DEBUG_DO(s_IsCurrentlyInUse = true);
 
     delete s_Instance->m_GameMode;
     s_Instance->m_GameMode = nullptr;
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
-    DEBUG_SINGLETON(s_Instance, "EntityManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+
+    DEBUG_DO(s_IsCurrentlyInUse = true);
 
     s_Instance->m_Entities.erase(entity);
 
@@ -120,11 +130,15 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
     }
 
     delete entity;
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
-    DEBUG_SINGLETON(s_Instance, "EntityManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+
+    DEBUG_DO(s_IsCurrentlyInUse = true);
 
     s_Instance->m_Components.erase(component);
 
@@ -140,4 +154,6 @@ void EntityManager::DetachComponent(Game::Component* component)
     }
 
     delete component;
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }

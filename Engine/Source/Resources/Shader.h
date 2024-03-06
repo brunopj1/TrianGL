@@ -2,6 +2,7 @@
 
 #include "Internal/ManagedResource.h"
 #include <string>
+#include <unordered_map>
 
 // Forward declaration
 namespace Engine::Core
@@ -16,15 +17,22 @@ namespace Engine::Components
 
 namespace Engine::Resources
 {
-    class Shader : public Internal::ManagedResource
+    // Forward declaration
+    class Material;
+
+    class Shader final : public Internal::ManagedResource
     {
     private:
         friend class Core::ResourceManager;
-        friend class Components::TextureRenderer;
+        friend class Components::TextureRenderer; // TODO remove friend class
+        friend class Material;
 
     private:
-        std::string m_VertexShaderPath;
-        std::string m_FragmentShaderPath;
+        std::string m_VertexShader;
+        std::string m_FragmentShader;
+        bool m_IsFilePath;
+
+        std::unordered_map<std::string, int> m_UniformLocations;
 
     private:
         int m_ProgramId = 0;
@@ -32,19 +40,21 @@ namespace Engine::Resources
         int m_FragmentShaderId = 0;
 
     private:
-        Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+        Shader(std::string vertexShader, std::string fragmentShader, bool isFilePath);
         ~Shader() override;
-
-    public:
-        std::string GetVertexShaderPath() const;
-        std::string GetFragmentShaderPath() const;
 
     private:
         void Load();
         void Free();
 
-        static int CompileShader(const std::string& filePath, int type);
+    private:
+        void LinkProgram();
+        int CompileShader(const std::string& shader, int type) const;
         static std::string ReadShaderFile(const std::string& filePath);
+
+    private:
+        void LoadUniformLocations();
+        int GetUniformLocation(const std::string& name) const;
 
     private:
         void Use() const;

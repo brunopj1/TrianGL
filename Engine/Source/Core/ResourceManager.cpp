@@ -1,6 +1,6 @@
 ﻿#include "ResourceManager.h"
 
-#include "Resources/Shader.h"
+#include "Resources/Material.h"
 #include "Resources/Texture.h"
 #include "Util/DebugFeatures.hpp"
 
@@ -14,36 +14,40 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
+    DEBUG_DO(s_IsCurrentlyInUse = true);
+
     for (const Internal::ManagedResource* resource : m_Resources)
     {
         delete resource;
     }
 
     s_Instance = nullptr;
-}
 
-Shader* ResourceManager::LoadShader(std::string vertexShaderPath, std::string fragmentShaderPath)
-{
-    DEBUG_SINGLETON(s_Instance, "ResourceManager");
-
-    Shader* shader = new Shader(std::move(vertexShaderPath), std::move(fragmentShaderPath));
-    s_Instance->m_Resources.push_back(shader);
-    return shader;
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }
 
 Texture* ResourceManager::LoadTexture(std::string filePath, const TextureParameters& parameters)
 {
-    DEBUG_SINGLETON(s_Instance, "ResourceManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "ResourceManager");
+
+    DEBUG_DO(s_IsCurrentlyInUse = true);
 
     Texture* texture = new Texture(std::move(filePath), parameters);
     s_Instance->m_Resources.push_back(texture);
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
+
     return texture;
 }
 
 void ResourceManager::Unload(Internal::ManagedResource* resource)
 {
-    DEBUG_SINGLETON(s_Instance, "ResourceManager");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "ResourceManager");
+
+    DEBUG_DO(s_IsCurrentlyInUse = true);
 
     std::erase(s_Instance->m_Resources, resource);
     delete resource;
+
+    DEBUG_DO(s_IsCurrentlyInUse = false);
 }

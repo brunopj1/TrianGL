@@ -28,7 +28,7 @@ namespace Engine::Game
 
     protected:
         Entity(bool shouldUpdate);
-        ~Entity() override = default;
+        ~Entity() override;
 
     public:
         Transform& GetTransform();

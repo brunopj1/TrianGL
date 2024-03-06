@@ -11,8 +11,8 @@
 
 using namespace Engine::Resources;
 
-Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
-    : m_VertexShaderPath(std::move(vertexShaderPath)), m_FragmentShaderPath(std::move(fragmentShaderPath))
+Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
+    : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
 {
     Load();
 }
@@ -22,25 +22,14 @@ Shader::~Shader()
     Free();
 }
 
-std::string Shader::GetVertexShaderPath() const
-{
-    return m_VertexShaderPath;
-}
-
-std::string Shader::GetFragmentShaderPath() const
-{
-    return m_FragmentShaderPath;
-}
-
 void Shader::Load()
 {
-    m_VertexShaderId = CompileShader(m_VertexShaderPath, GL_VERTEX_SHADER);
-    m_FragmentShaderId = CompileShader(m_FragmentShaderPath, GL_FRAGMENT_SHADER);
+    m_VertexShaderId = CompileShader(m_VertexShader, GL_VERTEX_SHADER);
+    m_FragmentShaderId = CompileShader(m_FragmentShader, GL_FRAGMENT_SHADER);
 
-    m_ProgramId = glCreateProgram();
-    glAttachShader(m_ProgramId, m_VertexShaderId);
-    glAttachShader(m_ProgramId, m_FragmentShaderId);
-    glLinkProgram(m_ProgramId);
+    LinkProgram();
+
+    LoadUniformLocations();
 }
 
 void Shader::Free()
@@ -55,9 +44,36 @@ void Shader::Free()
     m_ProgramId = 0;
 }
 
-int Shader::CompileShader(const std::string& filePath, const int type)
+void Shader::LinkProgram()
 {
-    const std::string shaderSource = ReadShaderFile(filePath);
+    m_ProgramId = glCreateProgram();
+
+    glAttachShader(m_ProgramId, m_VertexShaderId);
+    glAttachShader(m_ProgramId, m_FragmentShaderId);
+
+    glLinkProgram(m_ProgramId);
+
+    int success = 0;
+    glGetProgramiv(m_ProgramId, GL_LINK_STATUS, &success);
+
+    if (success == 0)
+    {
+        int logLength = 0;
+        glGetProgramiv(m_ProgramId, GL_INFO_LOG_LENGTH, &logLength);
+
+        char* log = new char[logLength + 1];
+        glGetProgramInfoLog(m_ProgramId, logLength, nullptr, log);
+
+        const std::string logStr = log;
+        delete[] log;
+
+        throw Exceptions::Core::ShaderCompilationException(logStr);
+    }
+}
+
+int Shader::CompileShader(const std::string& shader, const int type) const
+{
+    const std::string shaderSource = m_IsFilePath ? ReadShaderFile(shader) : shader;
     const char* shaderSourcePtr = shaderSource.c_str();
 
     const int shaderId = glCreateShader(type);
@@ -103,6 +119,32 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
     sstr << file.rdbuf();
 
     return sstr.str();
+}
+
+void Shader::LoadUniformLocations()
+{
+    int count = 0;
+    glGetProgramiv(m_ProgramId, GL_ACTIVE_UNIFORMS, &count);
+
+    GLint size;
+    GLenum type;
+
+    constexpr GLsizei bufSize = 1024;
+    // ReSharper disable once CppTooWideScope
+    GLchar name[bufSize];
+    GLsizei length;
+
+    for (int i = 0; i < count; i++)
+    {
+        glGetActiveUniform(m_ProgramId, i, bufSize, &length, &size, &type, name);
+        m_UniformLocations[name] = glGetUniformLocation(m_ProgramId, name);
+    }
+}
+
+int Shader::GetUniformLocation(const std::string& name) const
+{
+    const auto it = m_UniformLocations.find(name);
+    return it != m_UniformLocations.end() ? it->second : -1;
 }
 
 void Shader::Use() const

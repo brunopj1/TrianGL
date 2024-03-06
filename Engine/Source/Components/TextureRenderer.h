@@ -6,7 +6,7 @@
 
 namespace Engine::Resources
 {
-    class Shader;
+    class Material;
     class Texture;
 }
 
@@ -18,12 +18,12 @@ namespace Engine::Components
         friend class Core::EntityManager;
 
     private:
-        // TODO replace this by a default material
         static inline unsigned int s_QuadVao = 0;
         static inline unsigned int s_QuadVbo = 0;
         static inline unsigned int s_QuadEbo = 0;
 
-        static inline Resources::Shader* s_Shader = nullptr;
+        static inline Resources::Material* s_Material = nullptr;
+        // TODO put the texture in the default material
         static inline Resources::Texture* s_Texture = nullptr;
 
     public:

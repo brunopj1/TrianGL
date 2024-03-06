@@ -5,6 +5,8 @@
 #include "Core/EntityManager.h"
 #include "Entities/Camera.h"
 #include "Components/TextureRenderer.h"
+#include "Core/ResourceManager.h"
+#include "Resources/TestMaterial.h"
 
 using namespace Engine::Core;
 
@@ -23,4 +25,6 @@ void SnakeGameMode::OnStart()
     snake->GetTransform().SetPosition({2, 0});
     snake->GetTransform().SetRotationDeg(45);
     snake->GetTransform().SetScale(1.5);
+
+    TestMaterial* testMaterial = ResourceManager::LoadMaterial<TestMaterial>();
 }

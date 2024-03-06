@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DefaultResourcesCollection.h"
 #include "Window.h"
 #include "ResourceManager.h"
 #include "EntityManager.h"
@@ -26,8 +27,12 @@ namespace Engine::Core
     {
     private:
         Window m_Window;
+
         ResourceManager m_ResourceManager;
+        DefaultResourcesCollection m_DefaultResources;
+
         EntityManager m_EntityManager;
+
         InputSystem m_InputSystem;
 
     public:

@@ -1,21 +1,27 @@
 ﻿#include "Texture.h"
 
 #include "stb_image.h"
+#include "Core/ResourceManager.h"
 
 #include "glad/glad.h"
 
 #include "Exceptions/Common/FileNotFoundException.h"
+#include "Util/DebugFeatures.hpp"
 
 using namespace Engine::Resources;
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
+    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Texture");
+
     Load(parameters);
 }
 
 Texture::~Texture()
 {
+    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Texture");
+
     Free();
 }
 

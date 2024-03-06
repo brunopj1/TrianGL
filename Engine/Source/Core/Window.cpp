@@ -25,14 +25,14 @@ Window::Window(std::string title, const glm::ivec2 position, const glm::uvec2 re
 
 bool Window::IsFullscreen()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_Fullscreen;
 }
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     if (fullscreen == s_Instance->m_Fullscreen) return;
 
@@ -49,14 +49,14 @@ void Window::SetFullscreen(const bool fullscreen)
 
 std::string Window::GetTitle()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_Title;
 }
 
 void Window::SetTitle(std::string title)
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     s_Instance->m_Title = std::move(title);
     glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
@@ -64,14 +64,14 @@ void Window::SetTitle(std::string title)
 
 glm::ivec2 Window::GetPosition()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_Position;
 }
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     // m_Position is updated in the callback
     glfwSetWindowPos(s_Instance->m_WindowPtr, position.x, position.y);
@@ -79,14 +79,14 @@ void Window::SetPosition(const glm::ivec2 position)
 
 glm::uvec2 Window::GetResolution()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     if (resolution.x == 0 || resolution.y == 0)
     {
@@ -99,21 +99,21 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
 float Window::GetAspectRatio()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_AspectRatio;
 }
 
 bool Window::IsVsync()
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    DEBUG_SINGLETON(s_Instance, "Window");
+    DEBUG_SINGLETON_INSTANCE(s_Instance, "Window");
 
     s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);

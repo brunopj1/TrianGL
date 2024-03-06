@@ -22,7 +22,7 @@ namespace Engine::Game
 
     protected:
         Component(bool shouldUpdate);
-        ~Component() override = default;
+        ~Component() override;
 
     public:
         Entity* GetParent() const;
