@@ -122,7 +122,9 @@ void Application::Terminate() const
 
 void Application::Update()
 {
-    m_EntityManager.Update();
+    const float deltaTime = m_Clock.Update();
+
+    m_EntityManager.Update(deltaTime);
 }
 
 void Application::Render() const

@@ -48,6 +48,7 @@
 - [ ] Add a transform to the Texture Renderer
 - [ ] Add a pivot to the Texture Renderer
 - [ ] Add batch rendering (for the same material)
+- [ ] Add more Engine materials (camera, frame/time, etc...)
 
 ## Entity system
 
@@ -59,7 +60,7 @@
 - [X] Create Instancing methods and automatic update
 - [X] Allow passing arguments to the instancing methods (to match the constructor)
 - [X] Create lookup methods for the entities and components
-- [ ] Add the delta time to the update methods
+- [X] Add the delta time to the update methods
 - [ ] Move the static methods to the respective classes
 
 ## Project setup

@@ -13,5 +13,5 @@ protected:
 
 protected:
     void OnStart() override;
-    void OnUpdate() override;
+    void OnUpdate(float deltaTime) override;
 };

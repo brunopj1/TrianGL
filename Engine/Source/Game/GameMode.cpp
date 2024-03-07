@@ -18,6 +18,6 @@ GameMode::~GameMode()
 
 void GameMode::OnStart() {}
 
-void GameMode::OnEarlyUpdate() {}
+void GameMode::OnEarlyUpdate(float deltaTime) {}
 
-void GameMode::OnLateUpdate() {}
+void GameMode::OnLateUpdate(float deltaTime) {}

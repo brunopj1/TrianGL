@@ -10,7 +10,7 @@ namespace Engine::Game
 
     public:
         virtual void OnStart();
-        virtual void OnEarlyUpdate();
-        virtual void OnLateUpdate();
+        virtual void OnEarlyUpdate(float deltaTime);
+        virtual void OnLateUpdate(float deltaTime);
     };
 }

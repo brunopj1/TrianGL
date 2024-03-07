@@ -45,7 +45,7 @@ void EntityManager::TerminateComponents()
     Components::TextureRenderer::Terminate();
 }
 
-void EntityManager::Update()
+void EntityManager::Update(const float deltaTime)
 {
     for (Game::Internal::IUpdatable* updatable : m_OnStartQueue)
     {
@@ -53,17 +53,17 @@ void EntityManager::Update()
     }
     m_OnStartQueue.clear();
 
-    m_GameMode->OnEarlyUpdate();
+    m_GameMode->OnEarlyUpdate(deltaTime);
 
     for (Game::Internal::IUpdatable* updatable : m_OnUpdateQueue)
     {
         if (updatable->m_ShouldUpdate)
         {
-            updatable->OnUpdate();
+            updatable->OnUpdate(deltaTime);
         }
     }
 
-    m_GameMode->OnLateUpdate();
+    m_GameMode->OnLateUpdate(deltaTime);
 }
 
 void EntityManager::Render() const

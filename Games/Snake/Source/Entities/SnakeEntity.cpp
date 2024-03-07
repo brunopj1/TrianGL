@@ -38,7 +38,7 @@ void SnakeEntity::OnStart()
     std::cout << "I am the snake\n";
 }
 
-void SnakeEntity::OnUpdate()
+void SnakeEntity::OnUpdate(float deltaTime)
 {
     if (Engine::Services::InputSystem::WasKeyPressed(Engine::Services::KeyCode::Num1))
     {

@@ -13,4 +13,4 @@ int IUpdatable::GetOrderOfExecution() const
 
 void IUpdatable::OnStart() {}
 
-void IUpdatable::OnUpdate() {}
+void IUpdatable::OnUpdate(float deltaTime) {}

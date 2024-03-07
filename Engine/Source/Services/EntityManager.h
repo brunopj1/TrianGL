@@ -59,7 +59,7 @@ namespace Engine::Services
         static void TerminateComponents();
 
     private:
-        void Update();
+        void Update(float deltaTime);
         void Render() const;
 
     private:
