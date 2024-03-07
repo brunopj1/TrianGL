@@ -4,6 +4,8 @@
 #include "Entities/SnakeEntity.h"
 #include "Services/EntityManager.h"
 #include "Entities/Camera.h"
+#include "Services/Clock.h"
+#include <iostream>
 
 using namespace Engine::Services;
 

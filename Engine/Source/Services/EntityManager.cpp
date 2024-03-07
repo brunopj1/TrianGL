@@ -92,14 +92,14 @@ void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vecto
 
 Engine::Game::GameMode* EntityManager::GetGameMode()
 {
-    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+    SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
     return s_Instance->m_GameMode;
 }
 
 void EntityManager::DestroyGameMode()
 {
-    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+    SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
     PREPARE_SINGLETON_USAGE(true);
 
@@ -111,7 +111,7 @@ void EntityManager::DestroyGameMode()
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
-    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+    SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
     PREPARE_SINGLETON_USAGE(true);
 
@@ -132,7 +132,7 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
-    DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+    SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
     PREPARE_SINGLETON_USAGE(true);
 

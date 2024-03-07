@@ -26,14 +26,14 @@
 // Debug macros
 
 #ifdef DEBUG
-#define DEBUG_SINGLETON_INSTANCE(ptr, name)                 \
-if ((ptr) == nullptr)			                            \
+#define SINGLETON_CHECK_IF_INITIALIZED(name)                 \
+if (s_Instance == nullptr)			                            \
 {                                                           \
     throw Exceptions::Core::ServiceNotYetInitialized(name); \
 }                                                           \
 static_assert(true, "")
 #else
-#define DEBUG_SINGLETON_INSTANCE(ptr, name) static_assert(true, "")
+#define SINGLETON_CHECK_IF_INITIALIZED(name) static_assert(true, "")
 #endif
 
 #ifdef DEBUG

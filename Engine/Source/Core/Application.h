@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Clock.h"
+#include "Services/Clock.h"
 #include "Services/DefaultResourcesCollection.h"
 #include "Window.h"
 #include "Services/ResourceManager.h"
@@ -29,7 +29,7 @@ namespace Engine::Core
     private:
         Window m_Window;
 
-        Clock m_Clock;
+        Services::Clock m_Clock;
 
         Services::ResourceManager m_ResourceManager;
         Services::DefaultResourcesCollection m_DefaultResources;

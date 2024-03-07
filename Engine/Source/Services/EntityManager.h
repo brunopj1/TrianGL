@@ -73,7 +73,7 @@ namespace Engine::Services
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::GameMode)>
         static T* CreateGameMode(Args&&... args) // NOLINT
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             PREPARE_SINGLETON_USAGE(true);
 
@@ -94,7 +94,7 @@ namespace Engine::Services
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION_NO_ARGS(Game::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             PREPARE_SINGLETON_USAGE(true);
 
@@ -116,7 +116,7 @@ namespace Engine::Services
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Component)>
         static T* AttachComponent(Game::Entity* parent, Args&&... args)  // NOLINT
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             PREPARE_SINGLETON_USAGE(true);
 
@@ -146,7 +146,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
         static T* FindEntity()
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             for (auto entity : s_Instance->m_Entities)
             {
@@ -162,7 +162,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
         static std::vector<T*> FindEntities()
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             std::vector<T*> entities;
 
@@ -181,7 +181,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static T* FindComponent()
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             for (auto component : s_Instance->m_Components)
             {
@@ -197,7 +197,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static std::vector<T*> FindComponents()
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             std::vector<T*> components;
 
@@ -215,7 +215,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static T* FindComponentInEntity(Game::Entity* entity)
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             for (auto component : entity->m_Components)
             {
@@ -231,7 +231,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
         {
-            DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
+            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
             std::vector<T*> components;
 
