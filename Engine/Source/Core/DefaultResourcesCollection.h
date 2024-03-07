@@ -16,16 +16,10 @@ namespace Engine::Core
         inline static DefaultResourcesCollection* s_Instance = nullptr;
 
     private:
-        DefaultResources::DefaultMaterial* m_DefaultMaterial;
-
-    private:
         DefaultResourcesCollection();
         ~DefaultResourcesCollection();
 
     public:
-        static Engine::DefaultResources::DefaultMaterial* GetDefaultMaterial();
-
-    private:
-        void Init();
+        static DefaultResources::DefaultMaterial* GetDefaultMaterial();
     };
 }

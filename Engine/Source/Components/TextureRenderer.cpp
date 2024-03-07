@@ -5,9 +5,7 @@
 #include "Game/Entity.h"
 #include "glad/glad.h"
 #include "Resources/Material.h"
-#include "Resources/Shader.h"
 #include "Resources/Texture.h"
-#include <iostream>
 
 using namespace Engine::Components;
 

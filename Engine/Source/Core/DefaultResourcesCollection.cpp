@@ -17,10 +17,5 @@ Engine::DefaultResources::DefaultMaterial* Engine::Core::DefaultResourcesCollect
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "DefaultResourcesCollection");
 
-    return s_Instance->m_DefaultMaterial;
-}
-
-void Engine::Core::DefaultResourcesCollection::Init()
-{
-    m_DefaultMaterial = ResourceManager::LoadMaterial<DefaultResources::DefaultMaterial>();
+    return ResourceManager::LoadMaterial<DefaultResources::DefaultMaterial>();
 }

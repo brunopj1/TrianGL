@@ -1,7 +1,6 @@
 ﻿#include "EntityManager.h"
 
 #include "Components/TextureRenderer.h"
-#include "Entities/Camera.h"
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"

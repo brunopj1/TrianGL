@@ -2,7 +2,6 @@
 
 #include "Exceptions/Common/FileNotFoundException.h"
 #include "Exceptions/Common/FileTooBigException.h"
-#include "Exceptions/Core/OpenGlException.h"
 #include "Exceptions/Core/ShaderCompilationException.h"
 #include "glad/glad.h"
 #include <codecvt>
@@ -14,12 +13,9 @@ using namespace Engine::Resources;
 Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
     : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
 {
-    Load();
-}
-
-Shader::~Shader()
-{
-    Free();
+    // Load() and Free() cannot be called in the constructor and destructor
+    // because sometimes we create fake Shader objects to acess the unordered_map
+    // These methods are called by the Engine::Core::ResourceManager
 }
 
 void Shader::Load()

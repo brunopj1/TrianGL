@@ -2,7 +2,6 @@
 
 #include "Game/Component.h"
 #include "Game/Internal/IRenderable.h"
-#include <glm/mat4x4.hpp>
 
 namespace Engine::Resources
 {

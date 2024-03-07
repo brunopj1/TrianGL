@@ -38,7 +38,7 @@
 - [X] Shader class (internal)
 - [X] Material class (abstract)
 - [X] Material Attribute class
-- [ ] Material instances (using new instances of the material, but without duplicating the shader in the GPU)
+- [X] Material instances (using the same shader but different attributes)
 - [X] Add the default mesh
 - [X] Add the default material
 - [ ] Use uniform buffers for the shaders

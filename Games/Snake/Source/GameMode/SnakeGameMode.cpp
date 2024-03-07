@@ -4,9 +4,6 @@
 #include "Entities/SnakeEntity.h"
 #include "Core/EntityManager.h"
 #include "Entities/Camera.h"
-#include "Components/TextureRenderer.h"
-#include "Core/ResourceManager.h"
-#include "Resources/TestMaterial.h"
 
 using namespace Engine::Core;
 

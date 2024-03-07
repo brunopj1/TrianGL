@@ -25,6 +25,8 @@ namespace Engine::Resources
     private:
         friend class Core::ResourceManager;
         friend class Material;
+        friend struct ShaderHash;
+        friend struct ShaderEqual;
 
     private:
         std::string m_VertexShader;
@@ -40,7 +42,7 @@ namespace Engine::Resources
 
     private:
         Shader(std::string vertexShader, std::string fragmentShader, bool isFilePath);
-        ~Shader() override;
+        ~Shader() override = default;
 
     private:
         void Load();

@@ -100,8 +100,6 @@ void Application::Init()
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
 #endif
 
-    m_DefaultResources.Init();
-
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
     EntityManager::InitializeComponents();

@@ -1,6 +1,5 @@
 ﻿#include "ServiceNotYetInitialized.h"
 
-#include "glad/glad.h"
 #include <format>
 
 using namespace Engine::Exceptions::Core;

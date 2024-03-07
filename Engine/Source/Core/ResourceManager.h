@@ -3,9 +3,10 @@
 #include <vector>
 
 #include "Resources/TextureParameters.hpp"
+#include "Resources/ShaderHelpers.h"
 #include "Util/DebugFeatures.hpp"
+#include <unordered_map>
 
-// Forward declaration
 namespace Engine::Resources::Internal
 {
     class ManagedResource;
@@ -15,6 +16,7 @@ namespace Engine::Resources
 {
     class Material;
     class Texture;
+    class Shader;
 }
 
 namespace Engine::Core
@@ -32,6 +34,7 @@ namespace Engine::Core
 
     private:
         std::vector<Resources::Internal::ManagedResource*> m_Resources;
+        std::unordered_map<Resources::Shader*, unsigned int, Resources::ShaderHash, Resources::ShaderEqual> m_Shaders;
 
     private:
         ResourceManager();
@@ -60,5 +63,9 @@ namespace Engine::Core
         }
 
         static void Unload(Resources::Internal::ManagedResource* resource);
+
+    private:
+        static Resources::Shader* LoadShader(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
+        static void UnloadShader(Resources::Shader* shader);
     };
 }

@@ -24,14 +24,14 @@ namespace Engine::Resources
         friend class Components::TextureRenderer;
 
     private:
-        Shader m_Shader;
+        Shader* m_Shader;
         std::vector<MaterialAttribute*> m_Attributes;
 
     private:
         Mat4MaterialAttribute* m_PvmMatrix;
 
     protected:
-        Material(std::string vertexShader, std::string fragmentShader, bool isFilePath);
+        Material(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
         ~Material() override;
 
     protected:
@@ -46,7 +46,7 @@ namespace Engine::Resources
             static_assert(!std::is_same_v<TextureMaterialAttribute, T>, "To create a texture attribute use the 'AddTextureAttribute' method instead");
             static_assert(std::is_constructible_v<T, int>, "The specified class does not implement a valid constructor");
 
-            const int location = m_Shader.GetUniformLocation(name);
+            const int location = m_Shader->GetUniformLocation(name);
 
             T* attribute = new T(location);
             m_Attributes.push_back(attribute);
