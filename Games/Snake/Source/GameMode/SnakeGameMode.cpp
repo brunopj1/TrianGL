@@ -2,15 +2,14 @@
 
 #include "Entities/FoodEntity.h"
 #include "Entities/SnakeEntity.h"
-#include "Core/EntityManager.h"
+#include "Services/EntityManager.h"
 #include "Entities/Camera.h"
 
-using namespace Engine::Core;
+using namespace Engine::Services;
 
 void SnakeGameMode::OnStart()
 {
-    const auto camera = EntityManager::SpawnEntity<Engine::Entities::Camera>();
-    camera->SetAsMainCamera();
+    const auto camera = EntityManager::SpawnEntity<Engine::Entities::Camera>(true);
 
     const auto snake = EntityManager::SpawnEntity<SnakeEntity>();
 

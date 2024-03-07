@@ -1,20 +1,20 @@
 ﻿#include "Entity.h"
 
-#include "Core/EntityManager.h"
-#include "Util/DebugFeatures.hpp"
+#include "Services/EntityManager.h"
+#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine::Game;
 
 Entity::Entity(const bool shouldUpdate)
     : IUpdatable(shouldUpdate)
 {
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::Entity");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::Entity");
 }
 
 Entity::~Entity()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::Entity");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::Entity");
 }
 
 Transform& Entity::GetTransform()

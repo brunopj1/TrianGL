@@ -3,6 +3,12 @@
 #include "Game/Component.h"
 #include "Game/Internal/IRenderable.h"
 
+// Forward declarations
+namespace Engine::Services
+{
+    class EntityManager;
+}
+
 namespace Engine::Resources
 {
     class Material;
@@ -19,7 +25,7 @@ namespace Engine::Components
     class TextureRenderer final : public Game::Component, public Game::Internal::IRenderable
     {
     private:
-        friend class Core::EntityManager;
+        friend class Services::EntityManager;
 
     private:
         static inline unsigned int s_QuadVao = 0;
@@ -30,7 +36,7 @@ namespace Engine::Components
         Resources::Material* m_Material = nullptr;
 
     public:
-        TextureRenderer();
+        TextureRenderer(Resources::Material* material = nullptr);
         ~TextureRenderer() override = default;
 
     public:

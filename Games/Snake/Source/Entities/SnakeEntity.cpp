@@ -1,9 +1,9 @@
 ﻿#include "SnakeEntity.h"
 
 #include "Components/TextureRenderer.h"
-#include "Core/EntityManager.h"
-#include "Core/InputSystem.h"
-#include "Core/ResourceManager.h"
+#include "Services/EntityManager.h"
+#include "Services/InputSystem.h"
+#include "Services/ResourceManager.h"
 #include "Core/Window.h"
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
@@ -21,9 +21,9 @@ SnakeEntity::SnakeEntity()
 
     Engine::Resources::TextureParameters parameters;
     parameters.Filter = Engine::Resources::TextureFilterMode::Nearest;
-    const auto texture = Engine::Core::ResourceManager::LoadTexture("Assets/Textures/ugly_smile.png", parameters);
+    const auto texture = Engine::Services::ResourceManager::LoadTexture("Assets/Textures/ugly_smile.png", parameters);
 
-    const auto snakeTexture = Engine::Core::EntityManager::AttachComponent<Engine::Components::TextureRenderer>(this);
+    const auto snakeTexture = Engine::Services::EntityManager::AttachComponent<Engine::Components::TextureRenderer>(this);
     const auto material = snakeTexture->UseDefaultMaterial();
     material->GetTextureAttr()->SetValue(texture);
 }
@@ -40,13 +40,13 @@ void SnakeEntity::OnStart()
 
 void SnakeEntity::OnUpdate()
 {
-    if (Engine::Core::InputSystem::WasKeyPressed(Engine::Core::KeyCode::Num1))
+    if (Engine::Services::InputSystem::WasKeyPressed(Engine::Services::KeyCode::Num1))
     {
         Engine::Core::Window::SetFullscreen(false);
         Engine::Core::Window::SetPosition({50, 50});
         Engine::Core::Window::SetResolution({1280, 720});
     }
-    else if (Engine::Core::InputSystem::WasKeyPressed(Engine::Core::KeyCode::Num2))
+    else if (Engine::Services::InputSystem::WasKeyPressed(Engine::Services::KeyCode::Num2))
     {
         Engine::Core::Window::SetPosition({0, 0});
         Engine::Core::Window::SetResolution({1920, 1080});

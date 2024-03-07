@@ -4,6 +4,7 @@
 #include "Exceptions/Common/FileTooBigException.h"
 #include "Exceptions/Core/ShaderCompilationException.h"
 #include "glad/glad.h"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <codecvt>
 #include <fstream>
 #include <sstream>
@@ -139,6 +140,13 @@ void Shader::LoadUniformLocations()
 
 int Shader::GetUniformLocation(const std::string& name) const
 {
+#ifdef DEBUG
+    if (m_UniformLocations.empty())
+    {
+        throw std::runtime_error("Uniform locations are not loaded yet");
+    }
+#endif
+
     // TODO in debug mode give a warning if the location is -1
     const auto it = m_UniformLocations.find(name);
     return it != m_UniformLocations.end() ? it->second : -1;

@@ -2,15 +2,15 @@
 
 #include "MaterialAttributes.h"
 #include "Shader.h"
-#include "Core/ResourceManager.h"
+#include "Services/ResourceManager.h"
 #include "Entities/Camera.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
 Engine::Resources::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Material");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Material");
 
-    m_Shader = Core::ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
+    m_Shader = Services::ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
     CreateEngineAttributes();
 }
@@ -18,9 +18,9 @@ Engine::Resources::Material::Material(const std::string& vertexShader, const std
 Engine::Resources::Material::~Material()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Material");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Material");
 
-    Core::ResourceManager::UnloadShader(m_Shader);
+    Services::ResourceManager::UnloadShader(m_Shader);
 
     for (const auto attribute : m_Attributes)
     {

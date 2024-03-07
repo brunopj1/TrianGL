@@ -6,7 +6,7 @@
 #include <string>
 
 // Forward declaration
-namespace Engine::Core
+namespace Engine::Services
 {
     class ResourceManager;
 }
@@ -21,7 +21,7 @@ namespace Engine::Resources
     class Texture final : public Internal::ManagedResource
     {
     private:
-        friend class Core::ResourceManager;
+        friend class Services::ResourceManager;
         friend class TextureMaterialAttribute;
 
     private:

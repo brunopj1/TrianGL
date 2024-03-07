@@ -5,7 +5,7 @@
 #include <vector>
 
 // Forward declarations
-namespace Engine::Core
+namespace Engine::Services
 {
     class EntityManager;
 }
@@ -18,7 +18,7 @@ namespace Engine::Game
     class Entity : public Internal::IUpdatable
     {
     private:
-        friend class Core::EntityManager;
+        friend class Services::EntityManager;
 
     private:
         Transform m_Transform;

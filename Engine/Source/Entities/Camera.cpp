@@ -7,10 +7,15 @@
 
 using namespace Engine::Entities;
 
-Camera::Camera()
+Camera::Camera(const bool setAsMainCamera)
     : Entity(false)
 {
     m_AspectRatio = Core::Window::GetAspectRatio();
+
+    if (setAsMainCamera)
+    {
+        SetAsMainCamera();
+    }
 }
 
 Camera::~Camera()

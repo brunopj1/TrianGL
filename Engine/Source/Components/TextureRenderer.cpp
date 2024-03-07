@@ -1,7 +1,7 @@
 ﻿#include "TextureRenderer.h"
 
-#include "Core/DefaultResourcesCollection.h"
-#include "Core/ResourceManager.h"
+#include "Services/DefaultResourcesCollection.h"
+#include "Services/ResourceManager.h"
 #include "Game/Entity.h"
 #include "glad/glad.h"
 #include "Resources/Material.h"
@@ -9,8 +9,8 @@
 
 using namespace Engine::Components;
 
-TextureRenderer::TextureRenderer()
-    : Component(false)
+TextureRenderer::TextureRenderer(Resources::Material* material)
+    : Component(false), m_Material(material)
 {}
 
 Engine::Resources::Material* TextureRenderer::GetMaterial() const
@@ -22,7 +22,7 @@ void TextureRenderer::SetMaterial(Resources::Material* material, const bool unlo
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
-        Core::ResourceManager::Unload(m_Material);
+        Services::ResourceManager::Unload(m_Material);
     }
 
     m_Material = material;
@@ -32,10 +32,10 @@ Engine::DefaultResources::DefaultMaterial* TextureRenderer::UseDefaultMaterial(c
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
-        Core::ResourceManager::Unload(m_Material);
+        Services::ResourceManager::Unload(m_Material);
     }
 
-    const auto material = Core::DefaultResourcesCollection::GetDefaultMaterial();
+    const auto material = Services::DefaultResourcesCollection::GetDefaultMaterial();
     m_Material = material;
 
     return material;

@@ -2,11 +2,16 @@
 
 #include "Exceptions/Core/GameModeAlreadySpecifiedException.h"
 #include "Game/Entity.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <vector>
 #include <unordered_set>
 
 // Forward declarations
+namespace Engine::Core
+{
+    class Application;
+}
+
 namespace Engine::Game
 {
     class GameMode;
@@ -20,19 +25,19 @@ namespace Engine::Game::Internal
     class IRenderable;
 }
 
-namespace Engine::Core
+namespace Engine::Services
 {
     class EntityManager final
     {
     private:
-        friend class Application;
+        friend class Core::Application;
         friend class Game::GameMode;
         friend class Game::Entity;
         friend class Game::Component;
 
     private:
         inline static EntityManager* s_Instance = nullptr;
-        DEBUG_SINGLETON_DECLARE_USAGE_VAR();
+        DECLARE_SINGLETON_USAGE_VAR();
 
     private:
         Game::GameMode* m_GameMode = nullptr;
@@ -61,27 +66,23 @@ namespace Engine::Core
         static void AddToQueue(Game::Internal::IUpdatable* updatable, std::vector<Game::Internal::IUpdatable*>& queue);
 
     public:
-        Game::GameMode* GetGameMode() const;
+        static Game::GameMode* GetGameMode();
 
         // Instantiation methods (GameMode)
     private:
-        template <typename T>
-        static T* CreateGameMode()
+        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::GameMode)>
+        static T* CreateGameMode(Args&&... args) // NOLINT
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-            static_assert(std::is_base_of_v<Game::GameMode, T>, "The specified class does not derive Engine::Game::Entity");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
-            static_assert(!std::is_same_v<T, Game::GameMode>, "Cannot instantiate the abstract class Engine::Game::GameMode");
+            PREPARE_SINGLETON_USAGE(true);
 
             if (s_Instance->m_GameMode) throw Exceptions::Core::GameModeAlreadySpecifiedException();
 
-            DEBUG_DO(s_IsCurrentlyInUse = true);
-
-            T* instance = new T();
+            T* instance = new T(std::forward<Args>(args)...);
             s_Instance->m_GameMode = instance;
 
-            DEBUG_DO(s_IsCurrentlyInUse = false);
+            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }
@@ -90,24 +91,21 @@ namespace Engine::Core
 
         // Instantiation methods (Entity)
     public:
-        template <typename T>
-        static T* SpawnEntity()
+        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION_NO_ARGS(Game::Entity)>
+        static T* SpawnEntity(Args&&... args)  // NOLINT
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-            static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
+            PREPARE_SINGLETON_USAGE(true);
 
-            DEBUG_DO(s_IsCurrentlyInUse = true);
-
-            T* instance = new T();
+            T* instance = new T(std::forward<Args>(args)...);
 
             s_Instance->m_Entities.insert(instance);
 
             AddToQueue(instance, s_Instance->m_OnStartQueue);
             AddToQueue(instance, s_Instance->m_OnUpdateQueue);
 
-            DEBUG_DO(s_IsCurrentlyInUse = false);
+            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }
@@ -115,17 +113,14 @@ namespace Engine::Core
         static void DestroyEntity(Game::Entity* entity);
 
         // Instantiation methods (Component)
-        template <typename T>
-        static T* AttachComponent(Game::Entity* parent)
+        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Component)>
+        static T* AttachComponent(Game::Entity* parent, Args&&... args)  // NOLINT
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
+            PREPARE_SINGLETON_USAGE(true);
 
-            DEBUG_DO(s_IsCurrentlyInUse = true);
-
-            T* instance = new T();
+            T* instance = new T(std::forward<Args>(args)...);
 
             s_Instance->m_Components.insert(instance);
 
@@ -140,7 +135,7 @@ namespace Engine::Core
                 s_Instance->m_RenderQueue.push_back(instance);
             }
 
-            DEBUG_DO(s_IsCurrentlyInUse = false);
+            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }
@@ -148,12 +143,10 @@ namespace Engine::Core
         static void DetachComponent(Game::Component* component);
 
         // Entity lookup methods
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
         static T* FindEntity()
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
             for (auto entity : s_Instance->m_Entities)
             {
@@ -166,12 +159,10 @@ namespace Engine::Core
             return nullptr;
         }
 
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
         static std::vector<T*> FindEntities()
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Entity, T>, "The specified class does not derive Engine::Game::Entity");
 
             std::vector<T*> entities;
 
@@ -187,12 +178,10 @@ namespace Engine::Core
         }
 
         // Component lookup methods
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static T* FindComponent()
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             for (auto component : s_Instance->m_Components)
             {
@@ -205,12 +194,10 @@ namespace Engine::Core
             return nullptr;
         }
 
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static std::vector<T*> FindComponents()
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             std::vector<T*> components;
 
@@ -225,12 +212,10 @@ namespace Engine::Core
             return components;
         }
 
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static T* FindComponentInEntity(Game::Entity* entity)
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             for (auto component : entity->m_Components)
             {
@@ -243,12 +228,10 @@ namespace Engine::Core
             return nullptr;
         }
 
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
         static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
-
-            static_assert(std::is_base_of_v<Game::Component, T>, "The specified class does not derive Engine::Game::Component");
 
             std::vector<T*> components;
 

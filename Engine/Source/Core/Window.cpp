@@ -3,11 +3,11 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "EntityManager.h"
+#include "Services/EntityManager.h"
 #include "Entities/Camera.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <format>
 #include <stdexcept>
 #include <utility>
@@ -163,7 +163,7 @@ void Window::ResizeCallback(int width, int height)
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
-    for (const auto camera : EntityManager::FindEntities<Entities::Camera>())
+    for (const auto camera : Services::EntityManager::FindEntities<Entities::Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
     }

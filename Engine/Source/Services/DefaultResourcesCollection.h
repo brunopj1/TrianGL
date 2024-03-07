@@ -1,16 +1,18 @@
 ﻿#pragma once
 #include "DefaultResources/DefaultMaterial.h"
 
-// Forward declaration
-namespace Engine::Resources
-{}
-
+// Forward declarations
 namespace Engine::Core
+{
+    class Application;
+}
+
+namespace Engine::Services
 {
     class DefaultResourcesCollection final
     {
     private:
-        friend class Application;
+        friend class Core::Application;
 
     private:
         inline static DefaultResourcesCollection* s_Instance = nullptr;

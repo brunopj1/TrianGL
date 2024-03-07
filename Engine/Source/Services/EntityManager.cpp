@@ -5,9 +5,9 @@
 #include "Game/Entity.h"
 #include "Game/Component.h"
 #include "Game/Internal/IUpdatable.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Core;
+using namespace Engine::Services;
 
 EntityManager::EntityManager()
 {
@@ -16,7 +16,7 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     delete s_Instance->m_GameMode;
 
@@ -32,7 +32,7 @@ EntityManager::~EntityManager()
 
     s_Instance = nullptr;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }
 
 void EntityManager::InitializeComponents()
@@ -90,30 +90,30 @@ void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vecto
     queue.push_back(updatable);
 }
 
-Engine::Game::GameMode* EntityManager::GetGameMode() const
+Engine::Game::GameMode* EntityManager::GetGameMode()
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-    return m_GameMode;
+    return s_Instance->m_GameMode;
 }
 
 void EntityManager::DestroyGameMode()
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     delete s_Instance->m_GameMode;
     s_Instance->m_GameMode = nullptr;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     s_Instance->m_Entities.erase(entity);
 
@@ -127,14 +127,14 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
 
     delete entity;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "EntityManager");
 
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     s_Instance->m_Components.erase(component);
 
@@ -151,5 +151,5 @@ void EntityManager::DetachComponent(Game::Component* component)
 
     delete component;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }

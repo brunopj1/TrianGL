@@ -2,7 +2,7 @@
 
 #include "Internal/IUpdatable.h"
 
-namespace Engine::Core
+namespace Engine::Services
 {
     class EntityManager;
 }
@@ -15,7 +15,7 @@ namespace Engine::Game
     class Component : public Internal::IUpdatable
     {
     private:
-        friend class Core::EntityManager;
+        friend class Services::EntityManager;
 
     private:
         Entity* m_Parent = nullptr;

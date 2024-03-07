@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 // Forward declaration
-namespace Engine::Core
+namespace Engine::Services
 {
     class ResourceManager;
 }
@@ -23,7 +23,7 @@ namespace Engine::Resources
     class Shader final : public Internal::ManagedResource
     {
     private:
-        friend class Core::ResourceManager;
+        friend class Services::ResourceManager;
         friend class Material;
         friend struct ShaderHash;
         friend struct ShaderEqual;

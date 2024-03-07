@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "Internal/ManagedResource.h"
 #include "Resources/MaterialAttributes.h"
+#include "Util/Macros/MaterialMacros.hpp"
 #include <string>
 #include <vector>
 
@@ -38,18 +39,14 @@ namespace Engine::Resources
         virtual void OnRenderSetup() const;
 
     protected:
-        template <typename T>
+        template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>
         T* AddAttribute(const std::string& name)
         {
-            static_assert(!std::is_same_v<MaterialAttribute, T>, "Cannot instantiate the abstract class Engine::Resources::MaterialAttribute");
-            static_assert(std::is_base_of_v<MaterialAttribute, T>, "The specified class does not derive Engine::Resources::MaterialAttribute");
-            static_assert(!std::is_same_v<TextureMaterialAttribute, T>, "To create a texture attribute use the 'AddTextureAttribute' method instead");
-            static_assert(std::is_constructible_v<T, int>, "The specified class does not implement a valid constructor");
-
             const int location = m_Shader->GetUniformLocation(name);
 
             T* attribute = new T(location);
             m_Attributes.push_back(attribute);
+
             return attribute;
         }
 

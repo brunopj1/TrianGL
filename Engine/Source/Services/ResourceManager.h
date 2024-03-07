@@ -4,8 +4,14 @@
 
 #include "Resources/TextureParameters.hpp"
 #include "Resources/ShaderHelpers.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <unordered_map>
+
+// Forward declarations
+namespace Engine::Core
+{
+    class Application;
+}
 
 namespace Engine::Resources::Internal
 {
@@ -19,18 +25,18 @@ namespace Engine::Resources
     class Shader;
 }
 
-namespace Engine::Core
+namespace Engine::Services
 {
     class ResourceManager
     {
     private:
-        friend class Application;
+        friend class Core::Application;
         friend class Resources::Material;
         friend class Resources::Texture;
 
     private:
         inline static ResourceManager* s_Instance = nullptr;
-        DEBUG_SINGLETON_DECLARE_USAGE_VAR();
+        DECLARE_SINGLETON_USAGE_VAR();
 
     private:
         std::vector<Resources::Internal::ManagedResource*> m_Resources;
@@ -43,21 +49,17 @@ namespace Engine::Core
     public:
         static Resources::Texture* LoadTexture(std::string filePath, const Resources::TextureParameters& parameters = {});
 
-        template <typename T>
+        template <typename T, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION_NO_ARGS(Resources::Material)>
         static T* LoadMaterial()
         {
             DEBUG_SINGLETON_INSTANCE(s_Instance, "ResourceManager");
 
-            static_assert(!std::is_same_v<Resources::Material, T>, "Cannot instantiate the abstract class Engine::Resources::Material");
-            static_assert(std::is_base_of_v<Resources::Material, T>, "The specified class does not derive Engine::Resources::Material");
-            static_assert(std::is_constructible_v<T>, "The specified class does not implement an empty constructor");
-
-            DEBUG_DO(s_IsCurrentlyInUse = true);
+            PREPARE_SINGLETON_USAGE(true);
 
             T* material = new T();
             s_Instance->m_Resources.push_back(material);
 
-            DEBUG_DO(s_IsCurrentlyInUse = false);
+            PREPARE_SINGLETON_USAGE(false);
 
             return material;
         }

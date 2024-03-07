@@ -9,7 +9,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "InputSystem.h"
+#include "Services/InputSystem.h"
+#include "Services/EntityManager.h"
 #include "Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
 
@@ -102,12 +103,12 @@ void Application::Init()
 
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
-    EntityManager::InitializeComponents();
+    Services::EntityManager::InitializeComponents();
 }
 
 void Application::Terminate() const
 {
-    EntityManager::TerminateComponents();
+    Services::EntityManager::TerminateComponents();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();

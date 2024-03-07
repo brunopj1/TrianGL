@@ -2,10 +2,10 @@
 
 #include "Resources/Material.h"
 #include "Resources/Texture.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <ranges>
 
-using namespace Engine::Core;
+using namespace Engine::Services;
 
 ResourceManager::ResourceManager()
 {
@@ -14,7 +14,7 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     for (const Resources::Internal::ManagedResource* resource : m_Resources)
     {
@@ -23,19 +23,19 @@ ResourceManager::~ResourceManager()
 
     s_Instance = nullptr;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }
 
 Engine::Resources::Texture* ResourceManager::LoadTexture(std::string filePath, const Resources::TextureParameters& parameters)
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "ResourceManager");
 
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     Resources::Texture* texture = new Resources::Texture(std::move(filePath), parameters);
     s_Instance->m_Resources.push_back(texture);
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 
     return texture;
 }
@@ -44,12 +44,12 @@ void ResourceManager::Unload(Resources::Internal::ManagedResource* resource)
 {
     DEBUG_SINGLETON_INSTANCE(s_Instance, "ResourceManager");
 
-    DEBUG_DO(s_IsCurrentlyInUse = true);
+    PREPARE_SINGLETON_USAGE(true);
 
     std::erase(s_Instance->m_Resources, resource);
     delete resource;
 
-    DEBUG_DO(s_IsCurrentlyInUse = false);
+    PREPARE_SINGLETON_USAGE(false);
 }
 
 Engine::Resources::Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)

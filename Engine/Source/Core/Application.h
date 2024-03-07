@@ -1,15 +1,15 @@
 #pragma once
 
-#include "DefaultResourcesCollection.h"
+#include "Services/DefaultResourcesCollection.h"
 #include "Window.h"
-#include "ResourceManager.h"
-#include "EntityManager.h"
-#include "InputSystem.h"
+#include "Services/ResourceManager.h"
+#include "Services/EntityManager.h"
+#include "Services/InputSystem.h"
 
 // Forward declarations
-namespace Engine::Game
+namespace Engine::Services
 {
-    class GameMode;
+    class EntityManager;
 }
 
 namespace Engine::Core
@@ -28,12 +28,12 @@ namespace Engine::Core
     private:
         Window m_Window;
 
-        ResourceManager m_ResourceManager;
-        DefaultResourcesCollection m_DefaultResources;
+        Services::ResourceManager m_ResourceManager;
+        Services::DefaultResourcesCollection m_DefaultResources;
 
-        EntityManager m_EntityManager;
+        Services::EntityManager m_EntityManager;
 
-        InputSystem m_InputSystem;
+        Services::InputSystem m_InputSystem;
 
     public:
         Application(const ApplicationConfig& config = {});

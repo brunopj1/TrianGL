@@ -32,7 +32,7 @@ namespace Engine::Entities
         float m_AspectRatio;
 
     public:
-        Camera();
+        Camera(bool setAsMainCamera = false);
         ~Camera() override;
 
     public:

@@ -57,9 +57,10 @@
 - [ ] Create a System class (GameMode attachable)
 - [ ] Create a Scene class
 - [X] Create Instancing methods and automatic update
-- [ ] Allow passing arguments to the instancing methods (to match the constructor)
+- [X] Allow passing arguments to the instancing methods (to match the constructor)
 - [X] Create lookup methods for the entities and components
 - [ ] Add the delta time to the update methods
+- [ ] Move the static methods to the respective classes
 
 ## Project setup
 

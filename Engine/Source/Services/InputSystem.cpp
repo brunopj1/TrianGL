@@ -1,9 +1,9 @@
 ﻿#include "InputSystem.h"
 
 #include "GLFW/glfw3.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Core;
+using namespace Engine::Services;
 
 InputSystem::InputSystem()
 {

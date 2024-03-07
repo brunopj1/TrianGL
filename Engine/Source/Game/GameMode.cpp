@@ -1,19 +1,19 @@
 ﻿#include "GameMode.h"
 
-#include "Core/EntityManager.h"
-#include "Util/DebugFeatures.hpp"
+#include "Services/EntityManager.h"
+#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine::Game;
 
 GameMode::GameMode()
 {
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::GameMode");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::GameMode");
 }
 
 GameMode::~GameMode()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::EntityManager, "Engine::Game::GameMode");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::GameMode");
 }
 
 void GameMode::OnStart() {}

@@ -1,19 +1,19 @@
 ﻿#include "Texture.h"
 
 #include "stb_image.h"
-#include "Core/ResourceManager.h"
+#include "Services/ResourceManager.h"
 
 #include "glad/glad.h"
 
 #include "Exceptions/Common/FileNotFoundException.h"
-#include "Util/DebugFeatures.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine::Resources;
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Texture");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Texture");
 
     Load(parameters);
 }
@@ -21,7 +21,7 @@ Texture::Texture(std::string filePath, const TextureParameters& parameters)
 Texture::~Texture()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    DEBUG_SINGLETON_ASSERT_USAGE(Engine::Core::ResourceManager, "Engine::Resources::Texture");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Texture");
 
     Free();
 }
