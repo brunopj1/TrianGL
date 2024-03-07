@@ -29,6 +29,9 @@ namespace Engine::Resources
         MaterialAttribute(MaterialAttribute&&) = delete;
         MaterialAttribute& operator=(MaterialAttribute&&) = delete;
 
+    public:
+        bool IsValid() const;
+        
     private:
         void Bind() const;
         virtual void BindInternal() const = 0;

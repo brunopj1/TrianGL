@@ -40,17 +40,26 @@ namespace Engine::Resources
 
     protected:
         template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>
-        T* AddAttribute(const std::string& name)
+        T* AddAttribute(const std::string& name, const bool ignoreIfInvalid = false)
         {
             const int location = m_Shader->GetUniformLocation(name);
 
+            if (ignoreIfInvalid && location == -1)
+            {
+                return nullptr;
+            }
+
             T* attribute = new T(location);
-            m_Attributes.push_back(attribute);
+
+            if (location != -1)
+            {
+                m_Attributes.push_back(attribute);
+            }
 
             return attribute;
         }
 
-        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot);
+        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot, bool ignoreIfInvalid = false);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;

@@ -9,6 +9,11 @@ MaterialAttribute::MaterialAttribute(const int location)
     : m_Location(location)
 {}
 
+bool MaterialAttribute::IsValid() const
+{
+    return m_Location != -1;
+}
+
 void MaterialAttribute::Bind() const
 {
     if (m_Location == -1) return;
