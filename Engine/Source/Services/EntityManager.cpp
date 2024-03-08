@@ -16,23 +16,14 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-    PREPARE_SINGLETON_USAGE(true);
+    DestroyGameMode();
 
-    delete s_Instance->m_GameMode;
-
-    for (const Game::Entity* entity : m_Entities)
+    while (!m_Entities.empty())
     {
-        delete entity;
-    }
-
-    for (const Game::Component* component : m_Components)
-    {
-        delete component;
+        DestroyEntity(*m_Entities.begin());
     }
 
     s_Instance = nullptr;
-
-    PREPARE_SINGLETON_USAGE(false);
 }
 
 void EntityManager::InitializeComponents()

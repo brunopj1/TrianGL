@@ -2,19 +2,16 @@
 
 ## Future ideas
 
-- [ ] Copy the asset folders to the output directory instead of modifying the working directory
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
-- [ ] Enable attaching entities to other entities
 - [ ] Implement a garbage collector like the one from UE5 (with strong and weak pointers)
-- [ ] Create a layer of abstraction for ImGui (and use it to display debug info)
+- [ ] Implement a debug info window with ImGui and test custom windows
+- [ ] Implement a sound system
 - [ ] Try unit testing
 
-## Rendering with transparency
-- [ ] In the material enable the alpha blending dynamically
-- [ ] Enable alpha blending automatically based on each texture
-- [ ] Add an option to manually enable alpha blending (for user materials)
-- [ ] Sort the rendering based on the Z coordinate (listen for changes in positions to re-sort)
-- [ ] Add an option to specify if a texture has premultiplied alpha
+## General
+
+- [ ] Add a single exception for when the engine is not initialized
+- [ ] Reorganize the exceptions
 
 ## Resource Manager
 
@@ -31,6 +28,13 @@
 - [X] Create the methods to check for mouse movement and scroll
 - [X] Create methods to change the mouse behaviour (visible, hidden, locked)
 - [ ] Use raw mouse motion when the mouse is locked (if available)
+
+## Rendering with transparency
+- [ ] In the material enable the alpha blending dynamically
+- [ ] Enable alpha blending automatically based on each texture
+- [ ] Add an option to manually enable alpha blending (for user materials)
+- [ ] Sort the rendering based on the Z coordinate (listen for changes in positions to re-sort)
+- [ ] Add an option to specify if a texture has premultiplied alpha
 
 ## Rendering
 
@@ -62,6 +66,7 @@
 - [X] Create lookup methods for the entities and components
 - [X] Add the delta time to the update methods
 - [ ] Move the static methods to the respective classes
+- [ ] Allow parenting entities to each other (for Transform relationships, and auto memory management)
 
 ## Project setup
 
@@ -70,3 +75,4 @@
 - [X] Remove unnecessary filters from the lib premake files
 - [X] Fixed 32 bit version not working
 - [X] Only include ImGui in DEBUG config (use macros)
+- [X] Copy the asset folders to the output directory instead of modifying the working directory

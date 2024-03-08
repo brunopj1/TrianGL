@@ -1,21 +1,30 @@
 #include "SnakeGameMode.h"
 
-#include "Entities/FoodEntity.h"
-#include "Entities/SnakeEntity.h"
+#include "Entities/Apple.h"
+#include "Entities/Snake.h"
 #include "Services/EntityManager.h"
 #include "Entities/Camera.h"
-#include "Services/Clock.h"
-#include <iostream>
 
 using namespace Engine::Services;
 
-void SnakeGameMode::OnStart()
+SnakeGameMode::SnakeGameMode()
 {
-    const auto camera = EntityManager::SpawnEntity<Engine::Entities::Camera>(true);
+    m_Camera = EntityManager::SpawnEntity<Engine::Entities::Camera>(true);
 
-    const auto snake = EntityManager::SpawnEntity<SnakeEntity>();
+    m_Snake = EntityManager::SpawnEntity<Snake>();
 
-    const auto food1 = EntityManager::SpawnEntity<FoodEntity>();
+    m_Apple = EntityManager::SpawnEntity<Apple>();
+    m_Apple->GetTransform().TranslateBy({2, 1});
+}
 
-    const auto food2 = EntityManager::SpawnEntity<FoodEntity>();
+void SnakeGameMode::OnLateUpdate(const float deltaTime)
+{
+    m_TickTimer -= deltaTime;
+
+    if (m_TickTimer <= 0)
+    {
+        m_TickTimer = m_TickRate;
+
+        m_Snake->Move();
+    }
 }

@@ -1,12 +1,26 @@
 #pragma once
 
+#include "Entities/Camera.h"
+#include "Entities/Snake.h"
+#include "Entities/Apple.h"
 #include "Game/GameMode.h"
+
+// TODO Render the grid
 
 class SnakeGameMode final : public Engine::Game::GameMode
 {
+private:
+    Engine::Entities::Camera* m_Camera;
+    Snake* m_Snake;
+    Apple* m_Apple;
+
+    float m_TickRate = 0.5f;
+    float m_TickTimer = m_TickRate;
+
 public:
-    SnakeGameMode() = default;
+    SnakeGameMode();
     ~SnakeGameMode() override = default;
 
-    void OnStart() override;
+private:
+    void OnLateUpdate(float deltaTime) override;
 };

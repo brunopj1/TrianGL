@@ -91,7 +91,7 @@ namespace Engine::Services
 
         // Instantiation methods (Entity)
     public:
-        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION_NO_ARGS(Game::Entity)>
+        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");

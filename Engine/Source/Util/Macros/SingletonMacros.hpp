@@ -37,20 +37,20 @@ static_assert(true, "")
 #endif
 
 #ifdef DEBUG
-#define DECLARE_SINGLETON_USAGE_VAR() static inline bool s_IsCurrentlyInUse = false
+#define DECLARE_SINGLETON_USAGE_VAR() static inline unsigned int s_SingletonUsageDepth = 0
 #else
 #define DECLARE_SINGLETON_USAGE_VAR() static_assert(true, "")
 #endif
 
 #ifdef DEBUG
-#define PREPARE_SINGLETON_USAGE(value) s_IsCurrentlyInUse = value
+#define PREPARE_SINGLETON_USAGE() s_SingletonUsageDepth += 1
 #else
 #define PREPARE_SINGLETON_USAGE(value) static_assert(true, "")
 #endif
 
 #ifdef DEBUG
 #define ASSERT_SINGLETON_USAGE(class, name)                               \
-if (!class::s_IsCurrentlyInUse)                                           \
+if (class::s_SingletonUsageDepth == 0)                                    \
 {                                                                         \
     throw Exceptions::Core::SingletonNotBeingUsedException(name, #class); \
 }                                                                         \
@@ -58,3 +58,6 @@ static_assert(true, "")
 #else
 #define ASSERT_SINGLETON_USAGE(class, name) static_assert(true, "")
 #endif
+
+// TODO these macros dont guarantee that I'm not calling the destructor directly
+// For example when destroying the GameMode, manual deletes would not be caught
