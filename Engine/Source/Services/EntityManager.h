@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Exceptions/Core/GameModeAlreadySpecifiedException.h"
+#include "Exceptions/Game/GameModeAlreadySpecifiedException.hpp"
 #include "Game/Entity.h"
 #include "Util/Macros/SingletonMacros.hpp"
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
 // Forward declarations
 namespace Engine::Core
@@ -71,11 +71,11 @@ namespace Engine::Services
         // Instantiation methods (GameMode)
     private:
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::GameMode)>
-        static T* CreateGameMode(Args&&... args) // NOLINT
+        static T* CreateGameMode(Args&&... args)
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-            if (s_Instance->m_GameMode) throw Exceptions::Core::GameModeAlreadySpecifiedException();
+            if (s_Instance->m_GameMode) throw Exceptions::Game::GameModeAlreadySpecifiedException();
 
             PREPARE_SINGLETON_USAGE();
 
@@ -89,8 +89,8 @@ namespace Engine::Services
 
         // Instantiation methods (Entity)
     public:
-        template <typename T, typename... Args, typename = std::enable_if_t<!std::is_same_v<Game::Entity, T> && std::is_base_of_v<Game::Entity, T> && std::is_constructible_v<T, Args...>>>
-        static T* SpawnEntity(Args&&... args)  // NOLINT
+        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Entity)>
+        static T* SpawnEntity(Args&&... args)
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -110,7 +110,7 @@ namespace Engine::Services
 
         // Instantiation methods (Component)
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Component)>
-        static T* AttachComponent(Game::Entity* parent, Args&&... args)  // NOLINT
+        static T* AttachComponent(Game::Entity* parent, Args&&... args)
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 

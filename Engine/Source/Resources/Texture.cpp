@@ -13,7 +13,7 @@ using namespace Engine::Resources;
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Texture");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Texture, true);
 
     Load(parameters);
 }
@@ -21,7 +21,7 @@ Texture::Texture(std::string filePath, const TextureParameters& parameters)
 Texture::~Texture()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, "Engine::Resources::Texture");
+    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Texture, false);
 
     Free();
 }

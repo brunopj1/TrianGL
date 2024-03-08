@@ -6,7 +6,7 @@
 #include "Services/EntityManager.h"
 #include "Entities/Camera.h"
 
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 #include "Util/Macros/SingletonMacros.hpp"
 #include <format>
 #include <stdexcept>

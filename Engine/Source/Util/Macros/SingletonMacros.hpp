@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <type_traits>
-#include "Exceptions/Core/ServiceNotYetInitialized.h"
-#include "Exceptions/Core/SingletonNotBeingUsedException.h"
+#include "Exceptions/Core/ApplicationNotYetInitialized.hpp"
+#include "Exceptions/Core/ForbiddenCallToConstructor.hpp"
 
 // Template macros
 
@@ -26,10 +26,10 @@
 // Debug macros
 
 #ifdef DEBUG
-#define SINGLETON_CHECK_IF_INITIALIZED(name)                 \
-if (s_Instance == nullptr)			                            \
+#define SINGLETON_CHECK_IF_INITIALIZED(name)                \
+if (s_Instance == nullptr)			                        \
 {                                                           \
-    throw Exceptions::Core::ServiceNotYetInitialized(name); \
+    throw Exceptions::Core::ApplicationNotYetInitialized(); \
 }                                                           \
 static_assert(true, "")
 #else
@@ -49,15 +49,12 @@ static_assert(true, "")
 #endif
 
 #ifdef DEBUG
-#define ASSERT_SINGLETON_USAGE(class, name)                               \
-if (class::s_SingletonUsageDepth-- == 0)                                  \
-{                                                                         \
-    throw Exceptions::Core::SingletonNotBeingUsedException(name, #class); \
-}                                                                         \
+#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor)             \
+if (serviceClass::s_SingletonUsageDepth-- == 0)                                      \
+{                                                                                    \
+    throw Exceptions::Core::ForbiddenCallToConstructor(isConstructor, #objectClass); \
+}                                                                                    \
 static_assert(true, "")
 #else
 #define ASSERT_SINGLETON_USAGE(class, name) static_assert(true, "")
 #endif
-
-// TODO these macros dont guarantee that I'm not calling the destructor directly
-// For example when destroying the GameMode, manual deletes would not be caught

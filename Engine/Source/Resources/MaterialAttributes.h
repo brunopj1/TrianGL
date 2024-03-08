@@ -31,7 +31,7 @@ namespace Engine::Resources
 
     public:
         bool IsValid() const;
-        
+
     private:
         void Bind() const;
         virtual void BindInternal() const = 0;

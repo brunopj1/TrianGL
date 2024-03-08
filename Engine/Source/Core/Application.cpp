@@ -12,12 +12,12 @@
 #include "Services/InputSystem.h"
 #include "Services/EntityManager.h"
 #include "Entities/Camera.h"
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 
 #include "Game/GameMode.h"
-#include "Exceptions/Core/GameModeMissingException.h"
-#include "Exceptions/Core/MissingMainCameraException.h"
-#include "Exceptions/Core/OpenGlException.h"
+#include "Exceptions/Game/MissingGameModeException.hpp"
+#include "Exceptions/Game/MissingMainCameraException.hpp"
+#include "Exceptions/OpenGL/OpenGlException.hpp"
 #include <iostream>
 
 #ifdef DEBUG
@@ -44,7 +44,7 @@ void Application::Run()
 {
     if (!m_EntityManager.m_GameMode)
     {
-        throw Exceptions::Core::GameModeMissingException();
+        throw Exceptions::Game::GameModeMissingException();
     }
 
     m_EntityManager.m_GameMode->OnStart();
@@ -131,7 +131,7 @@ void Application::Render() const
 {
     if (const Entities::Camera* camera = Entities::Camera::GetMainCamera(); camera == nullptr)
     {
-        throw Exceptions::Core::MissingMainCameraException();
+        throw Exceptions::Game::MissingMainCameraException();
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -160,5 +160,5 @@ void Application::PollEvents() const
 
 void Application::ErrorCallback(const int error, const char* description)
 {
-    throw Exceptions::Core::OpenGlException(error, description);
+    throw Exceptions::OpenGl::OpenGlException(error, description);
 }

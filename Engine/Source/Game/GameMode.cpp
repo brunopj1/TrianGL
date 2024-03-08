@@ -7,13 +7,13 @@ using namespace Engine::Game;
 
 GameMode::GameMode()
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::GameMode");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, Engine::Game::GameMode, true);
 }
 
 GameMode::~GameMode()
 {
 #pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
-    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, "Engine::Game::GameMode");
+    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, Engine::Game::GameMode, false);
 }
 
 void GameMode::OnStart() {}

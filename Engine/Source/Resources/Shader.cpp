@@ -2,7 +2,7 @@
 
 #include "Exceptions/Common/FileNotFoundException.h"
 #include "Exceptions/Common/FileTooBigException.h"
-#include "Exceptions/Core/ShaderCompilationException.h"
+#include "Exceptions/OpenGL/ShaderCompilationException.hpp"
 #include "glad/glad.h"
 #include "Util/Macros/SingletonMacros.hpp"
 #include <codecvt>
@@ -64,7 +64,7 @@ void Shader::LinkProgram()
         const std::string logStr = log;
         delete[] log;
 
-        throw Exceptions::Core::ShaderCompilationException(logStr);
+        throw Exceptions::OpenGl::ShaderCompilationException(logStr);
     }
 }
 
@@ -91,7 +91,7 @@ int Shader::CompileShader(const std::string& shader, const int type) const
         const std::string logStr = log;
         delete[] log;
 
-        throw Exceptions::Core::ShaderCompilationException(type, logStr);
+        throw Exceptions::OpenGl::ShaderCompilationException(type, logStr);
     }
 
     return shaderId;

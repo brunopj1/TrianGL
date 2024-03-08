@@ -10,8 +10,8 @@
 
 ## General
 
-- [ ] Add a single exception for when the engine is not initialized
-- [ ] Reorganize the exceptions
+- [X] Add a single exception for when the engine is not initialized
+- [X] Reorganize the exceptions
 
 ## Resource Manager
 
