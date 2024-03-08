@@ -92,19 +92,15 @@ void EntityManager::DestroyGameMode()
 {
     SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-    PREPARE_SINGLETON_USAGE(true);
+    PREPARE_SINGLETON_USAGE();
 
     delete s_Instance->m_GameMode;
     s_Instance->m_GameMode = nullptr;
-
-    PREPARE_SINGLETON_USAGE(false);
 }
 
 void EntityManager::DestroyEntity(Game::Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-    PREPARE_SINGLETON_USAGE(true);
 
     s_Instance->m_Entities.erase(entity);
 
@@ -116,16 +112,14 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
         DetachComponent(entity->m_Components.front());
     }
 
-    delete entity;
+    PREPARE_SINGLETON_USAGE();
 
-    PREPARE_SINGLETON_USAGE(false);
+    delete entity;
 }
 
 void EntityManager::DetachComponent(Game::Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-    PREPARE_SINGLETON_USAGE(true);
 
     s_Instance->m_Components.erase(component);
 
@@ -140,7 +134,7 @@ void EntityManager::DetachComponent(Game::Component* component)
         std::erase(s_Instance->m_RenderQueue, renderable);
     }
 
-    delete component;
+    PREPARE_SINGLETON_USAGE();
 
-    PREPARE_SINGLETON_USAGE(false);
+    delete component;
 }

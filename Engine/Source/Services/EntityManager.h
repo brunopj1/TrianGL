@@ -75,14 +75,12 @@ namespace Engine::Services
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-            PREPARE_SINGLETON_USAGE(true);
-
             if (s_Instance->m_GameMode) throw Exceptions::Core::GameModeAlreadySpecifiedException();
+
+            PREPARE_SINGLETON_USAGE();
 
             T* instance = new T(std::forward<Args>(args)...);
             s_Instance->m_GameMode = instance;
-
-            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }
@@ -91,12 +89,12 @@ namespace Engine::Services
 
         // Instantiation methods (Entity)
     public:
-        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Entity)>
+        template <typename T, typename... Args, typename = std::enable_if_t<!std::is_same_v<Game::Entity, T> && std::is_base_of_v<Game::Entity, T> && std::is_constructible_v<T, Args...>>>
         static T* SpawnEntity(Args&&... args)  // NOLINT
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-            PREPARE_SINGLETON_USAGE(true);
+            PREPARE_SINGLETON_USAGE();
 
             T* instance = new T(std::forward<Args>(args)...);
 
@@ -104,8 +102,6 @@ namespace Engine::Services
 
             AddToQueue(instance, s_Instance->m_OnStartQueue);
             AddToQueue(instance, s_Instance->m_OnUpdateQueue);
-
-            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }
@@ -118,7 +114,7 @@ namespace Engine::Services
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-            PREPARE_SINGLETON_USAGE(true);
+            PREPARE_SINGLETON_USAGE();
 
             T* instance = new T(std::forward<Args>(args)...);
 
@@ -134,8 +130,6 @@ namespace Engine::Services
             {
                 s_Instance->m_RenderQueue.push_back(instance);
             }
-
-            PREPARE_SINGLETON_USAGE(false);
 
             return instance;
         }

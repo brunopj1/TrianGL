@@ -14,28 +14,22 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-    PREPARE_SINGLETON_USAGE(true);
-
-    for (const Resources::Internal::ManagedResource* resource : m_Resources)
+    while (!m_Resources.empty())
     {
-        delete resource;
+        Unload(*m_Resources.begin());
     }
 
     s_Instance = nullptr;
-
-    PREPARE_SINGLETON_USAGE(false);
 }
 
 Engine::Resources::Texture* ResourceManager::LoadTexture(std::string filePath, const Resources::TextureParameters& parameters)
 {
     SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
 
-    PREPARE_SINGLETON_USAGE(true);
+    PREPARE_SINGLETON_USAGE();
 
     Resources::Texture* texture = new Resources::Texture(std::move(filePath), parameters);
     s_Instance->m_Resources.push_back(texture);
-
-    PREPARE_SINGLETON_USAGE(false);
 
     return texture;
 }
@@ -44,12 +38,11 @@ void ResourceManager::Unload(Resources::Internal::ManagedResource* resource)
 {
     SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
 
-    PREPARE_SINGLETON_USAGE(true);
-
     std::erase(s_Instance->m_Resources, resource);
-    delete resource;
 
-    PREPARE_SINGLETON_USAGE(false);
+    PREPARE_SINGLETON_USAGE();
+
+    delete resource;
 }
 
 Engine::Resources::Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)

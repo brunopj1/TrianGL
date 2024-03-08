@@ -54,12 +54,10 @@ namespace Engine::Services
         {
             SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
 
-            PREPARE_SINGLETON_USAGE(true);
+            PREPARE_SINGLETON_USAGE();
 
             T* material = new T();
             s_Instance->m_Resources.push_back(material);
-
-            PREPARE_SINGLETON_USAGE(false);
 
             return material;
         }

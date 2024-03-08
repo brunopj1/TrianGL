@@ -37,7 +37,7 @@ static_assert(true, "")
 #endif
 
 #ifdef DEBUG
-#define DECLARE_SINGLETON_USAGE_VAR() static inline unsigned int s_SingletonUsageDepth = 0
+#define DECLARE_SINGLETON_USAGE_VAR() static inline int s_SingletonUsageDepth = 0
 #else
 #define DECLARE_SINGLETON_USAGE_VAR() static_assert(true, "")
 #endif
@@ -45,12 +45,12 @@ static_assert(true, "")
 #ifdef DEBUG
 #define PREPARE_SINGLETON_USAGE() s_SingletonUsageDepth += 1
 #else
-#define PREPARE_SINGLETON_USAGE(value) static_assert(true, "")
+#define PREPARE_SINGLETON_USAGE() static_assert(true, "")
 #endif
 
 #ifdef DEBUG
 #define ASSERT_SINGLETON_USAGE(class, name)                               \
-if (class::s_SingletonUsageDepth == 0)                                    \
+if (class::s_SingletonUsageDepth-- == 0)                                  \
 {                                                                         \
     throw Exceptions::Core::SingletonNotBeingUsedException(name, #class); \
 }                                                                         \
