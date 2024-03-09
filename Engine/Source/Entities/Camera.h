@@ -28,8 +28,10 @@ namespace Engine::Entities
     private:
         float m_HorizontalSize = 10.0f;
         bool m_LockHorizontalSize = true;
-
         float m_AspectRatio;
+
+    private:
+        glm::vec3 m_BackgroundColor = {0.5f, 0.5f, 0.5f};
 
     public:
         Camera(bool setAsMainCamera = false);
@@ -50,6 +52,10 @@ namespace Engine::Entities
 
     private:
         void SetAspectRatio(float aspectRatio);
+
+    public:
+        glm::vec3 GetBackgroundColor() const;
+        void SetBackgroundColor(const glm::vec3& color);
 
     private:
         glm::mat4 GetViewMatrix() const;

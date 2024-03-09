@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Internal/IUpdatable.h"
+#include "Internal/Updatable.h"
 #include "Transform.h"
 #include <vector>
 
@@ -15,7 +15,7 @@ namespace Engine::Game
     // Forward declarations
     class Component;
 
-    class Entity : public Internal::IUpdatable
+    class Entity : public Internal::Updatable
     {
     private:
         friend class Services::EntityManager;

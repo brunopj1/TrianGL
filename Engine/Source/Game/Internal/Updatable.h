@@ -14,7 +14,7 @@ namespace Engine::Game
 
 namespace Engine::Game::Internal
 {
-    class IUpdatable
+    class Updatable
     {
     private:
         friend class Services::EntityManager;
@@ -23,8 +23,8 @@ namespace Engine::Game::Internal
         bool m_ShouldUpdate;
 
     public:
-        IUpdatable(bool shouldUpdate);
-        virtual ~IUpdatable() = default;
+        Updatable(bool shouldUpdate);
+        virtual ~Updatable() = default;
 
     protected:
         virtual int GetOrderOfExecution() const;

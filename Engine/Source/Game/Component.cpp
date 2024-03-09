@@ -6,7 +6,7 @@
 using namespace Engine::Game;
 
 Component::Component(const bool shouldUpdate)
-    : IUpdatable(shouldUpdate)
+    : Updatable(shouldUpdate)
 {
     ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, Engine::Game::Component, true);
 }

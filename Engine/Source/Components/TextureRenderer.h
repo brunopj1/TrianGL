@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 #include "Game/Component.h"
-#include "Game/Internal/IRenderable.h"
+#include "Game/Internal/Renderable.h"
+#include "glm/vec2.hpp"
+#include "glm/mat4x4.hpp"
 
 // Forward declarations
 namespace Engine::Services
@@ -22,7 +24,7 @@ namespace Engine::DefaultResources
 
 namespace Engine::Components
 {
-    class TextureRenderer final : public Game::Component, public Game::Internal::IRenderable
+    class TextureRenderer final : public Game::Component, public Game::Internal::Renderable
     {
     private:
         friend class Services::EntityManager;
@@ -49,6 +51,6 @@ namespace Engine::Components
         static void Terminate();
 
     private:
-        void Render() const override;
+        void Render() override;
     };
 }

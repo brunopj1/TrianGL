@@ -4,7 +4,7 @@
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Game/Internal/IUpdatable.h"
+#include "Game/Internal/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine::Services;
@@ -38,7 +38,7 @@ void EntityManager::TerminateComponents()
 
 void EntityManager::Update(const float deltaTime)
 {
-    for (Game::Internal::IUpdatable* updatable : m_OnStartQueue)
+    for (Game::Internal::Updatable* updatable : m_OnStartQueue)
     {
         updatable->OnStart();
     }
@@ -46,7 +46,7 @@ void EntityManager::Update(const float deltaTime)
 
     m_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (Game::Internal::IUpdatable* updatable : m_OnUpdateQueue)
+    for (Game::Internal::Updatable* updatable : m_OnUpdateQueue)
     {
         if (updatable->m_ShouldUpdate)
         {
@@ -59,13 +59,13 @@ void EntityManager::Update(const float deltaTime)
 
 void EntityManager::Render() const
 {
-    for (const Game::Internal::IRenderable* renderable : m_RenderQueue)
+    for (Game::Internal::Renderable* renderable : m_RenderQueue)
     {
         renderable->Render();
     }
 }
 
-void EntityManager::AddToQueue(Game::Internal::IUpdatable* updatable, std::vector<Game::Internal::IUpdatable*>& queue)
+void EntityManager::AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue)
 {
     const auto order = updatable->GetOrderOfExecution();
 
@@ -129,7 +129,7 @@ void EntityManager::DetachComponent(Game::Component* component)
     auto& parentComponents = component->m_Parent->m_Components;
     std::erase(parentComponents, component);
 
-    if (const auto renderable = dynamic_cast<Game::Internal::IRenderable*>(component))
+    if (const auto renderable = dynamic_cast<Game::Internal::Renderable*>(component))
     {
         std::erase(s_Instance->m_RenderQueue, renderable);
     }

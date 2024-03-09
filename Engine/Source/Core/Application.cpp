@@ -16,7 +16,6 @@
 
 #include "Game/GameMode.h"
 #include "Exceptions/Game/MissingGameModeException.hpp"
-#include "Exceptions/Game/MissingMainCameraException.hpp"
 #include "Exceptions/OpenGL/OpenGlException.hpp"
 #include <iostream>
 
@@ -129,13 +128,11 @@ void Application::Update()
 
 void Application::Render() const
 {
-    if (const Entities::Camera* camera = Entities::Camera::GetMainCamera(); camera == nullptr)
-    {
-        throw Exceptions::Game::MissingMainCameraException();
-    }
+    const Entities::Camera* camera = Entities::Camera::GetMainCamera();
 
+    const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f);
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_NewFrame();
@@ -143,7 +140,10 @@ void Application::Render() const
     ImGui::NewFrame();
 #endif
 
-    m_EntityManager.Render();
+    if (camera != nullptr)
+    {
+        m_EntityManager.Render();
+    }
 
 #ifdef DEBUG
     ImGui::Render();

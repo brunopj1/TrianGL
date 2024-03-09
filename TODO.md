@@ -45,14 +45,12 @@
 - [X] Material instances (using the same shader but different attributes)
 - [X] Add the default mesh
 - [X] Add the default material
+- [X] Implement automatic rendering
+- [X] Add a transform to the "Renderable" class
+- [ ] Implement View Frustum Culling
 - [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)
-- [X] Implement automatic rendering
-- [ ] Implement View Frustum Culling
-- [ ] Add a transform to the Texture Renderer
-- [ ] Add a pivot to the Texture Renderer
 - [ ] Add batch rendering (for the same material)
-- [ ] Add more Engine materials (camera, frame/time, etc...)
 
 ## Entity system
 

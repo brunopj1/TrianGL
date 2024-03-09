@@ -83,6 +83,16 @@ void Camera::SetAspectRatio(const float aspectRatio)
     m_AspectRatio = aspectRatio;
 }
 
+glm::vec3 Camera::GetBackgroundColor() const
+{
+    return m_BackgroundColor;
+}
+
+void Camera::SetBackgroundColor(const glm::vec3& color)
+{
+    m_BackgroundColor = color;
+}
+
 glm::mat4 Camera::GetViewMatrix() const
 {
     const glm::vec3 position = glm::vec3(GetTransform().GetPosition(), 1.0f);

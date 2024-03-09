@@ -21,8 +21,8 @@ namespace Engine::Game
 
 namespace Engine::Game::Internal
 {
-    class IUpdatable;
-    class IRenderable;
+    class Updatable;
+    class Renderable;
 }
 
 namespace Engine::Services
@@ -45,10 +45,10 @@ namespace Engine::Services
         std::unordered_set<Game::Entity*> m_Entities;
         std::unordered_set<Game::Component*> m_Components;
 
-        std::vector<Game::Internal::IUpdatable*> m_OnUpdateQueue;
-        std::vector<Game::Internal::IUpdatable*> m_OnStartQueue;
+        std::vector<Game::Internal::Updatable*> m_OnUpdateQueue;
+        std::vector<Game::Internal::Updatable*> m_OnStartQueue;
 
-        std::vector<Game::Internal::IRenderable*> m_RenderQueue;
+        std::vector<Game::Internal::Renderable*> m_RenderQueue;
 
     private:
         EntityManager();
@@ -63,7 +63,7 @@ namespace Engine::Services
         void Render() const;
 
     private:
-        static void AddToQueue(Game::Internal::IUpdatable* updatable, std::vector<Game::Internal::IUpdatable*>& queue);
+        static void AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue);
 
     public:
         static Game::GameMode* GetGameMode();
@@ -126,7 +126,7 @@ namespace Engine::Services
             parent->m_Components.push_back(instance);
             instance->m_Parent = parent;
 
-            if constexpr (std::is_base_of_v<Game::Internal::IRenderable, T>)
+            if constexpr (std::is_base_of_v<Game::Internal::Renderable, T>)
             {
                 s_Instance->m_RenderQueue.push_back(instance);
             }

@@ -6,6 +6,7 @@
 #include "glad/glad.h"
 #include "Resources/Material.h"
 #include "Resources/Texture.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace Engine::Components;
 
@@ -97,14 +98,14 @@ void TextureRenderer::Terminate()
     s_QuadVao = 0;
 }
 
-void TextureRenderer::Render() const
+void TextureRenderer::Render()
 {
-    if (m_Material == nullptr)
-    {
-        // TODO throw an error
-    }
+    if (m_Material == nullptr) return;
 
-    const glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
+    const glm::mat4 parentModelMatrix = GetParent()->GetTransform().GetTransformMatrix();
+    const glm::mat4 textureModelMatrix = GetTransform().GetTransformMatrix();
+
+    const glm::mat4 modelMatrix = parentModelMatrix * textureModelMatrix;
 
     m_Material->Use(modelMatrix);
     m_Material->OnRenderSetup();
