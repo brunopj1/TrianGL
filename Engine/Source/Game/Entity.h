@@ -4,12 +4,6 @@
 #include "Transform.h"
 #include <vector>
 
-// Forward declarations
-namespace Engine::Services
-{
-    class EntityManager;
-}
-
 namespace Engine::Game
 {
     // Forward declarations
@@ -34,6 +28,11 @@ namespace Engine::Game
         Transform& GetTransform();
         const Transform& GetTransform() const;
 
-        const std::vector<Component*>& GetComponents() const;
+    public:
+        template <typename T, typename = std::enable_if_t<std::is_base_of_v<Entity, T>>>
+        T* As()
+        {
+            return dynamic_cast<T*>(this);
+        }
     };
 }

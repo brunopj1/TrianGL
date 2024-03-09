@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Internal/Updatable.h"
+#include <type_traits>
 
 namespace Engine::Services
 {
@@ -26,5 +27,12 @@ namespace Engine::Game
 
     public:
         Entity* GetParent() const;
+
+    public:
+        template <typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
+        T* As()
+        {
+            return dynamic_cast<T*>(this);
+        }
     };
 }

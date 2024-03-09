@@ -11,6 +11,8 @@ SnakeGameMode::SnakeGameMode()
 {
     m_Camera = EntityManager::SpawnEntity<Engine::Entities::Camera>(true);
 
+    m_Grid = EntityManager::SpawnEntity<Grid>(glm::uvec2(5, 5));
+
     m_Snake = EntityManager::SpawnEntity<Snake>();
 
     m_Apple = EntityManager::SpawnEntity<Apple>();

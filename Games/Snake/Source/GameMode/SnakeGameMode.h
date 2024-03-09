@@ -3,6 +3,7 @@
 #include "Entities/Camera.h"
 #include "Entities/Snake.h"
 #include "Entities/Apple.h"
+#include "Entities/Grid.h"
 #include "Game/GameMode.h"
 
 // TODO Render the grid
@@ -11,6 +12,8 @@ class SnakeGameMode final : public Engine::Game::GameMode
 {
 private:
     Engine::Entities::Camera* m_Camera;
+
+    Grid* m_Grid;
     Snake* m_Snake;
     Apple* m_Apple;
 

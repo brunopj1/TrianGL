@@ -138,7 +138,7 @@ namespace Engine::Services
 
         // Entity lookup methods
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
-        static T* FindEntity()
+        static T* FindEntityGlobally()
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -154,7 +154,7 @@ namespace Engine::Services
         }
 
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
-        static std::vector<T*> FindEntities()
+        static std::vector<T*> FindEntitiesGlobally()
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -173,7 +173,7 @@ namespace Engine::Services
 
         // Component lookup methods
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static T* FindComponent()
+        static T* FindComponentGlobally()
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -189,7 +189,7 @@ namespace Engine::Services
         }
 
         template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static std::vector<T*> FindComponents()
+        static std::vector<T*> FindComponentsGlobally()
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 

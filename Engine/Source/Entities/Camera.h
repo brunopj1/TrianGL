@@ -5,7 +5,6 @@
 // Forward declarations
 namespace Engine::Core
 {
-    class EntityManager;
     class Window;
 }
 

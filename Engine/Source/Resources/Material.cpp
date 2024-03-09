@@ -30,11 +30,11 @@ Engine::Resources::Material::~Material()
 void Engine::Resources::Material::OnRenderSetup() const
 {}
 
-Engine::Resources::TextureMaterialAttribute* Engine::Resources::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool ignoreIfInvalid)
+Engine::Resources::TextureMaterialAttribute* Engine::Resources::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {
     const int location = m_Shader->GetUniformLocation(name);
 
-    if (ignoreIfInvalid && location == -1)
+    if (location == -1 && !createIfInvalid)
     {
         return nullptr;
     }
@@ -63,16 +63,23 @@ void Engine::Resources::Material::Use(const glm::mat4& modelMatrix) const
 
 void Engine::Resources::Material::CreateEngineAttributes()
 {
-    m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", true);
+    m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", false);
+    m_ModelMatrix = AddAttribute<Mat4MaterialAttribute>("uModelMatrix", false);
 }
 
 void Engine::Resources::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
 {
     const Entities::Camera* camera = Entities::Camera::GetMainCamera();
+    // Null checking is not needed since the game is not rendered without a camera
 
     if (m_PvmMatrix != nullptr)
     {
         const auto pvmMatrix = camera->GetProjectionViewMatrix() * modelMatrix;
         m_PvmMatrix->SetValue(pvmMatrix);
+    }
+
+    if (m_ModelMatrix != nullptr)
+    {
+        m_ModelMatrix->SetValue(modelMatrix);
     }
 }

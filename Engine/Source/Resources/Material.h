@@ -30,6 +30,7 @@ namespace Engine::Resources
 
     private:
         Mat4MaterialAttribute* m_PvmMatrix;
+        Mat4MaterialAttribute* m_ModelMatrix;
 
     protected:
         Material(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
@@ -40,11 +41,11 @@ namespace Engine::Resources
 
     protected:
         template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>
-        T* AddAttribute(const std::string& name, const bool ignoreIfInvalid = false)
+        T* AddAttribute(const std::string& name, const bool createIfInvalid = true)
         {
             const int location = m_Shader->GetUniformLocation(name);
 
-            if (ignoreIfInvalid && location == -1)
+            if (location == -1 && !createIfInvalid)
             {
                 return nullptr;
             }
@@ -59,7 +60,7 @@ namespace Engine::Resources
             return attribute;
         }
 
-        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot, bool ignoreIfInvalid = false);
+        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;

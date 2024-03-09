@@ -46,8 +46,8 @@ void TextureRenderer::Init()
 {
     glEnable(GL_DEPTH_TEST);
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     // @formatter:off
 
@@ -105,7 +105,12 @@ void TextureRenderer::Render()
     const glm::mat4 parentModelMatrix = GetParent()->GetTransform().GetTransformMatrix();
     const glm::mat4 textureModelMatrix = GetTransform().GetTransformMatrix();
 
-    const glm::mat4 modelMatrix = parentModelMatrix * textureModelMatrix;
+    glm::mat4 modelMatrix = parentModelMatrix * textureModelMatrix;
+
+    if (const int zIndex = GetZIndex(); zIndex != 0)
+    {
+        modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<float>(zIndex)));
+    }
 
     m_Material->Use(modelMatrix);
     m_Material->OnRenderSetup();

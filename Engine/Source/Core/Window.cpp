@@ -163,7 +163,7 @@ void Window::ResizeCallback(int width, int height)
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
-    for (const auto camera : Services::EntityManager::FindEntities<Entities::Camera>())
+    for (const auto camera : Services::EntityManager::FindEntitiesGlobally<Entities::Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
     }

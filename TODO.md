@@ -30,11 +30,9 @@
 - [ ] Use raw mouse motion when the mouse is locked (if available)
 
 ## Rendering with transparency
-- [ ] In the material enable the alpha blending dynamically
-- [ ] Enable alpha blending automatically based on each texture
-- [ ] Add an option to manually enable alpha blending (for user materials)
-- [ ] Sort the rendering based on the Z coordinate (listen for changes in positions to re-sort)
-- [ ] Add an option to specify if a texture has premultiplied alpha
+- [X] Implement Z indexing
+- [ ] Implement Z sorting
+- [ ] Implement custom axis sorting
 
 ## Rendering
 
@@ -46,7 +44,7 @@
 - [X] Add the default mesh
 - [X] Add the default material
 - [X] Implement automatic rendering
-- [X] Add a transform to the "Renderable" class
+- [X] Add a transform to the Renderable class
 - [ ] Implement View Frustum Culling
 - [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)
