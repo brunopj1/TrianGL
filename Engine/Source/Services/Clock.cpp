@@ -1,6 +1,7 @@
 ﻿#include "Clock.h"
 
 #include "GLFW/glfw3.h"
+#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine::Services;
 

@@ -71,7 +71,7 @@ namespace Engine::Services
         // Instantiation methods (GameMode)
     private:
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::GameMode)>
-        static T* CreateGameMode(Args&&... args)
+        static T* CreateGameMode(Args&&... args) // NOLINT
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -90,7 +90,7 @@ namespace Engine::Services
         // Instantiation methods (Entity)
     public:
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Entity)>
-        static T* SpawnEntity(Args&&... args)
+        static T* SpawnEntity(Args&&... args) // NOLINT
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
@@ -110,7 +110,7 @@ namespace Engine::Services
 
         // Instantiation methods (Component)
         template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Component)>
-        static T* AttachComponent(Game::Entity* parent, Args&&... args)
+        static T* AttachComponent(Game::Entity* parent, Args&&... args) // NOLINT
         {
             SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 

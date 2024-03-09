@@ -1,14 +1,10 @@
 ﻿#include "Snake.h"
 
-#include "Components/TextureRenderer.h"
 #include "Services/EntityManager.h"
 #include "Services/InputSystem.h"
-#include "Services/ResourceManager.h"
-#include "Core/Window.h"
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
-#include "Resources/TextureParameters.hpp"
-#include <iostream>
+#include "Components/TextureRenderer.h"
 
 // TODO grid class (array and unordered_map)
 // TODO grid rendering

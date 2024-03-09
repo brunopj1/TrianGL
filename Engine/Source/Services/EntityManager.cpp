@@ -102,7 +102,7 @@ void EntityManager::DestroyEntity(Game::Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-    s_Instance->m_Entities.erase(entity);
+    if (const size_t num = s_Instance->m_Entities.erase(entity); num == 0) return;
 
     std::erase(s_Instance->m_OnStartQueue, entity);
     std::erase(s_Instance->m_OnUpdateQueue, entity);
@@ -121,7 +121,7 @@ void EntityManager::DetachComponent(Game::Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
 
-    s_Instance->m_Components.erase(component);
+    if (const size_t num = s_Instance->m_Components.erase(component); num == 0) return;
 
     std::erase(s_Instance->m_OnStartQueue, component);
     std::erase(s_Instance->m_OnUpdateQueue, component);

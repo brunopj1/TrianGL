@@ -4,6 +4,10 @@
 #include "Exceptions/Core/ApplicationNotYetInitialized.hpp"
 #include "Exceptions/Core/ForbiddenCallToConstructor.hpp"
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
 // Template macros
 
 #define SINGLETON_TEMPLATE_SPAWN_CONDITION(class) \
@@ -26,12 +30,12 @@
 // Debug macros
 
 #ifdef DEBUG
-#define SINGLETON_CHECK_IF_INITIALIZED(name)                \
-if (s_Instance == nullptr)			                        \
-{                                                           \
-    throw Exceptions::Core::ApplicationNotYetInitialized(); \
-}                                                           \
-static_assert(true, "")
+#define SINGLETON_CHECK_IF_INITIALIZED(name)                    \
+    if (s_Instance == nullptr)			                        \
+    {                                                           \
+        throw Exceptions::Core::ApplicationNotYetInitialized(); \
+    }                                                           \
+    static_assert(true, "")
 #else
 #define SINGLETON_CHECK_IF_INITIALIZED(name) static_assert(true, "")
 #endif
@@ -49,12 +53,25 @@ static_assert(true, "")
 #endif
 
 #ifdef DEBUG
-#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor)             \
-if (serviceClass::s_SingletonUsageDepth-- == 0)                                      \
-{                                                                                    \
-    throw Exceptions::Core::ForbiddenCallToConstructor(isConstructor, #objectClass); \
-}                                                                                    \
-static_assert(true, "")
+#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor)            \
+    if (serviceClass::s_SingletonUsageDepth == 0)                                       \
+    {                                                                                   \
+        if (isConstructor)                                                              \
+        {                                                                               \
+            std::cerr << "Forbidden direct call to the constructor of a "               \
+                      << #objectClass << "\n";                                          \
+        }                                                                               \
+        else                                                                            \
+        {                                                                               \
+            std::cerr << "Forbidden direct call to a destructor of a (or from with a) " \
+                      << #objectClass << "\n";                                          \
+        }                                                                               \
+    }                                                                                   \
+    else                                                                                \
+    {                                                                                   \
+        serviceClass::s_SingletonUsageDepth -= 1;                                       \
+    }                                                                                   \
+    static_assert(true, "")
 #else
 #define ASSERT_SINGLETON_USAGE(class, name) static_assert(true, "")
 #endif

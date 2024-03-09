@@ -38,7 +38,7 @@ void ResourceManager::Unload(Resources::Internal::ManagedResource* resource)
 {
     SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
 
-    std::erase(s_Instance->m_Resources, resource);
+    if (const size_t num = std::erase(s_Instance->m_Resources, resource); num == 0) return;
 
     PREPARE_SINGLETON_USAGE();
 

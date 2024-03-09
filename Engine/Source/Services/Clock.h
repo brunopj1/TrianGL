@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "Util/Macros/SingletonMacros.hpp"
-
 // Forward declarations
 namespace Engine::Core
 {

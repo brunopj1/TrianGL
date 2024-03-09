@@ -17,7 +17,6 @@ Engine::Resources::Material::Material(const std::string& vertexShader, const std
 
 Engine::Resources::Material::~Material()
 {
-#pragma warning(suppress: 4297) // Supress the "function assumed not to throw an exception" warning
     ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Material, false);
 
     Services::ResourceManager::UnloadShader(m_Shader);
