@@ -24,7 +24,7 @@ ResourceManager::~ResourceManager()
 
 Engine::Resources::Texture* ResourceManager::LoadTexture(std::string filePath, const Resources::TextureParameters& parameters)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     PREPARE_SINGLETON_USAGE();
 
@@ -36,7 +36,7 @@ Engine::Resources::Texture* ResourceManager::LoadTexture(std::string filePath, c
 
 void ResourceManager::Unload(Resources::Internal::ManagedResource* resource)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     if (const size_t num = std::erase(s_Instance->m_Resources, resource); num == 0) return;
 

@@ -17,7 +17,7 @@ DefaultResourcesCollection::~DefaultResourcesCollection()
 
 Engine::DefaultResources::DefaultMaterial* DefaultResourcesCollection::GetDefaultMaterial()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("DefaultResourcesCollection");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return ResourceManager::LoadMaterial<DefaultResources::DefaultMaterial>();
 }

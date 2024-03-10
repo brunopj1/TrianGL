@@ -6,9 +6,9 @@
 #include "glm/mat4x4.hpp"
 
 // Forward declarations
-namespace Engine::Services
+namespace Engine::Core
 {
-    class EntityManager;
+    class Application;
 }
 
 namespace Engine::Resources
@@ -27,7 +27,7 @@ namespace Engine::Components
     class TextureRenderer final : public Game::Component, public Game::Internal::Renderable
     {
     private:
-        friend class Services::EntityManager;
+        friend class Core::Application;
 
     private:
         static inline unsigned int s_QuadVao = 0;

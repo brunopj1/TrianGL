@@ -3,6 +3,7 @@
 #include "Services/Clock.h"
 #include "Services/DefaultResourcesCollection.h"
 #include "Window.h"
+#include "Game/GameMode.h"
 #include "Services/ResourceManager.h"
 #include "Services/EntityManager.h"
 #include "Services/InputSystem.h"
@@ -61,7 +62,7 @@ namespace Engine::Core
         template <typename T>
         void SetGameMode() const
         {
-            m_EntityManager.CreateGameMode<T>();
+            Game::GameMode::CreateGameMode<T>();
         }
     };
 }

@@ -25,14 +25,14 @@ Window::Window(std::string title, const glm::ivec2 position, const glm::uvec2 re
 
 bool Window::IsFullscreen()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Fullscreen;
 }
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     if (fullscreen == s_Instance->m_Fullscreen) return;
 
@@ -49,14 +49,14 @@ void Window::SetFullscreen(const bool fullscreen)
 
 std::string Window::GetTitle()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Title;
 }
 
 void Window::SetTitle(std::string title)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     s_Instance->m_Title = std::move(title);
     glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
@@ -64,14 +64,14 @@ void Window::SetTitle(std::string title)
 
 glm::ivec2 Window::GetPosition()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Position;
 }
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     // m_Position is updated in the callback
     glfwSetWindowPos(s_Instance->m_WindowPtr, position.x, position.y);
@@ -79,14 +79,14 @@ void Window::SetPosition(const glm::ivec2 position)
 
 glm::uvec2 Window::GetResolution()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     if (resolution.x == 0 || resolution.y == 0)
     {
@@ -99,21 +99,21 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
 float Window::GetAspectRatio()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_AspectRatio;
 }
 
 bool Window::IsVsync()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Window");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);
@@ -163,7 +163,7 @@ void Window::ResizeCallback(int width, int height)
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
-    for (const auto camera : Services::EntityManager::FindEntitiesGlobally<Entities::Camera>())
+    for (const auto camera : Game::Entity::FindEntitiesGlobally<Entities::Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
     }

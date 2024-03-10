@@ -5,6 +5,19 @@
 #include "Exceptions/Core/ForbiddenCallToConstructor.hpp"
 
 #ifdef DEBUG
+#define SINGLETON_CHECK_IF_INITIALIZED()                        \
+if (s_Instance == nullptr)			                        \
+{                                                           \
+throw Exceptions::Core::ApplicationNotYetInitialized(); \
+}                                                           \
+static_assert(true, "")
+#else
+#define SINGLETON_CHECK_IF_INITIALIZED() static_assert(true, "")
+#endif
+
+// TODO remove the following macros
+
+#ifdef DEBUG
 #include <iostream>
 #endif
 
@@ -22,24 +35,6 @@
         std::is_base_of_v<class, T> &&                    \
         std::is_constructible_v<T>>
 
-#define SINGLETON_TEMPLATE_LOOKUP_CONDITION(class) \
-    std::enable_if_t<                              \
-        !std::is_same_v<class, T> &&               \
-        std::is_base_of_v<class, T>>
-
-// Debug macros
-
-#ifdef DEBUG
-#define SINGLETON_CHECK_IF_INITIALIZED(name)                    \
-    if (s_Instance == nullptr)			                        \
-    {                                                           \
-        throw Exceptions::Core::ApplicationNotYetInitialized(); \
-    }                                                           \
-    static_assert(true, "")
-#else
-#define SINGLETON_CHECK_IF_INITIALIZED(name) static_assert(true, "")
-#endif
-
 #ifdef DEBUG
 #define DECLARE_SINGLETON_USAGE_VAR() static inline int s_SingletonUsageDepth = 0
 #else
@@ -53,7 +48,7 @@
 #endif
 
 #ifdef DEBUG
-#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor)            \
+#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor)                \
     if (serviceClass::s_SingletonUsageDepth == 0)                                       \
     {                                                                                   \
         if (isConstructor)                                                              \
@@ -73,5 +68,5 @@
     }                                                                                   \
     static_assert(true, "")
 #else
-#define ASSERT_SINGLETON_USAGE(class, name) static_assert(true, "")
+#define ASSERT_SINGLETON_USAGE(serviceClass, objectClass, isConstructor) static_assert(true, "")
 #endif

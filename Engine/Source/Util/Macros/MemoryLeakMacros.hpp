@@ -1,6 +1,8 @@
 #pragma once
 
+#ifdef DEBUG
 #include <iostream>
+#endif
 
 // Memory leaks
 #ifdef DEBUG

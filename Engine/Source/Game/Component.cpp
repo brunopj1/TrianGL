@@ -8,12 +8,12 @@ using namespace Engine::Game;
 Component::Component(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, Engine::Game::Component, true);
+    ASSERT_SPAWNER_USAGE(Engine::Game::Entity, Engine::Game::Component, true);
 }
 
 Component::~Component()
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::EntityManager, Engine::Game::Component, false);
+    ASSERT_SPAWNER_USAGE(Engine::Game::Entity, Engine::Game::Component, false);
 }
 
 Entity* Component::GetParent() const

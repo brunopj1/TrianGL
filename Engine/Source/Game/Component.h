@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Entity.h"
 #include "Internal/Updatable.h"
 #include <type_traits>
 
@@ -16,7 +17,7 @@ namespace Engine::Game
     class Component : public Internal::Updatable
     {
     private:
-        friend class Services::EntityManager;
+        friend class Entity;
 
     private:
         Entity* m_Parent = nullptr;
@@ -33,6 +34,13 @@ namespace Engine::Game
         T* As()
         {
             return dynamic_cast<T*>(this);
+        }
+
+    public:
+        template <typename T, typename... Args>
+        static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        {
+            return Entity::SpawnEntity<T>(std::forward<Args>(args)...);
         }
     };
 }

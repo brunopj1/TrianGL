@@ -2,6 +2,7 @@
 
 ## Future ideas
 
+- [ ] Find a way to automatically detect unused friend classes and forward declarations
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
 - [ ] Implement a garbage collector like the one from UE5 (with strong and weak pointers)
 - [ ] Implement a debug info window with ImGui and test custom windows
@@ -19,6 +20,7 @@
 - [X] Automatically delete resources when the application is closed
 - [X] Create a method to load textures
 - [X] Create a method to load materials
+- [ ] Move the static methods to the respective classes
 
 ## Input System
 
@@ -61,7 +63,7 @@
 - [X] Allow passing arguments to the instancing methods (to match the constructor)
 - [X] Create lookup methods for the entities and components
 - [X] Add the delta time to the update methods
-- [ ] Move the static methods to the respective classes
+- [X] Move the static methods to the respective classes
 - [ ] Allow parenting entities to each other (for Transform relationships, and auto memory management)
 
 ## Project setup

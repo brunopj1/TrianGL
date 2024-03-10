@@ -8,6 +8,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include "Components/TextureRenderer.h"
 
 #include "Services/InputSystem.h"
 #include "Services/EntityManager.h"
@@ -17,7 +18,10 @@
 #include "Game/GameMode.h"
 #include "Exceptions/Game/MissingGameModeException.hpp"
 #include "Exceptions/OpenGL/OpenGlException.hpp"
+
+#ifdef DEBUG
 #include <iostream>
+#endif
 
 #ifdef DEBUG
 #include <imgui.h>
@@ -102,12 +106,12 @@ void Application::Init()
 
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
-    Services::EntityManager::InitializeComponents();
+    Components::TextureRenderer::Init();
 }
 
 void Application::Terminate() const
 {
-    Services::EntityManager::TerminateComponents();
+    Components::TextureRenderer::Terminate();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();

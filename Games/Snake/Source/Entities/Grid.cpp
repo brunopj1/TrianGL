@@ -10,7 +10,7 @@ using namespace Engine::Services;
 Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)
 {
-    m_TextureRenderer = EntityManager::AttachComponent<Engine::Components::TextureRenderer>(this);
+    m_TextureRenderer = AttachComponent<Engine::Components::TextureRenderer>();
     m_TextureRenderer->SetMaterial(ResourceManager::LoadMaterial<GridMaterial>());
     m_TextureRenderer->SetZIndex(-1);
 

@@ -2,20 +2,20 @@
 
 #include "Entities/Apple.h"
 #include "Entities/Snake.h"
-#include "Services/EntityManager.h"
 #include "Entities/Camera.h"
 
-using namespace Engine::Services;
+using namespace Engine::Game;
+
 
 SnakeGameMode::SnakeGameMode()
 {
-    m_Camera = EntityManager::SpawnEntity<Engine::Entities::Camera>(true);
+    m_Camera = SpawnEntity<Engine::Entities::Camera>(true);
 
-    m_Grid = EntityManager::SpawnEntity<Grid>(glm::uvec2(5, 5));
+    m_Grid = SpawnEntity<Grid>(glm::uvec2(5, 5));
 
-    m_Snake = EntityManager::SpawnEntity<Snake>();
+    m_Snake = SpawnEntity<Snake>();
 
-    m_Apple = EntityManager::SpawnEntity<Apple>();
+    m_Apple = SpawnEntity<Apple>();
     m_Apple->GetTransform().TranslateBy({2, 1});
 }
 

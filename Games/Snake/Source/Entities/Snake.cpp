@@ -16,13 +16,10 @@ Snake::Snake()
 {
     m_BodyDirection = m_MoveDirection = {0, 1};
 
-    const auto snakeHead = EntityManager::SpawnEntity<SnakeBody>(glm::ivec2(0, 0));
+    const auto snakeHead = SpawnEntity<SnakeBody>(glm::ivec2(0, 0));
     m_Body.push_back(snakeHead);
 
-    auto test1 = snakeHead->As<Apple>();
-    auto test2 = ((Snake*)snakeHead)->As<SnakeBody>();
-
-    const auto snakeTail = EntityManager::SpawnEntity<SnakeBody>(glm::ivec2(0, -1));
+    const auto snakeTail = SpawnEntity<SnakeBody>(glm::ivec2(0, -1));
     m_Body.push_back(snakeTail);
 }
 

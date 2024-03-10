@@ -2,13 +2,12 @@
 
 #include "Components/TextureRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
-#include "Services/EntityManager.h"
 #include "GameMode/OrderOfExecution.hpp"
 
 Apple::Apple()
     : Entity(false)
 {
-    const auto foodTexture = Engine::Services::EntityManager::AttachComponent<Engine::Components::TextureRenderer>(this);
+    const auto foodTexture = AttachComponent<Engine::Components::TextureRenderer>();
     foodTexture->GetTransform().SetRotationDeg(45);
     foodTexture->GetTransform().SetScale(0.5f);
 

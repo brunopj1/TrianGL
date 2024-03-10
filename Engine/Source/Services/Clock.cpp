@@ -28,21 +28,21 @@ float Clock::Update()
 
 float Clock::GetTotalTime()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Engine::Services::Clock");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_TotalTime;
 }
 
 float Clock::GetDeltaTime()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Engine::Services::Clock");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_DeltaTime;
 }
 
 unsigned Clock::GetFrameCount()
 {
-    SINGLETON_CHECK_IF_INITIALIZED("Engine::Services::Clock");
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_FrameCount;
 }

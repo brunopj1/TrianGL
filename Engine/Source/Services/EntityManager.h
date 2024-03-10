@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include "Exceptions/Game/GameModeAlreadySpecifiedException.hpp"
 #include "Game/Entity.h"
-#include "Util/Macros/SingletonMacros.hpp"
 #include <unordered_set>
 #include <vector>
 
@@ -37,7 +35,6 @@ namespace Engine::Services
 
     private:
         inline static EntityManager* s_Instance = nullptr;
-        DECLARE_SINGLETON_USAGE_VAR();
 
     private:
         Game::GameMode* m_GameMode = nullptr;
@@ -55,189 +52,24 @@ namespace Engine::Services
         ~EntityManager();
 
     private:
-        static void InitializeComponents();
-        static void TerminateComponents();
-
-    private:
         void Update(float deltaTime);
         void Render() const;
 
     private:
-        static void AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue);
+        static void SetGameMode(Game::GameMode* gameMode);
 
-    public:
-        static Game::GameMode* GetGameMode();
+        static void AddEntity(Game::Entity* entity);
+        static void RemoveEntity(Game::Entity* entity);
 
-        // Instantiation methods (GameMode)
+        static void AddComponent(Game::Component* component);
+        static void RemoveComponent(Game::Component* component);
+
     private:
-        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::GameMode)>
-        static T* CreateGameMode(Args&&... args) // NOLINT
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
+        static Game::GameMode* GetGameMode();
+        static std::unordered_set<Game::Entity*>& GetEntities();
+        static std::unordered_set<Game::Component*>& GetComponents();
 
-            if (s_Instance->m_GameMode) throw Exceptions::Game::GameModeAlreadySpecifiedException();
-
-            PREPARE_SINGLETON_USAGE();
-
-            T* instance = new T(std::forward<Args>(args)...);
-            s_Instance->m_GameMode = instance;
-
-            return instance;
-        }
-
-        static void DestroyGameMode();
-
-        // Instantiation methods (Entity)
-    public:
-        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Entity)>
-        static T* SpawnEntity(Args&&... args) // NOLINT
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            PREPARE_SINGLETON_USAGE();
-
-            T* instance = new T(std::forward<Args>(args)...);
-
-            s_Instance->m_Entities.insert(instance);
-
-            AddToQueue(instance, s_Instance->m_OnStartQueue);
-            AddToQueue(instance, s_Instance->m_OnUpdateQueue);
-
-            return instance;
-        }
-
-        static void DestroyEntity(Game::Entity* entity);
-
-        // Instantiation methods (Component)
-        template <typename T, typename... Args, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION(Game::Component)>
-        static T* AttachComponent(Game::Entity* parent, Args&&... args) // NOLINT
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            PREPARE_SINGLETON_USAGE();
-
-            T* instance = new T(std::forward<Args>(args)...);
-
-            s_Instance->m_Components.insert(instance);
-
-            AddToQueue(instance, s_Instance->m_OnStartQueue);
-            AddToQueue(instance, s_Instance->m_OnUpdateQueue);
-
-            parent->m_Components.push_back(instance);
-            instance->m_Parent = parent;
-
-            if constexpr (std::is_base_of_v<Game::Internal::Renderable, T>)
-            {
-                s_Instance->m_RenderQueue.push_back(instance);
-            }
-
-            return instance;
-        }
-
-        static void DetachComponent(Game::Component* component);
-
-        // Entity lookup methods
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
-        static T* FindEntityGlobally()
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            for (auto entity : s_Instance->m_Entities)
-            {
-                if (T* casted = dynamic_cast<T*>(entity))
-                {
-                    return casted;
-                }
-            }
-
-            return nullptr;
-        }
-
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Entity)>
-        static std::vector<T*> FindEntitiesGlobally()
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            std::vector<T*> entities;
-
-            for (auto entity : s_Instance->m_Entities)
-            {
-                if (T* casted = dynamic_cast<T*>(entity))
-                {
-                    entities.push_back(casted);
-                }
-            }
-
-            return entities;
-        }
-
-        // Component lookup methods
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static T* FindComponentGlobally()
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            for (auto component : s_Instance->m_Components)
-            {
-                if (T* casted = dynamic_cast<T*>(component))
-                {
-                    return casted;
-                }
-            }
-
-            return nullptr;
-        }
-
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static std::vector<T*> FindComponentsGlobally()
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            std::vector<T*> components;
-
-            for (auto component : s_Instance->m_Components)
-            {
-                if (T* casted = dynamic_cast<T*>(component))
-                {
-                    components.push_back(casted);
-                }
-            }
-
-            return components;
-        }
-
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static T* FindComponentInEntity(Game::Entity* entity)
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            for (auto component : entity->m_Components)
-            {
-                if (T* casted = dynamic_cast<T*>(component))
-                {
-                    return casted;
-                }
-            }
-
-            return nullptr;
-        }
-
-        template <typename T, typename = SINGLETON_TEMPLATE_LOOKUP_CONDITION(Game::Component)>
-        static std::vector<T*> FindComponentsInEntity(Game::Entity* entity)
-        {
-            SINGLETON_CHECK_IF_INITIALIZED("EntityManager");
-
-            std::vector<T*> components;
-
-            for (auto component : entity->m_Components)
-            {
-                if (T* casted = dynamic_cast<T*>(component))
-                {
-                    components.push_back(casted);
-                }
-            }
-
-            return components;
-        }
+    private:
+        static void AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue);
     };
 }

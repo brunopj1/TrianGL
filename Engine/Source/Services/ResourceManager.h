@@ -52,7 +52,7 @@ namespace Engine::Services
         template <typename T, typename = SINGLETON_TEMPLATE_SPAWN_CONDITION_NO_ARGS(Resources::Material)>
         static T* LoadMaterial()
         {
-            SINGLETON_CHECK_IF_INITIALIZED("ResourceManager");
+            SINGLETON_CHECK_IF_INITIALIZED();
 
             PREPARE_SINGLETON_USAGE();
 
