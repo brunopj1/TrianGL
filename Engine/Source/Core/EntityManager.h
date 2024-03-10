@@ -5,11 +5,6 @@
 #include <vector>
 
 // Forward declarations
-namespace Engine::Core
-{
-    class Application;
-}
-
 namespace Engine::Game
 {
     class GameMode;
@@ -23,12 +18,12 @@ namespace Engine::Game::Internal
     class Renderable;
 }
 
-namespace Engine::Services
+namespace Engine::Core
 {
     class EntityManager final
     {
     private:
-        friend class Core::Application;
+        friend class Application;
         friend class Game::GameMode;
         friend class Game::Entity;
         friend class Game::Component;
@@ -59,10 +54,10 @@ namespace Engine::Services
         static void SetGameMode(Game::GameMode* gameMode);
 
         static void AddEntity(Game::Entity* entity);
-        static void RemoveEntity(Game::Entity* entity);
+        static bool RemoveEntity(Game::Entity* entity);
 
         static void AddComponent(Game::Component* component);
-        static void RemoveComponent(Game::Component* component);
+        static bool RemoveComponent(Game::Component* component);
 
     private:
         static Game::GameMode* GetGameMode();

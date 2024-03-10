@@ -3,10 +3,11 @@
 #include "Internal/ManagedResource.h"
 #include "TextureParameters.hpp"
 #include "glm/vec2.hpp"
+#include "Util/Macros/SpawnerMacros.hpp"
 #include <string>
 
 // Forward declaration
-namespace Engine::Services
+namespace Engine::Core
 {
     class ResourceManager;
 }
@@ -21,8 +22,11 @@ namespace Engine::Resources
     class Texture final : public Internal::ManagedResource
     {
     private:
-        friend class Services::ResourceManager;
+        friend class Core::ResourceManager;
         friend class TextureMaterialAttribute;
+
+    private:
+        DECLARE_SPAWNER_USAGE_VAR();
 
     private:
         std::string m_FilePath;
@@ -33,6 +37,10 @@ namespace Engine::Resources
     private:
         Texture(std::string filePath, const TextureParameters& parameters = {});
         ~Texture() override;
+
+    public:
+        static Texture* Load(std::string filePath, const TextureParameters& parameters = {});
+        void Unload() override;
 
     public:
         std::string GetFilePath() const;

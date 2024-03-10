@@ -2,7 +2,7 @@
 
 #include "Internal/Updatable.h"
 #include "Transform.h"
-#include "Services/EntityManager.h"
+#include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <vector>
 
@@ -48,7 +48,7 @@ namespace Engine::Game
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Services::EntityManager::AddEntity(instance);
+            Core::EntityManager::AddEntity(instance);
 
             return instance;
         }
@@ -59,11 +59,14 @@ namespace Engine::Game
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Component)>
         T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            PREPARE_SPAWNER_USAGE();
+            // Cannot use the macro directly because of circular dependencies
+#ifdef DEBUG
+            PrepareComponentSpawnerUsage();
+#endif
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Services::EntityManager::AddComponent(instance);
+            Core::EntityManager::AddComponent(instance);
 
             m_Components.push_back(instance);
             instance->m_Parent = this;
@@ -71,15 +74,13 @@ namespace Engine::Game
             return instance;
         }
 
-        void DetachComponent(Component* component);
-        void DetachComponents(const std::vector<Component*>& components);
-        void DetachAllComponents();
+        void DetachAllComponents() const;
 
     public:
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Entity)>
         static T* FindEntityGlobally()
         {
-            for (auto entity : Services::EntityManager::GetEntities())
+            for (auto entity : Core::EntityManager::GetEntities())
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -95,7 +96,7 @@ namespace Engine::Game
         {
             std::vector<T*> entities;
 
-            for (auto entity : Services::EntityManager::GetEntities())
+            for (auto entity : Core::EntityManager::GetEntities())
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -110,7 +111,7 @@ namespace Engine::Game
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Component)>
         static T* FindComponentGlobally()
         {
-            for (auto component : Services::EntityManager::GetComponents())
+            for (auto component : Core::EntityManager::GetComponents())
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -126,7 +127,7 @@ namespace Engine::Game
         {
             std::vector<T*> components;
 
-            for (auto component : Services::EntityManager::GetComponents())
+            for (auto component : Core::EntityManager::GetComponents())
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -166,5 +167,11 @@ namespace Engine::Game
 
             return components;
         }
+
+#ifdef DEBUG
+
+    private:
+        static void PrepareComponentSpawnerUsage();
+#endif
     };
 }

@@ -37,25 +37,31 @@
 #endif
 
 #ifdef DEBUG
-#define ASSERT_SPAWNER_USAGE(spawnerClass, objectClass, isConstructor)                  \
-    if (spawnerClass::s_SpawnerUsageDepth == 0)                                         \
-    {                                                                                   \
-        if (isConstructor)                                                              \
-        {                                                                               \
-            std::cerr << "Forbidden direct call to the constructor of a "               \
-                      << #objectClass << "\n";                                          \
-        }                                                                               \
-        else                                                                            \
-        {                                                                               \
-            std::cerr << "Forbidden direct call to a destructor of a (or from with a) " \
-                      << #objectClass << "\n";                                          \
-        }                                                                               \
-    }                                                                                   \
-    else                                                                                \
-    {                                                                                   \
-        spawnerClass::s_SpawnerUsageDepth -= 1;                                         \
-    }                                                                                   \
+#define PREPARE_SPAWNER_USAGE_ALT(spawnerClass) spawnerClass::s_SpawnerUsageDepth += 1
+#else
+#define PREPARE_SPAWNER_USAGE_ALT(spawnerClass) static_assert(true, "")
+#endif
+
+#ifdef DEBUG
+#define ASSERT_SPAWNER_USAGE(class, isConstructor)                      \
+    if (class::s_SpawnerUsageDepth == 0)                                \
+    {                                                                   \
+        if (isConstructor)                                              \
+        {                                                               \
+            std::cerr << "Forbidden direct call to the constructor of " \
+                      << #class << "\n";                                \
+        }                                                               \
+        else                                                            \
+        {                                                               \
+            std::cerr << "Forbidden direct call to a destructor of "    \
+                      << #class << "\n";                                \
+        }                                                               \
+    }                                                                   \
+    else                                                                \
+    {                                                                   \
+        class::s_SpawnerUsageDepth -= 1;                                \
+    }                                                                   \
     static_assert(true, "")
 #else
-#define ASSERT_SPAWNER_USAGE(spawnerClass, objectClass, isConstructor) static_assert(true, "")
+#define ASSERT_SPAWNER_USAGE(class, isConstructor) static_assert(true, "")
 #endif

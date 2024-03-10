@@ -2,7 +2,7 @@
 
 // @formatter:off
 
-namespace Engine::Services
+namespace Engine::Core
 {
 
 enum class KeyCode

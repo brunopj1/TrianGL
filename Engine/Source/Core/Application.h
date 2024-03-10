@@ -1,15 +1,14 @@
 #pragma once
 
-#include "Services/Clock.h"
-#include "Services/DefaultResourcesCollection.h"
+#include "Core/Clock.h"
 #include "Window.h"
 #include "Game/GameMode.h"
-#include "Services/ResourceManager.h"
-#include "Services/EntityManager.h"
-#include "Services/InputSystem.h"
+#include "Core/ResourceManager.h"
+#include "Core/EntityManager.h"
+#include "Core/InputSystem.h"
 
 // Forward declarations
-namespace Engine::Services
+namespace Engine::Core
 {
     class EntityManager;
 }
@@ -30,14 +29,12 @@ namespace Engine::Core
     private:
         Window m_Window;
 
-        Services::Clock m_Clock;
+        Clock m_Clock;
 
-        Services::ResourceManager m_ResourceManager;
-        Services::DefaultResourcesCollection m_DefaultResources;
+        ResourceManager m_ResourceManager;
+        EntityManager m_EntityManager;
 
-        Services::EntityManager m_EntityManager;
-
-        Services::InputSystem m_InputSystem;
+        InputSystem m_InputSystem;
 
     public:
         Application(const ApplicationConfig& config = {});
@@ -59,10 +56,10 @@ namespace Engine::Core
         [[noreturn]] static void ErrorCallback(int error, const char* description);
 
     public:
-        template <typename T>
-        void SetGameMode() const
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::GameMode)>
+        void SetGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            Game::GameMode::CreateGameMode<T>();
+            Game::GameMode::CreateGameMode<T>(std::forward<Args>(args)...);
         }
     };
 }

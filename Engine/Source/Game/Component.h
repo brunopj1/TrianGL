@@ -4,7 +4,7 @@
 #include "Internal/Updatable.h"
 #include <type_traits>
 
-namespace Engine::Services
+namespace Engine::Core
 {
     class EntityManager;
 }
@@ -18,6 +18,9 @@ namespace Engine::Game
     {
     private:
         friend class Entity;
+
+    private:
+        DECLARE_SPAWNER_USAGE_VAR();
 
     private:
         Entity* m_Parent = nullptr;
@@ -37,10 +40,12 @@ namespace Engine::Game
         }
 
     public:
-        template <typename T, typename... Args>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);
         }
+
+        void Detach();
     };
 }

@@ -1,11 +1,9 @@
 ﻿#include "TextureRenderer.h"
 
-#include "Services/DefaultResourcesCollection.h"
-#include "Services/ResourceManager.h"
 #include "Game/Entity.h"
 #include "glad/glad.h"
 #include "Resources/Material.h"
-#include "Resources/Texture.h"
+#include "DefaultResources/DefaultMaterial.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace Engine::Components;
@@ -23,7 +21,7 @@ void TextureRenderer::SetMaterial(Resources::Material* material, const bool unlo
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
-        Services::ResourceManager::Unload(m_Material);
+        m_Material->Unload();
     }
 
     m_Material = material;
@@ -33,10 +31,10 @@ Engine::DefaultResources::DefaultMaterial* TextureRenderer::UseDefaultMaterial(c
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
-        Services::ResourceManager::Unload(m_Material);
+        m_Material->Unload();
     }
 
-    const auto material = Services::DefaultResourcesCollection::GetDefaultMaterial();
+    const auto material = Resources::Material::Load<DefaultResources::DefaultMaterial>();
     m_Material = material;
 
     return material;

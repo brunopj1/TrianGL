@@ -20,7 +20,7 @@
 - [X] Automatically delete resources when the application is closed
 - [X] Create a method to load textures
 - [X] Create a method to load materials
-- [ ] Move the static methods to the respective classes
+- [X] Move the static methods to the respective classes
 
 ## Input System
 

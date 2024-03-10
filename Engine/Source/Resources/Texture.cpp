@@ -1,7 +1,7 @@
 ﻿#include "Texture.h"
 
 #include "stb_image.h"
-#include "Services/ResourceManager.h"
+#include "Core/ResourceManager.h"
 
 #include "glad/glad.h"
 
@@ -13,16 +13,36 @@ using namespace Engine::Resources;
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Texture, true);
+    ASSERT_SPAWNER_USAGE(Engine::Resources::Texture, true);
 
     Load(parameters);
 }
 
 Texture::~Texture()
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Texture, false);
+    ASSERT_SPAWNER_USAGE(Engine::Resources::Texture, false);
 
     Free();
+}
+
+Texture* Texture::Load(std::string filePath, const TextureParameters& parameters)
+{
+    SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(Engine::Core::ResourceManager);
+
+    Texture* instance = new Texture(std::move(filePath), parameters);
+
+    Core::ResourceManager::AddResource(instance);
+
+    return instance;
+}
+
+void Texture::Unload()
+{
+    Core::ResourceManager::RemoveResource(this);
+
+    PREPARE_SPAWNER_USAGE();
+
+    delete this;
 }
 
 std::string Texture::GetFilePath() const

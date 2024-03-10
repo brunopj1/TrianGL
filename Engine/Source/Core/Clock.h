@@ -1,17 +1,11 @@
 ﻿#pragma once
 
-// Forward declarations
 namespace Engine::Core
-{
-    class Application;
-}
-
-namespace Engine::Services
 {
     class Clock final
     {
     private:
-        friend class Core::Application;
+        friend class Application;
 
     private:
         inline static Clock* s_Instance = nullptr;

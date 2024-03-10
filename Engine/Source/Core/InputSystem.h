@@ -10,15 +10,10 @@ struct GLFWwindow;
 
 namespace Engine::Core
 {
-    class Application;
-}
-
-namespace Engine::Services
-{
     class InputSystem final
     {
     private:
-        friend class Core::Application;
+        friend class Application;
 
     private:
         static inline InputSystem* s_Instance = nullptr;

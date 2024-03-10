@@ -7,7 +7,7 @@
 #include "Game/Internal/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Services;
+using namespace Engine::Core;
 
 EntityManager::EntityManager()
 {
@@ -73,14 +73,16 @@ void EntityManager::AddEntity(Game::Entity* entity)
     AddToQueue(entity, s_Instance->m_OnUpdateQueue);
 }
 
-void EntityManager::RemoveEntity(Game::Entity* entity)
+bool EntityManager::RemoveEntity(Game::Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    if (const size_t num = s_Instance->m_Entities.erase(entity); num == 0) return;
+    if (const size_t num = s_Instance->m_Entities.erase(entity); num == 0) return false;
 
     std::erase(s_Instance->m_OnStartQueue, entity);
     std::erase(s_Instance->m_OnUpdateQueue, entity);
+
+    return true;
 }
 
 void EntityManager::AddComponent(Game::Component* component)
@@ -98,11 +100,11 @@ void EntityManager::AddComponent(Game::Component* component)
     }
 }
 
-void EntityManager::RemoveComponent(Game::Component* component)
+bool EntityManager::RemoveComponent(Game::Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    if (const size_t num = s_Instance->m_Components.erase(component); num == 0) return;
+    if (const size_t num = s_Instance->m_Components.erase(component); num == 0) return false;
 
     std::erase(s_Instance->m_OnStartQueue, component);
     std::erase(s_Instance->m_OnUpdateQueue, component);
@@ -111,6 +113,8 @@ void EntityManager::RemoveComponent(Game::Component* component)
     {
         std::erase(s_Instance->m_RenderQueue, renderable);
     }
+
+    return true;
 }
 
 Engine::Game::GameMode* EntityManager::GetGameMode()

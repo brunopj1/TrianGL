@@ -11,11 +11,11 @@
 class SnakeGameMode final : public Engine::Game::GameMode
 {
 private:
-    Engine::Entities::Camera* m_Camera;
+    Engine::Entities::Camera *m_Camera;
 
-    Grid* m_Grid;
-    Snake* m_Snake;
-    Apple* m_Apple;
+    Grid *m_Grid;
+    Snake *m_Snake;
+    Apple *m_Apple;
 
     float m_TickRate = 0.5f;
     float m_TickTimer = m_TickRate;

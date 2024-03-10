@@ -2,7 +2,7 @@
 #include "Game/Transform.h"
 
 // Forward declarations
-namespace Engine::Services
+namespace Engine::Core
 {
     class EntityManager;
 }
@@ -12,7 +12,7 @@ namespace Engine::Game::Internal
     class Renderable
     {
     private:
-        friend class Services::EntityManager;
+        friend class Core::EntityManager;
 
     private:
         Transform m_Transform;

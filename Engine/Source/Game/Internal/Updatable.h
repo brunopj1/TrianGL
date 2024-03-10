@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 // Forward declarations
-namespace Engine::Services
+namespace Engine::Core
 {
     class EntityManager;
 }
@@ -17,7 +17,7 @@ namespace Engine::Game::Internal
     class Updatable
     {
     private:
-        friend class Services::EntityManager;
+        friend class Core::EntityManager;
 
     private:
         bool m_ShouldUpdate;

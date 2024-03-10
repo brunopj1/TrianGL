@@ -2,24 +2,24 @@
 
 #include "MaterialAttributes.h"
 #include "Shader.h"
-#include "Services/ResourceManager.h"
+#include "Core/ResourceManager.h"
 #include "Entities/Camera.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
 Engine::Resources::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Material, true);
+    ASSERT_SPAWNER_USAGE(Engine::Resources::Material, true);
 
-    m_Shader = Services::ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
+    m_Shader = Core::ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
     CreateEngineAttributes();
 }
 
 Engine::Resources::Material::~Material()
 {
-    ASSERT_SINGLETON_USAGE(Engine::Services::ResourceManager, Engine::Resources::Material, false);
+    ASSERT_SPAWNER_USAGE(Engine::Resources::Material, false);
 
-    Services::ResourceManager::UnloadShader(m_Shader);
+    Core::ResourceManager::UnloadShader(m_Shader);
 
     for (const auto attribute : m_Attributes)
     {
@@ -29,6 +29,15 @@ Engine::Resources::Material::~Material()
 
 void Engine::Resources::Material::OnRenderSetup() const
 {}
+
+void Engine::Resources::Material::Unload()
+{
+    Core::ResourceManager::RemoveResource(this);
+
+    PREPARE_SPAWNER_USAGE();
+
+    delete this;
+}
 
 Engine::Resources::TextureMaterialAttribute* Engine::Resources::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {

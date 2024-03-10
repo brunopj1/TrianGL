@@ -2,8 +2,6 @@
 
 #include "Game/Component.h"
 #include "Game/Internal/Renderable.h"
-#include "glm/vec2.hpp"
-#include "glm/mat4x4.hpp"
 
 // Forward declarations
 namespace Engine::Core

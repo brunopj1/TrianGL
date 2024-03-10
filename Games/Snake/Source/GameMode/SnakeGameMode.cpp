@@ -3,9 +3,10 @@
 #include "Entities/Apple.h"
 #include "Entities/Snake.h"
 #include "Entities/Camera.h"
+#include "Components/TextureRenderer.h"
+#include "Resources/Texture.h"
 
 using namespace Engine::Game;
-
 
 SnakeGameMode::SnakeGameMode()
 {

@@ -1,9 +1,11 @@
 ﻿#pragma once
 
 #include "Shader.h"
+#include "Core/ResourceManager.h"
 #include "Internal/ManagedResource.h"
 #include "Resources/MaterialAttributes.h"
 #include "Util/Macros/MaterialMacros.hpp"
+#include "Util/Macros/SpawnerMacros.hpp"
 #include <string>
 #include <vector>
 
@@ -25,6 +27,9 @@ namespace Engine::Resources
         friend class Components::TextureRenderer;
 
     private:
+        DECLARE_SPAWNER_USAGE_VAR();
+
+    private:
         Shader* m_Shader;
         std::vector<MaterialAttribute*> m_Attributes;
 
@@ -38,6 +43,21 @@ namespace Engine::Resources
 
     protected:
         virtual void OnRenderSetup() const;
+
+    public:
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Resources::Material)>
+        static T* Load(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        {
+            PREPARE_SPAWNER_USAGE();
+
+            T* material = new T(std::forward<Args>(args)...);
+
+            Core::ResourceManager::AddResource(material);
+
+            return material;
+        }
+
+        void Unload() override;
 
     protected:
         template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>

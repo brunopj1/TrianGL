@@ -1,6 +1,5 @@
 ﻿#include "SnakeBody.h"
 
-#include "Services/EntityManager.h"
 #include "Components/TextureRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
 

@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 // Forward declaration
-namespace Engine::Services
+namespace Engine::Core
 {
     class ResourceManager;
 }
@@ -20,10 +20,10 @@ namespace Engine::Resources
     // Forward declaration
     class Material;
 
-    class Shader final : public Internal::ManagedResource
+    class Shader final
     {
     private:
-        friend class Services::ResourceManager;
+        friend class Core::ResourceManager;
         friend class Material;
         friend struct ShaderHash;
         friend struct ShaderEqual;
@@ -42,7 +42,7 @@ namespace Engine::Resources
 
     private:
         Shader(std::string vertexShader, std::string fragmentShader, bool isFilePath);
-        ~Shader() override = default;
+        ~Shader() = default;
 
     private:
         void Load();

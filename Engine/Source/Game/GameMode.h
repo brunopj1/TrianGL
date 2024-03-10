@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Exceptions/Game/GameModeAlreadySpecifiedException.hpp"
-#include "Services/EntityManager.h"
+#include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <type_traits>
 
@@ -8,10 +8,6 @@
 namespace Engine::Core
 {
     class Application;
-}
-
-namespace Engine::Services
-{
     class EntityManager;
 }
 
@@ -21,7 +17,7 @@ namespace Engine::Game
     {
     private:
         friend class Core::Application;
-        friend class Services::EntityManager;
+        friend class Core::EntityManager;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();
@@ -55,13 +51,13 @@ namespace Engine::Game
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Services::EntityManager::SetGameMode(instance);
+            Core::EntityManager::SetGameMode(instance);
         }
 
         void Destroy() const;
 
     public:
-        template <typename T, typename... Args>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);

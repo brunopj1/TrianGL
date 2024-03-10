@@ -10,8 +10,8 @@
 #include "stb_image.h"
 #include "Components/TextureRenderer.h"
 
-#include "Services/InputSystem.h"
-#include "Services/EntityManager.h"
+#include "Core/InputSystem.h"
+#include "Core/EntityManager.h"
 #include "Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 

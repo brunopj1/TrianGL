@@ -1,15 +1,13 @@
 ﻿#include "Snake.h"
 
-#include "Apple.h"
-#include "Services/EntityManager.h"
-#include "Services/InputSystem.h"
+#include "Core/InputSystem.h"
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
 
 // TODO grid class (array and unordered_map)
 // TODO grid rendering
 
-using namespace Engine::Services;
+using namespace Engine::Core;
 
 Snake::Snake()
     : Entity(true)

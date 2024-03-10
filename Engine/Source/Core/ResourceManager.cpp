@@ -1,11 +1,10 @@
 ﻿#include "ResourceManager.h"
 
 #include "Resources/Material.h"
-#include "Resources/Texture.h"
 #include "Util/Macros/SingletonMacros.hpp"
 #include <ranges>
 
-using namespace Engine::Services;
+using namespace Engine::Core;
 
 ResourceManager::ResourceManager()
 {
@@ -16,38 +15,30 @@ ResourceManager::~ResourceManager()
 {
     while (!m_Resources.empty())
     {
-        Unload(*m_Resources.begin());
+        const auto resource = *m_Resources.begin();
+        resource->Unload();
     }
 
     s_Instance = nullptr;
 }
 
-Engine::Resources::Texture* ResourceManager::LoadTexture(std::string filePath, const Resources::TextureParameters& parameters)
+void ResourceManager::AddResource(Resources::Internal::ManagedResource* resource)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    PREPARE_SINGLETON_USAGE();
-
-    Resources::Texture* texture = new Resources::Texture(std::move(filePath), parameters);
-    s_Instance->m_Resources.push_back(texture);
-
-    return texture;
+    s_Instance->m_Resources.push_back(resource);
 }
 
-void ResourceManager::Unload(Resources::Internal::ManagedResource* resource)
+bool ResourceManager::RemoveResource(Resources::Internal::ManagedResource* resource)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    if (const size_t num = std::erase(s_Instance->m_Resources, resource); num == 0) return;
-
-    PREPARE_SINGLETON_USAGE();
-
-    delete resource;
+    return std::erase(s_Instance->m_Resources, resource) > 0;
 }
 
 Engine::Resources::Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    // No need to call the DEBUG_SINGLETON_INSTANCE macro since this is used internally
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     const auto newShader = new Resources::Shader(vertexShader, fragmentShader, isFilePath);
     const auto it = s_Instance->m_Shaders.find(newShader);
@@ -66,7 +57,7 @@ Engine::Resources::Shader* ResourceManager::LoadShader(const std::string& vertex
 
 void ResourceManager::UnloadShader(Resources::Shader* shader)
 {
-    // No need to call the DEBUG_SINGLETON_INSTANCE macro since this is used internally
+    SINGLETON_CHECK_IF_INITIALIZED();
 
     const auto it = s_Instance->m_Shaders.find(shader);
 
