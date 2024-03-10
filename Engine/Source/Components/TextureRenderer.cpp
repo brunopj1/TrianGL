@@ -6,18 +6,18 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-using namespace Engine::Components;
+using namespace Engine;
 
-TextureRenderer::TextureRenderer(Resources::Material* material)
+TextureRenderer::TextureRenderer(Material* material)
     : Component(false), m_Material(material)
 {}
 
-Engine::Resources::Material* TextureRenderer::GetMaterial() const
+Material* TextureRenderer::GetMaterial() const
 {
     return m_Material;
 }
 
-void TextureRenderer::SetMaterial(Resources::Material* material, const bool unloadPreviousMaterial)
+void TextureRenderer::SetMaterial(Material* material, const bool unloadPreviousMaterial)
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
@@ -27,14 +27,14 @@ void TextureRenderer::SetMaterial(Resources::Material* material, const bool unlo
     m_Material = material;
 }
 
-Engine::DefaultResources::DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMaterial)
+DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMaterial)
 {
     if (unloadPreviousMaterial && m_Material != nullptr)
     {
         m_Material->Unload();
     }
 
-    const auto material = Resources::Material::Load<DefaultResources::DefaultMaterial>();
+    const auto material = Material::Load<DefaultMaterial>();
     m_Material = material;
 
     return material;

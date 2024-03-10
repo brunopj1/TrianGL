@@ -9,14 +9,14 @@
 #include <fstream>
 #include <sstream>
 
-using namespace Engine::Resources;
+using namespace Engine;
 
 Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
     : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
 {
     // Load() and Free() cannot be called in the constructor and destructor
     // because sometimes we create fake Shader objects to acess the unordered_map
-    // These methods are called by the Engine::Core::ResourceManager
+    // These methods are called by the Engine::ResourceManager
 }
 
 void Shader::Load()
@@ -64,7 +64,7 @@ void Shader::LinkProgram()
         const std::string logStr = log;
         delete[] log;
 
-        throw Exceptions::OpenGl::ShaderCompilationException(logStr);
+        throw ShaderCompilationException(logStr);
     }
 }
 
@@ -91,7 +91,7 @@ int Shader::CompileShader(const std::string& shader, const int type) const
         const std::string logStr = log;
         delete[] log;
 
-        throw Exceptions::OpenGl::ShaderCompilationException(type, logStr);
+        throw ShaderCompilationException(type, logStr);
     }
 
     return shaderId;
@@ -103,13 +103,13 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
 
     if (!file || !file.is_open())
     {
-        throw Exceptions::Common::FileNotFoundException(filePath);
+        throw FileNotFoundException(filePath);
     }
 
     // 64KiB sanity check for shaders:
     if (const auto size = file.gcount(); size > 0x10000)
     {
-        throw Exceptions::Common::FileTooBigException(filePath, "64KiB");
+        throw FileTooBigException(filePath, "64KiB");
     }
 
     std::stringstream sstr;

@@ -3,16 +3,16 @@
 #include "Core/EntityManager.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Game;
+using namespace Engine;
 
 GameMode::GameMode()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Game::GameMode, true);
+    ASSERT_SPAWNER_USAGE(Engine::GameMode, true);
 }
 
 GameMode::~GameMode()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Game::GameMode, false);
+    ASSERT_SPAWNER_USAGE(Engine::GameMode, false);
 }
 
 void GameMode::OnStart() {}
@@ -23,12 +23,12 @@ void GameMode::OnLateUpdate(float deltaTime) {}
 
 GameMode* GameMode::GetInstance()
 {
-    return Core::EntityManager::GetGameMode();
+    return EntityManager::GetGameMode();
 }
 
 void GameMode::Destroy() const
 {
-    Core::EntityManager::SetGameMode(nullptr);
+    EntityManager::SetGameMode(nullptr);
 
     PREPARE_SPAWNER_USAGE();
 

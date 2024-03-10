@@ -4,10 +4,12 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
 
+using namespace Engine;
+
 Apple::Apple()
     : Entity(false)
 {
-    const auto foodTexture = AttachComponent<Engine::Components::TextureRenderer>();
+    const auto foodTexture = AttachComponent<TextureRenderer>();
     foodTexture->GetTransform().SetRotationDeg(45);
     foodTexture->GetTransform().SetScale(0.5f);
 

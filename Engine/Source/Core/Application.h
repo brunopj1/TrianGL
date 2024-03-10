@@ -7,13 +7,7 @@
 #include "Core/EntityManager.h"
 #include "Core/InputSystem.h"
 
-// Forward declarations
-namespace Engine::Core
-{
-    class EntityManager;
-}
-
-namespace Engine::Core
+namespace Engine
 {
     struct ApplicationConfig
     {
@@ -56,10 +50,10 @@ namespace Engine::Core
         [[noreturn]] static void ErrorCallback(int error, const char* description);
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::GameMode)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::GameMode)>
         void SetGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            Game::GameMode::CreateGameMode<T>(std::forward<Args>(args)...);
+            GameMode::CreateGameMode<T>(std::forward<Args>(args)...);
         }
     };
 }

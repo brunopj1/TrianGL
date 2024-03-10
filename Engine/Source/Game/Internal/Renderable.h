@@ -1,18 +1,12 @@
 ﻿#pragma once
 #include "Game/Transform.h"
 
-// Forward declarations
-namespace Engine::Core
-{
-    class EntityManager;
-}
-
-namespace Engine::Game::Internal
+namespace Engine
 {
     class Renderable
     {
     private:
-        friend class Core::EntityManager;
+        friend class EntityManager;
 
     private:
         Transform m_Transform;

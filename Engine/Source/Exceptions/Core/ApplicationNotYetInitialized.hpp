@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace Engine::Exceptions::Core
+namespace Engine
 {
     class ApplicationNotYetInitialized final : public std::runtime_error
     {

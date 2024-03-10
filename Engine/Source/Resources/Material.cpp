@@ -6,20 +6,20 @@
 #include "Entities/Camera.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-Engine::Resources::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
+Engine::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    ASSERT_SPAWNER_USAGE(Engine::Resources::Material, true);
+    ASSERT_SPAWNER_USAGE(Engine::Material, true);
 
-    m_Shader = Core::ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
+    m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
     CreateEngineAttributes();
 }
 
-Engine::Resources::Material::~Material()
+Engine::Material::~Material()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Resources::Material, false);
+    ASSERT_SPAWNER_USAGE(Engine::Material, false);
 
-    Core::ResourceManager::UnloadShader(m_Shader);
+    ResourceManager::UnloadShader(m_Shader);
 
     for (const auto attribute : m_Attributes)
     {
@@ -27,19 +27,19 @@ Engine::Resources::Material::~Material()
     }
 }
 
-void Engine::Resources::Material::OnRenderSetup() const
+void Engine::Material::OnRenderSetup() const
 {}
 
-void Engine::Resources::Material::Unload()
+void Engine::Material::Unload()
 {
-    Core::ResourceManager::RemoveResource(this);
+    ResourceManager::RemoveResource(this);
 
     PREPARE_SPAWNER_USAGE();
 
     delete this;
 }
 
-Engine::Resources::TextureMaterialAttribute* Engine::Resources::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
+Engine::TextureMaterialAttribute* Engine::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {
     const int location = m_Shader->GetUniformLocation(name);
 
@@ -58,7 +58,7 @@ Engine::Resources::TextureMaterialAttribute* Engine::Resources::Material::AddTex
     return attribute;
 }
 
-void Engine::Resources::Material::Use(const glm::mat4& modelMatrix) const
+void Engine::Material::Use(const glm::mat4& modelMatrix) const
 {
     m_Shader->Use();
 
@@ -70,15 +70,15 @@ void Engine::Resources::Material::Use(const glm::mat4& modelMatrix) const
     }
 }
 
-void Engine::Resources::Material::CreateEngineAttributes()
+void Engine::Material::CreateEngineAttributes()
 {
     m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", false);
     m_ModelMatrix = AddAttribute<Mat4MaterialAttribute>("uModelMatrix", false);
 }
 
-void Engine::Resources::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
+void Engine::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
 {
-    const Entities::Camera* camera = Entities::Camera::GetMainCamera();
+    const Camera* camera = Camera::GetMainCamera();
     // Null checking is not needed since the game is not rendered without a camera
 
     if (m_PvmMatrix != nullptr)

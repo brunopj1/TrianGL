@@ -6,10 +6,10 @@ int main()
 {
     // Scope to avoid false positives during memory leak detection
     {
-        Engine::Core::ApplicationConfig config;
+        Engine::ApplicationConfig config;
         config.WindowTitle = "TrianGL - Snake";
 
-        Engine::Core::Application app{config};
+        Engine::Application app{config};
         app.SetGameMode<SnakeGameMode>();
 
         app.Run();

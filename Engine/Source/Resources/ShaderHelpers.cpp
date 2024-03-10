@@ -2,7 +2,7 @@
 
 #include "Shader.h"
 
-using namespace Engine::Resources;
+using namespace Engine;
 
 std::size_t ShaderHash::operator()(const Shader* shader) const
 {

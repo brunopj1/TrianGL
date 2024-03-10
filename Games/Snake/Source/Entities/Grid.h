@@ -10,13 +10,13 @@ enum class GridPosition
     SnakeEnd
 };
 
-class Grid final : public Engine::Game::Entity
+class Grid final : public Engine::Entity
 {
 private:
     glm::uvec2 m_Dimensions;
 
 private:
-    Engine::Components::TextureRenderer* m_TextureRenderer = nullptr;
+    Engine::TextureRenderer* m_TextureRenderer = nullptr;
 
 public:
     Grid(glm::uvec2 dimensions);

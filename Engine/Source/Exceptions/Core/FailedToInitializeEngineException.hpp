@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace Engine::Exceptions::Core
+namespace Engine
 {
     class FailedToInitializeEngineException final : public std::runtime_error
     {

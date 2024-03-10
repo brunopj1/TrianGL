@@ -1,23 +1,17 @@
 ﻿#pragma once
+
+#include "Entity.h"
 #include "Exceptions/Game/GameModeAlreadySpecifiedException.hpp"
 #include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
-#include <type_traits>
 
-// Forward declarations
-namespace Engine::Core
-{
-    class Application;
-    class EntityManager;
-}
-
-namespace Engine::Game
+namespace Engine
 {
     class GameMode
     {
     private:
-        friend class Core::Application;
-        friend class Core::EntityManager;
+        friend class Application;
+        friend class EntityManager;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();
@@ -42,22 +36,22 @@ namespace Engine::Game
         }
 
     private:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::GameMode)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::GameMode)>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            if (GetInstance() != nullptr) throw Exceptions::Game::GameModeAlreadySpecifiedException();
+            if (GetInstance() != nullptr) throw GameModeAlreadySpecifiedException();
 
             PREPARE_SPAWNER_USAGE();
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Core::EntityManager::SetGameMode(instance);
+            EntityManager::SetGameMode(instance);
         }
 
         void Destroy() const;
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);

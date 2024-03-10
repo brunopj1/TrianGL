@@ -4,10 +4,9 @@
 
 // TODO prevent users from manually creating / deleting these classes
 
-namespace Engine::Resources
+namespace Engine
 {
     // Forward declaration
-    class Material;
     class Texture;
 
     // Base class

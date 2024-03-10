@@ -2,7 +2,7 @@
 
 #include <format>
 
-using namespace Engine::Exceptions::Common;
+using namespace Engine;
 
 FileNotFoundException::FileNotFoundException(std::string filePath)
     : m_FilePath(std::move(filePath)), m_Message(std::format("The file '{}' was not found", m_FilePath))

@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace Engine::Exceptions::Core
+namespace Engine
 {
     class ForbiddenCallToConstructor final : public std::runtime_error
     {

@@ -1,50 +1,41 @@
 ﻿#pragma once
-#include <string>
-#include <vector>
 
 #include "Resources/ShaderHelpers.h"
 #include "Util/Macros/SingletonMacros.hpp"
+
+#include <string>
+#include <vector>
 #include <unordered_map>
 
-// Forward declarations
-namespace Engine::Resources::Internal
+namespace Engine
 {
+    // Forward declarations
     class ManagedResource;
-}
 
-namespace Engine::Resources
-{
-    class Material;
-    class Texture;
-    class Shader;
-}
-
-namespace Engine::Core
-{
     class ResourceManager
     {
     private:
         friend class Application;
-        friend class Resources::Material;
-        friend class Resources::Texture;
+        friend class Material;
+        friend class Texture;
 
     private:
         inline static ResourceManager* s_Instance = nullptr;
 
     private:
-        std::vector<Resources::Internal::ManagedResource*> m_Resources;
-        std::unordered_map<Resources::Shader*, unsigned int, Resources::ShaderHash, Resources::ShaderEqual> m_Shaders;
+        std::vector<ManagedResource*> m_Resources;
+        std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> m_Shaders;
 
     private:
         ResourceManager();
         ~ResourceManager();
 
     private:
-        static void AddResource(Resources::Internal::ManagedResource* resource);
-        static bool RemoveResource(Resources::Internal::ManagedResource* resource);
+        static void AddResource(ManagedResource* resource);
+        static bool RemoveResource(ManagedResource* resource);
 
     private:
-        static Resources::Shader* LoadShader(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
-        static void UnloadShader(Resources::Shader* shader);
+        static Shader* LoadShader(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
+        static void UnloadShader(Shader* shader);
     };
 }

@@ -1,46 +1,35 @@
 ﻿#pragma once
 
-#include "Game/Entity.h"
 #include <unordered_set>
 #include <vector>
 
-// Forward declarations
-namespace Engine::Game
+namespace Engine
 {
-    class GameMode;
-    class Entity;
-    class Component;
-}
-
-namespace Engine::Game::Internal
-{
+    // Forward declarations
     class Updatable;
     class Renderable;
-}
 
-namespace Engine::Core
-{
     class EntityManager final
     {
     private:
         friend class Application;
-        friend class Game::GameMode;
-        friend class Game::Entity;
-        friend class Game::Component;
+        friend class GameMode;
+        friend class Entity;
+        friend class Component;
 
     private:
         inline static EntityManager* s_Instance = nullptr;
 
     private:
-        Game::GameMode* m_GameMode = nullptr;
+        GameMode* m_GameMode = nullptr;
 
-        std::unordered_set<Game::Entity*> m_Entities;
-        std::unordered_set<Game::Component*> m_Components;
+        std::unordered_set<Entity*> m_Entities;
+        std::unordered_set<Component*> m_Components;
 
-        std::vector<Game::Internal::Updatable*> m_OnUpdateQueue;
-        std::vector<Game::Internal::Updatable*> m_OnStartQueue;
+        std::vector<Updatable*> m_OnUpdateQueue;
+        std::vector<Updatable*> m_OnStartQueue;
 
-        std::vector<Game::Internal::Renderable*> m_RenderQueue;
+        std::vector<Renderable*> m_RenderQueue;
 
     private:
         EntityManager();
@@ -51,20 +40,20 @@ namespace Engine::Core
         void Render() const;
 
     private:
-        static void SetGameMode(Game::GameMode* gameMode);
+        static void SetGameMode(GameMode* gameMode);
 
-        static void AddEntity(Game::Entity* entity);
-        static bool RemoveEntity(Game::Entity* entity);
+        static void AddEntity(Entity* entity);
+        static bool RemoveEntity(Entity* entity);
 
-        static void AddComponent(Game::Component* component);
-        static bool RemoveComponent(Game::Component* component);
-
-    private:
-        static Game::GameMode* GetGameMode();
-        static std::unordered_set<Game::Entity*>& GetEntities();
-        static std::unordered_set<Game::Component*>& GetComponents();
+        static void AddComponent(Component* component);
+        static bool RemoveComponent(Component* component);
 
     private:
-        static void AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue);
+        static GameMode* GetGameMode();
+        static std::unordered_set<Entity*>& GetEntities();
+        static std::unordered_set<Component*>& GetComponents();
+
+    private:
+        static void AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue);
     };
 }

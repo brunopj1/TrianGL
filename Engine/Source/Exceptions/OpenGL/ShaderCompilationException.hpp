@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace Engine::Exceptions::OpenGl
+namespace Engine
 {
     class ShaderCompilationException final : public std::runtime_error
     {

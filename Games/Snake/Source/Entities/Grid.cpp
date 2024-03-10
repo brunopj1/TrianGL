@@ -3,13 +3,13 @@
 #include "Components/TextureRenderer.h"
 #include "Materials/GridMaterial.h"
 
-using namespace Engine::Core;
+using namespace Engine;
 
 Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)
 {
-    m_TextureRenderer = AttachComponent<Engine::Components::TextureRenderer>();
-    m_TextureRenderer->SetMaterial(Engine::Resources::Material::Load<GridMaterial>());
+    m_TextureRenderer = AttachComponent<TextureRenderer>();
+    m_TextureRenderer->SetMaterial(Material::Load<GridMaterial>());
     m_TextureRenderer->SetZIndex(-1);
 
     SetDimensions(dimensions);

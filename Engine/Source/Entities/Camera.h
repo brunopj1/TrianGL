@@ -2,24 +2,13 @@
 
 #include "Game/Entity.h"
 
-// Forward declarations
-namespace Engine::Core
+namespace Engine
 {
-    class Window;
-}
-
-namespace Engine::Resources
-{
-    class Material;
-}
-
-namespace Engine::Entities
-{
-    class Camera final : public Game::Entity
+    class Camera final : public Entity
     {
     private:
-        friend class Core::Window;
-        friend class Resources::Material;
+        friend class Window;
+        friend class Material;
 
     private:
         static inline Camera* s_MainCamera = nullptr;

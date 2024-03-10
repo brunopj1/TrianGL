@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace Engine::Resources
+namespace Engine
 {
     // Forward declaration
     class Shader;

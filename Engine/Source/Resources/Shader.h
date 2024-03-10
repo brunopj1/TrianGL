@@ -1,29 +1,14 @@
 ﻿#pragma once
 
-#include "Internal/ManagedResource.h"
 #include <string>
 #include <unordered_map>
 
-// Forward declaration
-namespace Engine::Core
+namespace Engine
 {
-    class ResourceManager;
-}
-
-namespace Engine::Components
-{
-    class TextureRenderer;
-}
-
-namespace Engine::Resources
-{
-    // Forward declaration
-    class Material;
-
     class Shader final
     {
     private:
-        friend class Core::ResourceManager;
+        friend class ResourceManager;
         friend class Material;
         friend struct ShaderHash;
         friend struct ShaderEqual;

@@ -9,22 +9,14 @@
 #include <string>
 #include <vector>
 
-// Forward declaration
-namespace Engine::Core
+// Forward declarat
+namespace Engine
 {
-    class ResourceManager;
-}
-
-namespace Engine::Resources
-{
-    // Forward declaration
-    class MaterialAttribute;
-
-    class Material : public Internal::ManagedResource
+    class Material : public ManagedResource
     {
     private:
-        friend class Core::ResourceManager;
-        friend class Components::TextureRenderer;
+        friend class ResourceManager;
+        friend class TextureRenderer;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();
@@ -45,14 +37,14 @@ namespace Engine::Resources
         virtual void OnRenderSetup() const;
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Resources::Material)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Material)>
         static T* Load(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();
 
             T* material = new T(std::forward<Args>(args)...);
 
-            Core::ResourceManager::AddResource(material);
+            ResourceManager::AddResource(material);
 
             return material;
         }

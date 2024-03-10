@@ -1,10 +1,11 @@
 ﻿#pragma once
+
 #include "Resources/Material.h"
 
-class GridMaterial final : public Engine::Resources::Material
+class GridMaterial final : public Engine::Material
 {
 public:
-    Engine::Resources::FloatMaterialAttribute* GridResolution;
+    Engine::FloatMaterialAttribute* GridResolution;
 
 public:
     GridMaterial();

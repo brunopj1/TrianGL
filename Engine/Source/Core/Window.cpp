@@ -12,8 +12,8 @@
 #include <stdexcept>
 #include <utility>
 
-using namespace Engine::Core;
-using namespace Engine::Exceptions::Core;
+using namespace Engine;
+using namespace Engine;
 
 constexpr int minimun_window_resolution = 400;
 
@@ -163,7 +163,7 @@ void Window::ResizeCallback(int width, int height)
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
-    for (const auto camera : Game::Entity::FindEntitiesGlobally<Entities::Camera>())
+    for (const auto camera : Entity::FindEntitiesGlobally<Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
     }

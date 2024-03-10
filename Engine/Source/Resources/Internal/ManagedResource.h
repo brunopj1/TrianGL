@@ -1,16 +1,11 @@
 ﻿#pragma once
 
-namespace Engine::Core
-{
-    class ResourceManager;
-}
-
-namespace Engine::Resources::Internal
+namespace Engine
 {
     class ManagedResource
     {
     private:
-        friend class Core::ResourceManager;
+        friend class ResourceManager;
 
     protected:
         ManagedResource() = default;

@@ -7,7 +7,7 @@
 // ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
 
-namespace Engine::Core
+namespace Engine
 {
     class Window
     {

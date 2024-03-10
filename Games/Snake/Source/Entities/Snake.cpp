@@ -4,10 +4,7 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
 
-// TODO grid class (array and unordered_map)
-// TODO grid rendering
-
-using namespace Engine::Core;
+using namespace Engine;
 
 Snake::Snake()
     : Entity(true)

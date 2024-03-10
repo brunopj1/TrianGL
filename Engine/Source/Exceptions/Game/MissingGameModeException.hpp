@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace Engine::Exceptions::Game
+namespace Engine
 {
     class GameModeMissingException final : public std::runtime_error
     {

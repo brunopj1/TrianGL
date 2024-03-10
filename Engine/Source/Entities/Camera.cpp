@@ -5,12 +5,12 @@
 #include "glm/ext/matrix_transform.hpp"
 #include <stdexcept>
 
-using namespace Engine::Entities;
+using namespace Engine;
 
 Camera::Camera(const bool setAsMainCamera)
     : Entity(false)
 {
-    m_AspectRatio = Core::Window::GetAspectRatio();
+    m_AspectRatio = Window::GetAspectRatio();
 
     if (setAsMainCamera)
     {

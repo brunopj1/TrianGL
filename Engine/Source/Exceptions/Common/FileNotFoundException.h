@@ -3,7 +3,7 @@
 #include <exception>
 #include <string>
 
-namespace Engine::Exceptions::Common
+namespace Engine
 {
     class FileNotFoundException final : public std::exception
     {

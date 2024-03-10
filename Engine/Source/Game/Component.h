@@ -4,17 +4,9 @@
 #include "Internal/Updatable.h"
 #include <type_traits>
 
-namespace Engine::Core
+namespace Engine
 {
-    class EntityManager;
-}
-
-namespace Engine::Game
-{
-    // Forward declarations
-    class Entity;
-
-    class Component : public Internal::Updatable
+    class Component : public Updatable
     {
     private:
         friend class Entity;
@@ -40,7 +32,7 @@ namespace Engine::Game
         }
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);

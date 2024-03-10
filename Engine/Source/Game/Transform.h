@@ -3,18 +3,12 @@
 #include "glm/vec2.hpp"
 #include "glm/mat4x4.hpp"
 
-// Forward declarations
-namespace Engine::Components
-{
-    class TextureRenderer;
-}
-
-namespace Engine::Game
+namespace Engine
 {
     class Transform
     {
     private:
-        friend class Components::TextureRenderer;
+        friend class TextureRenderer;
 
     private:
         glm::vec2 m_Position = {0.0f, 0.0f};

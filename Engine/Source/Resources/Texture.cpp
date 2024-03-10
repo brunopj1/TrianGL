@@ -8,37 +8,37 @@
 #include "Exceptions/Common/FileNotFoundException.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Resources;
+using namespace Engine;
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SPAWNER_USAGE(Engine::Resources::Texture, true);
+    ASSERT_SPAWNER_USAGE(Engine::Texture, true);
 
     Load(parameters);
 }
 
 Texture::~Texture()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Resources::Texture, false);
+    ASSERT_SPAWNER_USAGE(Engine::Texture, false);
 
     Free();
 }
 
 Texture* Texture::Load(std::string filePath, const TextureParameters& parameters)
 {
-    SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(Engine::Core::ResourceManager);
+    SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(Engine::ResourceManager);
 
     Texture* instance = new Texture(std::move(filePath), parameters);
 
-    Core::ResourceManager::AddResource(instance);
+    ResourceManager::AddResource(instance);
 
     return instance;
 }
 
 void Texture::Unload()
 {
-    Core::ResourceManager::RemoveResource(this);
+    ResourceManager::RemoveResource(this);
 
     PREPARE_SPAWNER_USAGE();
 
@@ -66,7 +66,7 @@ void Texture::Load(const TextureParameters& parameters)
     unsigned char* data = stbi_load(m_FilePath.c_str(), &width, &height, &channels, 0);
     if (!data)
     {
-        throw Exceptions::Common::FileNotFoundException(m_FilePath);
+        throw FileNotFoundException(m_FilePath);
     }
 
     m_HasTransparency = channels == 4;

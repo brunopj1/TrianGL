@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace Engine::Core
+namespace Engine
 {
     class Clock final
     {

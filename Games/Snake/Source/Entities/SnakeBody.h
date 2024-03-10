@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Game/Entity.h"
 
-class SnakeBody final : public Engine::Game::Entity
+class SnakeBody final : public Engine::Entity
 {
 private:
     glm::ivec2 m_Position;

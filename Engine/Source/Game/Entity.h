@@ -6,12 +6,12 @@
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <vector>
 
-namespace Engine::Game
+namespace Engine
 {
     // Forward declarations
     class Component;
 
-    class Entity : public Internal::Updatable
+    class Entity : public Updatable
     {
     private:
         friend class Component;
@@ -41,14 +41,14 @@ namespace Engine::Game
         }
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Core::EntityManager::AddEntity(instance);
+            EntityManager::AddEntity(instance);
 
             return instance;
         }
@@ -56,7 +56,7 @@ namespace Engine::Game
         void Destroy();
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Game::Component)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Component)>
         T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             // Cannot use the macro directly because of circular dependencies
@@ -66,7 +66,7 @@ namespace Engine::Game
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            Core::EntityManager::AddComponent(instance);
+            EntityManager::AddComponent(instance);
 
             m_Components.push_back(instance);
             instance->m_Parent = this;
@@ -77,10 +77,10 @@ namespace Engine::Game
         void DetachAllComponents() const;
 
     public:
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Entity)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Entity)>
         static T* FindEntityGlobally()
         {
-            for (auto entity : Core::EntityManager::GetEntities())
+            for (auto entity : EntityManager::GetEntities())
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -91,12 +91,12 @@ namespace Engine::Game
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Entity)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Entity)>
         static std::vector<T*> FindEntitiesGlobally()
         {
             std::vector<T*> entities;
 
-            for (auto entity : Core::EntityManager::GetEntities())
+            for (auto entity : EntityManager::GetEntities())
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -108,10 +108,10 @@ namespace Engine::Game
         }
 
         // Component lookup methods
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Component)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
         static T* FindComponentGlobally()
         {
-            for (auto component : Core::EntityManager::GetComponents())
+            for (auto component : EntityManager::GetComponents())
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -122,12 +122,12 @@ namespace Engine::Game
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Component)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
         static std::vector<T*> FindComponentsGlobally()
         {
             std::vector<T*> components;
 
-            for (auto component : Core::EntityManager::GetComponents())
+            for (auto component : EntityManager::GetComponents())
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -138,7 +138,7 @@ namespace Engine::Game
             return components;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Component)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
         T* FindComponentInEntity()
         {
             for (auto component : m_Components)
@@ -152,7 +152,7 @@ namespace Engine::Game
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Game::Component)>
+        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
         std::vector<T*> FindComponentsInEntity()
         {
             std::vector<T*> components;

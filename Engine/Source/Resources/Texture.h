@@ -6,23 +6,12 @@
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <string>
 
-// Forward declaration
-namespace Engine::Core
+namespace Engine
 {
-    class ResourceManager;
-}
-
-namespace Engine::Components
-{
-    class TextureRenderer;
-}
-
-namespace Engine::Resources
-{
-    class Texture final : public Internal::ManagedResource
+    class Texture final : public ManagedResource
     {
     private:
-        friend class Core::ResourceManager;
+        friend class ResourceManager;
         friend class TextureMaterialAttribute;
 
     private:

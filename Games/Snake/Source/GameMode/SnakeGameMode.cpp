@@ -6,11 +6,11 @@
 #include "Components/TextureRenderer.h"
 #include "Resources/Texture.h"
 
-using namespace Engine::Game;
+using namespace Engine;
 
 SnakeGameMode::SnakeGameMode()
 {
-    m_Camera = SpawnEntity<Engine::Entities::Camera>(true);
+    m_Camera = SpawnEntity<Camera>(true);
 
     m_Grid = SpawnEntity<Grid>(glm::uvec2(5, 5));
 

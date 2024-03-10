@@ -3,7 +3,7 @@
 #include "Texture.h"
 #include "glad/glad.h"
 
-using namespace Engine::Resources;
+using namespace Engine;
 
 MaterialAttribute::MaterialAttribute(const int location)
     : m_Location(location)

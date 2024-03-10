@@ -3,29 +3,16 @@
 #include "Game/Component.h"
 #include "Game/Internal/Renderable.h"
 
-// Forward declarations
-namespace Engine::Core
+namespace Engine
 {
-    class Application;
-}
-
-namespace Engine::Resources
-{
+    // Forward declarations
     class Material;
-    class Texture;
-}
-
-namespace Engine::DefaultResources
-{
     class DefaultMaterial;
-}
 
-namespace Engine::Components
-{
-    class TextureRenderer final : public Game::Component, public Game::Internal::Renderable
+    class TextureRenderer final : public Component, public Renderable
     {
     private:
-        friend class Core::Application;
+        friend class Application;
 
     private:
         static inline unsigned int s_QuadVao = 0;
@@ -33,16 +20,16 @@ namespace Engine::Components
         static inline unsigned int s_QuadEbo = 0;
 
     private:
-        Resources::Material* m_Material = nullptr;
+        Material* m_Material = nullptr;
 
     public:
-        TextureRenderer(Resources::Material* material = nullptr);
+        TextureRenderer(Material* material = nullptr);
         ~TextureRenderer() override = default;
 
     public:
-        Resources::Material* GetMaterial() const;
-        void SetMaterial(Resources::Material* material, bool unloadPreviousMaterial = false);
-        DefaultResources::DefaultMaterial* UseDefaultMaterial(bool unloadPreviousMaterial = false);
+        Material* GetMaterial() const;
+        void SetMaterial(Material* material, bool unloadPreviousMaterial = false);
+        DefaultMaterial* UseDefaultMaterial(bool unloadPreviousMaterial = false);
 
     private:
         static void Init();

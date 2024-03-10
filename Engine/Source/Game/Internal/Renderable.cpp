@@ -1,13 +1,13 @@
 ﻿#include "Renderable.h"
 
-using namespace Engine::Game::Internal;
+using namespace Engine;
 
-Engine::Game::Transform& Renderable::GetTransform()
+Transform& Renderable::GetTransform()
 {
     return m_Transform;
 }
 
-const Engine::Game::Transform& Renderable::GetTransform() const
+const Transform& Renderable::GetTransform() const
 {
     return m_Transform;
 }

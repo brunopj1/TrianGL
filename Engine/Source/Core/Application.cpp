@@ -10,12 +10,9 @@
 #include "stb_image.h"
 #include "Components/TextureRenderer.h"
 
-#include "Core/InputSystem.h"
-#include "Core/EntityManager.h"
 #include "Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 
-#include "Game/GameMode.h"
 #include "Exceptions/Game/MissingGameModeException.hpp"
 #include "Exceptions/OpenGL/OpenGlException.hpp"
 
@@ -30,7 +27,7 @@
 #include <imgui_internal.h>
 #endif
 
-using namespace Engine::Core;
+using namespace Engine;
 
 Application::Application(const ApplicationConfig& config)
     : m_Window(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync)
@@ -47,7 +44,7 @@ void Application::Run()
 {
     if (!m_EntityManager.m_GameMode)
     {
-        throw Exceptions::Game::GameModeMissingException();
+        throw GameModeMissingException();
     }
 
     m_EntityManager.m_GameMode->OnStart();
@@ -70,7 +67,7 @@ void Application::Init()
 
     if (!glfwInit())
     {
-        throw Exceptions::Core::FailedToInitializeEngineException("Failed to init GLFW");
+        throw FailedToInitializeEngineException("Failed to init GLFW");
     }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -81,7 +78,7 @@ void Application::Init()
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))  // NOLINT(clang-diagnostic-cast-function-type-strict)
     {
-        throw Exceptions::Core::FailedToInitializeEngineException("Failed to init GLAD");
+        throw FailedToInitializeEngineException("Failed to init GLAD");
     }
 
 #ifdef DEBUG
@@ -106,12 +103,12 @@ void Application::Init()
 
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
-    Components::TextureRenderer::Init();
+    TextureRenderer::Init();
 }
 
 void Application::Terminate() const
 {
-    Components::TextureRenderer::Terminate();
+    TextureRenderer::Terminate();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();
@@ -132,7 +129,7 @@ void Application::Update()
 
 void Application::Render() const
 {
-    const Entities::Camera* camera = Entities::Camera::GetMainCamera();
+    const Camera* camera = Camera::GetMainCamera();
 
     const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -164,5 +161,5 @@ void Application::PollEvents() const
 
 void Application::ErrorCallback(const int error, const char* description)
 {
-    throw Exceptions::OpenGl::OpenGlException(error, description);
+    throw OpenGlException(error, description);
 }

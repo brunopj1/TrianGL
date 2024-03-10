@@ -4,17 +4,17 @@
 #include "Core/EntityManager.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Game;
+using namespace Engine;
 
 Entity::Entity(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SPAWNER_USAGE(Engine::Game::Entity, true);
+    ASSERT_SPAWNER_USAGE(Engine::Entity, true);
 }
 
 Entity::~Entity()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Game::Entity, false);
+    ASSERT_SPAWNER_USAGE(Engine::Entity, false);
 }
 
 Transform& Entity::GetTransform()
@@ -29,7 +29,7 @@ const Transform& Entity::GetTransform() const
 
 void Entity::Destroy()
 {
-    if (const bool isValid = Core::EntityManager::RemoveEntity(this); !isValid) return;
+    if (const bool isValid = EntityManager::RemoveEntity(this); !isValid) return;
 
     DetachAllComponents();
 
@@ -49,6 +49,6 @@ void Entity::DetachAllComponents() const
 #ifdef DEBUG
 void Entity::PrepareComponentSpawnerUsage()
 {
-    PREPARE_SPAWNER_USAGE_ALT(Engine::Game::Component);
+    PREPARE_SPAWNER_USAGE_ALT(Engine::Component);
 }
 #endif

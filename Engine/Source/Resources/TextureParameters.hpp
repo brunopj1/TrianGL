@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace Engine::Resources
+namespace Engine
 {
     enum class TextureWrapMode
     {

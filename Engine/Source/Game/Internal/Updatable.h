@@ -1,23 +1,11 @@
 ﻿#pragma once
 
-// Forward declarations
-namespace Engine::Core
-{
-    class EntityManager;
-}
-
-namespace Engine::Game
-{
-    class Component;
-    class Entity;
-}
-
-namespace Engine::Game::Internal
+namespace Engine
 {
     class Updatable
     {
     private:
-        friend class Core::EntityManager;
+        friend class EntityManager;
 
     private:
         bool m_ShouldUpdate;

@@ -7,7 +7,7 @@
 #include "Game/Internal/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine::Core;
+using namespace Engine;
 
 EntityManager::EntityManager()
 {
@@ -29,7 +29,7 @@ EntityManager::~EntityManager()
 
 void EntityManager::Update(const float deltaTime)
 {
-    for (Game::Internal::Updatable* updatable : m_OnStartQueue)
+    for (Updatable* updatable : m_OnStartQueue)
     {
         updatable->OnStart();
     }
@@ -37,7 +37,7 @@ void EntityManager::Update(const float deltaTime)
 
     m_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (Game::Internal::Updatable* updatable : m_OnUpdateQueue)
+    for (Updatable* updatable : m_OnUpdateQueue)
     {
         if (updatable->m_ShouldUpdate)
         {
@@ -50,20 +50,20 @@ void EntityManager::Update(const float deltaTime)
 
 void EntityManager::Render() const
 {
-    for (Game::Internal::Renderable* renderable : m_RenderQueue)
+    for (Renderable* renderable : m_RenderQueue)
     {
         renderable->Render();
     }
 }
 
-void EntityManager::SetGameMode(Game::GameMode* gameMode)
+void EntityManager::SetGameMode(GameMode* gameMode)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
     s_Instance->m_GameMode = gameMode;
 }
 
-void EntityManager::AddEntity(Game::Entity* entity)
+void EntityManager::AddEntity(Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
@@ -73,7 +73,7 @@ void EntityManager::AddEntity(Game::Entity* entity)
     AddToQueue(entity, s_Instance->m_OnUpdateQueue);
 }
 
-bool EntityManager::RemoveEntity(Game::Entity* entity)
+bool EntityManager::RemoveEntity(Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
@@ -85,7 +85,7 @@ bool EntityManager::RemoveEntity(Game::Entity* entity)
     return true;
 }
 
-void EntityManager::AddComponent(Game::Component* component)
+void EntityManager::AddComponent(Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
@@ -94,13 +94,13 @@ void EntityManager::AddComponent(Game::Component* component)
     AddToQueue(component, s_Instance->m_OnStartQueue);
     AddToQueue(component, s_Instance->m_OnUpdateQueue);
 
-    if (const auto renderable = dynamic_cast<Game::Internal::Renderable*>(component))
+    if (const auto renderable = dynamic_cast<Renderable*>(component))
     {
         s_Instance->m_RenderQueue.push_back(renderable);
     }
 }
 
-bool EntityManager::RemoveComponent(Game::Component* component)
+bool EntityManager::RemoveComponent(Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
@@ -109,7 +109,7 @@ bool EntityManager::RemoveComponent(Game::Component* component)
     std::erase(s_Instance->m_OnStartQueue, component);
     std::erase(s_Instance->m_OnUpdateQueue, component);
 
-    if (const auto renderable = dynamic_cast<Game::Internal::Renderable*>(component))
+    if (const auto renderable = dynamic_cast<Renderable*>(component))
     {
         std::erase(s_Instance->m_RenderQueue, renderable);
     }
@@ -117,28 +117,28 @@ bool EntityManager::RemoveComponent(Game::Component* component)
     return true;
 }
 
-Engine::Game::GameMode* EntityManager::GetGameMode()
+GameMode* EntityManager::GetGameMode()
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_GameMode;
 }
 
-std::unordered_set<Engine::Game::Entity*>& EntityManager::GetEntities()
+std::unordered_set<Entity*>& EntityManager::GetEntities()
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Entities;
 }
 
-std::unordered_set<Engine::Game::Component*>& EntityManager::GetComponents()
+std::unordered_set<Component*>& EntityManager::GetComponents()
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Components;
 }
 
-void EntityManager::AddToQueue(Game::Internal::Updatable* updatable, std::vector<Game::Internal::Updatable*>& queue)
+void EntityManager::AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue)
 {
     const auto order = updatable->GetOrderOfExecution();
 
