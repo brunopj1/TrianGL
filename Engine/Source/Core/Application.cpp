@@ -55,7 +55,7 @@ void Application::Run()
 
         Render();
 
-        m_InputSystem.OnEndOfFrame();
+        Cleanup();
 
         PollEvents();
     }
@@ -152,6 +152,11 @@ void Application::Render() const
 #endif
 
     m_Window.UpdateBuffers();
+}
+
+void Application::Cleanup()
+{
+    m_InputSystem.OnEndOfFrame();
 }
 
 void Application::PollEvents() const

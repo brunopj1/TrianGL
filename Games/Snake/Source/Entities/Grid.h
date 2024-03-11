@@ -1,19 +1,13 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-
-enum class GridPosition
-{
-    Empty = 0,
-    Apple,
-    Snake,
-    SnakeEnd
-};
+#include <optional>
 
 class Grid final : public Engine::Entity
 {
 private:
-    glm::uvec2 m_Dimensions;
+    glm::uvec2 m_Size;
+    std::vector<Entity*> m_Cells;
 
 private:
     Engine::TextureRenderer* m_TextureRenderer = nullptr;
@@ -23,5 +17,13 @@ public:
     ~Grid() override = default;
 
 public:
-    void SetDimensions(const glm::uvec2& dimensions);
+    glm::uvec2 GetSize() const;
+    unsigned int GetCellCount() const;
+
+    void Resize(const glm::uvec2& size);
+
+    Entity* GetCell(const glm::uvec2& position) const;
+    Entity* SetCell(const glm::uvec2& position, Entity* entity);
+
+    std::optional<glm::ivec2> GetRandomFreeCell() const;
 };

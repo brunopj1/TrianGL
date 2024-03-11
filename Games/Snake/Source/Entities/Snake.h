@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Apple.h"
+#include "Grid.h"
 #include "SnakeBody.h"
 #include "Game/Entity.h"
 
@@ -12,7 +14,7 @@ private:
     std::vector<SnakeBody*> m_Body;
 
 public:
-    Snake();
+    Snake(Grid* grid, const glm::ivec2& position, const glm::ivec2& direction);
     ~Snake() override = default;
 
 protected:
@@ -22,5 +24,11 @@ protected:
     void OnUpdate(float deltaTime) override;
 
 public:
-    void Move();
+    void Move(Grid* grid); // Returns true if the apple was eaten
+
+private:
+    void SpawnBody(Grid* grid, const glm::ivec2& position);
+
+    void DestroyLastBody(Grid* grid);
+    void DestroyTail(Grid* grid, const SnakeBody* from);
 };

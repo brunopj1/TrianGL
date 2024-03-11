@@ -5,24 +5,14 @@
 
 using namespace Engine;
 
-SnakeBody::SnakeBody(const glm::ivec2 position)
+SnakeBody::SnakeBody(Grid* grid, const glm::ivec2& position)
     : Entity(false)
 {
-    GetTransform().SetScale(0.75f);
-    SetPosition(position);
+    const auto texture = AttachComponent<TextureRenderer>();
+    texture->GetTransform().SetScale(0.75f);
 
-    const auto tr = AttachComponent<TextureRenderer>();
-    const auto material = tr->UseDefaultMaterial();
+    const auto material = texture->UseDefaultMaterial();
     material->GetColorAttr()->SetValue({0.16f, 0.5f, 0.15f, 1.0f});
-}
 
-const glm::ivec2& SnakeBody::GetPosition() const
-{
-    return m_Position;
-}
-
-void SnakeBody::SetPosition(const glm::ivec2& position)
-{
-    GetTransform().SetPosition(position);
-    m_Position = position;
+    grid->SetCell(position, this);
 }

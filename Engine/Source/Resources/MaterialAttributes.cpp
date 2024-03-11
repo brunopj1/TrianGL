@@ -47,7 +47,7 @@ void TextureMaterialAttribute::BindInternal() const
 {
     if (m_Value == nullptr) return;
     m_Value->Bind(m_Slot);
-    glUniform1i(m_Location, m_Slot); // NOLINT
+    glUniform1i(m_Location, m_Slot);
 }
 
 void IntMaterialAttribute::BindInternal() const

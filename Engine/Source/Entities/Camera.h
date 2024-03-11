@@ -38,12 +38,14 @@ namespace Engine
 
         bool IsSizeLockedHorizontally() const;
 
-    private:
-        void SetAspectRatio(float aspectRatio);
+        float GetAspectRatio() const;
 
     public:
         glm::vec3 GetBackgroundColor() const;
         void SetBackgroundColor(const glm::vec3& color);
+
+    private:
+        void SetAspectRatio(float aspectRatio);
 
     private:
         glm::mat4 GetViewMatrix() const;

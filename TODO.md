@@ -13,6 +13,7 @@
 
 - [X] Add a single exception for when the engine is not initialized
 - [X] Reorganize the exceptions
+- [ ] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
 
 ## Resource Manager
 
@@ -44,9 +45,12 @@
 - [X] Material Attribute class
 - [X] Material instances (using the same shader but different attributes)
 - [X] Add the default mesh
-- [X] Add the default material
+- [X] Add the default material43er5
 - [X] Implement automatic rendering
 - [X] Add a transform to the Renderable class
+- [X] Add a pivot to the Texture Renderer class
+- [ ] Add a flipped flag to the Texture Renderer class
+- [ ] Add a Texture Sheet class
 - [ ] Implement View Frustum Culling
 - [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)

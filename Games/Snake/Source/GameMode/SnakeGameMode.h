@@ -12,6 +12,7 @@ class SnakeGameMode final : public Engine::GameMode
 {
 private:
     Engine::Camera* m_Camera;
+    glm::uvec2 m_WindowSize;
 
     Grid* m_Grid;
     Snake* m_Snake;
@@ -25,5 +26,9 @@ public:
     ~SnakeGameMode() override = default;
 
 private:
+    void OnEarlyUpdate(float deltaTime) override;
     void OnLateUpdate(float deltaTime) override;
+
+private:
+    void FocusCameraOnGrid() const;
 };

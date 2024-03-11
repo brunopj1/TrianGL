@@ -44,6 +44,7 @@ namespace Engine
     private:
         void Update();
         void Render() const;
+        void Cleanup();
         void PollEvents() const;
 
     private:

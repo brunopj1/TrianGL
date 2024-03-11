@@ -2,18 +2,20 @@
 
 uniform sampler2D uMainTexture;
 
-uniform float uGridResolution = 0.02;
+uniform uvec2 uGridSize;
+uniform float uEdgeWidth;
 
-in vec2 WorldPos;
+in vec2 TexCoord;
 
 out vec4 FragColor;
 
 void main()
 {
-    vec2 pos = fract(WorldPos + 0.5);
+    vec2 pos = TexCoord * (uGridSize + uEdgeWidth) - uEdgeWidth * 0.5;
+    pos = fract(pos);
     
-    vec2 bottomLeft = step(uGridResolution * 0.5, pos);
-    vec2 topRight = 1 - step(1.0 - uGridResolution * 0.5, pos);
+    vec2 bottomLeft = step(uEdgeWidth * 0.5, pos);
+    vec2 topRight = 1 - step(1.0 - uEdgeWidth * 0.5, pos);
     
     float isGrid = 1 - bottomLeft.x * bottomLeft.y * topRight.x * topRight.y;
     

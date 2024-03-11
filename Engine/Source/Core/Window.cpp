@@ -42,7 +42,7 @@ void Window::SetFullscreen(const bool fullscreen)
         s_Instance->m_WindowPtr,
         fullscreen ? glfwGetPrimaryMonitor() : nullptr,
         s_Instance->m_Position.x, s_Instance->m_Position.y,
-        s_Instance->m_Resolution.x, s_Instance->m_Resolution.y, // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+        s_Instance->m_Resolution.x, s_Instance->m_Resolution.y,
         GLFW_DONT_CARE
     );
 }
@@ -94,7 +94,7 @@ void Window::SetResolution(const glm::uvec2 resolution)
     }
 
     // m_Resolution is updated in the callback
-    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);
 }
 
 float Window::GetAspectRatio()
@@ -121,7 +121,7 @@ void Window::SetVsync(const bool vsync)
 
 void Window::Init()
 {
-    m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);  // NOLINT(bugprone-narrowing-conversions, cppcoreguidelines-narrowing-conversions)
+    m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);
 
     if (m_WindowPtr == nullptr)
     {

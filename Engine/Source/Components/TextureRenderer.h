@@ -21,6 +21,7 @@ namespace Engine
 
     private:
         Material* m_Material = nullptr;
+        glm::vec2 m_Pivot = glm::vec2(0.5f);
 
     public:
         TextureRenderer(Material* material = nullptr);
@@ -30,6 +31,9 @@ namespace Engine
         Material* GetMaterial() const;
         void SetMaterial(Material* material, bool unloadPreviousMaterial = false);
         DefaultMaterial* UseDefaultMaterial(bool unloadPreviousMaterial = false);
+
+        glm::vec2 GetPivot() const;
+        void SetPivot(const glm::vec2& pivot);
 
     private:
         static void Init();

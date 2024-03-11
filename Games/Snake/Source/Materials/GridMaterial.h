@@ -5,7 +5,8 @@
 class GridMaterial final : public Engine::Material
 {
 public:
-    Engine::FloatMaterialAttribute* GridResolution;
+    Engine::Uint2MaterialAttribute* GridSize;
+    Engine::FloatMaterialAttribute* EdgeWidth;
 
 public:
     GridMaterial();

@@ -40,6 +40,16 @@ DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMa
     return material;
 }
 
+glm::vec2 TextureRenderer::GetPivot() const
+{
+    return m_Pivot;
+}
+
+void TextureRenderer::SetPivot(const glm::vec2& pivot)
+{
+    m_Pivot = pivot;
+}
+
 void TextureRenderer::Init()
 {
     glEnable(GL_DEPTH_TEST);
@@ -104,6 +114,11 @@ void TextureRenderer::Render()
     const glm::mat4 textureModelMatrix = GetTransform().GetTransformMatrix();
 
     glm::mat4 modelMatrix = parentModelMatrix * textureModelMatrix;
+
+    if (m_Pivot != glm::vec2(0.5f))
+    {
+        modelMatrix = translate(modelMatrix, glm::vec3(0.5f - m_Pivot, 0.0f));
+    }
 
     if (const int zIndex = GetZIndex(); zIndex != 0)
     {

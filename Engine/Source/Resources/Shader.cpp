@@ -1,7 +1,7 @@
 ﻿#include "Shader.h"
 
-#include "Exceptions/Common/FileNotFoundException.h"
-#include "Exceptions/Common/FileTooBigException.h"
+#include "../Exceptions/Common/FileNotFoundException.hpp"
+#include "../Exceptions/Common/FileTooBigException.hpp"
 #include "Exceptions/OpenGL/ShaderCompilationException.hpp"
 #include "glad/glad.h"
 #include "Util/Macros/SingletonMacros.hpp"

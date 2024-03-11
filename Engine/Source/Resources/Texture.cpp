@@ -5,7 +5,7 @@
 
 #include "glad/glad.h"
 
-#include "Exceptions/Common/FileNotFoundException.h"
+#include "../Exceptions/Common/FileNotFoundException.hpp"
 #include "Util/Macros/SingletonMacros.hpp"
 
 using namespace Engine;

@@ -73,14 +73,9 @@ bool Camera::IsSizeLockedHorizontally() const
     return m_LockHorizontalSize;
 }
 
-void Camera::SetAspectRatio(const float aspectRatio)
+float Camera::GetAspectRatio() const
 {
-    if (aspectRatio <= 0.0f)
-    {
-        throw std::invalid_argument("The aspect ratio must be greater than 0");
-    }
-
-    m_AspectRatio = aspectRatio;
+    return m_AspectRatio;
 }
 
 glm::vec3 Camera::GetBackgroundColor() const
@@ -91,6 +86,16 @@ glm::vec3 Camera::GetBackgroundColor() const
 void Camera::SetBackgroundColor(const glm::vec3& color)
 {
     m_BackgroundColor = color;
+}
+
+void Camera::SetAspectRatio(const float aspectRatio)
+{
+    if (aspectRatio <= 0.0f)
+    {
+        throw std::invalid_argument("The aspect ratio must be greater than 0");
+    }
+
+    m_AspectRatio = aspectRatio;
 }
 
 glm::mat4 Camera::GetViewMatrix() const
