@@ -19,7 +19,7 @@ namespace TGL
     public:
         LazyPtr(T* value)
         {
-            m_Id = value->m_Id;
+            m_Id = value ? value->m_Id : 0;
         }
 
         LazyPtr(std::nullptr_t)
@@ -27,7 +27,47 @@ namespace TGL
             m_Id = 0;
         }
 
+        LazyPtr()
+        {
+            m_Id = 0;
+        }
+
         ~LazyPtr() = default;
+
+    public:
+        LazyPtr(const LazyPtr& other)
+            : m_Id(other.m_Id)
+        {}
+
+        LazyPtr(LazyPtr&& other) noexcept
+            : m_Id(other.m_Id)
+        {}
+
+        LazyPtr& operator=(const LazyPtr& other)
+        {
+            if (this == &other) return *this;
+            m_Id = other.m_Id;
+            return *this;
+        }
+
+        LazyPtr& operator=(LazyPtr&& other) noexcept
+        {
+            if (this == &other) return *this;
+            m_Id = other.m_Id;
+            return *this;
+        }
+
+        LazyPtr& operator=(const T* value)
+        {
+            m_Id = value->m_Id;
+            return *this;
+        }
+
+        LazyPtr& operator=(std::nullptr_t)
+        {
+            m_Id = 0;
+            return *this;
+        }
 
     public:
         T* Get()

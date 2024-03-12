@@ -12,7 +12,6 @@ Snake::Snake(Grid* grid, const glm::ivec2& position, const glm::ivec2& direction
 {
     m_BodyDirection = m_MoveDirection = direction;
 
-
     SpawnBody(grid, position);
 }
 
