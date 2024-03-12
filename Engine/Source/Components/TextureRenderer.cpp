@@ -6,7 +6,7 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-using namespace Engine;
+using namespace TGL;
 
 TextureRenderer::TextureRenderer(Material* material)
     : Component(false), m_Material(material)

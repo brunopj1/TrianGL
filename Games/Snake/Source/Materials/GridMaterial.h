@@ -2,11 +2,11 @@
 
 #include "Resources/Material.h"
 
-class GridMaterial final : public Engine::Material
+class GridMaterial final : public TGL::Material
 {
 public:
-    Engine::Uint2MaterialAttribute* GridSize;
-    Engine::FloatMaterialAttribute* EdgeWidth;
+    TGL::Uint2MaterialAttribute* GridSize;
+    TGL::FloatMaterialAttribute* EdgeWidth;
 
 public:
     GridMaterial();

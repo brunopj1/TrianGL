@@ -1,20 +1,29 @@
 ﻿#pragma once
 
 #include "Entity.h"
-#include "Internal/Updatable.h"
+#include "Base/Updatable.h"
 #include <type_traits>
 
-namespace Engine
+namespace TGL
 {
+    // Forward declarations
+    template <typename T, typename C>
+    class LazyPtr;
+
     class Component : public Updatable
     {
     private:
+        friend class EntityManager;
         friend class Entity;
+
+        template <typename T, typename C>
+        friend class LazyPtr;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
+        uint32_t m_Id;
         Entity* m_Parent = nullptr;
 
     protected:
@@ -32,7 +41,7 @@ namespace Engine
         }
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);

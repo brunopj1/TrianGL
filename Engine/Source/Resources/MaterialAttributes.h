@@ -4,7 +4,7 @@
 
 // TODO prevent users from manually creating / deleting these classes
 
-namespace Engine
+namespace TGL
 {
     // Forward declaration
     class Texture;

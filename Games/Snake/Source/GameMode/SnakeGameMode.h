@@ -8,10 +8,10 @@
 
 // TODO Render the grid
 
-class SnakeGameMode final : public Engine::GameMode
+class SnakeGameMode final : public TGL::GameMode
 {
 private:
-    Engine::Camera* m_Camera;
+    TGL::Camera* m_Camera;
     glm::uvec2 m_WindowSize;
 
     Grid* m_Grid;

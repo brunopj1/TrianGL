@@ -1,6 +1,6 @@
 ﻿#include "Renderable.h"
 
-using namespace Engine;
+using namespace TGL;
 
 Transform& Renderable::GetTransform()
 {

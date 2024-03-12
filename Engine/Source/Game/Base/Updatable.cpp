@@ -1,6 +1,6 @@
 ﻿#include "Updatable.h"
 
-using namespace Engine;
+using namespace TGL;
 
 Updatable::Updatable(const bool shouldUpdate)
     : m_ShouldUpdate(shouldUpdate)

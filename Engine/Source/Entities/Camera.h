@@ -2,7 +2,7 @@
 
 #include "Game/Entity.h"
 
-namespace Engine
+namespace TGL
 {
     class Camera final : public Entity
     {

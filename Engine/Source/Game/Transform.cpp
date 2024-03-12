@@ -2,7 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-using namespace Engine;
+using namespace TGL;
 
 glm::vec2 Transform::GetPosition() const
 {

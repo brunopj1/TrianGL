@@ -1,7 +1,7 @@
 ﻿#include "Shader.h"
 
-#include "../Exceptions/Common/FileNotFoundException.hpp"
-#include "../Exceptions/Common/FileTooBigException.hpp"
+#include "Exceptions/Common/FileNotFoundException.hpp"
+#include "Exceptions/Common/FileTooBigException.hpp"
 #include "Exceptions/OpenGL/ShaderCompilationException.hpp"
 #include "glad/glad.h"
 #include "Util/Macros/SingletonMacros.hpp"
@@ -9,14 +9,14 @@
 #include <fstream>
 #include <sstream>
 
-using namespace Engine;
+using namespace TGL;
 
 Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
     : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
 {
     // Load() and Free() cannot be called in the constructor and destructor
     // because sometimes we create fake Shader objects to acess the unordered_map
-    // These methods are called by the Engine::ResourceManager
+    // These methods are called by the TGL::ResourceManager
 }
 
 void Shader::Load()

@@ -4,7 +4,6 @@
 
 - [ ] Find a way to automatically detect unused friend classes and forward declarations
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
-- [ ] Implement a garbage collector like the one from UE5 (with strong and weak pointers)
 - [ ] Implement a debug info window with ImGui and test custom windows
 - [ ] Implement a sound system
 - [ ] Try unit testing
@@ -13,6 +12,7 @@
 
 - [X] Add a single exception for when the engine is not initialized
 - [X] Reorganize the exceptions
+- [X] Add lazy pointers to the classes managed by the engine (Entity, Component, System, Resource)
 - [ ] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
 
 ## Resource Manager
@@ -45,7 +45,7 @@
 - [X] Material Attribute class
 - [X] Material instances (using the same shader but different attributes)
 - [X] Add the default mesh
-- [X] Add the default material43er5
+- [X] Add the default material
 - [X] Implement automatic rendering
 - [X] Add a transform to the Renderable class
 - [X] Add a pivot to the Texture Renderer class

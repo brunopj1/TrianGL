@@ -1,13 +1,17 @@
 ﻿#pragma once
 
-#include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
-namespace Engine
+namespace TGL
 {
     // Forward declarations
+    class IdGenerator;
     class Updatable;
     class Renderable;
+
+    template <typename T, typename C>
+    class LazyPtr;
 
     class EntityManager final
     {
@@ -17,14 +21,20 @@ namespace Engine
         friend class Entity;
         friend class Component;
 
+        template <typename T, typename C>
+        friend class LazyPtr;
+
     private:
         inline static EntityManager* s_Instance = nullptr;
 
     private:
+        IdGenerator* m_IdGenerator;
+
+    private:
         GameMode* m_GameMode = nullptr;
 
-        std::unordered_set<Entity*> m_Entities;
-        std::unordered_set<Component*> m_Components;
+        std::unordered_map<uint32_t, Entity*> m_Entities;
+        std::unordered_map<uint32_t, Component*> m_Components;
 
         std::vector<Updatable*> m_OnUpdateQueue;
         std::vector<Updatable*> m_OnStartQueue;
@@ -32,7 +42,7 @@ namespace Engine
         std::vector<Renderable*> m_RenderQueue;
 
     private:
-        EntityManager();
+        EntityManager(IdGenerator* idGenerator);
         ~EntityManager();
 
     private:
@@ -43,15 +53,17 @@ namespace Engine
         static void SetGameMode(GameMode* gameMode);
 
         static void AddEntity(Entity* entity);
+        static Entity* GetEntity(uint32_t id);
         static bool RemoveEntity(Entity* entity);
 
         static void AddComponent(Component* component);
+        static Component* GetComponent(uint32_t id);
         static bool RemoveComponent(Component* component);
 
     private:
         static GameMode* GetGameMode();
-        static std::unordered_set<Entity*>& GetEntities();
-        static std::unordered_set<Component*>& GetComponents();
+        static std::unordered_map<uint32_t, Entity*>& GetEntities();
+        static std::unordered_map<uint32_t, Component*>& GetComponents();
 
     private:
         static void AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue);

@@ -2,7 +2,7 @@
 
 #include "Resources/Material.h"
 
-namespace Engine
+namespace TGL
 {
     class DefaultMaterial final : public Material
     {

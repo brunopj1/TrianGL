@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Shader.h"
+#include "Internal/Shader.h"
 #include "Core/ResourceManager.h"
-#include "Internal/ManagedResource.h"
+#include "Base/Resource.h"
 #include "Resources/MaterialAttributes.h"
 #include "Util/Macros/MaterialMacros.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
@@ -10,9 +10,9 @@
 #include <vector>
 
 // Forward declarat
-namespace Engine
+namespace TGL
 {
-    class Material : public ManagedResource
+    class Material : public Resource
     {
     private:
         friend class ResourceManager;
@@ -37,7 +37,7 @@ namespace Engine
         virtual void OnRenderSetup() const;
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Material)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
         static T* Load(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();

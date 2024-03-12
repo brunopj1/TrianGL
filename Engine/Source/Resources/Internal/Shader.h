@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace Engine
+namespace TGL
 {
     class Shader final
     {

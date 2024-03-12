@@ -5,7 +5,7 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
 Snake::Snake(Grid* grid, const glm::ivec2& position, const glm::ivec2& direction)
     : Entity(true)

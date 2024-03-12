@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace Engine
+namespace TGL
 {
     enum class TextureWrapMode
     {

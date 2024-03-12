@@ -12,8 +12,8 @@
 #include <stdexcept>
 #include <utility>
 
-using namespace Engine;
-using namespace Engine;
+using namespace TGL;
+using namespace TGL;
 
 constexpr int minimun_window_resolution = 400;
 

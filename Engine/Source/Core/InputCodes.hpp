@@ -2,7 +2,7 @@
 
 // @formatter:off
 
-namespace Engine
+namespace TGL
 {
 
 enum class KeyCode

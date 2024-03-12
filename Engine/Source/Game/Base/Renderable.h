@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Game/Transform.h"
 
-namespace Engine
+namespace TGL
 {
     class Renderable
     {

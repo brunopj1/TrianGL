@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IdGenerator.h"
 #include "Core/Clock.h"
 #include "Window.h"
 #include "Game/GameMode.h"
@@ -7,7 +8,7 @@
 #include "Core/EntityManager.h"
 #include "Core/InputSystem.h"
 
-namespace Engine
+namespace TGL
 {
     struct ApplicationConfig
     {
@@ -25,8 +26,9 @@ namespace Engine
 
         Clock m_Clock;
 
-        ResourceManager m_ResourceManager;
-        EntityManager m_EntityManager;
+        IdGenerator m_IdGenerator;
+        ResourceManager m_ResourceManager{&m_IdGenerator};
+        EntityManager m_EntityManager{&m_IdGenerator};
 
         InputSystem m_InputSystem;
 
@@ -51,7 +53,7 @@ namespace Engine
         [[noreturn]] static void ErrorCallback(int error, const char* description);
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::GameMode)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
         void SetGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             GameMode::CreateGameMode<T>(std::forward<Args>(args)...);

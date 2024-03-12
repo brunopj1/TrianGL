@@ -1,15 +1,17 @@
 ﻿#include "EntityManager.h"
 
+#include "IdGenerator.h"
 #include "Components/TextureRenderer.h"
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Game/Internal/Updatable.h"
+#include "Game/Base/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
-EntityManager::EntityManager()
+EntityManager::EntityManager(IdGenerator* idGenerator)
+    : m_IdGenerator(idGenerator)
 {
     s_Instance = this;
 }
@@ -20,7 +22,7 @@ EntityManager::~EntityManager()
 
     while (!m_Entities.empty())
     {
-        const auto entity = *m_Entities.begin();
+        const auto [_, entity] = *m_Entities.begin();
         entity->Destroy();
     }
 
@@ -50,7 +52,7 @@ void EntityManager::Update(const float deltaTime)
 
 void EntityManager::Render() const
 {
-    for (Renderable* renderable : m_RenderQueue)
+    for (const auto& renderable : m_RenderQueue)
     {
         renderable->Render();
     }
@@ -67,17 +69,28 @@ void EntityManager::AddEntity(Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    s_Instance->m_Entities.insert(entity);
+    entity->m_Id = s_Instance->m_IdGenerator->NextId();
+
+    s_Instance->m_Entities.emplace(entity->m_Id, entity);
 
     AddToQueue(entity, s_Instance->m_OnStartQueue);
     AddToQueue(entity, s_Instance->m_OnUpdateQueue);
+}
+
+Entity* EntityManager::GetEntity(const uint32_t id)
+{
+    SINGLETON_CHECK_IF_INITIALIZED();
+
+    const auto it = s_Instance->m_Entities.find(id);
+    if (it != s_Instance->m_Entities.end()) return it->second;
+    return nullptr;
 }
 
 bool EntityManager::RemoveEntity(Entity* entity)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    if (const size_t num = s_Instance->m_Entities.erase(entity); num == 0) return false;
+    if (const size_t num = s_Instance->m_Entities.erase(entity->m_Id); num == 0) return false;
 
     std::erase(s_Instance->m_OnStartQueue, entity);
     std::erase(s_Instance->m_OnUpdateQueue, entity);
@@ -89,7 +102,9 @@ void EntityManager::AddComponent(Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    s_Instance->m_Components.insert(component);
+    component->m_Id = s_Instance->m_IdGenerator->NextId();
+
+    s_Instance->m_Components.emplace(component->m_Id, component);
 
     AddToQueue(component, s_Instance->m_OnStartQueue);
     AddToQueue(component, s_Instance->m_OnUpdateQueue);
@@ -100,11 +115,20 @@ void EntityManager::AddComponent(Component* component)
     }
 }
 
+Component* EntityManager::GetComponent(const uint32_t id)
+{
+    SINGLETON_CHECK_IF_INITIALIZED();
+
+    const auto it = s_Instance->m_Components.find(id);
+    if (it != s_Instance->m_Components.end()) return it->second;
+    return nullptr;
+}
+
 bool EntityManager::RemoveComponent(Component* component)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    if (const size_t num = s_Instance->m_Components.erase(component); num == 0) return false;
+    if (const size_t num = s_Instance->m_Components.erase(component->m_Id); num == 0) return false;
 
     std::erase(s_Instance->m_OnStartQueue, component);
     std::erase(s_Instance->m_OnUpdateQueue, component);
@@ -124,14 +148,14 @@ GameMode* EntityManager::GetGameMode()
     return s_Instance->m_GameMode;
 }
 
-std::unordered_set<Entity*>& EntityManager::GetEntities()
+std::unordered_map<uint32_t, Entity*>& EntityManager::GetEntities()
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
     return s_Instance->m_Entities;
 }
 
-std::unordered_set<Component*>& EntityManager::GetComponents()
+std::unordered_map<uint32_t, Component*>& EntityManager::GetComponents()
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 

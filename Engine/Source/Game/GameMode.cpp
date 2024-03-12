@@ -3,16 +3,16 @@
 #include "Core/EntityManager.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
 GameMode::GameMode()
 {
-    ASSERT_SPAWNER_USAGE(Engine::GameMode, true);
+    ASSERT_SPAWNER_USAGE(TGL::GameMode, true);
 }
 
 GameMode::~GameMode()
 {
-    ASSERT_SPAWNER_USAGE(Engine::GameMode, false);
+    ASSERT_SPAWNER_USAGE(TGL::GameMode, false);
 }
 
 void GameMode::OnStart() {}

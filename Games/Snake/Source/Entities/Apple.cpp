@@ -5,7 +5,7 @@
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
 Apple::Apple(Grid* grid)
     : Entity(false)

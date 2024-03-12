@@ -1,23 +1,23 @@
 ﻿#include "Material.h"
 
 #include "MaterialAttributes.h"
-#include "Shader.h"
+#include "Internal/Shader.h"
 #include "Core/ResourceManager.h"
 #include "Entities/Camera.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-Engine::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
+TGL::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    ASSERT_SPAWNER_USAGE(Engine::Material, true);
+    ASSERT_SPAWNER_USAGE(TGL::Material, true);
 
     m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
     CreateEngineAttributes();
 }
 
-Engine::Material::~Material()
+TGL::Material::~Material()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Material, false);
+    ASSERT_SPAWNER_USAGE(TGL::Material, false);
 
     ResourceManager::UnloadShader(m_Shader);
 
@@ -27,10 +27,10 @@ Engine::Material::~Material()
     }
 }
 
-void Engine::Material::OnRenderSetup() const
+void TGL::Material::OnRenderSetup() const
 {}
 
-void Engine::Material::Unload()
+void TGL::Material::Unload()
 {
     ResourceManager::RemoveResource(this);
 
@@ -39,7 +39,7 @@ void Engine::Material::Unload()
     delete this;
 }
 
-Engine::TextureMaterialAttribute* Engine::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
+TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {
     const int location = m_Shader->GetUniformLocation(name);
 
@@ -58,7 +58,7 @@ Engine::TextureMaterialAttribute* Engine::Material::AddTextureAttribute(const st
     return attribute;
 }
 
-void Engine::Material::Use(const glm::mat4& modelMatrix) const
+void TGL::Material::Use(const glm::mat4& modelMatrix) const
 {
     m_Shader->Use();
 
@@ -70,13 +70,13 @@ void Engine::Material::Use(const glm::mat4& modelMatrix) const
     }
 }
 
-void Engine::Material::CreateEngineAttributes()
+void TGL::Material::CreateEngineAttributes()
 {
     m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", false);
     m_ModelMatrix = AddAttribute<Mat4MaterialAttribute>("uModelMatrix", false);
 }
 
-void Engine::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
+void TGL::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
 {
     const Camera* camera = Camera::GetMainCamera();
     // Null checking is not needed since the game is not rendered without a camera

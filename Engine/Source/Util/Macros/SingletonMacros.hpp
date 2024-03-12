@@ -23,5 +23,5 @@ static_assert(true, "")
     }                                                  \
 static_assert(true, "")
 #else
-#define SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL() static_assert(true, "")
+#define SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(class) static_assert(true, "")
 #endif

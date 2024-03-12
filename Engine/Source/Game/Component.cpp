@@ -3,17 +3,17 @@
 #include "Core/EntityManager.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
 Component::Component(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SPAWNER_USAGE(Engine::Component, true);
+    ASSERT_SPAWNER_USAGE(TGL::Component, true);
 }
 
 Component::~Component()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Component, false);
+    ASSERT_SPAWNER_USAGE(TGL::Component, false);
 }
 
 Entity* Component::GetParent() const

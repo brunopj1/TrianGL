@@ -1,28 +1,35 @@
 ﻿#pragma once
 
-#include "Internal/Updatable.h"
+#include "Base/Updatable.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
+#include <ranges>
 #include <vector>
 
-namespace Engine
+namespace TGL
 {
     // Forward declarations
     class Component;
 
+    template <typename T, typename C>
+    class LazyPtr;
+
     class Entity : public Updatable
     {
     private:
+        friend class EntityManager;
         friend class Component;
+
+        template <typename T, typename C>
+        friend class LazyPtr;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
+        uint32_t m_Id;
         Transform m_Transform;
-
-    private:
         std::vector<Component*> m_Components;
 
     protected:
@@ -41,7 +48,7 @@ namespace Engine
         }
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();
@@ -56,7 +63,7 @@ namespace Engine
         void Destroy();
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Component)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Component)>
         T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             // Cannot use the macro directly because of circular dependencies
@@ -96,7 +103,7 @@ namespace Engine
         {
             std::vector<T*> entities;
 
-            for (auto entity : EntityManager::GetEntities())
+            for (auto entity : EntityManager::GetEntities() | std::views::values)
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -111,7 +118,7 @@ namespace Engine
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
         static T* FindComponentGlobally()
         {
-            for (auto component : EntityManager::GetComponents())
+            for (auto component : EntityManager::GetComponents() | std::views::values)
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -139,7 +146,7 @@ namespace Engine
         }
 
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
-        T* FindComponentInEntity()
+        T* FindComponent()
         {
             for (auto component : m_Components)
             {
@@ -153,7 +160,7 @@ namespace Engine
         }
 
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(Component)>
-        std::vector<T*> FindComponentsInEntity()
+        std::vector<T*> FindComponents()
         {
             std::vector<T*> components;
 

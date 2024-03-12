@@ -1,12 +1,14 @@
 ﻿#include "ResourceManager.h"
 
+#include "IdGenerator.h"
 #include "Resources/Material.h"
 #include "Util/Macros/SingletonMacros.hpp"
 #include <ranges>
 
-using namespace Engine;
+using namespace TGL;
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(IdGenerator* idGenerator)
+    : m_IdGenerator(idGenerator)
 {
     s_Instance = this;
 }
@@ -15,25 +17,36 @@ ResourceManager::~ResourceManager()
 {
     while (!m_Resources.empty())
     {
-        const auto resource = *m_Resources.begin();
+        const auto [_, resource] = *m_Resources.begin();
         resource->Unload();
     }
 
     s_Instance = nullptr;
 }
 
-void ResourceManager::AddResource(ManagedResource* resource)
+void ResourceManager::AddResource(Resource* resource)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    s_Instance->m_Resources.push_back(resource);
+    resource->m_Id = s_Instance->m_IdGenerator->NextId();
+
+    s_Instance->m_Resources.emplace(resource->m_Id, resource);
 }
 
-bool ResourceManager::RemoveResource(ManagedResource* resource)
+Resource* ResourceManager::GetResource(const uint32_t id)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 
-    return std::erase(s_Instance->m_Resources, resource) > 0;
+    const auto it = s_Instance->m_Resources.find(id);
+    if (it != s_Instance->m_Resources.end()) return it->second;
+    return nullptr;
+}
+
+bool ResourceManager::RemoveResource(const Resource* resource)
+{
+    SINGLETON_CHECK_IF_INITIALIZED();
+
+    return s_Instance->m_Resources.erase(resource->m_Id) > 0;
 }
 
 Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)

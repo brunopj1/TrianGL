@@ -3,14 +3,14 @@
 #include "Game/Entity.h"
 #include <optional>
 
-class Grid final : public Engine::Entity
+class Grid final : public TGL::Entity
 {
 private:
     glm::uvec2 m_Size;
     std::vector<Entity*> m_Cells;
 
 private:
-    Engine::TextureRenderer* m_TextureRenderer = nullptr;
+    TGL::TextureRenderer* m_TextureRenderer = nullptr;
 
 public:
     Grid(glm::uvec2 dimensions);

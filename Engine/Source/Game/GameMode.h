@@ -5,7 +5,7 @@
 #include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
 
-namespace Engine
+namespace TGL
 {
     class GameMode
     {
@@ -36,7 +36,7 @@ namespace Engine
         }
 
     private:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::GameMode)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             if (GetInstance() != nullptr) throw GameModeAlreadySpecifiedException();
@@ -51,7 +51,7 @@ namespace Engine
         void Destroy() const;
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(Engine::Entity)>
+        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return Entity::SpawnEntity<T>(std::forward<Args>(args)...);

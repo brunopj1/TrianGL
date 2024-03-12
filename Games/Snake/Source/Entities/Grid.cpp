@@ -3,7 +3,7 @@
 #include "Components/TextureRenderer.h"
 #include "Materials/GridMaterial.h"
 
-using namespace Engine;
+using namespace TGL;
 
 Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)

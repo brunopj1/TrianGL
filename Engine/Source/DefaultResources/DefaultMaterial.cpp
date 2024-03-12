@@ -1,6 +1,6 @@
 ﻿#include "DefaultMaterial.h"
 
-using namespace Engine;
+using namespace TGL;
 
 DefaultMaterial::DefaultMaterial()
     : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag", true)

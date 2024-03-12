@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace Engine
+namespace TGL
 {
     class ShaderCompilationException final : public std::runtime_error
     {

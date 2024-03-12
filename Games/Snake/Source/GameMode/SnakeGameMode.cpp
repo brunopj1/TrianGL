@@ -6,7 +6,9 @@
 #include "Components/TextureRenderer.h"
 #include "Core/Window.h"
 
-using namespace Engine;
+#include "Util/Memory/LazyPtr.hpp"
+
+using namespace TGL;
 
 // TODO disable the loop around mechanic
 // TODO sometimes the apple gets spawned on the snake and cannot be eaten

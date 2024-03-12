@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "Game/Component.h"
-#include "Game/Internal/Renderable.h"
+#include "Game/Base/Renderable.h"
 
-namespace Engine
+namespace TGL
 {
     // Forward declarations
     class Material;

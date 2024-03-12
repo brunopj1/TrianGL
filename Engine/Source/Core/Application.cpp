@@ -27,7 +27,7 @@
 #include <imgui_internal.h>
 #endif
 
-using namespace Engine;
+using namespace TGL;
 
 Application::Application(const ApplicationConfig& config)
     : m_Window(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync)

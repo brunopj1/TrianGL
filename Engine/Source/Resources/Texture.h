@@ -1,14 +1,14 @@
 ﻿#pragma once
 
-#include "Internal/ManagedResource.h"
+#include "Base/Resource.h"
 #include "TextureParameters.hpp"
 #include "glm/vec2.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <string>
 
-namespace Engine
+namespace TGL
 {
-    class Texture final : public ManagedResource
+    class Texture final : public Resource
     {
     private:
         friend class ResourceManager;

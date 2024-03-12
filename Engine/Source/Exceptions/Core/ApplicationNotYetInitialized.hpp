@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace Engine
+namespace TGL
 {
     class ApplicationNotYetInitialized final : public std::runtime_error
     {

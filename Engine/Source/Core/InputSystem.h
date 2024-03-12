@@ -8,7 +8,7 @@
 // ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
 
-namespace Engine
+namespace TGL
 {
     class InputSystem final
     {

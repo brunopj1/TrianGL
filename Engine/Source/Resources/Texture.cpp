@@ -5,29 +5,29 @@
 
 #include "glad/glad.h"
 
-#include "../Exceptions/Common/FileNotFoundException.hpp"
+#include "Exceptions/Common/FileNotFoundException.hpp"
 #include "Util/Macros/SingletonMacros.hpp"
 
-using namespace Engine;
+using namespace TGL;
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SPAWNER_USAGE(Engine::Texture, true);
+    ASSERT_SPAWNER_USAGE(TGL::Texture, true);
 
     Load(parameters);
 }
 
 Texture::~Texture()
 {
-    ASSERT_SPAWNER_USAGE(Engine::Texture, false);
+    ASSERT_SPAWNER_USAGE(TGL::Texture, false);
 
     Free();
 }
 
 Texture* Texture::Load(std::string filePath, const TextureParameters& parameters)
 {
-    SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(Engine::ResourceManager);
+    SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(TGL::ResourceManager);
 
     Texture* instance = new Texture(std::move(filePath), parameters);
 

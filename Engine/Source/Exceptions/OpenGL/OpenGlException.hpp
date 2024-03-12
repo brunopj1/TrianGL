@@ -3,7 +3,7 @@
 #include <format>
 #include <stdexcept>
 
-namespace Engine
+namespace TGL
 {
     class OpenGlException final : public std::runtime_error
     {

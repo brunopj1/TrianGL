@@ -5,7 +5,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include <stdexcept>
 
-using namespace Engine;
+using namespace TGL;
 
 Camera::Camera(const bool setAsMainCamera)
     : Entity(false)

@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace Engine
+namespace TGL
 {
     class GameModeMissingException final : public std::runtime_error
     {

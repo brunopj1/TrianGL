@@ -4,7 +4,7 @@
 #include "Grid.h"
 #include "SnakeBody.h"
 
-class Apple final : public Engine::Entity
+class Apple final : public TGL::Entity
 {
 public:
     Apple(Grid* grid);

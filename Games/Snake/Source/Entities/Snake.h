@@ -5,7 +5,7 @@
 #include "SnakeBody.h"
 #include "Game/Entity.h"
 
-class Snake final : public Engine::Entity
+class Snake final : public TGL::Entity
 {
 private:
     glm::ivec2 m_BodyDirection;

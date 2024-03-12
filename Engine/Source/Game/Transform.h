@@ -3,7 +3,7 @@
 #include "glm/vec2.hpp"
 #include "glm/mat4x4.hpp"
 
-namespace Engine
+namespace TGL
 {
     class Transform
     {

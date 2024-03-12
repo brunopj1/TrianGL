@@ -3,7 +3,7 @@
 #include "Components/TextureRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
 
-using namespace Engine;
+using namespace TGL;
 
 SnakeBody::SnakeBody(Grid* grid, const glm::ivec2& position)
     : Entity(false)
