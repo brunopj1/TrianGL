@@ -52,6 +52,6 @@ namespace TGL
         glm::mat4 GetProjectionMatrix() const;
         glm::mat4 GetProjectionViewMatrix() const;
 
-        // TODO update the matrix once per frame and save it in a member variable
+        // TODO update the matrix once per frame and save it in a member variable (and change the Renderable::Render method to const)
     };
 }

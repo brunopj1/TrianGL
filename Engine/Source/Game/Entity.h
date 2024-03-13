@@ -28,7 +28,7 @@ namespace TGL
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
-        uint32_t m_Id;
+        uint64_t m_Id = 0;
         Transform m_Transform;
         std::vector<Component*> m_Components;
 

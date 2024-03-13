@@ -6,6 +6,11 @@ workspace "TrianGL"
     configurations { "Debug", "Release"}
     platforms { "Win32", "Win64" }
 
+    systemversion "latest"
+	staticruntime "On"
+    
+    flags { "MultiProcessorCompile" }
+
     filter "configurations:Debug"
         runtime "Debug"
         symbols "On"
@@ -24,11 +29,6 @@ workspace "TrianGL"
     filter "platforms:Win64"
         system "Windows"
         architecture "x86_64"
-
-    systemversion "latest"
-	staticruntime "On"
-    
-    flags { "MultiProcessorCompile" }
 
 include "Engine/premake5.lua"
 

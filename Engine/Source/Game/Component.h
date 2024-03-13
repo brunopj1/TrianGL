@@ -23,7 +23,7 @@ namespace TGL
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
-        uint32_t m_Id;
+        uint64_t m_Id = 0;
         Entity* m_Parent = nullptr;
 
     protected:

@@ -7,11 +7,11 @@ project "GLAD"
 
     includedirs { "glad/include/" }
 
-files {
-    "premake5.lua",
-	"glad/include/glad/glad.h",
-    "glad/src/glad.c"
-}
+    files {
+        "premake5.lua",
+        "glad/include/glad/glad.h",
+        "glad/src/glad.c"
+    }
     
 	filter "system:linux"
 		pic "On"

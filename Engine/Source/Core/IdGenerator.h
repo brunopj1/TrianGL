@@ -10,14 +10,14 @@ namespace TGL
         friend class Application;
 
     private:
-        uint32_t m_NextId = 1;
+        uint64_t m_NextId = 1;
 
     private:
         IdGenerator() = default;
         ~IdGenerator() = default;
 
     public:
-        uint32_t NextId();
+        uint64_t NextId();
         void Reset();
     };
 }

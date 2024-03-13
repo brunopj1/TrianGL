@@ -23,7 +23,7 @@ public:
     void Resize(const glm::uvec2& size);
 
     Entity* GetCell(const glm::uvec2& position) const;
-    Entity* SetCell(const glm::uvec2& position, Entity* entity);
+    void SetCell(const glm::uvec2& position, Entity* entity);
 
     std::optional<glm::ivec2> GetRandomFreeCell() const;
 };

@@ -32,24 +32,24 @@ project "Engine"
     }
     
     filter "configurations:Debug"
-    links {
-        "ImGui",
-        "ImGui-Stdlib"
-    }
-    includedirs {
-        "../Libs/imgui/imgui/",
-        "../Libs/imgui/imgui/backends/",
-        "../Libs/imgui/imgui-stdlib/"
-    }
+        links {
+            "ImGui",
+            "ImGui-Stdlib"
+        }
+        includedirs {
+            "../Libs/imgui/imgui/",
+            "../Libs/imgui/imgui/backends/",
+            "../Libs/imgui/imgui-stdlib/"
+        }
     
     filter "system:linux"
-    links { "dl", "pthread" }
-    defines { "_X11" }
+        links { "dl", "pthread" }
+        defines { "_X11" }
     
     filter "system:windows"
-    defines { "_WINDOWS" }
-    
-    postbuildcommands {
-        -- "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/",
-        "{COPYDIR} Assets/ ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
-    }
+        defines { "_WINDOWS" }
+        
+        postbuildcommands {
+            -- "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/",
+            "{COPYDIR} Assets/ ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
+        }

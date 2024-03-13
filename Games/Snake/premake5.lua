@@ -25,3 +25,10 @@ project "Snake"
     postbuildcommands {
         "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
     }
+
+    filter "configurations:Debug"
+        includedirs {
+            "../../Libs/imgui/imgui/",
+            "../../Libs/imgui/imgui/backends/",
+            "../../Libs/imgui/imgui-stdlib/"
+        }

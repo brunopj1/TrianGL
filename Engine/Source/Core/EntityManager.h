@@ -1,7 +1,9 @@
 ﻿#pragma once
 
-#include <unordered_map>
 #include <vector>
+#include <unordered_map>
+
+#include "Game/Base/ImGuiMenuRender.h"
 
 namespace TGL
 {
@@ -9,6 +11,11 @@ namespace TGL
     class IdGenerator;
     class Updatable;
     class Renderable;
+
+#ifdef DEBUG
+    class ImGuiRenderer;
+    class ImGuiMenuRenderer;
+#endif
 
     template <typename T, typename C>
     class LazyPtr;
@@ -33,13 +40,18 @@ namespace TGL
     private:
         GameMode* m_GameMode = nullptr;
 
-        std::unordered_map<uint32_t, Entity*> m_Entities;
-        std::unordered_map<uint32_t, Component*> m_Components;
+        std::unordered_map<uint64_t, Entity*> m_Entities;
+        std::unordered_map<uint64_t, Component*> m_Components;
 
         std::vector<Updatable*> m_OnUpdateQueue;
         std::vector<Updatable*> m_OnStartQueue;
 
         std::vector<Renderable*> m_RenderQueue;
+
+#ifdef DEBUG
+        std::vector<ImGuiRenderer*> m_ImGuiRenderQueue;
+        std::vector<ImGuiMenuRenderer*> m_ImGuiMenuRenderQueue;
+#endif
 
     private:
         EntityManager(IdGenerator* idGenerator);
@@ -53,19 +65,23 @@ namespace TGL
         static void SetGameMode(GameMode* gameMode);
 
         static void AddEntity(Entity* entity);
-        static Entity* GetEntity(uint32_t id);
+        static Entity* GetEntity(uint64_t id);
         static bool RemoveEntity(Entity* entity);
 
         static void AddComponent(Component* component);
-        static Component* GetComponent(uint32_t id);
+        static Component* GetComponent(uint64_t id);
         static bool RemoveComponent(Component* component);
 
     private:
         static GameMode* GetGameMode();
-        static std::unordered_map<uint32_t, Entity*>& GetEntities();
-        static std::unordered_map<uint32_t, Component*>& GetComponents();
+        static std::unordered_map<uint64_t, Entity*>& GetEntities();
+        static std::unordered_map<uint64_t, Component*>& GetComponents();
 
     private:
         static void AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue);
+
+#ifdef DEBUG
+        static void AddToRenderQueue(ImGuiMenuRenderer* renderer, std::vector<ImGuiMenuRenderer*>& queue);
+#endif
     };
 }

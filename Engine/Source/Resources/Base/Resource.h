@@ -18,7 +18,7 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        uint32_t m_Id = 0;
+        uint64_t m_Id = 0;
 
     protected:
         Resource() = default;

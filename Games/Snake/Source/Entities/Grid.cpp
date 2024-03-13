@@ -49,19 +49,15 @@ Entity* Grid::GetCell(const glm::uvec2& position) const
     return m_Cells.at(index);
 }
 
-Entity* Grid::SetCell(const glm::uvec2& position, Entity* entity)
+void Grid::SetCell(const glm::uvec2& position, Entity* entity)
 {
     const unsigned index = position.y * m_Size.x + position.x;
-    Entity* previousEntity = m_Cells.at(index);
-
     m_Cells.at(index) = entity;
 
     if (entity != nullptr)
     {
         entity->GetTransform().SetPosition(glm::vec2(position) + 0.5f);
     }
-
-    return previousEntity;
 }
 
 std::optional<glm::ivec2> Grid::GetRandomFreeCell() const

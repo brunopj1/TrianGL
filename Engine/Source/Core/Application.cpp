@@ -22,9 +22,8 @@
 
 #ifdef DEBUG
 #include <imgui.h>
-#include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
-#include <imgui_internal.h>
+#include <imgui_impl_opengl3.h>
 #endif
 
 using namespace TGL;
@@ -51,13 +50,13 @@ void Application::Run()
 
     while (!m_Window.ShouldClose())
     {
+        PollEvents();
+
         Update();
 
         Render();
 
         Cleanup();
-
-        PollEvents();
     }
 }
 
@@ -83,14 +82,20 @@ void Application::Init()
 
 #ifdef DEBUG
     IMGUI_CHECKVERSION();
-    ImGuiContext* context = ImGui::CreateContext();
-    ImGui::SetCurrentContext(context);
+    ImGui::CreateContext();
     ImGui::GetIO().IniFilename = nullptr;
 
     ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    if (!ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true))
+    {
+        throw FailedToInitializeEngineException("Failed to init ImGui for GLFW");
+    }
+
+    if (!ImGui_ImplOpenGL3_Init("#version 430"))
+    {
+        throw FailedToInitializeEngineException("Failed to init ImGui for OpenGL 3");
+    }
 #endif
 
     stbi_set_flip_vertically_on_load(true);
@@ -113,7 +118,6 @@ void Application::Terminate() const
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    ImGui::Shutdown();
     ImGui::DestroyContext();
 #endif
 
@@ -147,11 +151,15 @@ void Application::Render() const
     }
 
 #ifdef DEBUG
+    RenderDebugInfo();
+#endif
+
+#ifdef DEBUG
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-    m_Window.UpdateBuffers();
+    m_Window.SwapBuffers();
 }
 
 void Application::Cleanup()
@@ -163,6 +171,27 @@ void Application::PollEvents() const
 {
     m_Window.PollEvents();
 }
+
+#ifdef DEBUG
+
+void Application::RenderDebugInfo()
+{
+    unsigned int framerate = Clock::GetFrameRate();
+    float frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
+
+    const std::string message = std::format("Framerate: {0} ({1} ms)", framerate, frameTime);
+    const char* cMessage = message.c_str();
+
+    // TODO add entity count and component count (updated once per frame)
+
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
+    const ImVec2 windowPos = viewport->WorkPos + ImVec2(10, viewport->WorkSize.y - ImGui::CalcTextSize(cMessage).y - 10);
+
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
+    drawList->AddText(windowPos, IM_COL32(255, 255, 255, 255), cMessage);
+}
+
+#endif
 
 void Application::ErrorCallback(const int error, const char* description)
 {

@@ -33,7 +33,7 @@ void ResourceManager::AddResource(Resource* resource)
     s_Instance->m_Resources.emplace(resource->m_Id, resource);
 }
 
-Resource* ResourceManager::GetResource(const uint32_t id)
+Resource* ResourceManager::GetResource(const uint64_t id)
 {
     SINGLETON_CHECK_IF_INITIALIZED();
 

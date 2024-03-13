@@ -37,6 +37,11 @@
 - [ ] Implement Z sorting
 - [ ] Implement custom axis sorting
 
+## Debug Rendering
+- [X] Add an abstract class for ImGui rendering
+- [X] Add ImGui menu overlay abstraction
+- [X] Add custom ordering for the ImGui menu overlay
+
 ## Rendering
 
 - [X] Texture Renderer class

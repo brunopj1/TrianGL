@@ -45,4 +45,14 @@ namespace TGL
     private:
         void Use() const;
     };
+
+    struct ShaderHash
+    {
+        std::size_t operator()(const Shader* shader) const;
+    };
+
+    struct ShaderEqual
+    {
+        bool operator()(const Shader* shader1, const Shader* shader2) const;
+    };
 }

@@ -13,7 +13,13 @@ namespace TGL
     private:
         float m_TotalTime = 0.0f;
         float m_DeltaTime = 0.0f;
-        unsigned int m_FrameCount = 0;
+
+        unsigned int m_TotalFrameCount = 0;
+        unsigned int m_SecondFrameCount = 0;
+        unsigned int m_FrameRate = 1;
+
+        float m_NextSecond = 1.0f;
+        bool m_IsNewSecond = false;
 
     private:
         Clock();
@@ -25,6 +31,10 @@ namespace TGL
     public:
         static float GetTotalTime();
         static float GetDeltaTime();
+
         static unsigned int GetFrameCount();
+        static unsigned int GetFrameRate();
+
+        static bool IsNewSecond();
     };
 }

@@ -3,6 +3,10 @@
 #include "GLFW/glfw3.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
+#ifdef DEBUG
+#include <imgui_impl_glfw.h>
+#endif
+
 using namespace TGL;
 
 InputSystem::InputSystem()
@@ -158,6 +162,10 @@ void InputSystem::OnEndOfFrame()
 
 void InputSystem::KeyboardCallback(const int key, const int action, const int /*mods*/)
 {
+#ifdef DEBUG
+    ImGui_ImplGlfw_KeyCallback(m_WindowPtr, key, 0, action, 0);
+#endif
+
     const KeyCode keyCode = static_cast<KeyCode>(key);
 
     switch (action)
@@ -178,8 +186,12 @@ void InputSystem::KeyboardCallback(const int key, const int action, const int /*
     }
 }
 
-void InputSystem::MouseButtonCallback(const int button, const int action, const int /*mods*/)
+void InputSystem::MouseButtonCallback(const int button, const int action, const int mods)
 {
+#ifdef DEBUG
+    ImGui_ImplGlfw_MouseButtonCallback(m_WindowPtr, button, action, mods);
+#endif
+
     const MouseButton mouseButton = static_cast<MouseButton>(button);
 
     switch (action)
@@ -199,6 +211,10 @@ void InputSystem::MouseButtonCallback(const int button, const int action, const 
 
 void InputSystem::MousePositionCallback(const double x, const double y)
 {
+#ifdef DEBUG
+    ImGui_ImplGlfw_CursorPosCallback(m_WindowPtr, x, y);
+#endif
+
     m_MousePosition = {static_cast<int>(x), static_cast<int>(y)};
     m_MouseDelta = m_MousePosition - m_LastMousePosition;
 }
@@ -206,5 +222,9 @@ void InputSystem::MousePositionCallback(const double x, const double y)
 // ReSharper disable once CppParameterNeverUsed
 void InputSystem::MouseScrollCallback(const double x, const double y)
 {
+#ifdef DEBUG
+    ImGui_ImplGlfw_ScrollCallback(m_WindowPtr, x, y);
+#endif
+
     m_MouseScroll = static_cast<int>(y);
 }

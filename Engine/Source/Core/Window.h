@@ -59,7 +59,7 @@ namespace TGL
         void ResizeCallback(int width, int height);
 
     private:
-        void UpdateBuffers() const;
+        void SwapBuffers() const;
         void PollEvents() const;
         bool ShouldClose() const;
 

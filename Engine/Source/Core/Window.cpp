@@ -169,7 +169,7 @@ void Window::ResizeCallback(int width, int height)
     }
 }
 
-void Window::UpdateBuffers() const
+void Window::SwapBuffers() const
 {
     glfwSwapBuffers(m_WindowPtr);
 }

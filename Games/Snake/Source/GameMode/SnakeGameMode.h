@@ -6,8 +6,6 @@
 #include "Entities/Grid.h"
 #include "Game/GameMode.h"
 
-// TODO Render the grid
-
 class SnakeGameMode final : public TGL::GameMode
 {
 private:

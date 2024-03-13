@@ -14,7 +14,7 @@ namespace TGL
     class LazyPtr
     {
     private:
-        uint32_t m_Id;
+        uint64_t m_Id;
 
     public:
         LazyPtr(T* value)

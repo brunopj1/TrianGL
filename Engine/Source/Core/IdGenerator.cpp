@@ -2,7 +2,7 @@
 
 using namespace TGL;
 
-uint32_t IdGenerator::NextId()
+uint64_t IdGenerator::NextId()
 {
     return m_NextId++;
 }

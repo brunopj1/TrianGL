@@ -1,10 +1,9 @@
 ﻿#pragma once
 
-#include "Resources/Internal/ShaderHelpers.h"
 #include "Util/Macros/SingletonMacros.hpp"
+#include "Resources/Internal/Shader.h"
 
 #include <string>
-#include <vector>
 #include <unordered_map>
 
 namespace TGL
@@ -31,7 +30,7 @@ namespace TGL
 
     private:
         IdGenerator* m_IdGenerator;
-        std::unordered_map<uint32_t, Resource*> m_Resources;
+        std::unordered_map<uint64_t, Resource*> m_Resources;
         std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> m_Shaders;
 
     private:
@@ -40,7 +39,7 @@ namespace TGL
 
     private:
         static void AddResource(Resource* resource);
-        static Resource* GetResource(uint32_t id);
+        static Resource* GetResource(uint64_t id);
         static bool RemoveResource(const Resource* resource);
 
     private:

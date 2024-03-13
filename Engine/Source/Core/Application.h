@@ -49,6 +49,13 @@ namespace TGL
         void Cleanup();
         void PollEvents() const;
 
+#ifdef DEBUG
+
+    private:
+        static void RenderDebugInfo();
+
+#endif
+
     private:
         [[noreturn]] static void ErrorCallback(int error, const char* description);
 
