@@ -264,6 +264,20 @@ std::unordered_map<uint64_t, Component*>& EntityManager::GetComponents()
     return s_Instance->m_Components;
 }
 
+size_t EntityManager::GetEntityCount()
+{
+    SINGLETON_CHECK_IF_INITIALIZED();
+
+    return s_Instance->m_Entities.size();
+}
+
+size_t EntityManager::GetComponentCount()
+{
+    SINGLETON_CHECK_IF_INITIALIZED();
+
+    return s_Instance->m_Components.size();
+}
+
 void EntityManager::AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue)
 {
     const auto order = updatable->GetOrderOfExecution();

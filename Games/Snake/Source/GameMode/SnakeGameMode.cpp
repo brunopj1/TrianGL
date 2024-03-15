@@ -9,13 +9,14 @@
 using namespace TGL;
 
 // TODO disable the loop around mechanic
+// TODO add imgui overlay to control the game
 
 SnakeGameMode::SnakeGameMode()
 {
     m_Camera = SpawnEntity<Camera>(true);
     m_WindowSize = Window::GetResolution();
 
-    m_Grid = SpawnEntity<Grid>(glm::uvec2(3, 3));
+    m_Grid = SpawnEntity<Grid>(glm::uvec2(7, 7));
 
     m_Snake = SpawnEntity<Snake>(m_Grid, glm::ivec2(1, 1), glm::ivec2(0, 1));
 

@@ -176,13 +176,13 @@ void Application::PollEvents() const
 
 void Application::RenderDebugInfo()
 {
-    unsigned int framerate = Clock::GetFrameRate();
-    float frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
+    const unsigned int framerate = Clock::GetFrameRate();
+    const float frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
 
-    const std::string message = std::format("Framerate: {0} ({1} ms)", framerate, frameTime);
+    std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
+    message += std::format("Entities: {0} | Components: {1}", EntityManager::GetEntityCount(), EntityManager::GetComponentCount());
+
     const char* cMessage = message.c_str();
-
-    // TODO add entity count and component count (updated once per frame)
 
     const ImGuiViewport* viewport = ImGui::GetMainViewport();
     const ImVec2 windowPos = viewport->WorkPos + ImVec2(10, viewport->WorkSize.y - ImGui::CalcTextSize(cMessage).y - 10);

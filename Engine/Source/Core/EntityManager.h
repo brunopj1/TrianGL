@@ -77,6 +77,9 @@ namespace TGL
         static std::unordered_map<uint64_t, Entity*>& GetEntities();
         static std::unordered_map<uint64_t, Component*>& GetComponents();
 
+        static size_t GetEntityCount();
+        static size_t GetComponentCount();
+
     private:
         static void AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue);
 
