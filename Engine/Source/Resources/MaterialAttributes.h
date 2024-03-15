@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "glm/glm.hpp"
+#include <memory>
 
 // TODO prevent users from manually creating / deleting these classes
 
@@ -41,7 +42,7 @@ namespace TGL
     class TextureMaterialAttribute final : public MaterialAttribute
     {
     private:
-        Texture* m_Value;
+        std::shared_ptr<Texture> m_Value;
         unsigned int m_Slot;
 
     public:
@@ -49,8 +50,8 @@ namespace TGL
         ~TextureMaterialAttribute() override = default;
 
     public:
-        Texture* GetValue() const;
-        void SetValue(Texture* value);
+        std::shared_ptr<Texture> GetValue() const;
+        void SetValue(std::shared_ptr<Texture> value);
 
         unsigned int GetSlot() const;
         void SetSlot(unsigned int slot);

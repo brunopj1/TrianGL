@@ -5,6 +5,7 @@
 #include "Entities/Camera.h"
 #include "Components/TextureRenderer.h"
 #include "Core/Window.h"
+#include "Resources/Material.h"
 
 using namespace TGL;
 
@@ -13,8 +14,6 @@ using namespace TGL;
 
 SnakeGameMode::SnakeGameMode()
 {
-    new Grid({});
-
     m_Camera = SpawnEntity<Camera>(true);
     m_WindowSize = Window::GetResolution();
 

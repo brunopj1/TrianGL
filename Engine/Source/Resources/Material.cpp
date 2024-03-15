@@ -16,8 +16,6 @@ TGL::Material::Material(const std::string& vertexShader, const std::string& frag
 
 TGL::Material::~Material()
 {
-    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Material);
-
     ResourceManager::UnloadShader(m_Shader);
 
     for (const auto attribute : m_Attributes)
@@ -28,15 +26,6 @@ TGL::Material::~Material()
 
 void TGL::Material::OnRenderSetup() const
 {}
-
-void TGL::Material::Unload()
-{
-    ResourceManager::RemoveResource(this);
-
-    PREPARE_SPAWNER_USAGE();
-
-    delete this;
-}
 
 TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {

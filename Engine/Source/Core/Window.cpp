@@ -6,7 +6,6 @@
 #include "Entities/Camera.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
-#include "../Util/Macros/SingletonMacros.hpp"
 #include <format>
 #include <stdexcept>
 #include <utility>

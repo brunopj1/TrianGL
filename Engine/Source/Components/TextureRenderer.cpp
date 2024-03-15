@@ -8,36 +8,25 @@
 
 using namespace TGL;
 
-TextureRenderer::TextureRenderer(Material* material)
-    : Component(false), m_Material(material)
+TextureRenderer::TextureRenderer(std::shared_ptr<Material> material)
+    : Component(false), m_Material(std::move(material))
 {}
 
-Material* TextureRenderer::GetMaterial() const
+std::shared_ptr<Material> TextureRenderer::GetMaterial() const
 {
     return m_Material;
 }
 
-void TextureRenderer::SetMaterial(Material* material, const bool unloadPreviousMaterial)
+void TextureRenderer::SetMaterial(std::shared_ptr<Material> material)
 {
-    if (unloadPreviousMaterial && m_Material != nullptr)
-    {
-        m_Material->Unload();
-    }
-
-    m_Material = material;
+    m_Material = std::move(material);
 }
 
-DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMaterial)
+std::shared_ptr<DefaultMaterial> TextureRenderer::UseDefaultMaterial()
 {
-    if (unloadPreviousMaterial && m_Material != nullptr)
-    {
-        m_Material->Unload();
-    }
-
-    const auto material = Material::CreateInstanceOf<DefaultMaterial>();
-    m_Material = material;
-
-    return material;
+    auto defaultMaterial = Material::CreateInstanceOf<DefaultMaterial>();
+    m_Material = defaultMaterial;
+    return defaultMaterial;
 }
 
 glm::vec2 TextureRenderer::GetPivot() const

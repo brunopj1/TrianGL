@@ -1,14 +1,14 @@
 ﻿#pragma once
 
-#include "Base/Resource.h"
 #include "TextureParameters.hpp"
 #include "glm/vec2.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
+#include <memory>
 #include <string>
 
 namespace TGL
 {
-    class Texture final : public Resource
+    class Texture final
     {
     private:
         friend class ResourceManager;
@@ -23,13 +23,12 @@ namespace TGL
         glm::uvec2 m_Resolution = {0, 0};
         bool m_HasTransparency = false;
 
-    private:
+    public:
         Texture(std::string filePath, const TextureParameters& parameters = {});
-        ~Texture() override;
+        ~Texture();
 
     public:
-        static Texture* Load(std::string filePath, const TextureParameters& parameters = {});
-        void Unload() override;
+        static std::shared_ptr<Texture> Load(std::string filePath, const TextureParameters& parameters = {});
 
     public:
         std::string GetFilePath() const;

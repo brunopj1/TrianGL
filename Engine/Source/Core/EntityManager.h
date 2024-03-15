@@ -9,7 +9,6 @@
 namespace TGL
 {
     // Forward declarations
-    class IdGenerator;
     class Updatable;
     class Renderable;
 
@@ -36,7 +35,7 @@ namespace TGL
         DECLARE_SINGLETON_INSTANCE_VAR(TGL::EntityManager);
 
     private:
-        IdGenerator* m_IdGenerator;
+        uint64_t m_NextId = 1;
 
     private:
         GameMode* m_GameMode = nullptr;
@@ -55,8 +54,11 @@ namespace TGL
 #endif
 
     private:
-        EntityManager(IdGenerator* idGenerator);
+        EntityManager();
         ~EntityManager();
+
+    private:
+        void Terminate();
 
     private:
         void Update(float deltaTime);

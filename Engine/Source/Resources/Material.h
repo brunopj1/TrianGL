@@ -1,18 +1,17 @@
 ﻿#pragma once
 
 #include "Internal/Shader.h"
-#include "Core/ResourceManager.h"
-#include "Base/Resource.h"
 #include "Resources/MaterialAttributes.h"
 #include "Util/Macros/MaterialMacros.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
+#include <memory>
 #include <string>
 #include <vector>
 
 // Forward declarat
 namespace TGL
 {
-    class Material : public Resource
+    class Material : public std::enable_shared_from_this<Material>
     {
     private:
         friend class ResourceManager;
@@ -29,27 +28,30 @@ namespace TGL
         Mat4MaterialAttribute* m_PvmMatrix;
         Mat4MaterialAttribute* m_ModelMatrix;
 
-    protected:
+    public:
         Material(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
-        ~Material() override;
+        virtual ~Material();
 
     protected:
         virtual void OnRenderSetup() const;
 
     public:
+        template <typename T, typename = std::enable_if_t<std::is_base_of_v<Material, T>>>
+        std::shared_ptr<T> As()
+        {
+            return std::dynamic_pointer_cast<T>(shared_from_this());
+        }
+
+    public:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
-        static T* CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        static std::shared_ptr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();
 
-            T* material = new T(std::forward<Args>(args)...);
+            std::shared_ptr<T> instance = std::make_shared<T>(std::forward<Args>(args)...);
 
-            ResourceManager::AddResource(material);
-
-            return material;
+            return instance;
         }
-
-        void Unload() override;
 
     protected:
         template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>

@@ -36,7 +36,7 @@
 - [X] Add an abstract class for ImGui rendering
 - [X] Add ImGui menu overlay abstraction
 - [X] Add custom ordering for the ImGui menu overlay
-- 
+
 ## Rendering with transparency
 - [X] Implement Z indexing
 - [ ] Implement Z sorting
@@ -54,7 +54,7 @@
 - [X] Implement automatic rendering
 - [X] Add a transform to the Renderable class
 - [X] Add a pivot to the Texture Renderer class
-- [ ] Use shared pointers for the resources
+- [X] Use shared pointers for the resources
 - [ ] Add a flipped flag to the Texture Renderer class
 - [ ] Add a Texture Sheet class
 - [ ] Implement View Frustum Culling

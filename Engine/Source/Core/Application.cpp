@@ -36,6 +36,8 @@ Application::Application(const ApplicationConfig& config)
 
 Application::~Application()
 {
+    m_EntityManager.Terminate();
+
     Terminate();
 }
 

@@ -5,8 +5,6 @@
 #include "Core/ResourceManager.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Resources/Base/Resource.h"
-
 
 namespace TGL
 {
@@ -85,13 +83,6 @@ namespace TGL
             {
                 Component* componentPtr = EntityManager::GetComponent(m_Id);
                 T* ptr = componentPtr ? componentPtr->As<T>() : nullptr;
-                if (ptr == nullptr) m_Id = 0;
-                return ptr;
-            }
-            else if constexpr (std::is_base_of_v<Resource, T>)
-            {
-                Resource* resourcePtr = ResourceManager::GetResource(m_Id);
-                T* ptr = resourcePtr ? resourcePtr->As<T>() : nullptr;
                 if (ptr == nullptr) m_Id = 0;
                 return ptr;
             }

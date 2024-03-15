@@ -1,12 +1,10 @@
 ﻿#include "Texture.h"
 
+#include "glad/glad.h"
 #include "stb_image.h"
 #include "Core/ResourceManager.h"
-
-#include "glad/glad.h"
-
 #include "Exceptions/Common/FileNotFoundException.hpp"
-#include "../Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
@@ -15,36 +13,23 @@ Texture::Texture(std::string filePath, const TextureParameters& parameters)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Texture);
 
-    assert(1 + 1, "");
-
     Load(parameters);
 }
 
 Texture::~Texture()
 {
-    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Texture);
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     Free();
 }
 
-Texture* Texture::Load(std::string filePath, const TextureParameters& parameters)
+std::shared_ptr<Texture> Texture::Load(std::string filePath, const TextureParameters& parameters)
 {
     ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
-    Texture* instance = new Texture(std::move(filePath), parameters);
-
-    ResourceManager::AddResource(instance);
+    std::shared_ptr<Texture> instance = std::make_shared<Texture>(std::move(filePath), parameters);
 
     return instance;
-}
-
-void Texture::Unload()
-{
-    ResourceManager::RemoveResource(this);
-
-    PREPARE_SPAWNER_USAGE();
-
-    delete this;
 }
 
 std::string Texture::GetFilePath() const

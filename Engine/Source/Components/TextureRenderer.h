@@ -2,6 +2,7 @@
 
 #include "Game/Component.h"
 #include "Game/Base/Renderable.h"
+#include <memory>
 
 namespace TGL
 {
@@ -20,17 +21,17 @@ namespace TGL
         static inline unsigned int s_QuadEbo = 0;
 
     private:
-        Material* m_Material = nullptr;
+        std::shared_ptr<Material> m_Material = nullptr;
         glm::vec2 m_Pivot = glm::vec2(0.5f);
 
     public:
-        TextureRenderer(Material* material = nullptr);
+        TextureRenderer(std::shared_ptr<Material> material = nullptr);
         ~TextureRenderer() override = default;
 
     public:
-        Material* GetMaterial() const;
-        void SetMaterial(Material* material, bool unloadPreviousMaterial = false);
-        DefaultMaterial* UseDefaultMaterial(bool unloadPreviousMaterial = false);
+        std::shared_ptr<Material> GetMaterial() const;
+        void SetMaterial(std::shared_ptr<Material> material);
+        std::shared_ptr<DefaultMaterial> UseDefaultMaterial();
 
         glm::vec2 GetPivot() const;
         void SetPivot(const glm::vec2& pivot);

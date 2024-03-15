@@ -1,52 +1,19 @@
 ﻿#include "ResourceManager.h"
 
-#include "IdGenerator.h"
 #include "Resources/Material.h"
-#include "../Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <ranges>
 
 using namespace TGL;
 
-ResourceManager::ResourceManager(IdGenerator* idGenerator)
-    : m_IdGenerator(idGenerator)
+ResourceManager::ResourceManager()
 {
     s_Instance = this;
 }
 
 ResourceManager::~ResourceManager()
 {
-    while (!m_Resources.empty())
-    {
-        const auto [_, resource] = *m_Resources.begin();
-        resource->Unload();
-    }
-
     s_Instance = nullptr;
-}
-
-void ResourceManager::AddResource(Resource* resource)
-{
-    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
-
-    resource->m_Id = s_Instance->m_IdGenerator->NextId();
-
-    s_Instance->m_Resources.emplace(resource->m_Id, resource);
-}
-
-Resource* ResourceManager::GetResource(const uint64_t id)
-{
-    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
-
-    const auto it = s_Instance->m_Resources.find(id);
-    if (it != s_Instance->m_Resources.end()) return it->second;
-    return nullptr;
-}
-
-bool ResourceManager::RemoveResource(const Resource* resource)
-{
-    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
-
-    return s_Instance->m_Resources.erase(resource->m_Id) > 0;
 }
 
 Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)

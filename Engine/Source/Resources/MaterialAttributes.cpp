@@ -23,14 +23,14 @@ void MaterialAttribute::Bind() const
 TextureMaterialAttribute::TextureMaterialAttribute(const int location, const unsigned slot)
     : MaterialAttribute(location), m_Value(nullptr), m_Slot(slot) {}
 
-Texture* TextureMaterialAttribute::GetValue() const
+std::shared_ptr<Texture> TextureMaterialAttribute::GetValue() const
 {
     return m_Value;
 }
 
-void TextureMaterialAttribute::SetValue(Texture* const value)
+void TextureMaterialAttribute::SetValue(std::shared_ptr<Texture> value)
 {
-    m_Value = value;
+    m_Value = std::move(value);
 }
 
 unsigned TextureMaterialAttribute::GetSlot() const

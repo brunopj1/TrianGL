@@ -34,7 +34,7 @@ void Grid::Resize(const glm::uvec2& size)
     m_Cells.clear();
     m_Cells.resize(gridSize, nullptr);
 
-    const GridMaterial* material = dynamic_cast<GridMaterial*>(m_TextureRenderer->GetMaterial());
+    const auto material = m_TextureRenderer->GetMaterial()->As<GridMaterial>();
     material->GridSize->SetValue(m_Size);
     const float edgeWidth = material->EdgeWidth->GetValue();
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IdGenerator.h"
 #include "Core/Clock.h"
 #include "Window.h"
 #include "Game/GameMode.h"
@@ -26,11 +25,11 @@ namespace TGL
 
         Clock m_Clock;
 
-        IdGenerator m_IdGenerator;
-        ResourceManager m_ResourceManager{&m_IdGenerator};
-        EntityManager m_EntityManager{&m_IdGenerator};
-
         InputSystem m_InputSystem;
+
+        ResourceManager m_ResourceManager;
+
+        EntityManager m_EntityManager;
 
     public:
         Application(const ApplicationConfig& config = {});

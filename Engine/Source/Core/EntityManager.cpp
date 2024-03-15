@@ -1,13 +1,12 @@
 ﻿#include "EntityManager.h"
 
-#include "IdGenerator.h"
 #include "Components/TextureRenderer.h"
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
 #include "Game/Base/ImGuiMenuRender.h"
 #include "Game/Base/Updatable.h"
-#include "../Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 
 #ifdef DEBUG
 #include "Game/Base/ImGuiRenderer.h"
@@ -16,13 +15,20 @@
 
 using namespace TGL;
 
-EntityManager::EntityManager(IdGenerator* idGenerator)
-    : m_IdGenerator(idGenerator)
+EntityManager::EntityManager()
 {
     s_Instance = this;
 }
 
 EntityManager::~EntityManager()
+{
+    // The objects are destroyed in the Terminate method
+    // to prevent destroying them after the OpenGL context is destroyed
+
+    s_Instance = nullptr;
+}
+
+void EntityManager::Terminate()
 {
     m_GameMode->Destroy();
 
@@ -31,8 +37,6 @@ EntityManager::~EntityManager()
         const auto [_, entity] = *m_Entities.begin();
         entity->Destroy();
     }
-
-    s_Instance = nullptr;
 }
 
 void EntityManager::Update(const float deltaTime)
@@ -123,7 +127,7 @@ void EntityManager::AddEntity(Entity* entity)
 {
     ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
-    entity->m_Id = s_Instance->m_IdGenerator->NextId();
+    entity->m_Id = s_Instance->m_NextId++;
 
     s_Instance->m_Entities.emplace(entity->m_Id, entity);
 
@@ -180,7 +184,7 @@ void EntityManager::AddComponent(Component* component)
 {
     ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
-    component->m_Id = s_Instance->m_IdGenerator->NextId();
+    component->m_Id = s_Instance->m_NextId++;
 
     s_Instance->m_Components.emplace(component->m_Id, component);
 
