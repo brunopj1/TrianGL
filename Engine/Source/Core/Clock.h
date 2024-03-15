@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Util/Macros/SingletonMacros.hpp"
 
 namespace TGL
 {
@@ -8,7 +9,7 @@ namespace TGL
         friend class Application;
 
     private:
-        inline static Clock* s_Instance = nullptr;
+        DECLARE_SINGLETON_INSTANCE_VAR(TGL::Clock);
 
     private:
         float m_TotalTime = 0.0f;

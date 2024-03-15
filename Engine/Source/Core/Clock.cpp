@@ -1,7 +1,7 @@
 ﻿#include "Clock.h"
 
 #include "GLFW/glfw3.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "../Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
@@ -43,35 +43,35 @@ float Clock::Update()
 
 float Clock::GetTotalTime()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
 
     return s_Instance->m_TotalTime;
 }
 
 float Clock::GetDeltaTime()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
 
     return s_Instance->m_DeltaTime;
 }
 
 unsigned Clock::GetFrameCount()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
 
     return s_Instance->m_TotalFrameCount;
 }
 
 unsigned Clock::GetFrameRate()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
 
     return s_Instance->m_FrameRate;
 }
 
 bool Clock::IsNewSecond()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
 
     return s_Instance->m_IsNewSecond;
 }

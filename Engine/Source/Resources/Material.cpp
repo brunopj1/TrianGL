@@ -4,11 +4,10 @@
 #include "Internal/Shader.h"
 #include "Core/ResourceManager.h"
 #include "Entities/Camera.h"
-#include "Util/Macros/SingletonMacros.hpp"
 
 TGL::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    ASSERT_SPAWNER_USAGE(TGL::Material, true);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Material);
 
     m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
@@ -17,7 +16,7 @@ TGL::Material::Material(const std::string& vertexShader, const std::string& frag
 
 TGL::Material::~Material()
 {
-    ASSERT_SPAWNER_USAGE(TGL::Material, false);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Material);
 
     ResourceManager::UnloadShader(m_Shader);
 

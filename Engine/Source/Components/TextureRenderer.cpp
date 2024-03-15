@@ -34,7 +34,7 @@ DefaultMaterial* TextureRenderer::UseDefaultMaterial(const bool unloadPreviousMa
         m_Material->Unload();
     }
 
-    const auto material = Material::Load<DefaultMaterial>();
+    const auto material = Material::CreateInstanceOf<DefaultMaterial>();
     m_Material = material;
 
     return material;

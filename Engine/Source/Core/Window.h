@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Util/Macros/SingletonMacros.hpp"
 #include <string>
 #include <glm/vec2.hpp>
 
@@ -15,7 +16,7 @@ namespace TGL
         friend class Application;
 
     private:
-        inline static Window* s_Instance = nullptr;
+        DECLARE_SINGLETON_INSTANCE_VAR(TGL::Window);
 
     private:
         GLFWwindow* m_WindowPtr = nullptr;
@@ -37,7 +38,7 @@ namespace TGL
         static void SetFullscreen(bool fullscreen);
 
         static std::string GetTitle();
-        static void SetTitle(std::string title);
+        static void SetTitle(const std::string& title);
 
         static glm::ivec2 GetPosition();
         static void SetPosition(glm::ivec2 position);

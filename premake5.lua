@@ -14,12 +14,12 @@ workspace "TrianGL"
     filter "configurations:Debug"
         runtime "Debug"
         symbols "On"
-        defines { "DEBUG", "DEBUG_SHADER" }
+        defines { "DEBUG" }
 
     filter "configurations:Release"
         runtime "Release"
         optimize "Speed"
-        defines { "RELEASE" }
+        defines { "NDEBUG" }
         flags { "LinkTimeOptimization" }
 
     filter "platforms:Win32"
@@ -42,4 +42,3 @@ group "Dependencies"
 
 group "Games"
     include "Games/Snake/premake5.lua"
-

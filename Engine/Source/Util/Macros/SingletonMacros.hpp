@@ -1,27 +1,7 @@
 ﻿#pragma once
 
-#include <type_traits>
-#include "Exceptions/Core/ApplicationNotYetInitialized.hpp"
-#include "Exceptions/Core/ForbiddenCallToConstructor.hpp"
+#include <cassert>
 
-#ifdef DEBUG
-#define SINGLETON_CHECK_IF_INITIALIZED()      \
-    if (s_Instance == nullptr)			      \
-    {                                         \
-        throw ApplicationNotYetInitialized(); \
-    }                                         \
-static_assert(true, "")
-#else
-#define SINGLETON_CHECK_IF_INITIALIZED() static_assert(true, "")
-#endif
+#define DECLARE_SINGLETON_INSTANCE_VAR(class) static inline class* s_Instance = nullptr
 
-#ifdef DEBUG
-#define SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(class) \
-    if (class::s_Instance == nullptr)			       \
-    {                                                  \
-        throw ApplicationNotYetInitialized();          \
-    }                                                  \
-static_assert(true, "")
-#else
-#define SINGLETON_CHECK_IF_INITIALIZED_EXTERNAL(class) static_assert(true, "")
-#endif
+#define ASSERT_SINGLETON_INITIALIZED(class) assert(class::s_Instance != nullptr && "The singleton #class is not initialized")

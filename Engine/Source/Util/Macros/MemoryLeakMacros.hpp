@@ -19,5 +19,5 @@
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR); \
 	_CrtDumpMemoryLeaks()
 #else
-#define DEBUG_MEMORY_LEAKS() static_assert(true, "")
+#define DEBUG_MEMORY_LEAKS() ((void)0)
 #endif

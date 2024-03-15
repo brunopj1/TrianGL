@@ -38,7 +38,7 @@ namespace TGL
 
     public:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
-        static T* Load(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        static T* CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             PREPARE_SPAWNER_USAGE();
 

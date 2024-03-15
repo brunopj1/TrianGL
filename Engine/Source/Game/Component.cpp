@@ -1,19 +1,18 @@
 ﻿#include "Component.h"
 
 #include "Core/EntityManager.h"
-#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
 Component::Component(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SPAWNER_USAGE(TGL::Component, true);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Component);
 }
 
 Component::~Component()
 {
-    ASSERT_SPAWNER_USAGE(TGL::Component, false);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Component);
 }
 
 Entity* Component::GetParent() const

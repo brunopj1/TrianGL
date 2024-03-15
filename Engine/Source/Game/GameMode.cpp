@@ -1,18 +1,17 @@
 ﻿#include "GameMode.h"
 
 #include "Core/EntityManager.h"
-#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
 GameMode::GameMode()
 {
-    ASSERT_SPAWNER_USAGE(TGL::GameMode, true);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::GameMode);
 }
 
 GameMode::~GameMode()
 {
-    ASSERT_SPAWNER_USAGE(TGL::GameMode, false);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::GameMode);
 }
 
 void GameMode::OnStart() {}

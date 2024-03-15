@@ -2,7 +2,7 @@
 
 #include "IdGenerator.h"
 #include "Resources/Material.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "../Util/Macros/SingletonMacros.hpp"
 #include <ranges>
 
 using namespace TGL;
@@ -26,7 +26,7 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::AddResource(Resource* resource)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     resource->m_Id = s_Instance->m_IdGenerator->NextId();
 
@@ -35,7 +35,7 @@ void ResourceManager::AddResource(Resource* resource)
 
 Resource* ResourceManager::GetResource(const uint64_t id)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     const auto it = s_Instance->m_Resources.find(id);
     if (it != s_Instance->m_Resources.end()) return it->second;
@@ -44,14 +44,14 @@ Resource* ResourceManager::GetResource(const uint64_t id)
 
 bool ResourceManager::RemoveResource(const Resource* resource)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     return s_Instance->m_Resources.erase(resource->m_Id) > 0;
 }
 
 Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     const auto newShader = new Shader(vertexShader, fragmentShader, isFilePath);
     const auto it = s_Instance->m_Shaders.find(newShader);
@@ -70,7 +70,7 @@ Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::
 
 void ResourceManager::UnloadShader(Shader* shader)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
 
     const auto it = s_Instance->m_Shaders.find(shader);
 

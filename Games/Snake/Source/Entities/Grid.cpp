@@ -9,7 +9,7 @@ Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)
 {
     m_TextureRenderer = AttachComponent<TextureRenderer>();
-    m_TextureRenderer->SetMaterial(Material::Load<GridMaterial>());
+    m_TextureRenderer->SetMaterial(Material::CreateInstanceOf<GridMaterial>());
     m_TextureRenderer->SetPivot({0, 0});
     m_TextureRenderer->SetZIndex(-1);
 

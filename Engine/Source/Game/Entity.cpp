@@ -2,19 +2,18 @@
 
 #include "Component.h"
 #include "Core/EntityManager.h"
-#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
 Entity::Entity(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SPAWNER_USAGE(TGL::Entity, true);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Entity);
 }
 
 Entity::~Entity()
 {
-    ASSERT_SPAWNER_USAGE(TGL::Entity, false);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Entity);
 }
 
 Transform& Entity::GetTransform()
@@ -49,6 +48,6 @@ void Entity::DetachAllComponents() const
 #ifdef DEBUG
 void Entity::PrepareComponentSpawnerUsage()
 {
-    PREPARE_SPAWNER_USAGE_ALT(TGL::Component);
+    PREPARE_SPAWNER_USAGE_EXTERNAL(TGL::Component);
 }
 #endif

@@ -7,7 +7,7 @@
 #include "Game/Component.h"
 #include "Game/Base/ImGuiMenuRender.h"
 #include "Game/Base/Updatable.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "../Util/Macros/SingletonMacros.hpp"
 
 #ifdef DEBUG
 #include "Game/Base/ImGuiRenderer.h"
@@ -85,7 +85,7 @@ void EntityManager::Render() const
 
 void EntityManager::SetGameMode(GameMode* gameMode)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     s_Instance->m_GameMode = gameMode;
 
@@ -121,7 +121,7 @@ void EntityManager::SetGameMode(GameMode* gameMode)
 
 void EntityManager::AddEntity(Entity* entity)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     entity->m_Id = s_Instance->m_IdGenerator->NextId();
 
@@ -145,7 +145,7 @@ void EntityManager::AddEntity(Entity* entity)
 
 Entity* EntityManager::GetEntity(const uint64_t id)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     const auto it = s_Instance->m_Entities.find(id);
     if (it != s_Instance->m_Entities.end()) return it->second;
@@ -154,7 +154,7 @@ Entity* EntityManager::GetEntity(const uint64_t id)
 
 bool EntityManager::RemoveEntity(Entity* entity)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     if (const size_t num = s_Instance->m_Entities.erase(entity->m_Id); num == 0) return false;
 
@@ -178,7 +178,7 @@ bool EntityManager::RemoveEntity(Entity* entity)
 
 void EntityManager::AddComponent(Component* component)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     component->m_Id = s_Instance->m_IdGenerator->NextId();
 
@@ -207,7 +207,7 @@ void EntityManager::AddComponent(Component* component)
 
 Component* EntityManager::GetComponent(const uint64_t id)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     const auto it = s_Instance->m_Components.find(id);
     if (it != s_Instance->m_Components.end()) return it->second;
@@ -216,7 +216,7 @@ Component* EntityManager::GetComponent(const uint64_t id)
 
 bool EntityManager::RemoveComponent(Component* component)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     if (const size_t num = s_Instance->m_Components.erase(component->m_Id); num == 0) return false;
 
@@ -245,35 +245,35 @@ bool EntityManager::RemoveComponent(Component* component)
 
 GameMode* EntityManager::GetGameMode()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     return s_Instance->m_GameMode;
 }
 
 std::unordered_map<uint64_t, Entity*>& EntityManager::GetEntities()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     return s_Instance->m_Entities;
 }
 
 std::unordered_map<uint64_t, Component*>& EntityManager::GetComponents()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     return s_Instance->m_Components;
 }
 
 size_t EntityManager::GetEntityCount()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     return s_Instance->m_Entities.size();
 }
 
 size_t EntityManager::GetComponentCount()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::EntityManager);
 
     return s_Instance->m_Components.size();
 }

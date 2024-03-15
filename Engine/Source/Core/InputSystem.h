@@ -2,6 +2,7 @@
 
 #include "InputCodes.hpp"
 #include "glm/vec2.hpp"
+#include "Util/Macros/SingletonMacros.hpp"
 #include <unordered_set>
 
 // Forward declarations
@@ -16,7 +17,7 @@ namespace TGL
         friend class Application;
 
     private:
-        static inline InputSystem* s_Instance = nullptr;
+        DECLARE_SINGLETON_INSTANCE_VAR(TGL::InputSystem);
 
     private:
         GLFWwindow* m_WindowPtr = nullptr;

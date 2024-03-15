@@ -13,6 +13,8 @@ using namespace TGL;
 
 SnakeGameMode::SnakeGameMode()
 {
+    new Grid({});
+
     m_Camera = SpawnEntity<Camera>(true);
     m_WindowSize = Window::GetResolution();
 

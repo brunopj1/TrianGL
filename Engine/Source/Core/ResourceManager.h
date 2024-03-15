@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Util/Macros/SingletonMacros.hpp"
 #include "Resources/Internal/Shader.h"
+#include "Util/Macros/SingletonMacros.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -26,7 +26,7 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        inline static ResourceManager* s_Instance = nullptr;
+        DECLARE_SINGLETON_INSTANCE_VAR(TGL::ResourceManager);
 
     private:
         IdGenerator* m_IdGenerator;

@@ -3,11 +3,10 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "Core/EntityManager.h"
 #include "Entities/Camera.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "../Util/Macros/SingletonMacros.hpp"
 #include <format>
 #include <stdexcept>
 #include <utility>
@@ -25,14 +24,14 @@ Window::Window(std::string title, const glm::ivec2 position, const glm::uvec2 re
 
 bool Window::IsFullscreen()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_Fullscreen;
 }
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     if (fullscreen == s_Instance->m_Fullscreen) return;
 
@@ -49,29 +48,29 @@ void Window::SetFullscreen(const bool fullscreen)
 
 std::string Window::GetTitle()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_Title;
 }
 
-void Window::SetTitle(std::string title)
+void Window::SetTitle(const std::string& title)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
-    s_Instance->m_Title = std::move(title);
+    s_Instance->m_Title = title;
     glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
 }
 
 glm::ivec2 Window::GetPosition()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_Position;
 }
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     // m_Position is updated in the callback
     glfwSetWindowPos(s_Instance->m_WindowPtr, position.x, position.y);
@@ -79,14 +78,14 @@ void Window::SetPosition(const glm::ivec2 position)
 
 glm::uvec2 Window::GetResolution()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     if (resolution.x == 0 || resolution.y == 0)
     {
@@ -99,21 +98,21 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
 float Window::GetAspectRatio()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_AspectRatio;
 }
 
 bool Window::IsVsync()
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    SINGLETON_CHECK_IF_INITIALIZED();
+    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
 
     s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);
