@@ -88,7 +88,7 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
     if (resolution.x == 0 || resolution.y == 0)
     {
-        throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
+        throw std::invalid_argument("The resolution must be greater than 0");
     }
 
     // m_Resolution is updated in the callback

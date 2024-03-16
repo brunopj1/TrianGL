@@ -20,6 +20,8 @@ TGL::Material::~Material()
 
     for (const auto attribute : m_Attributes)
     {
+        PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
+        
         delete attribute;
     }
 }
@@ -35,6 +37,8 @@ TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::str
     {
         return nullptr;
     }
+
+    PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
 
     const auto attribute = new TextureMaterialAttribute(location, slot);
 

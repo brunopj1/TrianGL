@@ -41,7 +41,7 @@ namespace TGL
         {
             if (GetInstance() != nullptr) throw GameModeAlreadySpecifiedException();
 
-            PREPARE_SPAWNER_USAGE();
+            PREPARE_SPAWNER_USAGE(TGL::GameMode);
 
             T* instance = new T(std::forward<Args>(args)...);
 

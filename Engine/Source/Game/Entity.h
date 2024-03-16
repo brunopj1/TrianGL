@@ -51,7 +51,7 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
         static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            PREPARE_SPAWNER_USAGE();
+            PREPARE_SPAWNER_USAGE(TGL::Entity);
 
             T* instance = new T(std::forward<Args>(args)...);
 

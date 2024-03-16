@@ -32,7 +32,7 @@ void Entity::Destroy()
 
     DetachAllComponents();
 
-    PREPARE_SPAWNER_USAGE();
+    PREPARE_SPAWNER_USAGE(TGL::Entity);
 
     delete this;
 }
@@ -48,6 +48,6 @@ void Entity::DetachAllComponents() const
 #ifdef DEBUG
 void Entity::PrepareComponentSpawnerUsage()
 {
-    PREPARE_SPAWNER_USAGE_EXTERNAL(TGL::Component);
+    PREPARE_SPAWNER_USAGE(TGL::Component);
 }
 #endif

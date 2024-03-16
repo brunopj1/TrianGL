@@ -46,7 +46,7 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
         static std::shared_ptr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            PREPARE_SPAWNER_USAGE();
+            PREPARE_SPAWNER_USAGE(TGL::Material);
 
             std::shared_ptr<T> instance = std::make_shared<T>(std::forward<Args>(args)...);
 
@@ -63,6 +63,8 @@ namespace TGL
             {
                 return nullptr;
             }
+
+            PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
 
             T* attribute = new T(location);
 

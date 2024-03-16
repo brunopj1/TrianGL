@@ -26,7 +26,7 @@ void Component::Detach()
 
     std::erase(m_Parent->m_Components, this);
 
-    PREPARE_SPAWNER_USAGE();
+    PREPARE_SPAWNER_USAGE(TGL::Component);
 
     delete this;
 }

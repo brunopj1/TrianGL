@@ -1,9 +1,8 @@
 ﻿#pragma once
 
 #include "glm/glm.hpp"
+#include "Util/Macros/SpawnerMacros.hpp"
 #include <memory>
-
-// TODO prevent users from manually creating / deleting these classes
 
 namespace TGL
 {
@@ -16,12 +15,15 @@ namespace TGL
     private:
         friend class Material;
 
+    private:
+        DECLARE_SPAWNER_USAGE_VAR();
+
     protected:
         int m_Location;
 
     protected:
         MaterialAttribute(int location);
-        virtual ~MaterialAttribute() = default;
+        virtual ~MaterialAttribute();
 
     public:
         MaterialAttribute(const MaterialAttribute&) = delete;

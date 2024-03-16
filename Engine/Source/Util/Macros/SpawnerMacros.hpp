@@ -32,15 +32,9 @@
 #endif
 
 #ifdef DEBUG
-#define PREPARE_SPAWNER_USAGE() s_SpawnerUsageDepth += 1
+#define PREPARE_SPAWNER_USAGE(class) class::s_SpawnerUsageDepth += 1
 #else
-#define PREPARE_SPAWNER_USAGE() static_assert(true, "")
-#endif
-
-#ifdef DEBUG
-#define PREPARE_SPAWNER_USAGE_EXTERNAL(spawnerClass) spawnerClass::s_SpawnerUsageDepth += 1
-#else
-#define PREPARE_SPAWNER_USAGE_ALT(spawnerClass) static_assert(true, "")
+#define PREPARE_SPAWNER_USAGE(class) static_assert(true, "")
 #endif
 
 #define ASSERT_SPAWNER_USAGE_CONSTRUCTOR(class) assert(class::s_SpawnerUsageDepth-- > 0 && "Forbidden direct call to the constructor")

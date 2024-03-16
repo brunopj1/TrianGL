@@ -7,7 +7,14 @@ using namespace TGL;
 
 MaterialAttribute::MaterialAttribute(const int location)
     : m_Location(location)
-{}
+{
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::MaterialAttribute);
+}
+
+MaterialAttribute::~MaterialAttribute()
+{
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::MaterialAttribute);
+}
 
 bool MaterialAttribute::IsValid() const
 {

@@ -29,7 +29,7 @@ void GameMode::Destroy() const
 {
     EntityManager::SetGameMode(nullptr);
 
-    PREPARE_SPAWNER_USAGE();
+    PREPARE_SPAWNER_USAGE(TGL::GameMode);
 
     delete this;
 }
