@@ -4,9 +4,31 @@
 #include "stb_image.h"
 #include "Core/ResourceManager.h"
 #include "Exceptions/Common/FileNotFoundException.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 #include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
+
+TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix)
+    : Resolution(resolution), Offset(offset), TextureMatrix(textureMatrix)
+{}
+
+TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
+    : m_Texture(std::move(texture)), m_Index(index)
+{
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::TextureSlice);
+}
+
+void TextureSlice::Bind(const unsigned slot) const
+{
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, m_Texture->m_TextureId);
+}
+
+glm::mat4* TextureSlice::GetMatrix() const
+{
+    return &m_Texture->m_Slices[m_Index].TextureMatrix;
+}
 
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
@@ -26,6 +48,8 @@ Texture::~Texture()
 std::shared_ptr<Texture> Texture::Load(std::string filePath, const TextureParameters& parameters)
 {
     ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
+
+    PREPARE_SPAWNER_USAGE(TGL::Texture);
 
     std::shared_ptr<Texture> instance = std::make_shared<Texture>(std::move(filePath), parameters);
 
@@ -47,6 +71,107 @@ bool Texture::HasTransparency() const
     return m_HasTransparency;
 }
 
+size_t Texture::SliceCount() const
+{
+    return m_Slices.size();
+}
+
+std::shared_ptr<TextureSlice> Texture::GetSlice(const unsigned int index)
+{
+    if (index >= m_Slices.size())
+    {
+        throw std::runtime_error("Invalid slice index");
+    }
+
+    PREPARE_SPAWNER_USAGE(TGL::TextureSlice);
+
+    return std::make_shared<TextureSlice>(shared_from_this(), index);
+}
+
+int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
+{
+    const glm::uvec2 topRight = offset + resolution;
+    if (topRight.x > m_Resolution.x || topRight.y > m_Resolution.y)
+    {
+        throw std::runtime_error("Invalid resolution or offset");
+    }
+
+    CreateSliceInternal(resolution, offset);
+
+    return m_Slices.size() - 1;
+}
+
+std::shared_ptr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
+{
+    const int index = CreateSlice(resolution, offset);
+    return GetSlice(index);
+}
+
+int Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+{
+    const glm::uvec2 totalPadding = padding * 2u;
+    if (totalPadding.x >= m_Resolution.x || totalPadding.y >= m_Resolution.y)
+    {
+        throw std::runtime_error("Invalid padding");
+    }
+
+    const glm::uvec2 contentResolution = m_Resolution - totalPadding + spacing;
+    const glm::uvec2 effectiveSliceResolution = resolution + spacing;
+    const glm::uvec2 contentRemainder = contentResolution % effectiveSliceResolution;
+    if (contentRemainder.x != 0 || contentRemainder.y != 0)
+    {
+        throw std::runtime_error("Invalid resolution or spacing");
+    }
+
+    const glm::uvec2 sliceCount = contentResolution / effectiveSliceResolution;
+
+    for (unsigned int y = 0; y < sliceCount.y; y++)
+    {
+        for (unsigned int x = 0; x < sliceCount.x; x++)
+        {
+            const glm::uvec2 offset = padding + effectiveSliceResolution * glm::uvec2(x, y);
+            CreateSliceInternal(resolution, offset);
+        }
+    }
+
+    return sliceCount.x * sliceCount.y;
+}
+
+std::vector<std::shared_ptr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+{
+    const int sliceCount = CreateSliceGrid(resolution, padding, spacing);
+
+    std::vector<std::shared_ptr<TextureSlice>> slices;
+    slices.reserve(sliceCount);
+
+    for (int i = m_Slices.size() - sliceCount; i < m_Slices.size(); i++)
+    {
+        slices.push_back(GetSlice(i));
+    }
+
+    return slices;
+}
+
+void Texture::CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset)
+{
+    const glm::vec3 translate = {
+        offset.x / static_cast<float>(m_Resolution.x),
+        (m_Resolution.y - resolution.y - offset.y) / static_cast<float>(m_Resolution.y),
+        0.0f
+    };
+
+    const glm::vec3 scale = {
+        resolution.x / static_cast<float>(m_Resolution.x),
+        resolution.y / static_cast<float>(m_Resolution.y),
+        1.0f
+    };
+
+    glm::mat4 textureMatrix = glm::translate(glm::mat4(1.0f), translate);
+    textureMatrix = glm::scale(textureMatrix, scale);
+
+    m_Slices.push_back({resolution, offset, textureMatrix});
+}
+
 void Texture::Load(const TextureParameters& parameters)
 {
     int width, height, channels;
@@ -56,6 +181,7 @@ void Texture::Load(const TextureParameters& parameters)
         throw FileNotFoundException(m_FilePath);
     }
 
+    m_Resolution = {width, height};
     m_HasTransparency = channels == 4;
 
     glGenTextures(1, &m_TextureId);
@@ -120,4 +246,9 @@ void Texture::Bind(const unsigned int slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
+}
+
+glm::mat4* Texture::GetMatrix() const
+{
+    return nullptr;
 }

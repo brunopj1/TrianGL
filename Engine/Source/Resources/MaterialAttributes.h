@@ -7,7 +7,7 @@
 namespace TGL
 {
     // Forward declaration
-    class Texture;
+    class TextureBinding;
 
     // Base class
     class MaterialAttribute
@@ -32,10 +32,10 @@ namespace TGL
         MaterialAttribute& operator=(MaterialAttribute&&) = delete;
 
     public:
-        bool IsValid() const;
+        virtual bool IsValid() const;
 
     private:
-        void Bind() const;
+        virtual void Bind() const;
         virtual void BindInternal() const = 0;
     };
 
@@ -44,21 +44,26 @@ namespace TGL
     class TextureMaterialAttribute final : public MaterialAttribute
     {
     private:
-        std::shared_ptr<Texture> m_Value;
+        int m_MatrixLocation;
+        std::shared_ptr<TextureBinding> m_Value;
         unsigned int m_Slot;
 
     public:
-        TextureMaterialAttribute(int location, unsigned int slot);
+        TextureMaterialAttribute(int samplerLocation, int matrixLocation, unsigned int slot);
         ~TextureMaterialAttribute() override = default;
 
     public:
-        std::shared_ptr<Texture> GetValue() const;
-        void SetValue(std::shared_ptr<Texture> value);
+        std::shared_ptr<TextureBinding> GetValue() const;
+        void SetValue(std::shared_ptr<TextureBinding> value);
 
         unsigned int GetSlot() const;
         void SetSlot(unsigned int slot);
 
+    public:
+        bool IsValid() const override;
+
     private:
+        void Bind() const override;
         void BindInternal() const override;
     };
 

@@ -4,18 +4,27 @@
 #include "Components/TextureRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
 #include "GameMode/OrderOfExecution.hpp"
+#include "Resources/Texture.h"
 
 using namespace TGL;
 
 Apple::Apple(Grid* grid)
     : Entity(false)
 {
-    TextureRenderer* texture = AttachComponent<TextureRenderer>();
-    texture->GetTransform().SetRotationDeg(45);
-    texture->GetTransform().SetScale(0.5f);
+    TextureRenderer* tr = AttachComponent<TextureRenderer>();
+    tr->GetTransform().SetRotationDeg(45);
+    tr->GetTransform().SetScale(0.5f);
 
-    const auto material = texture->UseDefaultMaterial();
-    material->GetColorAttr()->SetValue({0.9f, 0.23f, 0.15f, 1.0f});
+    const auto material = tr->UseDefaultMaterial();
+    //material->GetColorAttr()->SetValue({0.9f, 0.23f, 0.15f, 1.0f});
+
+    auto params = TextureParameters();
+    params.Filter = TextureFilterMode::Nearest;
+
+    const auto texture = Texture::Load("Assets/Textures/test2.png", params);
+    texture->CreateSliceGrid({16, 16}, {2, 3}, {4, 12});
+
+    material->GetTextureAttr()->SetValue(texture->GetSlice(3));
 
     RandomizePosition(grid);
 }
@@ -27,7 +36,7 @@ int Apple::GetOrderOfExecution() const
 
 void Apple::RandomizePosition(Grid* grid)
 {
-    std::optional<glm::ivec2> freeCell = grid->GetRandomFreeCell();
+    const std::optional<glm::ivec2> freeCell = grid->GetRandomFreeCell();
 
     if (freeCell.has_value())
     {

@@ -2,11 +2,8 @@
 
 ## Future ideas
 
-- [ ] Find a way to automatically detect unused friend classes and forward declarations
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
-- [ ] Implement a debug info window with ImGui and test custom windows
 - [ ] Implement a sound system
-- [ ] Try unit testing
 
 ## General
 
@@ -41,6 +38,7 @@
 - [X] Implement Z indexing
 - [ ] Implement Z sorting
 - [ ] Implement custom axis sorting
+- [ ] Enable / disable alpha blending dynamically
 
 ## Rendering
 
@@ -55,8 +53,8 @@
 - [X] Add a transform to the Renderable class
 - [X] Add a pivot to the Texture Renderer class
 - [X] Use shared pointers for the resources
+- [X] Add a way to slice textures (texture sheet)
 - [ ] Add a flipped flag to the Texture Renderer class
-- [ ] Add a Texture Sheet class
 - [ ] Implement View Frustum Culling
 - [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)

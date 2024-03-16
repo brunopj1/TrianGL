@@ -21,7 +21,7 @@ TGL::Material::~Material()
     for (const auto attribute : m_Attributes)
     {
         PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
-        
+
         delete attribute;
     }
 }
@@ -31,18 +31,19 @@ void TGL::Material::OnRenderSetup() const
 
 TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {
-    const int location = m_Shader->GetUniformLocation(name);
+    const int samplerLocation = m_Shader->GetUniformLocation(name);
+    const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
 
-    if (location == -1 && !createIfInvalid)
+    if (samplerLocation == -1 && matrixLocation == -1 && !createIfInvalid)
     {
         return nullptr;
     }
 
     PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
 
-    const auto attribute = new TextureMaterialAttribute(location, slot);
+    const auto attribute = new TextureMaterialAttribute(samplerLocation, matrixLocation, slot);
 
-    if (location != -1)
+    if (samplerLocation != -1 || matrixLocation != -1)
     {
         m_Attributes.push_back(attribute);
     }

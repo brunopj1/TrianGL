@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Apple.h"
 #include "Grid.h"
 #include "SnakeBody.h"
 #include "Game/Entity.h"

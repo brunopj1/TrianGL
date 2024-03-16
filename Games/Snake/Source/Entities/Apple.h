@@ -2,7 +2,6 @@
 
 #include "Game/Entity.h"
 #include "Grid.h"
-#include "SnakeBody.h"
 
 class Apple final : public TGL::Entity
 {

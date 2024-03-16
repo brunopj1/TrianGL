@@ -1,8 +1,11 @@
 #version 430 core
 
-uniform sampler2D uTexture;
-uniform vec4 uColor;
 uniform int uIsTextureValid;
+
+uniform sampler2D uTexture;
+uniform mat4 uTextureMatrix;
+
+uniform vec4 uColor;
 
 in vec2 TexCoord;
 
@@ -16,6 +19,7 @@ void main()
     }  
     else
     {
-        FragColor = texture(uTexture, TexCoord) * uColor;
+        vec2 coord = (uTextureMatrix * vec4(TexCoord, 0.0, 1.0)).xy;
+        FragColor = texture(uTexture, coord) * uColor;
     }
 }

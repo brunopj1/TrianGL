@@ -27,15 +27,15 @@ void MaterialAttribute::Bind() const
     BindInternal();
 }
 
-TextureMaterialAttribute::TextureMaterialAttribute(const int location, const unsigned slot)
-    : MaterialAttribute(location), m_Value(nullptr), m_Slot(slot) {}
+TextureMaterialAttribute::TextureMaterialAttribute(const int samplerLocation, const int matrixLocation, const unsigned slot)
+    : MaterialAttribute(samplerLocation), m_MatrixLocation(matrixLocation), m_Value(nullptr), m_Slot(slot) {}
 
-std::shared_ptr<Texture> TextureMaterialAttribute::GetValue() const
+std::shared_ptr<TextureBinding> TextureMaterialAttribute::GetValue() const
 {
     return m_Value;
 }
 
-void TextureMaterialAttribute::SetValue(std::shared_ptr<Texture> value)
+void TextureMaterialAttribute::SetValue(std::shared_ptr<TextureBinding> value)
 {
     m_Value = std::move(value);
 }
@@ -50,11 +50,40 @@ void TextureMaterialAttribute::SetSlot(const unsigned slot)
     m_Slot = slot;
 }
 
+bool TextureMaterialAttribute::IsValid() const
+{
+    return m_Location != -1 || m_MatrixLocation != -1;
+}
+
+void TextureMaterialAttribute::Bind() const
+{
+    if (m_Location == -1 && m_MatrixLocation == -1) return;
+    BindInternal();
+}
+
 void TextureMaterialAttribute::BindInternal() const
 {
     if (m_Value == nullptr) return;
-    m_Value->Bind(m_Slot);
-    glUniform1i(m_Location, m_Slot);
+
+    if (m_Location != -1)
+    {
+        m_Value->Bind(m_Slot);
+        glUniform1i(m_Location, m_Slot);
+    }
+
+    if (m_MatrixLocation != -1)
+    {
+        glm::mat4* matrix = m_Value->GetMatrix();
+
+        if (matrix != nullptr)
+        {
+            glUniformMatrix4fv(m_MatrixLocation, 1, GL_FALSE, &(*matrix)[0][0]);
+        }
+        else
+        {
+            glUniformMatrix4fv(m_MatrixLocation, 1, GL_FALSE, &glm::mat4(1.0f)[0][0]);
+        }
+    }
 }
 
 void IntMaterialAttribute::BindInternal() const
