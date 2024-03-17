@@ -13,7 +13,7 @@ Apple::Apple(Grid* grid)
 {
     TextureRenderer* tr = AttachComponent<TextureRenderer>();
     tr->GetTransform().SetRotationDeg(45);
-    tr->GetTransform().SetScale(0.5f);
+    tr->GetTransform().SetScale({-0.5, 0.5f});
 
     const auto material = tr->UseDefaultMaterial();
     //material->GetColorAttr()->SetValue({0.9f, 0.23f, 0.15f, 1.0f});

@@ -23,6 +23,7 @@ namespace TGL
     private:
         std::shared_ptr<Material> m_Material = nullptr;
         glm::vec2 m_Pivot = glm::vec2(0.5f);
+        glm::bvec2 m_Flip = glm::bvec2(false);
 
     public:
         TextureRenderer(std::shared_ptr<Material> material = nullptr);

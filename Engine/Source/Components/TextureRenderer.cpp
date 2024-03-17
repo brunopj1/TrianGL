@@ -100,13 +100,15 @@ void TextureRenderer::Render()
     if (m_Material == nullptr) return;
 
     const glm::mat4 parentModelMatrix = GetParent()->GetTransform().GetTransformMatrix();
-    const glm::mat4 textureModelMatrix = GetTransform().GetTransformMatrix();
+    const glm::mat4 rendererModelMatrix = GetTransform().GetTransformMatrix();
 
-    glm::mat4 modelMatrix = parentModelMatrix * textureModelMatrix;
+    glm::mat4 modelMatrix = parentModelMatrix * rendererModelMatrix;
 
     if (m_Pivot != glm::vec2(0.5f))
     {
-        modelMatrix = translate(modelMatrix, glm::vec3(0.5f - m_Pivot, 0.0f));
+        const glm::vec3 sign = glm::sign(glm::vec3(modelMatrix[0][0], modelMatrix[1][1], 1));
+
+        modelMatrix = translate(modelMatrix, glm::vec3(0.5f - m_Pivot, 0.0f) * sign);
     }
 
     if (const int zIndex = GetZIndex(); zIndex != 0)

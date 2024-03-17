@@ -54,7 +54,7 @@
 - [X] Add a pivot to the Texture Renderer class
 - [X] Use shared pointers for the resources
 - [X] Add a way to slice textures (texture sheet)
-- [ ] Add a flipped flag to the Texture Renderer class
+- [X] Allow flipping the texture renderer (using the scale)
 - [ ] Implement View Frustum Culling
 - [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)
