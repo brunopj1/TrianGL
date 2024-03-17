@@ -77,6 +77,7 @@ namespace TGL
         }
 
         TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot, bool createIfInvalid = true);
+        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, const std::string& matrixName, unsigned int slot, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;

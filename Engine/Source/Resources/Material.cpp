@@ -31,8 +31,13 @@ void TGL::Material::OnRenderSetup() const
 
 TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
 {
+    return AddTextureAttribute(name, name + "Matrix", slot, createIfInvalid);
+}
+
+TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const std::string& matrixName, const unsigned slot, const bool createIfInvalid)
+{
     const int samplerLocation = m_Shader->GetUniformLocation(name);
-    const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
+    const int matrixLocation = m_Shader->GetUniformLocation(matrixName);
 
     if (samplerLocation == -1 && matrixLocation == -1 && !createIfInvalid)
     {
