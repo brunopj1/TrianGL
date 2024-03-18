@@ -5,7 +5,6 @@
 #include "Apple.h"
 #include "Core/InputSystem.h"
 #include "DefaultResources/DefaultMaterial.h"
-#include "GameMode/OrderOfExecution.hpp"
 
 using namespace TGL;
 
@@ -16,11 +15,6 @@ Snake::Snake(Grid* grid, std::shared_ptr<Texture> spriteSheet, const glm::ivec2&
 
     SpawnHead(grid, position - direction);
     SpawnHead(grid, position);
-}
-
-int Snake::GetOrderOfExecution() const
-{
-    return static_cast<int>(OrderOfExecution::Snake);
 }
 
 void Snake::OnUpdate(const float deltaTime)
@@ -111,10 +105,10 @@ void Snake::DestroyTail(Grid* grid, const SnakeBody* firstBody)
 void Snake::UpdateTail() const
 {
     const auto bodySize = m_Body.size();
+
+    const SnakeBody* preTailEnd = m_Body[bodySize - 2];
+    const glm::ivec2 newDirection = preTailEnd->GetBackDirection();
+
     SnakeBody* tailEnd = m_Body[bodySize - 1];
-    SnakeBody* preTailEnd = m_Body[bodySize - 2];
-
-    const glm::ivec2 newDirection = preTailEnd->GetTransform().GetPosition() - tailEnd->GetTransform().GetPosition();
-
     tailEnd->Modify(SnakeBodyType::Tail, newDirection, newDirection);
 }

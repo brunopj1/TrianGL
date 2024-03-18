@@ -13,9 +13,6 @@ public:
     Apple(Grid* grid, std::shared_ptr<TGL::Texture> spriteSheet);
     ~Apple() override = default;
 
-protected:
-    int GetOrderOfExecution() const override;
-
 public:
     void RandomizePosition(Grid* grid);
 };

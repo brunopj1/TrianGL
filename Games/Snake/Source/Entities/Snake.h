@@ -21,9 +21,6 @@ public:
     ~Snake() override = default;
 
 protected:
-    int GetOrderOfExecution() const override;
-
-protected:
     void OnUpdate(float deltaTime) override;
 
 public:

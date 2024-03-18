@@ -18,6 +18,11 @@ SnakeBody::SnakeBody(Grid* grid, std::shared_ptr<Texture> texture, const glm::iv
     UpdateTexture();
 }
 
+glm::ivec2 SnakeBody::GetBackDirection() const
+{
+    return m_BackDirection;
+}
+
 void SnakeBody::Modify(const SnakeBodyType type, const glm::ivec2& frontDirection, const glm::ivec2& backDirection)
 {
     m_Type = type;

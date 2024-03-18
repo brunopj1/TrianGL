@@ -28,6 +28,9 @@ public:
     SnakeBody(Grid* grid, std::shared_ptr<TGL::Texture> texture, const glm::ivec2& position, const glm::ivec2& direction);
 
 public:
+    glm::ivec2 GetBackDirection() const;
+
+public:
     void Modify(SnakeBodyType type, const glm::ivec2& frontDirection = {0, 0}, const glm::ivec2& backDirection = {0, 0});
 
 private:
