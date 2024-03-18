@@ -1,5 +1,7 @@
 ﻿#include "Snake.h"
 
+#include <utility>
+
 #include "Apple.h"
 #include "Core/InputSystem.h"
 #include "DefaultResources/DefaultMaterial.h"
@@ -7,12 +9,13 @@
 
 using namespace TGL;
 
-Snake::Snake(Grid* grid, const glm::ivec2& position, const glm::ivec2& direction)
-    : Entity(true)
+Snake::Snake(Grid* grid, std::shared_ptr<Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction)
+    : Entity(true), m_SpriteSheet(std::move(spriteSheet))
 {
     m_BodyDirection = m_MoveDirection = direction;
 
-    SpawnBody(grid, position);
+    SpawnHead(grid, position - direction);
+    SpawnHead(grid, position);
 }
 
 int Snake::GetOrderOfExecution() const
@@ -32,6 +35,7 @@ void Snake::OnUpdate(const float deltaTime)
     if (direction != glm::ivec2(0) && direction != m_MoveDirection && direction != -m_BodyDirection)
     {
         m_MoveDirection = direction;
+        m_Body.front()->Modify(SnakeBodyType::Head, m_MoveDirection);
     }
 }
 
@@ -49,32 +53,39 @@ void Snake::Move(Grid* grid)
     // No hit
     if (hitEntity == nullptr || hitEntity == m_Body.back())
     {
-        DestroyLastBody(grid);
-        SpawnBody(grid, nextPosition);
+        DestroyTailEnd(grid);
+        SpawnHead(grid, nextPosition);
+        UpdateTail();
     }
     // Hit snake
     else if (const SnakeBody* hitBody = hitEntity->As<SnakeBody>(); hitBody != nullptr)
     {
         DestroyTail(grid, hitBody);
-        SpawnBody(grid, nextPosition);
+        SpawnHead(grid, nextPosition);
+        UpdateTail();
     }
     // Hit apple
     else if (Apple* hitApple = hitEntity->As<Apple>(); hitApple != nullptr)
     {
-        SpawnBody(grid, nextPosition);
+        SpawnHead(grid, nextPosition);
         hitApple->RandomizePosition(grid);
     }
-}
-
-void Snake::SpawnBody(Grid* grid, const glm::ivec2& position)
-{
-    const auto snakeBody = SpawnEntity<SnakeBody>(grid, position);
-    m_Body.insert(m_Body.begin(), snakeBody);
 
     m_BodyDirection = m_MoveDirection;
 }
 
-void Snake::DestroyLastBody(Grid* grid)
+void Snake::SpawnHead(Grid* grid, const glm::ivec2& position)
+{
+    const auto snakeBody = SpawnEntity<SnakeBody>(grid, m_SpriteSheet, position, m_MoveDirection);
+    m_Body.insert(m_Body.begin(), snakeBody);
+
+    if (const auto bodySize = m_Body.size(); bodySize > 1)
+    {
+        m_Body[1]->Modify(bodySize == 2 ? SnakeBodyType::Tail : SnakeBodyType::Body);
+    }
+}
+
+void Snake::DestroyTailEnd(Grid* grid)
 {
     SnakeBody* body = m_Body.back();
     m_Body.pop_back();
@@ -83,7 +94,7 @@ void Snake::DestroyLastBody(Grid* grid)
     body->Destroy();
 }
 
-void Snake::DestroyTail(Grid* grid, const SnakeBody* from)
+void Snake::DestroyTail(Grid* grid, const SnakeBody* firstBody)
 {
     while (true)
     {
@@ -93,6 +104,17 @@ void Snake::DestroyTail(Grid* grid, const SnakeBody* from)
         grid->SetCell(body->GetTransform().GetPosition(), nullptr);
         body->Destroy();
 
-        if (body == from) break;
+        if (body == firstBody) break;
     }
+}
+
+void Snake::UpdateTail() const
+{
+    const auto bodySize = m_Body.size();
+    SnakeBody* tailEnd = m_Body[bodySize - 1];
+    SnakeBody* preTailEnd = m_Body[bodySize - 2];
+
+    const glm::ivec2 newDirection = preTailEnd->GetTransform().GetPosition() - tailEnd->GetTransform().GetPosition();
+
+    tailEnd->Modify(SnakeBodyType::Tail, newDirection, newDirection);
 }

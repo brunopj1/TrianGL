@@ -23,11 +23,13 @@ bool MaterialAttribute::IsValid() const
 
 void MaterialAttribute::Bind() const
 {
-    if (m_Location == -1) return;
-    BindInternal();
+    if (IsValid())
+    {
+        BindInternal();
+    }
 }
 
-TextureMaterialAttribute::TextureMaterialAttribute(const int samplerLocation, const int matrixLocation, const unsigned slot)
+TextureMaterialAttribute::TextureMaterialAttribute(const int samplerLocation, const int matrixLocation, const unsigned char slot)
     : MaterialAttribute(samplerLocation), m_MatrixLocation(matrixLocation), m_Value(nullptr), m_Slot(slot) {}
 
 std::shared_ptr<TextureBinding> TextureMaterialAttribute::GetValue() const
@@ -40,30 +42,18 @@ void TextureMaterialAttribute::SetValue(std::shared_ptr<TextureBinding> value)
     m_Value = std::move(value);
 }
 
-unsigned TextureMaterialAttribute::GetSlot() const
-{
-    return m_Slot;
-}
-
-void TextureMaterialAttribute::SetSlot(const unsigned slot)
-{
-    m_Slot = slot;
-}
-
 bool TextureMaterialAttribute::IsValid() const
 {
     return m_Location != -1 || m_MatrixLocation != -1;
 }
 
-void TextureMaterialAttribute::Bind() const
-{
-    if (m_Location == -1 && m_MatrixLocation == -1) return;
-    BindInternal();
-}
-
 void TextureMaterialAttribute::BindInternal() const
 {
-    if (m_Value == nullptr) return;
+    if (m_Value == nullptr) // If location is -1 the sampler is not being used, so we don't need to unbind
+    {
+        TextureBinding::Unbind(m_Slot);
+        return;
+    }
 
     if (m_Location != -1)
     {

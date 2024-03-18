@@ -23,7 +23,8 @@ namespace TGL
         virtual ~TextureBinding() = default;
 
     private:
-        virtual void Bind(unsigned int slot) const = 0;
+        static void Unbind(unsigned char slot);
+        virtual void Bind(unsigned char slot) const = 0;
         virtual glm::mat4* GetMatrix() const = 0;
     };
 
@@ -61,7 +62,7 @@ namespace TGL
         ~TextureSlice() override = default;
 
     private:
-        void Bind(unsigned slot) const override;
+        void Bind(unsigned char slot) const override;
         glm::mat4* GetMatrix() const override;
     };
 
@@ -116,7 +117,7 @@ namespace TGL
         void Free();
 
     private:
-        void Bind(unsigned slot) const override;
+        void Bind(unsigned char slot) const override;
         glm::mat4* GetMatrix() const override;
     };
 }

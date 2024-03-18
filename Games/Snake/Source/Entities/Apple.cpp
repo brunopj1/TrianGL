@@ -8,23 +8,12 @@
 
 using namespace TGL;
 
-Apple::Apple(Grid* grid)
-    : Entity(false)
+Apple::Apple(Grid* grid, std::shared_ptr<Texture> spriteSheet)
+    : Entity(false), m_SpriteSheet(std::move(spriteSheet))
 {
     TextureRenderer* tr = AttachComponent<TextureRenderer>();
-    tr->GetTransform().SetRotationDeg(45);
-    tr->GetTransform().SetScale({-0.5, 0.5f});
-
     const auto material = tr->UseDefaultMaterial();
-    //material->GetColorAttr()->SetValue({0.9f, 0.23f, 0.15f, 1.0f});
-
-    auto params = TextureParameters();
-    params.Filter = TextureFilterMode::Nearest;
-
-    const auto texture = Texture::Load("Assets/Textures/test2.png", params);
-    texture->CreateSliceGrid({16, 16}, {2, 3}, {4, 12});
-
-    material->GetTextureAttr()->SetValue(texture->GetSlice(3));
+    material->GetTextureAttr()->SetValue(m_SpriteSheet->GetSlice(7));
 
     RandomizePosition(grid);
 }

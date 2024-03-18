@@ -30,7 +30,7 @@ void Transform::SetPosition(const glm::vec2& newPosition)
     m_WasModified = true;
 }
 
-void Transform::SetRotationRag(const float newRotation)
+void Transform::SetRotationRad(const float newRotation)
 {
     m_Rotation = newRotation;
     m_WasModified = true;

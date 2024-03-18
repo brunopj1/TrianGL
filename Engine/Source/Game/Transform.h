@@ -31,7 +31,7 @@ namespace TGL
 
     public:
         void SetPosition(const glm::vec2& newPosition);
-        void SetRotationRag(float newRotation);
+        void SetRotationRad(float newRotation);
         void SetRotationDeg(float newRotation);
         void SetScale(const glm::vec2& newScale);
         void SetScale(float newScale);

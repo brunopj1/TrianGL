@@ -3,6 +3,7 @@
 #include "Grid.h"
 #include "SnakeBody.h"
 #include "Game/Entity.h"
+#include "Resources/Texture.h"
 
 class Snake final : public TGL::Entity
 {
@@ -12,8 +13,11 @@ private:
 
     std::vector<SnakeBody*> m_Body;
 
+private:
+    std::shared_ptr<TGL::Texture> m_SpriteSheet;
+
 public:
-    Snake(Grid* grid, const glm::ivec2& position, const glm::ivec2& direction);
+    Snake(Grid* grid, std::shared_ptr<TGL::Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction);
     ~Snake() override = default;
 
 protected:
@@ -26,8 +30,10 @@ public:
     void Move(Grid* grid); // Returns true if the apple was eaten
 
 private:
-    void SpawnBody(Grid* grid, const glm::ivec2& position);
+    void SpawnHead(Grid* grid, const glm::ivec2& position);
 
-    void DestroyLastBody(Grid* grid);
-    void DestroyTail(Grid* grid, const SnakeBody* from);
+    void DestroyTailEnd(Grid* grid);
+    void DestroyTail(Grid* grid, const SnakeBody* firstBody);
+
+    void UpdateTail() const;
 };

@@ -5,7 +5,9 @@
 #include "Core/ResourceManager.h"
 #include "Entities/Camera.h"
 
-TGL::Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
+using namespace TGL;
+
+Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Material);
 
@@ -14,7 +16,7 @@ TGL::Material::Material(const std::string& vertexShader, const std::string& frag
     CreateEngineAttributes();
 }
 
-TGL::Material::~Material()
+Material::~Material()
 {
     ResourceManager::UnloadShader(m_Shader);
 
@@ -26,18 +28,14 @@ TGL::Material::~Material()
     }
 }
 
-void TGL::Material::OnRenderSetup() const
+void Material::OnRenderSetup() const
 {}
 
-TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const unsigned int slot, const bool createIfInvalid)
-{
-    return AddTextureAttribute(name, name + "Matrix", slot, createIfInvalid);
-}
-
-TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::string& name, const std::string& matrixName, const unsigned slot, const bool createIfInvalid)
+// TODO try to use the same template specialization for this implementation
+TextureMaterialAttribute* Material::AddTextureAttribute(const std::string& name, const bool createIfInvalid)
 {
     const int samplerLocation = m_Shader->GetUniformLocation(name);
-    const int matrixLocation = m_Shader->GetUniformLocation(matrixName);
+    const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
 
     if (samplerLocation == -1 && matrixLocation == -1 && !createIfInvalid)
     {
@@ -46,7 +44,7 @@ TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::str
 
     PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
 
-    const auto attribute = new TextureMaterialAttribute(samplerLocation, matrixLocation, slot);
+    TextureMaterialAttribute* attribute = new TextureMaterialAttribute(samplerLocation, matrixLocation, samplerLocation != -1 ? m_NextTextureSlot++ : 255);
 
     if (samplerLocation != -1 || matrixLocation != -1)
     {
@@ -56,11 +54,13 @@ TGL::TextureMaterialAttribute* TGL::Material::AddTextureAttribute(const std::str
     return attribute;
 }
 
-void TGL::Material::Use(const glm::mat4& modelMatrix) const
+void Material::Use(const glm::mat4& modelMatrix) const
 {
     m_Shader->Use();
 
     UpdateEngineAttributes(modelMatrix);
+
+    OnRenderSetup();
 
     for (const auto attribute : m_Attributes)
     {
@@ -68,13 +68,13 @@ void TGL::Material::Use(const glm::mat4& modelMatrix) const
     }
 }
 
-void TGL::Material::CreateEngineAttributes()
+void Material::CreateEngineAttributes()
 {
     m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", false);
     m_ModelMatrix = AddAttribute<Mat4MaterialAttribute>("uModelMatrix", false);
 }
 
-void TGL::Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
+void Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
 {
     const Camera* camera = Camera::GetMainCamera();
     // Null checking is not needed since the game is not rendered without a camera

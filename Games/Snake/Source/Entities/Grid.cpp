@@ -51,6 +51,11 @@ Entity* Grid::GetCell(const glm::uvec2& position) const
 
 void Grid::SetCell(const glm::uvec2& position, Entity* entity)
 {
+    if (position.x >= m_Size.x || position.y >= m_Size.y)
+    {
+        throw std::runtime_error("Position out of bounds");
+    }
+
     const unsigned index = position.y * m_Size.x + position.x;
     m_Cells.at(index) = entity;
 

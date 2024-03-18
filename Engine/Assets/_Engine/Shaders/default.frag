@@ -15,7 +15,7 @@ void main()
 {
     if (uIsTextureValid == 0) 
     {
-        FragColor = uColor;
+        FragColor = vec4(0, 0, 1, 1);
     }  
     else
     {

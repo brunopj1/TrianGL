@@ -31,11 +31,9 @@ namespace TGL
         MaterialAttribute(MaterialAttribute&&) = delete;
         MaterialAttribute& operator=(MaterialAttribute&&) = delete;
 
-    public:
-        virtual bool IsValid() const;
-
     private:
-        virtual void Bind() const;
+        virtual bool IsValid() const;
+        void Bind() const;
         virtual void BindInternal() const = 0;
     };
 
@@ -46,24 +44,18 @@ namespace TGL
     private:
         int m_MatrixLocation;
         std::shared_ptr<TextureBinding> m_Value;
-        unsigned int m_Slot;
+        unsigned char m_Slot;
 
     public:
-        TextureMaterialAttribute(int samplerLocation, int matrixLocation, unsigned int slot);
+        TextureMaterialAttribute(int samplerLocation, int matrixLocation, unsigned char slot);
         ~TextureMaterialAttribute() override = default;
 
     public:
         std::shared_ptr<TextureBinding> GetValue() const;
         void SetValue(std::shared_ptr<TextureBinding> value);
 
-        unsigned int GetSlot() const;
-        void SetSlot(unsigned int slot);
-
-    public:
-        bool IsValid() const override;
-
     private:
-        void Bind() const override;
+        bool IsValid() const override;
         void BindInternal() const override;
     };
 

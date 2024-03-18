@@ -12,12 +12,14 @@ private:
     TGL::Camera* m_Camera;
     glm::uvec2 m_WindowSize;
 
+    std::shared_ptr<TGL::Texture> m_SpriteSheet;
+
     Grid* m_Grid;
     Snake* m_Snake;
     Apple* m_Apple;
 
-    float m_TickRate = 0.5f;
-    float m_TickTimer = m_TickRate;
+    float m_TickRate;
+    float m_TickTimer;
 
 public:
     SnakeGameMode();

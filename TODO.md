@@ -56,9 +56,9 @@
 - [X] Add a way to slice textures (texture sheet)
 - [X] Allow flipping the texture renderer (using the scale)
 - [ ] Implement View Frustum Culling
-- [ ] Use uniform buffers for the shaders
 - [ ] Validate the material attributes (repeated names, invalid type)
 - [ ] Add batch rendering (for the same material)
+- [ ] Use uniform buffers for the shaders
 
 ## Entity system
 

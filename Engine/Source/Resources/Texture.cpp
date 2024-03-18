@@ -9,6 +9,12 @@
 
 using namespace TGL;
 
+void TextureBinding::Unbind(const unsigned char slot)
+{
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix)
     : Resolution(resolution), Offset(offset), TextureMatrix(textureMatrix)
 {}
@@ -19,7 +25,7 @@ TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::TextureSlice);
 }
 
-void TextureSlice::Bind(const unsigned slot) const
+void TextureSlice::Bind(const unsigned char slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_Texture->m_TextureId);
@@ -242,7 +248,7 @@ void Texture::Free()
     m_TextureId = 0;
 }
 
-void Texture::Bind(const unsigned int slot) const
+void Texture::Bind(const unsigned char slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);

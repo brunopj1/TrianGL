@@ -11,17 +11,27 @@ using namespace TGL;
 
 // TODO disable the loop around mechanic
 // TODO add imgui overlay to control the game
+// TODO add a more fluid motion to the snake
 
 SnakeGameMode::SnakeGameMode()
 {
     m_Camera = SpawnEntity<Camera>(true);
     m_WindowSize = Window::GetResolution();
 
+    auto textureParams = TextureParameters();
+    textureParams.Filter = TextureFilterMode::Nearest;
+    textureParams.GenerateMipmaps = false;
+
+    m_SpriteSheet = Texture::Load("Assets/Textures/sprite_sheet.png", textureParams);
+    m_SpriteSheet->CreateSliceGrid({25, 25});
+
+    m_TickRate = m_TickTimer = 0.3f;
+
     m_Grid = SpawnEntity<Grid>(glm::uvec2(7, 7));
 
-    m_Snake = SpawnEntity<Snake>(m_Grid, glm::ivec2(1, 1), glm::ivec2(0, 1));
+    m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 
-    m_Apple = SpawnEntity<Apple>(m_Grid);
+    m_Apple = SpawnEntity<Apple>(m_Grid, m_SpriteSheet);
 
     FocusCameraOnGrid();
 }

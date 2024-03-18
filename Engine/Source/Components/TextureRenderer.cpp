@@ -117,7 +117,6 @@ void TextureRenderer::Render()
     }
 
     m_Material->Use(modelMatrix);
-    m_Material->OnRenderSetup();
 
     glBindVertexArray(s_QuadVao);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, s_QuadEbo);

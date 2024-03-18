@@ -23,6 +23,7 @@ namespace TGL
     private:
         Shader* m_Shader;
         std::vector<MaterialAttribute*> m_Attributes;
+        unsigned char m_NextTextureSlot = 0;
 
     private:
         Mat4MaterialAttribute* m_PvmMatrix;
@@ -54,7 +55,7 @@ namespace TGL
         }
 
     protected:
-        template <typename T, typename = ATTRIBUTE_TEMPLATE_SPAWN_CONDITION>
+        template <typename T, typename = std::enable_if_t<!std::is_same_v<MaterialAttribute, T> && std::is_base_of_v<MaterialAttribute, T> && std::is_constructible_v<T, int>>>
         T* AddAttribute(const std::string& name, const bool createIfInvalid = true)
         {
             const int location = m_Shader->GetUniformLocation(name);
@@ -76,8 +77,7 @@ namespace TGL
             return attribute;
         }
 
-        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, unsigned int slot, bool createIfInvalid = true);
-        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, const std::string& matrixName, unsigned int slot, bool createIfInvalid = true);
+        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;
