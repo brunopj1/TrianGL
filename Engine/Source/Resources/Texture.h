@@ -11,12 +11,12 @@
 
 namespace TGL
 {
-    // Binding class (for the material attribute)
+    // Binding class (for the material uniform)
 
     class TextureBinding
     {
     private:
-        friend class TextureMaterialAttribute;
+        friend class TextureUniform;
 
     protected:
         TextureBinding() = default;
@@ -73,7 +73,7 @@ namespace TGL
     private:
         friend class ResourceManager;
         friend class TextureSlice;
-        friend class TextureMaterialAttribute;
+        friend class TextureUniform;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR();

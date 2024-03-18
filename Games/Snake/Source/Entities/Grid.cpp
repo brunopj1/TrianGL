@@ -1,7 +1,10 @@
 ﻿#include "Grid.h"
 
 #include "Components/TextureRenderer.h"
+#include "Core/Window.h"
+#include "Entities/Camera.h"
 #include "Materials/GridMaterial.h"
+#include "glm/glm.hpp"
 
 using namespace TGL;
 
@@ -9,9 +12,12 @@ Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)
 {
     m_TextureRenderer = AttachComponent<TextureRenderer>();
-    m_TextureRenderer->SetMaterial(Material::CreateInstanceOf<GridMaterial>());
     m_TextureRenderer->SetPivot({0, 0});
     m_TextureRenderer->SetZIndex(-1);
+
+    const auto gridMaterial = Material::CreateInstanceOf<GridMaterial>();
+    gridMaterial->EdgeWidth->Value = 0.02f;
+    m_TextureRenderer->SetMaterial(gridMaterial);
 
     Resize(dimensions);
 }
@@ -24,23 +30,6 @@ glm::uvec2 Grid::GetSize() const
 unsigned Grid::GetCellCount() const
 {
     return m_Size.x * m_Size.y;
-}
-
-void Grid::Resize(const glm::uvec2& size)
-{
-    m_Size = size;
-    const unsigned gridSize = m_Size.x * m_Size.y;
-
-    m_Cells.clear();
-    m_Cells.resize(gridSize, nullptr);
-
-    const auto material = m_TextureRenderer->GetMaterial()->As<GridMaterial>();
-    material->GridSize->SetValue(m_Size);
-    const float edgeWidth = material->EdgeWidth->GetValue();
-
-    Transform& transform = GetTransform();
-    transform.SetPosition(glm::vec2(-edgeWidth * 0.5f));
-    transform.SetScale(glm::vec2(m_Size) + edgeWidth);
 }
 
 Entity* Grid::GetCell(const glm::uvec2& position) const
@@ -84,4 +73,37 @@ std::optional<glm::ivec2> Grid::GetRandomFreeCell() const
 
     const unsigned randomIndex = freeIndices[rand() % freeIndices.size()]; // NOLINT
     return glm::ivec2(randomIndex % m_Size.x, randomIndex / m_Size.x);
+}
+
+void Grid::Resize(const glm::uvec2& size)
+{
+    m_Size = size;
+
+    const auto material = m_TextureRenderer->GetMaterial()->As<GridMaterial>();
+    material->GridSize->Value = m_Size;
+
+    const unsigned gridSize = m_Size.x * m_Size.y;
+    m_Cells.clear();
+    m_Cells.resize(gridSize, nullptr);
+
+    Transform& transform = GetTransform();
+    transform.SetPosition({0, 0});
+    transform.SetScale(glm::vec2(m_Size));
+}
+
+void Grid::FocusCamera() const
+{
+    const auto camera = Camera::GetMainCamera();
+    const float aspectRatio = camera->GetAspectRatio();
+
+    if (aspectRatio > 1)
+    {
+        camera->SetVerticalSize(m_Size.y + 0.5f);
+    }
+    else
+    {
+        camera->SetHorizontalSize(m_Size.x + 0.5f);
+    }
+
+    camera->GetTransform().SetPosition(glm::vec3(m_Size, 0) * 0.5f);
 }

@@ -1,6 +1,6 @@
 ﻿#include "Material.h"
 
-#include "MaterialAttributes.h"
+#include "MaterialUniforms.h"
 #include "Internal/Shader.h"
 #include "Core/ResourceManager.h"
 #include "Entities/Camera.h"
@@ -13,18 +13,18 @@ Material::Material(const std::string& vertexShader, const std::string& fragmentS
 
     m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
-    CreateEngineAttributes();
+    CreateEngineUniforms();
 }
 
 Material::~Material()
 {
     ResourceManager::UnloadShader(m_Shader);
 
-    for (const auto attribute : m_Attributes)
+    for (const auto uniform : m_Uniforms)
     {
-        PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
+        PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
 
-        delete attribute;
+        delete uniform;
     }
 }
 
@@ -32,7 +32,7 @@ void Material::OnRenderSetup() const
 {}
 
 // TODO try to use the same template specialization for this implementation
-TextureMaterialAttribute* Material::AddTextureAttribute(const std::string& name, const bool createIfInvalid)
+TextureUniform* Material::AddTextureUniform(const std::string& name, const bool createIfInvalid)
 {
     const int samplerLocation = m_Shader->GetUniformLocation(name);
     const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
@@ -42,39 +42,39 @@ TextureMaterialAttribute* Material::AddTextureAttribute(const std::string& name,
         return nullptr;
     }
 
-    PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
+    PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
 
-    TextureMaterialAttribute* attribute = new TextureMaterialAttribute(samplerLocation, matrixLocation, samplerLocation != -1 ? m_NextTextureSlot++ : 255);
+    TextureUniform* uniform = new TextureUniform(samplerLocation, matrixLocation, samplerLocation != -1 ? m_NextTextureSlot++ : 255);
 
     if (samplerLocation != -1 || matrixLocation != -1)
     {
-        m_Attributes.push_back(attribute);
+        m_Uniforms.push_back(uniform);
     }
 
-    return attribute;
+    return uniform;
 }
 
 void Material::Use(const glm::mat4& modelMatrix) const
 {
     m_Shader->Use();
 
-    UpdateEngineAttributes(modelMatrix);
+    UpdateEngineUniforms(modelMatrix);
 
     OnRenderSetup();
 
-    for (const auto attribute : m_Attributes)
+    for (const auto uniform : m_Uniforms)
     {
-        attribute->Bind();
+        uniform->Bind();
     }
 }
 
-void Material::CreateEngineAttributes()
+void Material::CreateEngineUniforms()
 {
-    m_PvmMatrix = AddAttribute<Mat4MaterialAttribute>("uPVMMatrix", false);
-    m_ModelMatrix = AddAttribute<Mat4MaterialAttribute>("uModelMatrix", false);
+    m_PvmMatrix = AddUniform<Mat4Uniform>("uPVMMatrix", false);
+    m_ModelMatrix = AddUniform<Mat4Uniform>("uModelMatrix", false);
 }
 
-void Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
+void Material::UpdateEngineUniforms(const glm::mat4& modelMatrix) const
 {
     const Camera* camera = Camera::GetMainCamera();
     // Null checking is not needed since the game is not rendered without a camera
@@ -82,11 +82,11 @@ void Material::UpdateEngineAttributes(const glm::mat4& modelMatrix) const
     if (m_PvmMatrix != nullptr)
     {
         const auto pvmMatrix = camera->GetProjectionViewMatrix() * modelMatrix;
-        m_PvmMatrix->SetValue(pvmMatrix);
+        m_PvmMatrix->Value = pvmMatrix;
     }
 
     if (m_ModelMatrix != nullptr)
     {
-        m_ModelMatrix->SetValue(modelMatrix);
+        m_ModelMatrix->Value = modelMatrix;
     }
 }

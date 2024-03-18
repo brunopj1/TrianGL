@@ -3,29 +3,17 @@
 using namespace TGL;
 
 DefaultMaterial::DefaultMaterial()
-    : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag", true)
+    : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag", true),
+      Texture(AddTextureUniform("uTexture")),
+      Color(AddUniform<Float4Uniform>("uColor")),
+      IsTextureValid(AddUniform<IntUniform>("uIsTextureValid"))
 {
-    m_Texture = AddTextureAttribute("uTexture");
-    m_Texture->SetValue(nullptr);
-
-    m_Color = AddAttribute<Float4MaterialAttribute>("uColor");
-    m_Color->SetValue({1.0f, 1.0f, 1.0f, 1.0f});
-
-    m_IsTextureValid = AddAttribute<IntMaterialAttribute>("uIsTextureValid");
-    m_IsTextureValid->SetValue(0);
-}
-
-TextureMaterialAttribute* DefaultMaterial::GetTextureAttr() const
-{
-    return m_Texture;
-}
-
-Float4MaterialAttribute* DefaultMaterial::GetColorAttr() const
-{
-    return m_Color;
+    Texture->Value = nullptr;
+    Color->Value = {1.0f, 1.0f, 1.0f, 1.0f};
+    IsTextureValid->Value = 0;
 }
 
 void DefaultMaterial::OnRenderSetup() const
 {
-    m_IsTextureValid->SetValue(m_Texture->GetValue() != nullptr ? 1 : 0);
+    IsTextureValid->Value = Texture->Value != nullptr ? 1 : 0;
 }

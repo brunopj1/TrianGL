@@ -6,18 +6,16 @@ namespace TGL
 {
     class DefaultMaterial final : public Material
     {
+    public:
+        TextureUniform* const Texture;
+        Float4Uniform* const Color;
+
     private:
-        TextureMaterialAttribute* m_Texture;
-        Float4MaterialAttribute* m_Color;
-        IntMaterialAttribute* m_IsTextureValid;
+        IntUniform* const IsTextureValid;
 
     public:
         DefaultMaterial();
         ~DefaultMaterial() override = default;
-
-    public:
-        TextureMaterialAttribute* GetTextureAttr() const;
-        Float4MaterialAttribute* GetColorAttr() const;
 
     protected:
         void OnRenderSetup() const override;

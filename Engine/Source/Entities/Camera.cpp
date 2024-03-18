@@ -36,6 +36,11 @@ void Camera::SetAsMainCamera()
     s_MainCamera = this;
 }
 
+glm::vec2 Camera::GetSize() const
+{
+    return {m_HorizontalSize, m_HorizontalSize / m_AspectRatio};
+}
+
 float Camera::GetHorizontalSize() const
 {
     return m_HorizontalSize;
@@ -66,6 +71,11 @@ void Camera::SetVerticalSize(const float size, const bool lock)
 
     m_HorizontalSize = size * m_AspectRatio;
     if (lock) m_LockHorizontalSize = false;
+}
+
+void Camera::LockSize(const bool horizontally)
+{
+    m_LockHorizontalSize = horizontally;
 }
 
 bool Camera::IsSizeLockedHorizontally() const

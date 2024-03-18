@@ -28,7 +28,4 @@ public:
 private:
     void OnEarlyUpdate(float deltaTime) override;
     void OnLateUpdate(float deltaTime) override;
-
-private:
-    void FocusCameraOnGrid() const;
 };

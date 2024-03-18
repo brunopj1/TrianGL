@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Internal/Shader.h"
-#include "Resources/MaterialAttributes.h"
+#include "MaterialUniforms.h"
 #include "Util/Macros/MaterialMacros.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <memory>
@@ -22,16 +22,22 @@ namespace TGL
 
     private:
         Shader* m_Shader;
-        std::vector<MaterialAttribute*> m_Attributes;
+        std::vector<MaterialUniform*> m_Uniforms;
         unsigned char m_NextTextureSlot = 0;
 
     private:
-        Mat4MaterialAttribute* m_PvmMatrix;
-        Mat4MaterialAttribute* m_ModelMatrix;
+        Mat4Uniform* m_PvmMatrix;
+        Mat4Uniform* m_ModelMatrix;
 
     public:
         Material(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
         virtual ~Material();
+
+    public:
+        Material(const Material&) = delete;
+        Material& operator=(const Material&) = delete;
+        Material(Material&&) = delete;
+        Material& operator=(Material&&) = delete;
 
     protected:
         virtual void OnRenderSetup() const;
@@ -55,8 +61,8 @@ namespace TGL
         }
 
     protected:
-        template <typename T, typename = std::enable_if_t<!std::is_same_v<MaterialAttribute, T> && std::is_base_of_v<MaterialAttribute, T> && std::is_constructible_v<T, int>>>
-        T* AddAttribute(const std::string& name, const bool createIfInvalid = true)
+        template <typename T, typename = std::enable_if_t<!std::is_same_v<MaterialUniform, T> && std::is_base_of_v<MaterialUniform, T> && std::is_constructible_v<T, int>>>
+        T* AddUniform(const std::string& name, const bool createIfInvalid = true)
         {
             const int location = m_Shader->GetUniformLocation(name);
 
@@ -65,24 +71,24 @@ namespace TGL
                 return nullptr;
             }
 
-            PREPARE_SPAWNER_USAGE(TGL::MaterialAttribute);
+            PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
 
-            T* attribute = new T(location);
+            T* uniform = new T(location);
 
             if (location != -1)
             {
-                m_Attributes.push_back(attribute);
+                m_Uniforms.push_back(uniform);
             }
 
-            return attribute;
+            return uniform;
         }
 
-        TextureMaterialAttribute* AddTextureAttribute(const std::string& name, bool createIfInvalid = true);
+        TextureUniform* AddTextureUniform(const std::string& name, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;
 
-        void CreateEngineAttributes();
-        void UpdateEngineAttributes(const glm::mat4& modelMatrix) const;
+        void CreateEngineUniforms();
+        void UpdateEngineUniforms(const glm::mat4& modelMatrix) const;
     };
 }

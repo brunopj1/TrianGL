@@ -30,12 +30,15 @@ namespace TGL
         void SetAsMainCamera();
 
     public:
+        glm::vec2 GetSize() const;
+
         float GetHorizontalSize() const;
         void SetHorizontalSize(float size, bool lock = false);
 
         float GetVerticalSize() const;
         void SetVerticalSize(float size, bool lock = false);
 
+        void LockSize(bool horizontally);
         bool IsSizeLockedHorizontally() const;
 
         float GetAspectRatio() const;

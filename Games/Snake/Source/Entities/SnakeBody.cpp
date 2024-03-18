@@ -34,7 +34,7 @@ void SnakeBody::Modify(const SnakeBodyType type, const glm::ivec2& frontDirectio
 
 void SnakeBody::UpdateTexture()
 {
-    // Find the correct texture
+    // Find the correct texture slice
 
     std::shared_ptr<TextureSlice> texture = nullptr;
 
@@ -52,12 +52,9 @@ void SnakeBody::UpdateTexture()
         texture = m_Texture->GetSlice(idx);
     }
 
-    m_TextureRenderer->GetMaterial()->As<DefaultMaterial>()->GetTextureAttr()->SetValue(texture);
+    m_TextureRenderer->GetMaterial()->As<DefaultMaterial>()->Texture->Value = texture;
 
     // Rotate the texture
-
-    //const int crossMoveDirection = m_BackDirection.x * m_FrontDirection.y - m_BackDirection.y * m_FrontDirection.x;
-    //if (crossMoveDirection > 0) GetTransform().SetScale({-1, 1});
 
     const float angle = (m_BackDirection.y == -1) * 180.0f - glm::sign(m_BackDirection.x) * 90.0f;
     GetTransform().SetRotationDeg(angle);

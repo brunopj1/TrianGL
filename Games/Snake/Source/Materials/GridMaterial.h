@@ -5,8 +5,8 @@
 class GridMaterial final : public TGL::Material
 {
 public:
-    TGL::Uint2MaterialAttribute* GridSize;
-    TGL::FloatMaterialAttribute* EdgeWidth;
+    TGL::Uint2Uniform* const GridSize;
+    TGL::FloatUniform* const EdgeWidth;
 
 public:
     GridMaterial();

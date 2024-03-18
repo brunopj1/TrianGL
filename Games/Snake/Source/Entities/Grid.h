@@ -20,10 +20,12 @@ public:
     glm::uvec2 GetSize() const;
     unsigned int GetCellCount() const;
 
-    void Resize(const glm::uvec2& size);
-
     Entity* GetCell(const glm::uvec2& position) const;
     void SetCell(const glm::uvec2& position, Entity* entity);
 
     std::optional<glm::ivec2> GetRandomFreeCell() const;
+
+public:
+    void Resize(const glm::uvec2& size);
+    void FocusCamera() const;
 };

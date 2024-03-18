@@ -13,27 +13,27 @@ using namespace TGL;
 // TODO add imgui overlay to control the game
 // TODO add a more fluid motion to the snake
 
+// TODO grid edge is inconsistent
+// TODO snake texture sometimes has weird bugs
+
 SnakeGameMode::SnakeGameMode()
 {
     m_Camera = SpawnEntity<Camera>(true);
-    m_WindowSize = Window::GetResolution();
+    m_WindowSize = {0, 0}; // Force the camera to focus on the grid
 
     auto textureParams = TextureParameters();
     textureParams.Filter = TextureFilterMode::Nearest;
-    textureParams.GenerateMipmaps = false;
 
     m_SpriteSheet = Texture::Load("Assets/Textures/sprite_sheet.png", textureParams);
     m_SpriteSheet->CreateSliceGrid({25, 25});
 
-    m_TickRate = m_TickTimer = 0.3f;
+    m_TickRate = m_TickTimer = 0.35f;
 
-    m_Grid = SpawnEntity<Grid>(glm::uvec2(7, 7));
+    m_Grid = SpawnEntity<Grid>(glm::uvec2(10, 10));
 
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 
     m_Apple = SpawnEntity<Apple>(m_Grid, m_SpriteSheet);
-
-    FocusCameraOnGrid();
 }
 
 void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
@@ -42,7 +42,7 @@ void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
 
     if (currentWindowSize != m_WindowSize)
     {
-        FocusCameraOnGrid();
+        m_Grid->FocusCamera();
     }
 
     m_WindowSize = currentWindowSize;
@@ -58,21 +58,4 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
 
         m_Snake->Move(m_Grid);
     }
-}
-
-void SnakeGameMode::FocusCameraOnGrid() const
-{
-    const float aspectRatio = m_Camera->GetAspectRatio();
-    const glm::uvec2 gridSize = m_Grid->GetSize();
-
-    if (aspectRatio > 1)
-    {
-        m_Camera->SetVerticalSize(gridSize.y + 0.5f);
-    }
-    else
-    {
-        m_Camera->SetHorizontalSize(gridSize.x + 0.5f);
-    }
-
-    m_Camera->GetTransform().SetPosition(glm::vec3(gridSize, 0) * 0.5f);
 }

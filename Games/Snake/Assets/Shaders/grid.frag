@@ -19,7 +19,5 @@ void main()
     
     float isGrid = 1 - bottomLeft.x * bottomLeft.y * topRight.x * topRight.y;
     
-    //float isGrid = min(pos.x, pos.y);
-    
     FragColor = vec4(vec3(0.0), isGrid);
 }
