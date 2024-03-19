@@ -135,7 +135,8 @@ void Application::Update()
 
 void Application::Render() const
 {
-    const Camera* camera = Camera::GetMainCamera();
+    Camera* camera = Camera::GetMainCamera();
+    camera->UpdateMatrices();
 
     const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);

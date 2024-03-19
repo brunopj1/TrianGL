@@ -7,6 +7,7 @@ namespace TGL
     class Camera final : public Entity
     {
     private:
+        friend class Application;
         friend class Window;
         friend class Material;
 
@@ -20,6 +21,11 @@ namespace TGL
 
     private:
         glm::vec3 m_BackgroundColor = {0.5f, 0.5f, 0.5f};
+
+    private:
+        glm::mat4 m_ViewMatrix;
+        glm::mat4 m_ProjectionMatrix;
+        glm::mat4 m_ProjectionViewMatrix;
 
     public:
         Camera(bool setAsMainCamera = false);
@@ -51,10 +57,10 @@ namespace TGL
         void SetAspectRatio(float aspectRatio);
 
     private:
-        glm::mat4 GetViewMatrix() const;
-        glm::mat4 GetProjectionMatrix() const;
-        glm::mat4 GetProjectionViewMatrix() const;
+        void UpdateMatrices();
 
-        // TODO update the matrix once per frame and save it in a member variable (and change the Renderable::Render method to const)
+        const glm::mat4& GetViewMatrix() const;
+        const glm::mat4& GetProjectionMatrix() const;
+        const glm::mat4& GetProjectionViewMatrix() const;
     };
 }

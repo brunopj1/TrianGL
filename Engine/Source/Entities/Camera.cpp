@@ -110,23 +110,38 @@ void Camera::SetAspectRatio(const float aspectRatio)
     m_AspectRatio = aspectRatio;
 }
 
-glm::mat4 Camera::GetViewMatrix() const
+void Camera::UpdateMatrices()
 {
-    // TODO use the transform rotation and scale
-    const glm::vec3 position = glm::vec3(GetTransform().GetPosition(), CAMERA_DEPTH * 0.5f);
-    constexpr glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-    constexpr glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    return lookAt(position, position + front, up);
-}
+    const auto transform = GetTransform();
 
-glm::mat4 Camera::GetProjectionMatrix() const
-{
+    // View matrix
+    const glm::vec3 position = glm::vec3(transform.GetPosition(), CAMERA_DEPTH * 0.5f);
+    const glm::vec3 up = glm::vec3(glm::sin(transform.GetRotationRad()), glm::cos(transform.GetRotationRad()), 0.0f);
+    constexpr glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
+
+    m_ViewMatrix = lookAt(position, position + front, up);
+
+    // Projection matrix
     const float halfSizeH = m_HorizontalSize / 2.0f;
     const float halfSizeV = halfSizeH / m_AspectRatio;
-    return glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, CAMERA_DEPTH);
+
+    m_ProjectionMatrix = glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, CAMERA_DEPTH);
+
+    // Projection view matrix
+    m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
 }
 
-glm::mat4 Camera::GetProjectionViewMatrix() const
+const glm::mat4& Camera::GetViewMatrix() const
 {
-    return GetProjectionMatrix() * GetViewMatrix();
+    return m_ViewMatrix;
+}
+
+const glm::mat4& Camera::GetProjectionMatrix() const
+{
+    return m_ProjectionMatrix;
+}
+
+const glm::mat4& Camera::GetProjectionViewMatrix() const
+{
+    return m_ProjectionViewMatrix;
 }
