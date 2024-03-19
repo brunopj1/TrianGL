@@ -40,11 +40,11 @@ void SnakeBody::UpdateTexture()
 
     if (m_Type == SnakeBodyType::Tail)
     {
-        texture = m_Texture->GetSlice(6);
+        texture = m_Texture->GetSlice(3);
     }
     else
     {
-        int idx = m_Type == SnakeBodyType::Head ? 0 : 3;
+        int idx = m_Type == SnakeBodyType::Head ? 0 : 4;
 
         const int crossMoveDirection = m_BackDirection.x * m_FrontDirection.y - m_BackDirection.y * m_FrontDirection.x;
         idx += crossMoveDirection < 0 ? 1 : crossMoveDirection > 0 ? 2 : 0;

@@ -36,17 +36,22 @@ TextureUniform* Material::AddTextureUniform(const std::string& name, const bool 
 {
     const int samplerLocation = m_Shader->GetUniformLocation(name);
     const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
+    const int resolutionLocation = m_Shader->GetUniformLocation(name + "Resolution");
 
-    if (samplerLocation == -1 && matrixLocation == -1 && !createIfInvalid)
+    const bool isValid = samplerLocation != -1 || matrixLocation != -1 || resolutionLocation != -1;
+
+    if (!isValid && !createIfInvalid)
     {
         return nullptr;
     }
 
+    const unsigned char slot = samplerLocation != -1 ? m_NextTextureSlot++ : 255;
+
     PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
 
-    TextureUniform* uniform = new TextureUniform(samplerLocation, matrixLocation, samplerLocation != -1 ? m_NextTextureSlot++ : 255);
+    TextureUniform* uniform = new TextureUniform(samplerLocation, matrixLocation, resolutionLocation, slot);
 
-    if (samplerLocation != -1 || matrixLocation != -1)
+    if (isValid)
     {
         m_Uniforms.push_back(uniform);
     }

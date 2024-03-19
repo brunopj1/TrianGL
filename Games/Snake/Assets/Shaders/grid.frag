@@ -1,23 +1,15 @@
 #version 430 core
 
-uniform sampler2D uMainTexture;
-
 uniform uvec2 uGridSize;
-uniform float uEdgeWidth;
 
-in vec2 TexCoord;
+in vec2 texCoord;
 
-out vec4 FragColor;
+out vec4 fragColor;
 
 void main()
 {
-    vec2 pos = TexCoord * (uGridSize + uEdgeWidth) - uEdgeWidth * 0.5;
-    pos = fract(pos);
-    
-    vec2 bottomLeft = step(uEdgeWidth * 0.5, pos);
-    vec2 topRight = 1 - step(1.0 - uEdgeWidth * 0.5, pos);
-    
-    float isGrid = 1 - bottomLeft.x * bottomLeft.y * topRight.x * topRight.y;
-    
-    FragColor = vec4(vec3(0.0), isGrid);
+    vec2 gridIndex = min(vec2(texCoord * uGridSize), uGridSize - 1);
+    uvec2 gridRemainder = uvec2(gridIndex) % 2;
+    float tint = 0.6 + 0.05 * ((gridRemainder.x + gridRemainder.y) % 2);
+    fragColor = vec4(vec3(tint), 1.0);
 }

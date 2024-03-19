@@ -96,13 +96,14 @@ namespace TGL
     {
     private:
         int m_MatrixLocation;
+        int m_ResoultionLocation;
         unsigned char m_Slot;
 
     public:
         std::shared_ptr<TextureBinding> Value;
 
     public:
-        TextureUniform(int samplerLocation, int matrixLocation, unsigned char slot);
+        TextureUniform(int samplerLocation, int matrixLocation, int resolutionLocation, unsigned char slot);
         ~TextureUniform() override = default;
 
     private:

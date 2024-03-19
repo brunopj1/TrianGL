@@ -7,6 +7,8 @@
 
 using namespace TGL;
 
+#define CAMERA_DEPTH 2000.0f
+
 Camera::Camera(const bool setAsMainCamera)
     : Entity(false)
 {
@@ -110,7 +112,8 @@ void Camera::SetAspectRatio(const float aspectRatio)
 
 glm::mat4 Camera::GetViewMatrix() const
 {
-    const glm::vec3 position = glm::vec3(GetTransform().GetPosition(), 1.0f);
+    // TODO use the transform rotation and scale
+    const glm::vec3 position = glm::vec3(GetTransform().GetPosition(), CAMERA_DEPTH * 0.5f);
     constexpr glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
     constexpr glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     return lookAt(position, position + front, up);
@@ -120,7 +123,7 @@ glm::mat4 Camera::GetProjectionMatrix() const
 {
     const float halfSizeH = m_HorizontalSize / 2.0f;
     const float halfSizeV = halfSizeH / m_AspectRatio;
-    return glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.1f, 100.0f);
+    return glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, CAMERA_DEPTH);
 }
 
 glm::mat4 Camera::GetProjectionViewMatrix() const

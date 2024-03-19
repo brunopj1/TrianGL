@@ -45,8 +45,8 @@
 - [X] Texture Renderer class
 - [X] Shader class (internal)
 - [X] Material class (abstract)
-- [X] Material Attribute class
-- [X] Material instances (using the same shader but different attributes)
+- [X] Material Uniform class
+- [X] Material instances (using the same shader but different uniforms)
 - [X] Add the default mesh
 - [X] Add the default material
 - [X] Implement automatic rendering
@@ -56,7 +56,8 @@
 - [X] Add a way to slice textures (texture sheet)
 - [X] Allow flipping the texture renderer (using the scale)
 - [ ] Implement View Frustum Culling
-- [ ] Validate the material attributes (repeated names, invalid type)
+- [ ] Add more engine material uniforms (window, camera, etc...)
+- [ ] Validate the material uniforms (repeated names, invalid type)
 - [ ] Add batch rendering (for the same material)
 - [ ] Use uniform buffers for the shaders
 

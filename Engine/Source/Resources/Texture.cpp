@@ -36,6 +36,11 @@ glm::mat4* TextureSlice::GetMatrix() const
     return &m_Texture->m_Slices[m_Index].TextureMatrix;
 }
 
+glm::uvec2 TextureSlice::GetResolution() const
+{
+    return m_Texture->m_Slices[m_Index].Resolution;
+}
+
 Texture::Texture(std::string filePath, const TextureParameters& parameters)
     : m_FilePath(std::move(filePath))
 {
@@ -70,11 +75,6 @@ std::string Texture::GetFilePath() const
 glm::uvec2 Texture::GetResolution() const
 {
     return m_Resolution;
-}
-
-bool Texture::HasTransparency() const
-{
-    return m_HasTransparency;
 }
 
 size_t Texture::SliceCount() const
@@ -188,7 +188,6 @@ void Texture::Load(const TextureParameters& parameters)
     }
 
     m_Resolution = {width, height};
-    m_HasTransparency = channels == 4;
 
     glGenTextures(1, &m_TextureId);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);

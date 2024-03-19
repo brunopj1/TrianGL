@@ -4,6 +4,7 @@
 #include "Entities/Snake.h"
 #include "Entities/Camera.h"
 #include "Components/TextureRenderer.h"
+#include "Core/InputSystem.h"
 #include "Core/Window.h"
 #include "Resources/Material.h"
 
@@ -13,9 +14,6 @@ using namespace TGL;
 // TODO add imgui overlay to control the game
 // TODO add a more fluid motion to the snake
 
-// TODO grid edge is inconsistent
-// TODO snake texture sometimes has weird bugs
-
 SnakeGameMode::SnakeGameMode()
 {
     m_Camera = SpawnEntity<Camera>(true);
@@ -23,13 +21,14 @@ SnakeGameMode::SnakeGameMode()
 
     auto textureParams = TextureParameters();
     textureParams.Filter = TextureFilterMode::Nearest;
+    textureParams.GenerateMipmaps = false;
 
     m_SpriteSheet = Texture::Load("Assets/Textures/sprite_sheet.png", textureParams);
     m_SpriteSheet->CreateSliceGrid({25, 25});
 
-    m_TickRate = m_TickTimer = 0.35f;
+    m_TickRate = m_TickTimer = 0.25f;
 
-    m_Grid = SpawnEntity<Grid>(glm::uvec2(10, 10));
+    m_Grid = SpawnEntity<Grid>(glm::uvec2(15));
 
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 

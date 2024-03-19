@@ -25,7 +25,9 @@ namespace TGL
     private:
         static void Unbind(unsigned char slot);
         virtual void Bind(unsigned char slot) const = 0;
+
         virtual glm::mat4* GetMatrix() const = 0;
+        virtual glm::uvec2 GetResolution() const = 0;
     };
 
     // Texture slice struct and class
@@ -63,7 +65,9 @@ namespace TGL
 
     private:
         void Bind(unsigned char slot) const override;
+
         glm::mat4* GetMatrix() const override;
+        glm::uvec2 GetResolution() const override;
     };
 
     // Main class-
@@ -82,7 +86,6 @@ namespace TGL
         std::string m_FilePath;
         unsigned int m_TextureId = 0;
         glm::uvec2 m_Resolution = {0, 0};
-        bool m_HasTransparency = false;
 
     private:
         std::vector<TextureSliceInfo> m_Slices;
@@ -96,8 +99,7 @@ namespace TGL
 
     public:
         std::string GetFilePath() const;
-        glm::uvec2 GetResolution() const;
-        bool HasTransparency() const;
+        glm::uvec2 GetResolution() const override; // Also used by TextureBinding
 
     public:
         size_t SliceCount() const;

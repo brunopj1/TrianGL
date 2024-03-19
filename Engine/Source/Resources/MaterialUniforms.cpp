@@ -99,8 +99,8 @@ void Mat4Uniform::BindInternal() const
     glUniformMatrix4fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }
 
-TextureUniform::TextureUniform(const int samplerLocation, const int matrixLocation, const unsigned char slot)
-    : MaterialUniform(samplerLocation), m_MatrixLocation(matrixLocation), m_Slot(slot), Value(nullptr) {}
+TextureUniform::TextureUniform(const int samplerLocation, const int matrixLocation, const int resolutionLocation, const unsigned char slot)
+    : MaterialUniform(samplerLocation), m_MatrixLocation(matrixLocation), m_ResoultionLocation(resolutionLocation), m_Slot(slot), Value(nullptr) {}
 
 bool TextureUniform::IsValid() const
 {
@@ -133,5 +133,10 @@ void TextureUniform::BindInternal() const
         {
             glUniformMatrix4fv(m_MatrixLocation, 1, GL_FALSE, &glm::mat4(1.0f)[0][0]);
         }
+    }
+
+    if (m_ResoultionLocation != -1)
+    {
+        glUniform2uiv(m_ResoultionLocation, 1, &Value->GetResolution()[0]);
     }
 }
