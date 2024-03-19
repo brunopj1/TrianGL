@@ -2,11 +2,12 @@
 
 #include "Texture.h"
 #include "glad/glad.h"
+#include "Internal/Shader.h"
 
 using namespace TGL;
 
-MaterialUniform::MaterialUniform(const int location)
-    : m_Location(location)
+MaterialUniform::MaterialUniform(const Shader* shader, const std::string& name)
+    : m_Location(shader->GetUniformLocation(name))
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::MaterialUniform);
 }
@@ -99,12 +100,16 @@ void Mat4Uniform::BindInternal() const
     glUniformMatrix4fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }
 
-TextureUniform::TextureUniform(const int samplerLocation, const int matrixLocation, const int resolutionLocation, const unsigned char slot)
-    : MaterialUniform(samplerLocation), m_MatrixLocation(matrixLocation), m_ResoultionLocation(resolutionLocation), m_Slot(slot), Value(nullptr) {}
+TextureUniform::TextureUniform(const Shader* shader, const std::string& name)
+    : MaterialUniform(shader, name),
+      m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")),
+      m_ResoultionLocation(shader->GetUniformLocation(name + "Resolution")),
+      m_Slot(0), Value(nullptr) // The slot is updated by the spawner
+{}
 
 bool TextureUniform::IsValid() const
 {
-    return m_Location != -1 || m_MatrixLocation != -1;
+    return m_Location != -1 || m_MatrixLocation != -1 || m_ResoultionLocation != -1;
 }
 
 void TextureUniform::BindInternal() const

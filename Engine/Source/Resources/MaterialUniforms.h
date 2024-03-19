@@ -7,6 +7,7 @@
 namespace TGL
 {
     // Forward declaration
+    class Shader;
     class TextureBinding;
 
     // Base class
@@ -22,7 +23,7 @@ namespace TGL
         int m_Location;
 
     protected:
-        MaterialUniform(int location);
+        MaterialUniform(const Shader* shader, const std::string& name);
         virtual ~MaterialUniform();
 
     public:
@@ -41,19 +42,19 @@ namespace TGL
 
     // @formatter:off
     
-    #define MATERIAL_UNIFORM_IMPLEMENTATION(name, type, val) \
-        class name final : public MaterialUniform            \
-        {                                                    \
-        public:                                              \
-            type Value;                                      \
-                                                             \
-        public:                                              \
-            name(const int location)                         \
-                : MaterialUniform(location), Value(val) {}   \
-            ~name() override = default;                      \
-                                                             \
-        private:                                             \
-            void BindInternal() const override;              \
+    #define MATERIAL_UNIFORM_IMPLEMENTATION(className, type, val)    \
+        class className final : public MaterialUniform               \
+        {                                                            \
+        public:                                                      \
+            type Value;                                              \
+                                                                     \
+        public:                                                      \
+            className(const Shader* shader, const std::string& name) \
+                : MaterialUniform(shader, name), Value(val) {}       \
+            ~className() override = default;                         \
+                                                                     \
+        private:                                                     \
+            void BindInternal() const override;                      \
         }
 
     // @formatter:on
@@ -95,6 +96,9 @@ namespace TGL
     class TextureUniform final : public MaterialUniform
     {
     private:
+        friend class Material;
+
+    private:
         int m_MatrixLocation;
         int m_ResoultionLocation;
         unsigned char m_Slot;
@@ -103,7 +107,7 @@ namespace TGL
         std::shared_ptr<TextureBinding> Value;
 
     public:
-        TextureUniform(int samplerLocation, int matrixLocation, int resolutionLocation, unsigned char slot);
+        TextureUniform(const Shader* shader, const std::string& name);
         ~TextureUniform() override = default;
 
     private:

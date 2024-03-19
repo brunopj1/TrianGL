@@ -10,6 +10,8 @@ namespace TGL
     private:
         friend class ResourceManager;
         friend class Material;
+        friend class MaterialUniform;
+        friend class TextureUniform;
         friend struct ShaderHash;
         friend struct ShaderEqual;
 

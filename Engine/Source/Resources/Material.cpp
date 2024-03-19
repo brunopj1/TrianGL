@@ -31,34 +31,6 @@ Material::~Material()
 void Material::OnRenderSetup() const
 {}
 
-// TODO try to use the same template specialization for this implementation
-TextureUniform* Material::AddTextureUniform(const std::string& name, const bool createIfInvalid)
-{
-    const int samplerLocation = m_Shader->GetUniformLocation(name);
-    const int matrixLocation = m_Shader->GetUniformLocation(name + "Matrix");
-    const int resolutionLocation = m_Shader->GetUniformLocation(name + "Resolution");
-
-    const bool isValid = samplerLocation != -1 || matrixLocation != -1 || resolutionLocation != -1;
-
-    if (!isValid && !createIfInvalid)
-    {
-        return nullptr;
-    }
-
-    const unsigned char slot = samplerLocation != -1 ? m_NextTextureSlot++ : 255;
-
-    PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
-
-    TextureUniform* uniform = new TextureUniform(samplerLocation, matrixLocation, resolutionLocation, slot);
-
-    if (isValid)
-    {
-        m_Uniforms.push_back(uniform);
-    }
-
-    return uniform;
-}
-
 void Material::Use(const glm::mat4& modelMatrix) const
 {
     m_Shader->Use();

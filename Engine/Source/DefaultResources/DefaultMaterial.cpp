@@ -4,7 +4,7 @@ using namespace TGL;
 
 DefaultMaterial::DefaultMaterial()
     : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag", true),
-      Texture(AddTextureUniform("uTexture")),
+      Texture(AddUniform<TextureUniform>("uTexture")),
       Color(AddUniform<Float4Uniform>("uColor")),
       IsTextureValid(AddUniform<IntUniform>("uIsTextureValid"))
 {

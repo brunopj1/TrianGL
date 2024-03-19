@@ -61,29 +61,32 @@ namespace TGL
         }
 
     protected:
-        template <typename T, typename = std::enable_if_t<!std::is_same_v<MaterialUniform, T> && std::is_base_of_v<MaterialUniform, T> && std::is_constructible_v<T, int>>>
+        template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
         T* AddUniform(const std::string& name, const bool createIfInvalid = true)
         {
-            const int location = m_Shader->GetUniformLocation(name);
-
-            if (location == -1 && !createIfInvalid)
-            {
-                return nullptr;
-            }
-
             PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
 
-            T* uniform = new T(location);
+            T* uniform = new T(m_Shader, name);
 
-            if (location != -1)
+            if constexpr (std::is_same_v<T, TextureUniform>)
+            {
+                if (uniform->m_Location != -1) uniform->m_Slot = m_NextTextureSlot++;
+            }
+
+            if (uniform->IsValid())
             {
                 m_Uniforms.push_back(uniform);
+            }
+            else if (!createIfInvalid)
+            {
+                PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
+
+                delete uniform;
+                uniform = nullptr;
             }
 
             return uniform;
         }
-
-        TextureUniform* AddTextureUniform(const std::string& name, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;
