@@ -66,7 +66,6 @@
 - [X] Create a GameMode class
 - [X] Create an Entity class
 - [X] Create a Component class
-- [ ] Create a System class (GameMode attachable)
 - [ ] Create a Scene class
 - [X] Create Instancing methods and automatic update
 - [X] Allow passing arguments to the instancing methods (to match the constructor)

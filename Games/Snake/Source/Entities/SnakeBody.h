@@ -31,7 +31,9 @@ public:
     glm::ivec2 GetBackDirection() const;
 
 public:
-    void Modify(SnakeBodyType type, const glm::ivec2& frontDirection = {0, 0}, const glm::ivec2& backDirection = {0, 0});
+    void SetAsHead(const glm::ivec2& direction);
+    void SetAsBody();
+    void SetAsTail();
 
 private:
     void UpdateTexture();

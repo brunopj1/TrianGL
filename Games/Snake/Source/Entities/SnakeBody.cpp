@@ -23,11 +23,25 @@ glm::ivec2 SnakeBody::GetBackDirection() const
     return m_BackDirection;
 }
 
-void SnakeBody::Modify(const SnakeBodyType type, const glm::ivec2& frontDirection, const glm::ivec2& backDirection)
+void SnakeBody::SetAsHead(const glm::ivec2& direction)
 {
-    m_Type = type;
-    if (frontDirection != glm::ivec2(0)) m_FrontDirection = frontDirection;
-    if (backDirection != glm::ivec2(0)) m_BackDirection = backDirection;
+    m_Type = SnakeBodyType::Head;
+    m_FrontDirection = direction;
+
+    UpdateTexture();
+}
+
+void SnakeBody::SetAsBody()
+{
+    m_Type = SnakeBodyType::Body;
+
+    UpdateTexture();
+}
+
+void SnakeBody::SetAsTail()
+{
+    m_Type = SnakeBodyType::Tail;
+    m_BackDirection = m_FrontDirection;
 
     UpdateTexture();
 }

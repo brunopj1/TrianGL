@@ -29,7 +29,7 @@ void Snake::OnUpdate(const float deltaTime)
     if (direction != glm::ivec2(0) && direction != m_MoveDirection && direction != -m_BodyDirection)
     {
         m_MoveDirection = direction;
-        m_Body.front()->Modify(SnakeBodyType::Head, m_MoveDirection);
+        m_Body.front()->SetAsHead(m_MoveDirection);
     }
 }
 
@@ -75,7 +75,8 @@ void Snake::SpawnHead(Grid* grid, const glm::ivec2& position)
 
     if (const auto bodySize = m_Body.size(); bodySize > 1)
     {
-        m_Body[1]->Modify(bodySize == 2 ? SnakeBodyType::Tail : SnakeBodyType::Body);
+        if (bodySize == 2) m_Body[1]->SetAsTail();
+        else m_Body[1]->SetAsBody();
     }
 }
 
@@ -104,11 +105,5 @@ void Snake::DestroyTail(Grid* grid, const SnakeBody* firstBody)
 
 void Snake::UpdateTail() const
 {
-    const auto bodySize = m_Body.size();
-
-    const SnakeBody* preTailEnd = m_Body[bodySize - 2];
-    const glm::ivec2 newDirection = preTailEnd->GetBackDirection();
-
-    SnakeBody* tailEnd = m_Body[bodySize - 1];
-    tailEnd->Modify(SnakeBodyType::Tail, newDirection, newDirection);
+    m_Body.back()->SetAsTail();
 }
