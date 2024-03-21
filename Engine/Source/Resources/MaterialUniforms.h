@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
+#include <string>
 #include <memory>
 
 namespace TGL

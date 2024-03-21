@@ -5,6 +5,7 @@
 #include "Entities/Camera.h"
 #include "Materials/GridMaterial.h"
 #include "glm/glm.hpp"
+#include <stdexcept>
 
 using namespace TGL;
 
