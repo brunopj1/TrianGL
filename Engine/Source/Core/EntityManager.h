@@ -3,12 +3,14 @@
 #include <vector>
 #include <unordered_map>
 
-#include "Game/Base/ImGuiMenuRender.h"
+#include "Game/ImGui/ImGuiMenuRender.h"
 #include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SpawnerMacros.hpp"
 
 namespace TGL
 {
     // Forward declarations
+    class Object;
     class Updatable;
     class Renderable;
 
@@ -89,5 +91,9 @@ namespace TGL
 #ifdef DEBUG
         static void AddToRenderQueue(ImGuiMenuRenderer* renderer, std::vector<ImGuiMenuRenderer*>& queue);
 #endif
+
+    private:
+        static void StoreObjectCallbacks(Object* object);
+        static void RemoveObjectCallbacks(Object* object);
     };
 }

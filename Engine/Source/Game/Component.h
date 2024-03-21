@@ -10,7 +10,7 @@ namespace TGL
     template <typename T, typename C>
     class LazyPtr;
 
-    class Component : public Updatable
+    class Component : public Object, public Updatable
     {
     private:
         friend class EntityManager;
@@ -23,7 +23,6 @@ namespace TGL
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
-        uint64_t m_Id = 0;
         Entity* m_Parent = nullptr;
 
     protected:

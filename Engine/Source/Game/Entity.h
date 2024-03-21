@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Object.h"
 #include "Base/Updatable.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
@@ -15,10 +16,9 @@ namespace TGL
     template <typename T, typename C>
     class LazyPtr;
 
-    class Entity : public Updatable
+    class Entity : public Object, public Updatable
     {
     private:
-        friend class EntityManager;
         friend class Component;
 
         template <typename T, typename C>
@@ -28,7 +28,6 @@ namespace TGL
         DECLARE_SPAWNER_USAGE_VAR();
 
     private:
-        uint64_t m_Id = 0;
         Transform m_Transform;
         std::vector<Component*> m_Components;
 

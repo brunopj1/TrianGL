@@ -4,12 +4,12 @@
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Game/Base/ImGuiMenuRender.h"
 #include "Game/Base/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
+#include "Game/ImGui/ImGuiRenderer.h"
+#include "Game/ImGui/ImGuiMenuRender.h"
 
 #ifdef DEBUG
-#include "Game/Base/ImGuiRenderer.h"
 #include <imgui.h>
 #endif
 
@@ -93,34 +93,16 @@ void EntityManager::SetGameMode(GameMode* gameMode)
 
     s_Instance->m_GameMode = gameMode;
 
-#ifdef DEBUG
-
     if (gameMode != nullptr)
     {
-        if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(gameMode); imguiRenderer != nullptr)
-        {
-            s_Instance->m_ImGuiRenderQueue.push_back(imguiRenderer);
-        }
+        gameMode->m_Id = s_Instance->m_NextId++;
 
-        if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(gameMode); imguiMenuRenderer != nullptr)
-        {
-            s_Instance->m_ImGuiMenuRenderQueue.push_back(imguiMenuRenderer);
-        }
+        StoreObjectCallbacks(gameMode);
     }
     else
     {
-        if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(gameMode); imguiRenderer != nullptr)
-        {
-            std::erase(s_Instance->m_ImGuiRenderQueue, imguiRenderer);
-        }
-
-        if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(gameMode); imguiMenuRenderer != nullptr)
-        {
-            std::erase(s_Instance->m_ImGuiMenuRenderQueue, imguiMenuRenderer);
-        }
+        RemoveObjectCallbacks(s_Instance->m_GameMode);
     }
-
-#endif
 }
 
 void EntityManager::AddEntity(Entity* entity)
@@ -134,17 +116,7 @@ void EntityManager::AddEntity(Entity* entity)
     AddToQueue(entity, s_Instance->m_OnStartQueue);
     AddToQueue(entity, s_Instance->m_OnUpdateQueue);
 
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(entity); imguiRenderer != nullptr)
-    {
-        s_Instance->m_ImGuiRenderQueue.push_back(imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(entity); imguiMenuRenderer != nullptr)
-    {
-        AddToRenderQueue(imguiMenuRenderer, s_Instance->m_ImGuiMenuRenderQueue);
-    }
-#endif
+    StoreObjectCallbacks(entity);
 }
 
 Entity* EntityManager::GetEntity(const uint64_t id)
@@ -165,17 +137,7 @@ bool EntityManager::RemoveEntity(Entity* entity)
     std::erase(s_Instance->m_OnStartQueue, entity);
     std::erase(s_Instance->m_OnUpdateQueue, entity);
 
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(entity); imguiRenderer != nullptr)
-    {
-        std::erase(s_Instance->m_ImGuiRenderQueue, imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(entity); imguiMenuRenderer != nullptr)
-    {
-        std::erase(s_Instance->m_ImGuiMenuRenderQueue, imguiMenuRenderer);
-    }
-#endif
+    RemoveObjectCallbacks(entity);
 
     return true;
 }
@@ -191,22 +153,7 @@ void EntityManager::AddComponent(Component* component)
     AddToQueue(component, s_Instance->m_OnStartQueue);
     AddToQueue(component, s_Instance->m_OnUpdateQueue);
 
-    if (const auto renderable = dynamic_cast<Renderable*>(component); renderable != nullptr)
-    {
-        s_Instance->m_RenderQueue.push_back(renderable);
-    }
-
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(component); imguiRenderer != nullptr)
-    {
-        s_Instance->m_ImGuiRenderQueue.push_back(imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(component); imguiMenuRenderer != nullptr)
-    {
-        AddToRenderQueue(imguiMenuRenderer, s_Instance->m_ImGuiMenuRenderQueue);
-    }
-#endif
+    StoreObjectCallbacks(component);
 }
 
 Component* EntityManager::GetComponent(const uint64_t id)
@@ -227,22 +174,7 @@ bool EntityManager::RemoveComponent(Component* component)
     std::erase(s_Instance->m_OnStartQueue, component);
     std::erase(s_Instance->m_OnUpdateQueue, component);
 
-    if (const auto renderable = dynamic_cast<Renderable*>(component); renderable != nullptr)
-    {
-        std::erase(s_Instance->m_RenderQueue, renderable);
-    }
-
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(component); imguiRenderer != nullptr)
-    {
-        std::erase(s_Instance->m_ImGuiRenderQueue, imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(component); imguiMenuRenderer != nullptr)
-    {
-        s_Instance->m_ImGuiMenuRenderQueue.push_back(imguiMenuRenderer);
-    }
-#endif
+    RemoveObjectCallbacks(component);
 
     return true;
 }
@@ -317,3 +249,51 @@ void EntityManager::AddToRenderQueue(ImGuiMenuRenderer* renderer, std::vector<Im
 }
 
 #endif
+
+void EntityManager::StoreObjectCallbacks(Object* object)
+{
+    // Renderable
+
+    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
+    {
+        s_Instance->m_RenderQueue.push_back(renderable);
+    }
+
+    // ImGui Renderer
+
+#ifdef DEBUG
+    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(object); imguiRenderer != nullptr)
+    {
+        s_Instance->m_ImGuiRenderQueue.push_back(imguiRenderer);
+    }
+
+    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(object); imguiMenuRenderer != nullptr)
+    {
+        AddToRenderQueue(imguiMenuRenderer, s_Instance->m_ImGuiMenuRenderQueue);
+    }
+#endif
+}
+
+void EntityManager::RemoveObjectCallbacks(Object* object)
+{
+    // Renderable
+
+    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
+    {
+        std::erase(s_Instance->m_RenderQueue, renderable);
+    }
+
+    // ImGui Renderer
+
+#ifdef DEBUG
+    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(object); imguiRenderer != nullptr)
+    {
+        std::erase(s_Instance->m_ImGuiRenderQueue, imguiRenderer);
+    }
+
+    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(object); imguiMenuRenderer != nullptr)
+    {
+        std::erase(s_Instance->m_ImGuiMenuRenderQueue, imguiMenuRenderer);
+    }
+#endif
+}

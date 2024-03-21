@@ -7,7 +7,7 @@
 
 namespace TGL
 {
-    class GameMode
+    class GameMode : public Object
     {
     private:
         friend class Application;
@@ -18,7 +18,7 @@ namespace TGL
 
     public:
         GameMode();
-        virtual ~GameMode();
+        ~GameMode() override;
 
     public:
         virtual void OnStart();
