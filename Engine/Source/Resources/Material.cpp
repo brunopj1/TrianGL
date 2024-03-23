@@ -9,7 +9,7 @@ using namespace TGL;
 
 Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Material);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Material);
 
     m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
 
@@ -20,12 +20,7 @@ Material::~Material()
 {
     ResourceManager::UnloadShader(m_Shader);
 
-    for (const auto uniform : m_Uniforms)
-    {
-        PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
-
-        delete uniform;
-    }
+    ResourceManager::UnloadMaterialUniforms(this);
 }
 
 void Material::OnRenderSetup() const

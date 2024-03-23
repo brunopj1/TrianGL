@@ -21,70 +21,70 @@ InputSystem::~InputSystem()
 
 bool InputSystem::IsKeyDown(const KeyCode key)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_KeysDown.contains(key);
 }
 
 bool InputSystem::WasKeyPressed(const KeyCode key)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_KeysPressedThisFrame.contains(key);
 }
 
 bool InputSystem::WasKeyRepeated(const KeyCode key)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_KeysRepeatedThisFrame.contains(key);
 }
 
 bool InputSystem::WasKeyReleased(const KeyCode key)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_KeysReleasedThisFrame.contains(key);
 }
 
 bool InputSystem::IsMouseButtonDown(const MouseButton button)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseButtonsDown.contains(button);
 }
 
 bool InputSystem::WasMouseButtonPressed(const MouseButton button)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseButtonsPressedThisFrame.contains(button);
 }
 
 bool InputSystem::WasMouseButtonReleased(const MouseButton button)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseButtonsReleasedThisFrame.contains(button);
 }
 
 glm::ivec2 InputSystem::GetMousePosition()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MousePosition;
 }
 
 glm::ivec2 InputSystem::GetMouseDelta()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseDelta;
 }
 
 void InputSystem::SetMousePosition(const glm::ivec2 position)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     glfwSetCursorPos(s_Instance->m_WindowPtr, position.x, position.y);
     s_Instance->m_MousePosition = position;
@@ -92,21 +92,21 @@ void InputSystem::SetMousePosition(const glm::ivec2 position)
 
 int InputSystem::GetMouseScroll()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseScroll;
 }
 
 MouseMode InputSystem::GetMouseMode()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_MouseMode;
 }
 
 void InputSystem::SetMouseMode(MouseMode mode)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::InputSystem);
+    ASSERT_SINGLETON_INITIALIZED();
 
     const int glfwMode = static_cast<int>(mode);
     glfwSetInputMode(s_Instance->m_WindowPtr, GLFW_CURSOR, glfwMode);

@@ -2,13 +2,14 @@
 
 #include "Internal/Shader.h"
 #include "MaterialUniforms.h"
+#include "Core/ResourceManager.h"
 #include "Util/Macros/MaterialMacros.hpp"
 #include "Util/Macros/SpawnerMacros.hpp"
 #include <memory>
 #include <string>
 #include <vector>
 
-// Forward declarat
+// Forward declarations
 namespace TGL
 {
     class Material : public std::enable_shared_from_this<Material>
@@ -16,9 +17,6 @@ namespace TGL
     private:
         friend class ResourceManager;
         friend class TextureRenderer;
-
-    private:
-        DECLARE_SPAWNER_USAGE_VAR();
 
     private:
         Shader* m_Shader;
@@ -53,39 +51,14 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
         static std::shared_ptr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            PREPARE_SPAWNER_USAGE(TGL::Material);
-
-            std::shared_ptr<T> instance = std::make_shared<T>(std::forward<Args>(args)...);
-
-            return instance;
+            return ResourceManager::LoadMaterial<T>(std::forward<Args>(args)...);
         }
 
     protected:
         template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
         T* AddUniform(const std::string& name, const bool createIfInvalid = true)
         {
-            PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
-
-            T* uniform = new T(m_Shader, name);
-
-            if constexpr (std::is_same_v<T, TextureUniform>)
-            {
-                if (uniform->m_Location != -1) uniform->m_Slot = m_NextTextureSlot++;
-            }
-
-            if (uniform->IsValid())
-            {
-                m_Uniforms.push_back(uniform);
-            }
-            else if (!createIfInvalid)
-            {
-                PREPARE_SPAWNER_USAGE(TGL::MaterialUniform);
-
-                delete uniform;
-                uniform = nullptr;
-            }
-
-            return uniform;
+            return ResourceManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
         }
 
     private:

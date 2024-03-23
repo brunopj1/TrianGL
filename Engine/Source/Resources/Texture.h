@@ -3,9 +3,7 @@
 #include "TextureParameters.hpp"
 #include "glm/mat2x2.hpp"
 #include "glm/vec2.hpp"
-#include "Util/Macros/SpawnerMacros.hpp"
 #include <memory>
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -53,9 +51,6 @@ namespace TGL
         friend class Texture;
 
     private:
-        DECLARE_SPAWNER_USAGE_VAR();
-
-    private:
         std::shared_ptr<Texture> m_Texture;
         int m_Index;
 
@@ -80,9 +75,6 @@ namespace TGL
         friend class TextureUniform;
 
     private:
-        DECLARE_SPAWNER_USAGE_VAR();
-
-    private:
         std::string m_FilePath;
         unsigned int m_TextureId = 0;
         glm::uvec2 m_Resolution = {0, 0};
@@ -91,11 +83,11 @@ namespace TGL
         std::vector<TextureSliceInfo> m_Slices;
 
     public:
-        Texture(std::string filePath, const TextureParameters& parameters = {});
+        Texture(std::string filePath);
         ~Texture() override;
 
     public:
-        static std::shared_ptr<Texture> Load(std::string filePath, const TextureParameters& parameters = {});
+        static std::shared_ptr<Texture> Load(const std::string& filePath, const TextureParameters& parameters = {});
 
     public:
         std::string GetFilePath() const;
@@ -115,7 +107,7 @@ namespace TGL
         void CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset);
 
     private:
-        void Load(const TextureParameters& parameters);
+        void Setup(const TextureParameters& parameters);
         void Free();
 
     private:

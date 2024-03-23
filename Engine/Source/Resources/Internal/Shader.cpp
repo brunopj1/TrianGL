@@ -14,12 +14,12 @@ using namespace TGL;
 Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
     : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
 {
-    // Load() and Free() cannot be called in the constructor and destructor
+    // Setup() and Free() cannot be called in the constructor and destructor
     // because sometimes we create fake Shader objects to acess the unordered_map
     // These methods are called by the TGL::ResourceManager
 }
 
-void Shader::Load()
+void Shader::Setup()
 {
     m_VertexShaderId = CompileShader(m_VertexShader, GL_VERTEX_SHADER);
     m_FragmentShaderId = CompileShader(m_FragmentShader, GL_FRAGMENT_SHADER);

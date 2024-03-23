@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "glm/glm.hpp"
-#include "Util/Macros/SpawnerMacros.hpp"
 #include <string>
 #include <memory>
 
@@ -15,10 +14,8 @@ namespace TGL
     class MaterialUniform
     {
     private:
+        friend class ResourceManager;
         friend class Material;
-
-    private:
-        DECLARE_SPAWNER_USAGE_VAR();
 
     protected:
         int m_Location;
@@ -97,7 +94,7 @@ namespace TGL
     class TextureUniform final : public MaterialUniform
     {
     private:
-        friend class Material;
+        friend class ResourceManager;
 
     private:
         int m_MatrixLocation;

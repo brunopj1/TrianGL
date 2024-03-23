@@ -5,6 +5,20 @@
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
 - [ ] Implement a sound system
 
+## Github wiki
+
+- [ ] Add a useful readme file
+- [ ] Add a wiki with the engine documentation
+- [ ] Explain how to create a game (create the Application, set the game mode, etc...)
+- [ ] Explain the Game classes and how to create / destroy them
+- [ ] Explain that the game mode should not delete anything in the destructor
+- [ ] Explain how the resources work (talk about the shared pointers)
+- [ ] Explain the public core systems (Clock, Input, Window, etc...)
+- [ ] Explain the existing entities and components (Camera, Texture Renderer, etc...)
+- [ ] Explain the lazy pointers and how to use them
+- [ ] Explain how to render ImGui windows (and say that it is debug only)
+- [ ] Add every new feature to the wiki
+
 ## General
 
 - [X] Add a single exception for when the engine is not initialized

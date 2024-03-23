@@ -7,12 +7,12 @@ using namespace TGL;
 Component::Component(const bool shouldUpdate)
     : Updatable(shouldUpdate)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Component);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
 }
 
 Component::~Component()
 {
-    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::Component);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Component);
 }
 
 Entity* Component::GetParent() const
@@ -22,11 +22,5 @@ Entity* Component::GetParent() const
 
 void Component::Detach()
 {
-    if (const bool isValid = EntityManager::RemoveComponent(this); !isValid) return;
-
-    std::erase(m_Parent->m_Components, this);
-
-    PREPARE_SPAWNER_USAGE(TGL::Component);
-
-    delete this;
+    EntityManager::DestroyComponent(this);
 }

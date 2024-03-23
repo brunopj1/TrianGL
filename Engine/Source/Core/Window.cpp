@@ -23,14 +23,14 @@ Window::Window(std::string title, const glm::ivec2 position, const glm::uvec2 re
 
 bool Window::IsFullscreen()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_Fullscreen;
 }
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     if (fullscreen == s_Instance->m_Fullscreen) return;
 
@@ -47,14 +47,14 @@ void Window::SetFullscreen(const bool fullscreen)
 
 std::string Window::GetTitle()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_Title;
 }
 
 void Window::SetTitle(const std::string& title)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     s_Instance->m_Title = title;
     glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
@@ -62,14 +62,14 @@ void Window::SetTitle(const std::string& title)
 
 glm::ivec2 Window::GetPosition()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_Position;
 }
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     // m_Position is updated in the callback
     glfwSetWindowPos(s_Instance->m_WindowPtr, position.x, position.y);
@@ -77,14 +77,14 @@ void Window::SetPosition(const glm::ivec2 position)
 
 glm::uvec2 Window::GetResolution()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     if (resolution.x == 0 || resolution.y == 0)
     {
@@ -97,21 +97,21 @@ void Window::SetResolution(const glm::uvec2 resolution)
 
 float Window::GetAspectRatio()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_AspectRatio;
 }
 
 bool Window::IsVsync()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Window);
+    ASSERT_SINGLETON_INITIALIZED();
 
     s_Instance->m_Vsync = vsync;
     glfwSwapInterval(vsync);

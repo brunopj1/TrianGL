@@ -62,7 +62,7 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
         void SetGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            GameMode::CreateGameMode<T>(std::forward<Args>(args)...);
+            EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
         }
     };
 }

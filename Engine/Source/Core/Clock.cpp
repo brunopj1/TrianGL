@@ -43,35 +43,35 @@ float Clock::Update()
 
 float Clock::GetTotalTime()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_TotalTime;
 }
 
 float Clock::GetDeltaTime()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_DeltaTime;
 }
 
 unsigned Clock::GetFrameCount()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_TotalFrameCount;
 }
 
 unsigned Clock::GetFrameRate()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_FrameRate;
 }
 
 bool Clock::IsNewSecond()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::Clock);
+    ASSERT_SINGLETON_INITIALIZED();
 
     return s_Instance->m_IsNewSecond;
 }

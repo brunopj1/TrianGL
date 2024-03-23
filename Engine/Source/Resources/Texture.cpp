@@ -5,7 +5,6 @@
 #include "Core/ResourceManager.h"
 #include "Exceptions/Common/FileNotFoundException.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include "Util/Macros/SingletonMacros.hpp"
 
 using namespace TGL;
 
@@ -22,7 +21,7 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
 TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
     : m_Texture(std::move(texture)), m_Index(index)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::TextureSlice);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, TextureSlice);
 }
 
 void TextureSlice::Bind(const unsigned char slot) const
@@ -41,30 +40,20 @@ glm::uvec2 TextureSlice::GetResolution() const
     return m_Texture->m_Slices[m_Index].Resolution;
 }
 
-Texture::Texture(std::string filePath, const TextureParameters& parameters)
+Texture::Texture(std::string filePath)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::Texture);
-
-    Load(parameters);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Texture);
 }
 
 Texture::~Texture()
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
-
-    Free();
+    ResourceManager::UnloadTexture(this);
 }
 
-std::shared_ptr<Texture> Texture::Load(std::string filePath, const TextureParameters& parameters)
+std::shared_ptr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
 {
-    ASSERT_SINGLETON_INITIALIZED(TGL::ResourceManager);
-
-    PREPARE_SPAWNER_USAGE(TGL::Texture);
-
-    std::shared_ptr<Texture> instance = std::make_shared<Texture>(std::move(filePath), parameters);
-
-    return instance;
+    return ResourceManager::LoadTexture(filePath, parameters);
 }
 
 std::string Texture::GetFilePath() const
@@ -89,9 +78,7 @@ std::shared_ptr<TextureSlice> Texture::GetSlice(const unsigned int index)
         throw std::runtime_error("Invalid slice index");
     }
 
-    PREPARE_SPAWNER_USAGE(TGL::TextureSlice);
-
-    return std::make_shared<TextureSlice>(shared_from_this(), index);
+    return ResourceManager::CreateTextureSlice(this, index);
 }
 
 int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
@@ -104,7 +91,7 @@ int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 
     CreateSliceInternal(resolution, offset);
 
-    return m_Slices.size() - 1;
+    return static_cast<int>(m_Slices.size()) - 1;
 }
 
 std::shared_ptr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
@@ -150,7 +137,7 @@ std::vector<std::shared_ptr<TextureSlice>> Texture::CreateAndGetSliceGrid(const 
     std::vector<std::shared_ptr<TextureSlice>> slices;
     slices.reserve(sliceCount);
 
-    for (int i = m_Slices.size() - sliceCount; i < m_Slices.size(); i++)
+    for (int i = static_cast<int>(m_Slices.size()) - sliceCount; i < m_Slices.size(); i++)
     {
         slices.push_back(GetSlice(i));
     }
@@ -178,7 +165,7 @@ void Texture::CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2
     m_Slices.push_back({resolution, offset, textureMatrix});
 }
 
-void Texture::Load(const TextureParameters& parameters)
+void Texture::Setup(const TextureParameters& parameters)
 {
     int width, height, channels;
     unsigned char* data = stbi_load(m_FilePath.c_str(), &width, &height, &channels, 0);

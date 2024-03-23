@@ -6,12 +6,12 @@ using namespace TGL;
 
 GameMode::GameMode()
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::GameMode);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, GameMode);
 }
 
 GameMode::~GameMode()
 {
-    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::GameMode);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, GameMode);
 }
 
 void GameMode::OnStart() {}
@@ -23,13 +23,4 @@ void GameMode::OnLateUpdate(float deltaTime) {}
 GameMode* GameMode::GetInstance()
 {
     return EntityManager::GetGameMode();
-}
-
-void GameMode::Destroy() const
-{
-    EntityManager::SetGameMode(nullptr);
-
-    PREPARE_SPAWNER_USAGE(TGL::GameMode);
-
-    delete this;
 }
