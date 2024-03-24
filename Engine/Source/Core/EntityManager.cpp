@@ -129,7 +129,7 @@ size_t EntityManager::GetComponentCount()
     return s_Instance->m_Components.size();
 }
 
-void EntityManager::AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue)
+void EntityManager::AddToUpdateQueue(Updatable* updatable, std::vector<Updatable*>& queue)
 {
     const auto order = updatable->GetOrderOfExecution();
 
@@ -143,6 +143,22 @@ void EntityManager::AddToQueue(Updatable* updatable, std::vector<Updatable*>& qu
     }
 
     queue.push_back(updatable);
+}
+
+void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue)
+{
+    const auto order = renderable->GetZIndex();
+
+    for (auto it = queue.begin(); it != queue.end(); ++it)
+    {
+        if ((*it)->GetZIndex() > order)
+        {
+            queue.insert(it, renderable);
+            return;
+        }
+    }
+
+    queue.push_back(renderable);
 }
 
 #if DEBUG
@@ -165,13 +181,25 @@ void EntityManager::AddToImGuiQueue(ImGuiMenuRenderer* renderer, std::vector<ImG
 
 #endif
 
+void EntityManager::StoreUpdatableObject(Updatable* object)
+{
+    AddToUpdateQueue(object, m_OnStartQueue);
+    AddToUpdateQueue(object, m_OnUpdateQueue);
+}
+
+void EntityManager::RemoveUpdatableObject(Updatable* object)
+{
+    std::erase(m_OnStartQueue, object);
+    std::erase(m_OnUpdateQueue, object);
+}
+
 void EntityManager::StoreObjectCallbacks(Object* object)
 {
     // Renderable
 
     if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
     {
-        m_RenderQueue.push_back(renderable);
+        AddToRenderQueue(renderable, m_RenderQueue);
     }
 
     // ImGui Renderer
@@ -213,6 +241,15 @@ void EntityManager::RemoveObjectCallbacks(Object* object)
 #endif
 }
 
+void EntityManager::UpdateRenderableOrder(Renderable* renderable)
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    std::erase(s_Instance->m_RenderQueue, renderable);
+
+    AddToRenderQueue(renderable, s_Instance->m_RenderQueue);
+}
+
 void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component)
 {
     entity->m_Components.push_back(component);
@@ -240,9 +277,7 @@ void EntityManager::DestroyEntity(Entity* entity)
 
     if (const size_t num = s_Instance->m_Entities.erase(entity->m_Id); num == 0) return;
 
-    std::erase(s_Instance->m_OnStartQueue, entity);
-    std::erase(s_Instance->m_OnUpdateQueue, entity);
-
+    s_Instance->RemoveUpdatableObject(entity);
     s_Instance->RemoveObjectCallbacks(entity);
 
     entity->DetachAllComponents();
@@ -258,9 +293,7 @@ void EntityManager::DestroyComponent(Component* component)
 
     if (const size_t num = s_Instance->m_Components.erase(component->m_Id); num == 0) return;
 
-    std::erase(s_Instance->m_OnStartQueue, component);
-    std::erase(s_Instance->m_OnUpdateQueue, component);
-
+    s_Instance->RemoveUpdatableObject(component);
     s_Instance->RemoveObjectCallbacks(component);
 
     std::erase(component->m_Parent->m_Components, component);

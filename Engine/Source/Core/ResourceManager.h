@@ -86,7 +86,7 @@ namespace TGL
 
         static void UnloadMaterialUniforms(const Material* material);
 
-        static Shader* LoadShader(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
+        static Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
         static void UnloadShader(Shader* shader);
     };

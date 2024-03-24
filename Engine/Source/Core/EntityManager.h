@@ -35,6 +35,7 @@ namespace TGL
         friend class GameMode;
         friend class Entity;
         friend class Component;
+        friend class Renderable;
 
         template <typename T, typename C>
         friend class LazyPtr;
@@ -86,15 +87,21 @@ namespace TGL
         static size_t GetComponentCount();
 
     private:
-        static void AddToQueue(Updatable* updatable, std::vector<Updatable*>& queue);
+        static void AddToUpdateQueue(Updatable* updatable, std::vector<Updatable*>& queue);
+        static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
 #ifdef DEBUG
         static void AddToImGuiQueue(ImGuiMenuRenderer* renderer, std::vector<ImGuiMenuRenderer*>& queue);
 #endif
 
     private:
+        void StoreUpdatableObject(Updatable* object);
+        void RemoveUpdatableObject(Updatable* object);
+
         void StoreObjectCallbacks(Object* object);
         void RemoveObjectCallbacks(Object* object);
+
+        static void UpdateRenderableOrder(Renderable* renderable);
 
     private:
         // This cannot be executed directly because of circular dependencies
@@ -134,9 +141,7 @@ namespace TGL
 
             s_Instance->m_Entities.emplace(instance->m_Id, instance);
 
-            AddToQueue(instance, s_Instance->m_OnStartQueue);
-            AddToQueue(instance, s_Instance->m_OnUpdateQueue);
-
+            s_Instance->StoreUpdatableObject(instance);
             s_Instance->StoreObjectCallbacks(instance);
 
             return instance;
@@ -157,9 +162,7 @@ namespace TGL
 
             s_Instance->m_Components.emplace(instance->m_Id, instance);
 
-            AddToQueue(instance, s_Instance->m_OnStartQueue);
-            AddToQueue(instance, s_Instance->m_OnUpdateQueue);
-
+            s_Instance->StoreUpdatableObject(instance);
             s_Instance->StoreObjectCallbacks(instance);
 
             SetupEntityComponentRelationship(parent, instance);
@@ -239,7 +242,7 @@ namespace TGL
         }
 
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
-        T* FindComponentInEntity(const std::vector<Component*>& entityComponents)
+        static T* FindComponentInEntity(const std::vector<Component*>& entityComponents)
         {
             ASSERT_SINGLETON_INITIALIZED();
 
@@ -255,7 +258,7 @@ namespace TGL
         }
 
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
-        std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents)
+        static std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents)
         {
             ASSERT_SINGLETON_INITIALIZED();
 

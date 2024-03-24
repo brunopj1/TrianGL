@@ -18,7 +18,6 @@ namespace TGL
     private:
         std::string m_VertexShader;
         std::string m_FragmentShader;
-        bool m_IsFilePath;
 
         std::unordered_map<std::string, int> m_UniformLocations;
 
@@ -28,7 +27,7 @@ namespace TGL
         int m_FragmentShaderId = 0;
 
     private:
-        Shader(std::string vertexShader, std::string fragmentShader, bool isFilePath);
+        Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
         ~Shader() = default;
 
     private:
@@ -37,7 +36,7 @@ namespace TGL
 
     private:
         void LinkProgram();
-        int CompileShader(const std::string& shader, int type) const;
+        static int CompileShader(const std::string& shaderPath, int type);
         static std::string ReadShaderFile(const std::string& filePath);
 
     private:

@@ -28,7 +28,7 @@ namespace TGL
         Mat4Uniform* m_ModelMatrix;
 
     public:
-        Material(const std::string& vertexShader, const std::string& fragmentShader, bool isFilePath);
+        Material(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
         virtual ~Material();
 
     public:

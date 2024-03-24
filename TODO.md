@@ -50,7 +50,7 @@
 
 ## Rendering with transparency
 - [X] Implement Z indexing
-- [ ] Implement Z sorting
+- [X] Implement Z sorting
 - [ ] Implement custom axis sorting
 - [ ] Enable / disable alpha blending dynamically
 

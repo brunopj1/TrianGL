@@ -58,11 +58,11 @@ void ResourceManager::UnloadMaterialUniforms(const Material* material)
     }
 }
 
-Shader* ResourceManager::LoadShader(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
+Shader* ResourceManager::LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
     ASSERT_SINGLETON_INITIALIZED();
 
-    const auto newShader = new Shader(vertexShader, fragmentShader, isFilePath);
+    const auto newShader = new Shader(vertexShaderPath, fragmentShaderPath);
     const auto it = s_Instance->m_Shaders.find(newShader);
 
     if (it == s_Instance->m_Shaders.end())

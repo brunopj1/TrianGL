@@ -7,11 +7,11 @@
 
 using namespace TGL;
 
-Material::Material(const std::string& vertexShader, const std::string& fragmentShader, const bool isFilePath)
+Material::Material(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Material);
 
-    m_Shader = ResourceManager::LoadShader(vertexShader, fragmentShader, isFilePath);
+    m_Shader = ResourceManager::LoadShader(vertexShaderPath, fragmentShaderPath);
 
     CreateEngineUniforms();
 }

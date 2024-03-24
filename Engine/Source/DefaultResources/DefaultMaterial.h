@@ -7,11 +7,11 @@ namespace TGL
     class DefaultMaterial final : public Material
     {
     public:
-        TextureUniform* const Texture;
-        Float4Uniform* const Color;
+        TextureUniform* const Texture = AddUniform<TextureUniform>("uTexture");
+        Float4Uniform* const Color = AddUniform<Float4Uniform>("uColor");
 
     private:
-        IntUniform* const IsTextureValid;
+        IntUniform* const IsTextureValid = AddUniform<IntUniform>("uIsTextureValid");
 
     public:
         DefaultMaterial();

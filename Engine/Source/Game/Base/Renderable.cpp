@@ -1,5 +1,7 @@
 ﻿#include "Renderable.h"
 
+#include "Core/EntityManager.h"
+
 using namespace TGL;
 
 Transform& Renderable::GetTransform()
@@ -19,5 +21,12 @@ int Renderable::GetZIndex() const
 
 void Renderable::SetZIndex(const int zIndex)
 {
+    const bool valueChanged = m_ZIndex != zIndex;
+
     m_ZIndex = zIndex;
+
+    if (valueChanged)
+    {
+        EntityManager::UpdateRenderableOrder(this);
+    }
 }

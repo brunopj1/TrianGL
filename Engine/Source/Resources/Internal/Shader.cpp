@@ -11,8 +11,8 @@
 
 using namespace TGL;
 
-Shader::Shader(std::string vertexShader, std::string fragmentShader, const bool isFilePath)
-    : m_VertexShader(std::move(vertexShader)), m_FragmentShader(std::move(fragmentShader)), m_IsFilePath(isFilePath)
+Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
+    : m_VertexShader(std::move(vertexShaderPath)), m_FragmentShader(std::move(fragmentShaderPath))
 {
     // Setup() and Free() cannot be called in the constructor and destructor
     // because sometimes we create fake Shader objects to acess the unordered_map
@@ -68,9 +68,9 @@ void Shader::LinkProgram()
     }
 }
 
-int Shader::CompileShader(const std::string& shader, const int type) const
+int Shader::CompileShader(const std::string& shaderPath, const int type)
 {
-    const std::string shaderSource = m_IsFilePath ? ReadShaderFile(shader) : shader;
+    const std::string shaderSource = ReadShaderFile(shaderPath);
     const char* shaderSourcePtr = shaderSource.c_str();
 
     const int shaderId = glCreateShader(type);
@@ -160,7 +160,7 @@ std::size_t ShaderHash::operator()(const Shader* shader) const
 
 bool ShaderEqual::operator()(const Shader* shader1, const Shader* shader2) const
 {
-    return shader1->m_IsFilePath == shader2->m_IsFilePath &&
+    return
         shader1->m_VertexShader == shader2->m_VertexShader &&
         shader1->m_FragmentShader == shader2->m_FragmentShader;
 }
