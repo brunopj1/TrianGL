@@ -8,7 +8,7 @@ namespace TGL
 {
     // Forward declaration
     class Shader;
-    class TextureBinding;
+    class Sprite;
 
     // Base class
     class MaterialUniform
@@ -89,9 +89,9 @@ namespace TGL
 
     MATERIAL_UNIFORM_IMPLEMENTATION(Mat4Uniform, glm::mat4, {});
 
-    // Texture uniform
+    // Sprite uniform
 
-    class TextureUniform final : public MaterialUniform
+    class SpriteUniform final : public MaterialUniform
     {
     private:
         friend class ResourceManager;
@@ -102,11 +102,11 @@ namespace TGL
         unsigned char m_Slot;
 
     public:
-        std::shared_ptr<TextureBinding> Value;
+        std::shared_ptr<Sprite> Value;
 
     public:
-        TextureUniform(const Shader* shader, const std::string& name);
-        ~TextureUniform() override = default;
+        SpriteUniform(const Shader* shader, const std::string& name);
+        ~SpriteUniform() override = default;
 
     private:
         bool IsValid() const override;

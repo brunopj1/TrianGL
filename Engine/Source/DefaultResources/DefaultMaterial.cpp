@@ -5,12 +5,12 @@ using namespace TGL;
 DefaultMaterial::DefaultMaterial()
     : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag")
 {
-    Texture->Value = nullptr;
+    Sprite->Value = nullptr;
     Color->Value = {1.0f, 1.0f, 1.0f, 1.0f};
-    IsTextureValid->Value = 0;
+    IsSpriteValid->Value = 0;
 }
 
 void DefaultMaterial::OnRenderSetup() const
 {
-    IsTextureValid->Value = Texture->Value != nullptr ? 1 : 0;
+    IsSpriteValid->Value = Sprite->Value != nullptr ? 1 : 0;
 }

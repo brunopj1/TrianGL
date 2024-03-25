@@ -66,7 +66,7 @@ void SnakeBody::UpdateTexture()
         texture = m_Texture->GetSlice(idx);
     }
 
-    m_TextureRenderer->GetMaterial()->As<DefaultMaterial>()->Texture->Value = texture;
+    m_TextureRenderer->GetMaterial()->As<DefaultMaterial>()->Sprite->Value = texture;
 
     // Rotate the texture
 

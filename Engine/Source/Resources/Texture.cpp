@@ -8,7 +8,7 @@
 
 using namespace TGL;
 
-void TextureBinding::Unbind(const unsigned char slot)
+void Sprite::Unbind(const unsigned char slot)
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -24,6 +24,16 @@ TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, TextureSlice);
 }
 
+std::shared_ptr<Texture> TextureSlice::GetTexture() const
+{
+    return m_Texture;
+}
+
+glm::uvec2 TextureSlice::GetResolution() const
+{
+    return m_Texture->m_Slices[m_Index].Resolution;
+}
+
 void TextureSlice::Bind(const unsigned char slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
@@ -33,11 +43,6 @@ void TextureSlice::Bind(const unsigned char slot) const
 glm::mat4* TextureSlice::GetMatrix() const
 {
     return &m_Texture->m_Slices[m_Index].TextureMatrix;
-}
-
-glm::uvec2 TextureSlice::GetResolution() const
-{
-    return m_Texture->m_Slices[m_Index].Resolution;
 }
 
 Texture::Texture(std::string filePath)

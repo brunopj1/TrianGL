@@ -101,23 +101,23 @@ void Mat4Uniform::BindInternal() const
     glUniformMatrix4fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }
 
-TextureUniform::TextureUniform(const Shader* shader, const std::string& name)
+SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
     : MaterialUniform(shader, name),
       m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")),
       m_ResoultionLocation(shader->GetUniformLocation(name + "Resolution")),
       m_Slot(0), Value(nullptr) // The slot is updated by the spawner
 {}
 
-bool TextureUniform::IsValid() const
+bool SpriteUniform::IsValid() const
 {
     return m_Location != -1 || m_MatrixLocation != -1 || m_ResoultionLocation != -1;
 }
 
-void TextureUniform::BindInternal() const
+void SpriteUniform::BindInternal() const
 {
     if (Value == nullptr) // If location is -1 the sampler is not being used, so we don't need to unbind
     {
-        TextureBinding::Unbind(m_Slot);
+        Sprite::Unbind(m_Slot);
         return;
     }
 

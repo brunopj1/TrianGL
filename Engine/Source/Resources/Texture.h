@@ -11,14 +11,14 @@ namespace TGL
 {
     // Binding class (for the material uniform)
 
-    class TextureBinding
+    class Sprite
     {
     private:
-        friend class TextureUniform;
+        friend class SpriteUniform;
 
     protected:
-        TextureBinding() = default;
-        virtual ~TextureBinding() = default;
+        Sprite() = default;
+        virtual ~Sprite() = default;
 
     private:
         static void Unbind(unsigned char slot);
@@ -28,7 +28,7 @@ namespace TGL
         virtual glm::uvec2 GetResolution() const = 0;
     };
 
-    // Texture slice struct and class
+    // Sprite slice struct and class
 
     struct TextureSliceInfo
     {
@@ -45,7 +45,7 @@ namespace TGL
         TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix);
     };
 
-    class TextureSlice final : public TextureBinding
+    class TextureSlice final : public Sprite
     {
     private:
         friend class Texture;
@@ -58,21 +58,23 @@ namespace TGL
         TextureSlice(std::shared_ptr<Texture> texture, int index);
         ~TextureSlice() override = default;
 
+    public:
+        std::shared_ptr<Texture> GetTexture() const;
+        glm::uvec2 GetResolution() const override;  // Also used by Sprite class
+
     private:
         void Bind(unsigned char slot) const override;
-
         glm::mat4* GetMatrix() const override;
-        glm::uvec2 GetResolution() const override;
     };
 
     // Main class-
 
-    class Texture final : public TextureBinding, public std::enable_shared_from_this<Texture>
+    class Texture final : public Sprite, public std::enable_shared_from_this<Texture>
     {
     private:
         friend class ResourceManager;
         friend class TextureSlice;
-        friend class TextureUniform;
+        friend class SpriteUniform;
 
     private:
         std::string m_FilePath;
@@ -91,7 +93,7 @@ namespace TGL
 
     public:
         std::string GetFilePath() const;
-        glm::uvec2 GetResolution() const override; // Also used by TextureBinding
+        glm::uvec2 GetResolution() const override; // Also used by Sprite class
 
     public:
         size_t SliceCount() const;

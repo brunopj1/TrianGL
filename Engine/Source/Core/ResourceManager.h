@@ -64,7 +64,7 @@ namespace TGL
 
             T* instance = new T(shader, name);
 
-            if constexpr (std::is_same_v<T, TextureUniform>)
+            if constexpr (std::is_same_v<T, SpriteUniform>)
             {
                 if (instance->m_Location != -1) instance->m_Slot = nextTextureSlot++;
             }

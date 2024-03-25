@@ -11,7 +11,7 @@ namespace TGL
         friend class ResourceManager;
         friend class Material;
         friend class MaterialUniform;
-        friend class TextureUniform;
+        friend class SpriteUniform;
         friend struct ShaderHash;
         friend struct ShaderEqual;
 
