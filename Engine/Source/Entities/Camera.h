@@ -58,11 +58,20 @@ namespace TGL
         glm::vec3 GetBackgroundColor() const;
         void SetBackgroundColor(const glm::vec3& color);
 
+    public:
+        // TODO optimize the matrix calculations for these methods
+        glm::vec2 ScreenToWorldPosition(const glm::vec2& screenPos) const;
+        glm::vec2 WorldToScreenPosition(const glm::vec2& worldPos) const;
+
     private:
         void SetAspectRatio(float aspectRatio);
 
     private:
         void UpdateMatrices();
+
+        glm::mat4 ComputeViewMatrix() const;
+        glm::mat4 ComputeProjectionMatrix() const;
+        glm::mat4 ComputeProjectionViewMatrix(bool inverse = false) const;
 
         const glm::mat4& GetViewMatrix() const;
         const glm::mat4& GetProjectionMatrix() const;

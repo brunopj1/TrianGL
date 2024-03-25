@@ -25,6 +25,8 @@ namespace TGL
 
     private:
         Mat4Uniform* m_PvmMatrix;
+        Mat4Uniform* m_ProjectionMatrix;
+        Mat4Uniform* m_ViewMatrix;
         Mat4Uniform* m_ModelMatrix;
 
     public:

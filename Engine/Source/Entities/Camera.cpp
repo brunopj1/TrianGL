@@ -113,6 +113,38 @@ void Camera::SetBackgroundColor(const glm::vec3& color)
     m_BackgroundColor = color;
 }
 
+glm::vec2 Camera::ScreenToWorldPosition(const glm::vec2& screenPos) const
+{
+    const glm::uvec2 screenResolution = Window::GetResolution();
+
+    const glm::vec4 clipPos = {
+        screenPos.x / screenResolution.x * 2.0f - 1.0f,
+        1.0f - screenPos.y / screenResolution.y * 2.0f,
+        0.0f, 1.0f
+    };
+
+    const glm::mat4 inverseProjectionViewMatrix = ComputeProjectionViewMatrix(true);
+
+    glm::vec4 worldPos = inverseProjectionViewMatrix * clipPos;
+    worldPos /= worldPos.w;
+
+    return worldPos;
+}
+
+glm::vec2 Camera::WorldToScreenPosition(const glm::vec2& worldPos) const
+{
+    const glm::mat4 projectionViewMatrix = ComputeProjectionViewMatrix();
+
+    const glm::vec4 clipPos = projectionViewMatrix * glm::vec4(worldPos, 0.0f, 1.0f);
+
+    const glm::vec2 screenPos = {
+        (clipPos.x + 1.0f) / 2.0f * Window::GetResolution().x,
+        (1.0f - clipPos.y) / 2.0f * Window::GetResolution().y
+    };
+
+    return screenPos;
+}
+
 void Camera::SetAspectRatio(const float aspectRatio)
 {
     if (aspectRatio <= 0.0f)
@@ -125,24 +157,38 @@ void Camera::SetAspectRatio(const float aspectRatio)
 
 void Camera::UpdateMatrices()
 {
+    m_ViewMatrix = ComputeViewMatrix();
+    m_ProjectionMatrix = ComputeProjectionMatrix();
+    m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
+}
+
+glm::mat4 Camera::ComputeViewMatrix() const
+{
     const auto transform = GetTransform();
 
-    // View matrix
     const glm::vec3 position = glm::vec3(transform.GetPosition(), m_DepthRange.y * 0.5f);
     const glm::vec3 up = glm::vec3(glm::sin(transform.GetRotationRad()), glm::cos(transform.GetRotationRad()), 0.0f);
     constexpr glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
 
-    m_ViewMatrix = lookAt(position, position + front, up);
+    return lookAt(position, position + front, up);
+}
 
-    // Projection matrix
+glm::mat4 Camera::ComputeProjectionMatrix() const
+{
     const float halfSizeH = m_HorizontalSize / 2.0f;
     const float halfSizeV = halfSizeH / m_AspectRatio;
     const float farPlane = static_cast<float>(m_DepthRange.y - m_DepthRange.x);
 
-    m_ProjectionMatrix = glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, farPlane);
+    return glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, farPlane);
+}
 
-    // Projection view matrix
-    m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;
+glm::mat4 Camera::ComputeProjectionViewMatrix(const bool inverse) const
+{
+    const glm::mat4 projectionMatrix = ComputeProjectionMatrix();
+    const glm::mat4 viewMatrix = ComputeViewMatrix();
+    const glm::mat4 projectionViewMatrix = projectionMatrix * viewMatrix;
+
+    return inverse ? glm::inverse(projectionViewMatrix) : projectionViewMatrix;
 }
 
 const glm::mat4& Camera::GetViewMatrix() const

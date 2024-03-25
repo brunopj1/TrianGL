@@ -5,7 +5,6 @@
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
 - [ ] Implement a sound system
 - [ ] List all the libraries used in the project (and their licenses)
-- [ ] World to Screen and Screen to World methods
 
 ## Github wiki
 
@@ -26,6 +25,7 @@
 - [X] Add a single exception for when the engine is not initialized
 - [X] Reorganize the exceptions
 - [X] Add lazy pointers to the classes managed by the engine (Entity, Component, System, Resource)
+- [X] World to Screen and Screen to World methods
 - [ ] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
 
 ## Resource Manager

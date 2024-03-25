@@ -43,6 +43,8 @@ void Material::Use(const glm::mat4& modelMatrix) const
 void Material::CreateEngineUniforms()
 {
     m_PvmMatrix = AddUniform<Mat4Uniform>("uPVMMatrix", false);
+    m_ProjectionMatrix = AddUniform<Mat4Uniform>("uProjectionMatrix", false);
+    m_ViewMatrix = AddUniform<Mat4Uniform>("uViewMatrix", false);
     m_ModelMatrix = AddUniform<Mat4Uniform>("uModelMatrix", false);
 }
 
@@ -55,6 +57,16 @@ void Material::UpdateEngineUniforms(const glm::mat4& modelMatrix) const
     {
         const auto pvmMatrix = camera->GetProjectionViewMatrix() * modelMatrix;
         m_PvmMatrix->Value = pvmMatrix;
+    }
+
+    if (m_ProjectionMatrix != nullptr)
+    {
+        m_ProjectionMatrix->Value = camera->GetProjectionMatrix();
+    }
+
+    if (m_ViewMatrix != nullptr)
+    {
+        m_ViewMatrix->Value = camera->GetViewMatrix();
     }
 
     if (m_ModelMatrix != nullptr)
