@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Object.h"
-#include "Base/Updatable.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.hpp"
@@ -10,7 +9,7 @@
 
 namespace TGL
 {
-    class Entity : public Object, public Updatable
+    class Entity : public Object
     {
     private:
         friend class EntityManager;

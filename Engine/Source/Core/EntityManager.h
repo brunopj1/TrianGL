@@ -9,16 +9,11 @@
 #include <ranges>
 
 #ifdef DEBUG
-#include "Game/ImGui/ImGuiMenuRender.h"
+#include "Rendering/ImGui/ImGuiMenuRender.h"
 #endif
 
 namespace TGL
 {
-    // Forward declarations
-    class Object;
-    class Updatable;
-    class Renderable;
-
 #ifdef DEBUG
     class ImGuiRenderer;
     class ImGuiMenuRenderer;
@@ -54,8 +49,8 @@ namespace TGL
         std::unordered_map<uint64_t, Entity*> m_Entities;
         std::unordered_map<uint64_t, Component*> m_Components;
 
-        std::vector<Updatable*> m_OnUpdateQueue;
-        std::vector<Updatable*> m_OnStartQueue;
+        std::vector<Object*> m_OnUpdateQueue;
+        std::vector<Object*> m_OnStartQueue;
 
         std::vector<Renderable*> m_RenderQueue;
 
@@ -84,7 +79,7 @@ namespace TGL
         static size_t GetComponentCount();
 
     private:
-        static void AddToUpdateQueue(Updatable* updatable, std::vector<Updatable*>& queue);
+        static void AddToUpdateQueue(Object* object, std::vector<Object*>& queue);
         static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
 #ifdef DEBUG
@@ -92,12 +87,10 @@ namespace TGL
 #endif
 
     private:
-        void StoreUpdatableObject(Updatable* object);
-        void RemoveUpdatableObject(Updatable* object);
-
         void StoreObjectCallbacks(Object* object);
         void RemoveObjectCallbacks(Object* object);
 
+    private:
         static void UpdateRenderableOrder(Renderable* renderable);
 
     private:
@@ -138,7 +131,6 @@ namespace TGL
 
             s_Instance->m_Entities.emplace(instance->m_Id, instance);
 
-            s_Instance->StoreUpdatableObject(instance);
             s_Instance->StoreObjectCallbacks(instance);
 
             return instance;
@@ -159,7 +151,6 @@ namespace TGL
 
             s_Instance->m_Components.emplace(instance->m_Id, instance);
 
-            s_Instance->StoreUpdatableObject(instance);
             s_Instance->StoreObjectCallbacks(instance);
 
             SetupEntityComponentRelationship(parent, instance);

@@ -2,8 +2,8 @@
 
 #include <utility>
 
-#include "Components/SpriteRenderer.h"
-#include "DefaultResources/DefaultMaterial.h"
+#include "Implementations/Components/SpriteRenderer.h"
+#include "Implementations/Resources/DefaultMaterial.h"
 
 using namespace TGL;
 

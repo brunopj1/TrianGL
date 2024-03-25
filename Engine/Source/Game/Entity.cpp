@@ -6,7 +6,7 @@
 using namespace TGL;
 
 Entity::Entity(const bool shouldUpdate)
-    : Updatable(shouldUpdate)
+    : Object(shouldUpdate)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
 }

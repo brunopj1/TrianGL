@@ -1,8 +1,8 @@
 ﻿#include "Apple.h"
 
 #include "Grid.h"
-#include "Components/SpriteRenderer.h"
-#include "DefaultResources/DefaultMaterial.h"
+#include "Implementations/Components/SpriteRenderer.h"
+#include "Implementations/Resources/DefaultMaterial.h"
 #include "Resources/Texture.h"
 
 using namespace TGL;

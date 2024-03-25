@@ -5,7 +5,7 @@
 using namespace TGL;
 
 Component::Component(const bool shouldUpdate)
-    : Updatable(shouldUpdate)
+    : Object(shouldUpdate)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
 }

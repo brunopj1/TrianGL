@@ -3,7 +3,7 @@
 #include "MaterialUniforms.h"
 #include "Internal/Shader.h"
 #include "Core/ResourceManager.h"
-#include "Entities/Camera.h"
+#include "Implementations/Entities/Camera.h"
 
 using namespace TGL;
 

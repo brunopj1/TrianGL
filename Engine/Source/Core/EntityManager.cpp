@@ -1,15 +1,14 @@
 ﻿#include "EntityManager.h"
 
-#include "Components/SpriteRenderer.h"
+#include "Implementations/Components/SpriteRenderer.h"
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Game/Base/Updatable.h"
 #include "Util/Macros/SingletonMacros.hpp"
 
 #ifdef DEBUG
-#include "Game/ImGui/ImGuiRenderer.h"
-#include "Game/ImGui/ImGuiMenuRender.h"
+#include "Rendering/ImGui/ImGuiRenderer.h"
+#include "Rendering/ImGui/ImGuiMenuRender.h"
 #include <imgui.h>
 #endif
 
@@ -40,19 +39,19 @@ void EntityManager::Terminate() const
 
 void EntityManager::Update(const float deltaTime)
 {
-    for (Updatable* updatable : m_OnStartQueue)
+    for (Object* object : m_OnStartQueue)
     {
-        updatable->OnStart();
+        object->OnStart();
     }
     m_OnStartQueue.clear();
 
     m_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (Updatable* updatable : m_OnUpdateQueue)
+    for (Object* object : m_OnUpdateQueue)
     {
-        if (updatable->m_ShouldUpdate)
+        if (object->m_ShouldUpdate)
         {
-            updatable->OnUpdate(deltaTime);
+            object->OnUpdate(deltaTime);
         }
     }
 
@@ -129,20 +128,20 @@ size_t EntityManager::GetComponentCount()
     return s_Instance->m_Components.size();
 }
 
-void EntityManager::AddToUpdateQueue(Updatable* updatable, std::vector<Updatable*>& queue)
+void EntityManager::AddToUpdateQueue(Object* object, std::vector<Object*>& queue)
 {
-    const auto order = updatable->GetOrderOfExecution();
+    const auto order = object->GetOrderOfExecution();
 
     for (auto it = queue.begin(); it != queue.end(); ++it)
     {
         if ((*it)->GetOrderOfExecution() > order)
         {
-            queue.insert(it, updatable);
+            queue.insert(it, object);
             return;
         }
     }
 
-    queue.push_back(updatable);
+    queue.push_back(object);
 }
 
 void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue)
@@ -181,20 +180,13 @@ void EntityManager::AddToImGuiQueue(ImGuiMenuRenderer* renderer, std::vector<ImG
 
 #endif
 
-void EntityManager::StoreUpdatableObject(Updatable* object)
-{
-    AddToUpdateQueue(object, m_OnStartQueue);
-    AddToUpdateQueue(object, m_OnUpdateQueue);
-}
-
-void EntityManager::RemoveUpdatableObject(Updatable* object)
-{
-    std::erase(m_OnStartQueue, object);
-    std::erase(m_OnUpdateQueue, object);
-}
-
 void EntityManager::StoreObjectCallbacks(Object* object)
 {
+    // Updatable
+
+    AddToUpdateQueue(object, m_OnStartQueue);
+    AddToUpdateQueue(object, m_OnUpdateQueue);
+
     // Renderable
 
     if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
@@ -219,6 +211,11 @@ void EntityManager::StoreObjectCallbacks(Object* object)
 
 void EntityManager::RemoveObjectCallbacks(Object* object)
 {
+    // Updatable
+
+    std::erase(m_OnStartQueue, object);
+    std::erase(m_OnUpdateQueue, object);
+
     // Renderable
 
     if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
@@ -277,7 +274,6 @@ void EntityManager::DestroyEntity(Entity* entity)
 
     if (const size_t num = s_Instance->m_Entities.erase(entity->m_Id); num == 0) return;
 
-    s_Instance->RemoveUpdatableObject(entity);
     s_Instance->RemoveObjectCallbacks(entity);
 
     entity->DetachAllComponents();
@@ -293,7 +289,6 @@ void EntityManager::DestroyComponent(Component* component)
 
     if (const size_t num = s_Instance->m_Components.erase(component->m_Id); num == 0) return;
 
-    s_Instance->RemoveUpdatableObject(component);
     s_Instance->RemoveObjectCallbacks(component);
 
     std::erase(component->m_Parent->m_Components, component);

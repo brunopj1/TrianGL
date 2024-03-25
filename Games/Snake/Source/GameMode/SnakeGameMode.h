@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entities/Camera.h"
+#include "Implementations/Entities/Camera.h"
 #include "Entities/Snake.h"
 #include "Entities/Apple.h"
 #include "Entities/Grid.h"

@@ -1,8 +1,8 @@
 ﻿#include "Grid.h"
 
-#include "Components/SpriteRenderer.h"
+#include "Implementations/Components/SpriteRenderer.h"
 #include "Core/Window.h"
-#include "Entities/Camera.h"
+#include "Implementations/Entities/Camera.h"
 #include "Materials/GridMaterial.h"
 #include "glm/glm.hpp"
 #include <stdexcept>

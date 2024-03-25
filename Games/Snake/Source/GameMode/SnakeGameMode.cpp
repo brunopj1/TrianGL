@@ -2,8 +2,8 @@
 
 #include "Entities/Apple.h"
 #include "Entities/Snake.h"
-#include "Entities/Camera.h"
-#include "Components/SpriteRenderer.h"
+#include "Implementations/Entities/Camera.h"
+#include "Implementations/Components/SpriteRenderer.h"
 #include "Core/InputSystem.h"
 #include "Core/Window.h"
 #include "Resources/Material.h"

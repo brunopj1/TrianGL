@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "Entities/Camera.h"
+#include "Implementations/Entities/Camera.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 #include <format>

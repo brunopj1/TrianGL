@@ -1,11 +1,10 @@
 ﻿#pragma once
 
 #include "Entity.h"
-#include "Base/Updatable.h"
 
 namespace TGL
 {
-    class Component : public Object, public Updatable
+    class Component : public Object
     {
     private:
         friend class EntityManager;

@@ -8,9 +8,9 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "Components/SpriteRenderer.h"
+#include "Implementations/Components/SpriteRenderer.h"
 
-#include "Entities/Camera.h"
+#include "Implementations/Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
 
 #include "Exceptions/Game/MissingGameModeException.hpp"

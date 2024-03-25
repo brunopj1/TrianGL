@@ -16,10 +16,18 @@ namespace TGL
 
     private:
         uint64_t m_Id = 0;
+        bool m_ShouldUpdate;
 
     public:
-        Object() = default;
+        Object(bool shouldUpdate);
         virtual ~Object() = default;
+
+    protected:
+        virtual int GetOrderOfExecution() const;
+
+    protected:
+        virtual void OnStart();
+        virtual void OnUpdate(float deltaTime);
 
     public:
         template <typename T, typename = std::enable_if_t<std::is_base_of_v<Object, T>>>
