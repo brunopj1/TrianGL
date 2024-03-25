@@ -2,7 +2,7 @@
 
 #include "Resources/Material.h"
 #include "Resources/Texture.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 #include <ranges>
 
 using namespace TGL;

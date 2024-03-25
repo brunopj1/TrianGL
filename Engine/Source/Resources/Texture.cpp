@@ -3,7 +3,7 @@
 #include "glad/glad.h"
 #include "stb_image.h"
 #include "Core/ResourceManager.h"
-#include "Exceptions/Common/FileNotFoundException.hpp"
+#include "Exceptions/Common/FileNotFoundException.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;

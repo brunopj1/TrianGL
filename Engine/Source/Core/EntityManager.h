@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "Exceptions/Game/GameModeAlreadySpecifiedException.hpp"
+#include "Exceptions/Game/GameModeAlreadySpecifiedException.h"
 #include <vector>
 #include <unordered_map>
 
-#include "Util/Macros/SingletonMacros.hpp"
-#include "Util/Macros/SpawnerMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
+#include "Util/Macros/SpawnerMacros.h"
 #include <ranges>
 
 #ifdef DEBUG

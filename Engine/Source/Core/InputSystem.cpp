@@ -1,7 +1,7 @@
 ﻿#include "InputSystem.h"
 
 #include "GLFW/glfw3.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 
 #ifdef DEBUG
 #include <imgui_impl_glfw.h>

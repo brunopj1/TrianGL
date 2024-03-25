@@ -5,7 +5,7 @@
 #include "Entities/Apple.h"
 #include "Entities/Grid.h"
 #include "Game/GameMode.h"
-#include "Util/Memory/LazyPtr.hpp"
+#include "Util/Memory/LazyPtr.h"
 
 class SnakeGameMode final : public TGL::GameMode
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 #include <string>
 #include <glm/vec2.hpp>
 

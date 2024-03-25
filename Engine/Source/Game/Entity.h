@@ -3,7 +3,7 @@
 #include "Object.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
-#include "Util/Macros/SpawnerMacros.hpp"
+#include "Util/Macros/SpawnerMacros.h"
 #include <ranges>
 #include <vector>
 

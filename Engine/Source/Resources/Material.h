@@ -3,8 +3,8 @@
 #include "Internal/Shader.h"
 #include "MaterialUniforms.h"
 #include "Core/ResourceManager.h"
-#include "Util/Macros/MaterialMacros.hpp"
-#include "Util/Macros/SpawnerMacros.hpp"
+#include "Util/Macros/MaterialMacros.h"
+#include "Util/Macros/SpawnerMacros.h"
 #include <memory>
 #include <string>
 #include <vector>

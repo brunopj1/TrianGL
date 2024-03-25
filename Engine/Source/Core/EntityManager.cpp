@@ -4,7 +4,7 @@
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 
 #ifdef DEBUG
 #include "Rendering/ImGui/ImGuiRenderer.h"

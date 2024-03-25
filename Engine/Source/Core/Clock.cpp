@@ -1,7 +1,7 @@
 ﻿#include "Clock.h"
 
 #include "GLFW/glfw3.h"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 
 using namespace TGL;
 

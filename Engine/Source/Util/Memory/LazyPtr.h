@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Util/Macros/LazyPointerMacros.hpp"
+#include "Util/Macros/LazyPointerMacros.h"
 #include "Core/EntityManager.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"

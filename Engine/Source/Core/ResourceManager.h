@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "Resources/Internal/Shader.h"
-#include "Util/Macros/MaterialMacros.hpp"
-#include "Util/Macros/SingletonMacros.hpp"
-#include "Util/Macros/SpawnerMacros.hpp"
+#include "Util/Macros/MaterialMacros.h"
+#include "Util/Macros/SingletonMacros.h"
+#include "Util/Macros/SpawnerMacros.h"
 
 #include <string>
 #include <memory>

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "InputCodes.hpp"
+#include "InputCodes.h"
 #include "glm/vec2.hpp"
-#include "Util/Macros/SingletonMacros.hpp"
+#include "Util/Macros/SingletonMacros.h"
 #include <unordered_set>
 
 // Forward declarations

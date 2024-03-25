@@ -11,10 +11,10 @@
 #include "Implementations/Components/SpriteRenderer.h"
 
 #include "Implementations/Entities/Camera.h"
-#include "Exceptions/Core/FailedToInitializeEngineException.hpp"
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 
-#include "Exceptions/Game/MissingGameModeException.hpp"
-#include "Exceptions/OpenGL/OpenGlException.hpp"
+#include "Exceptions/Game/MissingGameModeException.h"
+#include "Exceptions/OpenGL/OpenGlException.h"
 
 #ifdef DEBUG
 #include <iostream>

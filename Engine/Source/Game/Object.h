@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Core/EntityManager.h"
-#include "Util/Macros/SpawnerMacros.hpp"
+#include "Util/Macros/SpawnerMacros.h"
 #include <cstdint>
 
 namespace TGL

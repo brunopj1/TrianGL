@@ -1,6 +1,6 @@
 #include "Core/Application.h"
 #include <GameMode/SnakeGameMode.h>
-#include "Util/Macros/MemoryLeakMacros.hpp"
+#include "Util/Macros/MemoryLeakMacros.h"
 
 int main()
 {
