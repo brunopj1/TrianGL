@@ -5,6 +5,7 @@
 #include "Entities/Apple.h"
 #include "Entities/Grid.h"
 #include "Game/GameMode.h"
+#include "Util/Memory/LazyPtr.hpp"
 
 class SnakeGameMode final : public TGL::GameMode
 {
@@ -16,7 +17,9 @@ private:
 
     Grid* m_Grid;
     Snake* m_Snake;
-    Apple* m_Apple;
+    TGL::LazyPtr<Apple> m_Apple;
+
+    bool m_Victory = false;
 
     float m_TickRate;
     float m_TickTimer;

@@ -24,9 +24,6 @@ namespace TGL
     class ImGuiMenuRenderer;
 #endif
 
-    template <typename T, typename C>
-    class LazyPtr;
-
     class EntityManager final
     {
     private:
@@ -37,7 +34,7 @@ namespace TGL
         friend class Component;
         friend class Renderable;
 
-        template <typename T, typename C>
+        template <typename T, typename Condition>
         friend class LazyPtr;
 
     private:

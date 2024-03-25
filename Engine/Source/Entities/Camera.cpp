@@ -7,8 +7,6 @@
 
 using namespace TGL;
 
-#define CAMERA_DEPTH 2000.0f
-
 Camera::Camera(const bool setAsMainCamera)
     : Entity(false)
 {
@@ -90,6 +88,21 @@ float Camera::GetAspectRatio() const
     return m_AspectRatio;
 }
 
+void Camera::SetDepthRange(int min, int max)
+{
+    if (max <= min)
+    {
+        throw std::invalid_argument("The maximum depth must be greater than the minimum depth");
+    }
+
+    m_DepthRange = {min, max};
+}
+
+glm::vec2 Camera::GetDepthRange() const
+{
+    return m_DepthRange;
+}
+
 glm::vec3 Camera::GetBackgroundColor() const
 {
     return m_BackgroundColor;
@@ -115,7 +128,7 @@ void Camera::UpdateMatrices()
     const auto transform = GetTransform();
 
     // View matrix
-    const glm::vec3 position = glm::vec3(transform.GetPosition(), CAMERA_DEPTH * 0.5f);
+    const glm::vec3 position = glm::vec3(transform.GetPosition(), m_DepthRange.y * 0.5f);
     const glm::vec3 up = glm::vec3(glm::sin(transform.GetRotationRad()), glm::cos(transform.GetRotationRad()), 0.0f);
     constexpr glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
 
@@ -124,8 +137,9 @@ void Camera::UpdateMatrices()
     // Projection matrix
     const float halfSizeH = m_HorizontalSize / 2.0f;
     const float halfSizeV = halfSizeH / m_AspectRatio;
+    const float farPlane = m_DepthRange.y - m_DepthRange.x;
 
-    m_ProjectionMatrix = glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, CAMERA_DEPTH);
+    m_ProjectionMatrix = glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, farPlane);
 
     // Projection view matrix
     m_ProjectionViewMatrix = m_ProjectionMatrix * m_ViewMatrix;

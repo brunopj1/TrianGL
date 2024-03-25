@@ -2,7 +2,6 @@
 
 #include "Util/Macros/LazyPointerMacros.hpp"
 #include "Core/EntityManager.h"
-#include "Core/ResourceManager.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
 

@@ -4,6 +4,8 @@
 
 - [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
 - [ ] Implement a sound system
+- [ ] List all the libraries used in the project (and their licenses)
+- [ ] World to Screen and Screen to World methods
 
 ## Github wiki
 

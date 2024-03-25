@@ -10,20 +10,11 @@
 
 namespace TGL
 {
-    // Forward declarations
-    class Component;
-
-    template <typename T, typename C>
-    class LazyPtr;
-
     class Entity : public Object, public Updatable
     {
     private:
         friend class EntityManager;
         friend class Component;
-
-        template <typename T, typename C>
-        friend class LazyPtr;
 
     private:
         Transform m_Transform;

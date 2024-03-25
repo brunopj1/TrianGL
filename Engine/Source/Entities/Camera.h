@@ -19,6 +19,8 @@ namespace TGL
         bool m_LockHorizontalSize = true;
         float m_AspectRatio;
 
+        glm::ivec2 m_DepthRange = {-1000, 1000};
+
     private:
         glm::vec3 m_BackgroundColor = {0.5f, 0.5f, 0.5f};
 
@@ -48,6 +50,9 @@ namespace TGL
         bool IsSizeLockedHorizontally() const;
 
         float GetAspectRatio() const;
+
+        void SetDepthRange(int min, int max);
+        glm::vec2 GetDepthRange() const;
 
     public:
         glm::vec3 GetBackgroundColor() const;

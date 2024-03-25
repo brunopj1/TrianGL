@@ -49,6 +49,11 @@ void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
 
 void SnakeGameMode::OnLateUpdate(const float deltaTime)
 {
+    if (m_Victory)
+    {
+        return;
+    }
+
     m_TickTimer -= deltaTime;
 
     if (m_TickTimer <= 0)
@@ -56,5 +61,10 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
         m_TickTimer = m_TickRate;
 
         m_Snake->Move(m_Grid);
+
+        if (m_Apple.Get() == nullptr)
+        {
+            m_Victory = true;
+        }
     }
 }

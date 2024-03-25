@@ -11,6 +11,9 @@ namespace TGL
     private:
         friend class EntityManager;
 
+        template <typename T, typename Condition>
+        friend class LazyPtr;
+
     private:
         uint64_t m_Id = 0;
 
