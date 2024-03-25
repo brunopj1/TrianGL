@@ -16,7 +16,7 @@ namespace TGL
     {
     private:
         friend class ResourceManager;
-        friend class TextureRenderer;
+        friend class SpriteRenderer;
 
     private:
         Shader* m_Shader;

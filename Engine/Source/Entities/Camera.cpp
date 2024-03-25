@@ -137,7 +137,7 @@ void Camera::UpdateMatrices()
     // Projection matrix
     const float halfSizeH = m_HorizontalSize / 2.0f;
     const float halfSizeV = halfSizeH / m_AspectRatio;
-    const float farPlane = m_DepthRange.y - m_DepthRange.x;
+    const float farPlane = static_cast<float>(m_DepthRange.y - m_DepthRange.x);
 
     m_ProjectionMatrix = glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, farPlane);
 

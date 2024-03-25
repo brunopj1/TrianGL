@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "Components/TextureRenderer.h"
+#include "Components/SpriteRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
 
 using namespace TGL;
@@ -10,8 +10,8 @@ using namespace TGL;
 SnakeBody::SnakeBody(Grid* grid, std::shared_ptr<Texture> texture, const glm::ivec2& position, const glm::ivec2& direction)
     : Entity(false), m_Type(SnakeBodyType::Head), m_BackDirection(direction), m_FrontDirection(direction), m_Texture(std::move(texture))
 {
-    m_TextureRenderer = AttachComponent<TextureRenderer>();
-    m_TextureRenderer->UseDefaultMaterial();
+    m_SpriteRenderer = AttachComponent<SpriteRenderer>();
+    m_SpriteRenderer->UseDefaultMaterial();
 
     grid->SetCell(position, this);
 
@@ -66,7 +66,7 @@ void SnakeBody::UpdateTexture()
         texture = m_Texture->GetSlice(idx);
     }
 
-    m_TextureRenderer->GetMaterial()->As<DefaultMaterial>()->Sprite->Value = texture;
+    m_SpriteRenderer->GetMaterial()->As<DefaultMaterial>()->Sprite->Value = texture;
 
     // Rotate the texture
 

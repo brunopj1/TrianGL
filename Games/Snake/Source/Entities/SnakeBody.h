@@ -19,7 +19,7 @@ private:
     glm::ivec2 m_FrontDirection;
 
 private:
-    TGL::TextureRenderer* m_TextureRenderer;
+    TGL::SpriteRenderer* m_SpriteRenderer;
 
 private:
     std::shared_ptr<TGL::Texture> m_Texture;

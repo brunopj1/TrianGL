@@ -1,4 +1,4 @@
-﻿#include "TextureRenderer.h"
+﻿#include "SpriteRenderer.h"
 
 #include "Game/Entity.h"
 #include "glad/glad.h"
@@ -8,38 +8,38 @@
 
 using namespace TGL;
 
-TextureRenderer::TextureRenderer(std::shared_ptr<Material> material)
+SpriteRenderer::SpriteRenderer(std::shared_ptr<Material> material)
     : Component(false), m_Material(std::move(material))
 {}
 
-std::shared_ptr<Material> TextureRenderer::GetMaterial() const
+std::shared_ptr<Material> SpriteRenderer::GetMaterial() const
 {
     return m_Material;
 }
 
-void TextureRenderer::SetMaterial(std::shared_ptr<Material> material)
+void SpriteRenderer::SetMaterial(std::shared_ptr<Material> material)
 {
     m_Material = std::move(material);
 }
 
-std::shared_ptr<DefaultMaterial> TextureRenderer::UseDefaultMaterial()
+std::shared_ptr<DefaultMaterial> SpriteRenderer::UseDefaultMaterial()
 {
     auto defaultMaterial = Material::CreateInstanceOf<DefaultMaterial>();
     m_Material = defaultMaterial;
     return defaultMaterial;
 }
 
-glm::vec2 TextureRenderer::GetPivot() const
+glm::vec2 SpriteRenderer::GetPivot() const
 {
     return m_Pivot;
 }
 
-void TextureRenderer::SetPivot(const glm::vec2& pivot)
+void SpriteRenderer::SetPivot(const glm::vec2& pivot)
 {
     m_Pivot = pivot;
 }
 
-void TextureRenderer::Init()
+void SpriteRenderer::Init()
 {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -84,7 +84,7 @@ void TextureRenderer::Init()
     glEnableVertexAttribArray(1);
 }
 
-void TextureRenderer::Terminate()
+void SpriteRenderer::Terminate()
 {
     glDeleteBuffers(1, &s_QuadVbo);
     s_QuadVbo = 0;
@@ -96,7 +96,7 @@ void TextureRenderer::Terminate()
     s_QuadVao = 0;
 }
 
-void TextureRenderer::Render()
+void SpriteRenderer::Render()
 {
     if (m_Material == nullptr) return;
 

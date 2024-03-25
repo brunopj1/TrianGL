@@ -10,7 +10,7 @@ namespace TGL
     class Material;
     class DefaultMaterial;
 
-    class TextureRenderer final : public Component, public Renderable
+    class SpriteRenderer final : public Component, public Renderable
     {
     private:
         friend class Application;
@@ -26,8 +26,8 @@ namespace TGL
         glm::bvec2 m_Flip = glm::bvec2(false);
 
     public:
-        TextureRenderer(std::shared_ptr<Material> material = nullptr);
-        ~TextureRenderer() override = default;
+        SpriteRenderer(std::shared_ptr<Material> material = nullptr);
+        ~SpriteRenderer() override = default;
 
     public:
         std::shared_ptr<Material> GetMaterial() const;

@@ -8,7 +8,7 @@ namespace TGL
     class Transform
     {
     private:
-        friend class TextureRenderer;
+        friend class SpriteRenderer;
 
     private:
         glm::vec2 m_Position = {0.0f, 0.0f};

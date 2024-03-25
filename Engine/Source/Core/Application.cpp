@@ -8,7 +8,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "Components/TextureRenderer.h"
+#include "Components/SpriteRenderer.h"
 
 #include "Entities/Camera.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.hpp"
@@ -110,12 +110,12 @@ void Application::Init()
 
     m_InputSystem.Init(m_Window.GetGlfwWindow());
 
-    TextureRenderer::Init();
+    SpriteRenderer::Init();
 }
 
 void Application::Terminate() const
 {
-    TextureRenderer::Terminate();
+    SpriteRenderer::Terminate();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();

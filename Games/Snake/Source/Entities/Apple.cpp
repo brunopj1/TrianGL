@@ -1,7 +1,7 @@
 ﻿#include "Apple.h"
 
 #include "Grid.h"
-#include "Components/TextureRenderer.h"
+#include "Components/SpriteRenderer.h"
 #include "DefaultResources/DefaultMaterial.h"
 #include "Resources/Texture.h"
 
@@ -10,8 +10,8 @@ using namespace TGL;
 Apple::Apple(Grid* grid, std::shared_ptr<Texture> spriteSheet)
     : Entity(false), m_SpriteSheet(std::move(spriteSheet))
 {
-    TextureRenderer* tr = AttachComponent<TextureRenderer>();
-    const auto material = tr->UseDefaultMaterial();
+    SpriteRenderer* sr = AttachComponent<SpriteRenderer>();
+    const auto material = sr->UseDefaultMaterial();
     material->Sprite->Value = m_SpriteSheet->GetSlice(7);
 
     RandomizePosition(grid);

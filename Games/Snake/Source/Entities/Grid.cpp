@@ -1,6 +1,6 @@
 ﻿#include "Grid.h"
 
-#include "Components/TextureRenderer.h"
+#include "Components/SpriteRenderer.h"
 #include "Core/Window.h"
 #include "Entities/Camera.h"
 #include "Materials/GridMaterial.h"
@@ -12,10 +12,10 @@ using namespace TGL;
 Grid::Grid(const glm::uvec2 dimensions)
     : Entity(false)
 {
-    m_TextureRenderer = AttachComponent<TextureRenderer>();
-    m_TextureRenderer->SetMaterial(Material::CreateInstanceOf<GridMaterial>());
-    m_TextureRenderer->SetPivot({0, 0});
-    m_TextureRenderer->SetZIndex(-1);
+    m_SpriteRenderer = AttachComponent<SpriteRenderer>();
+    m_SpriteRenderer->SetMaterial(Material::CreateInstanceOf<GridMaterial>());
+    m_SpriteRenderer->SetPivot({0, 0});
+    m_SpriteRenderer->SetZIndex(-1);
 
     Resize(dimensions);
 }
@@ -77,7 +77,7 @@ void Grid::Resize(const glm::uvec2& size)
 {
     m_Size = size;
 
-    const auto material = m_TextureRenderer->GetMaterial()->As<GridMaterial>();
+    const auto material = m_SpriteRenderer->GetMaterial()->As<GridMaterial>();
     material->GridSize->Value = m_Size;
 
     const unsigned gridSize = m_Size.x * m_Size.y;

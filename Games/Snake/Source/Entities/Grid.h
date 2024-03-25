@@ -10,7 +10,7 @@ private:
     std::vector<Entity*> m_Cells;
 
 private:
-    TGL::TextureRenderer* m_TextureRenderer = nullptr;
+    TGL::SpriteRenderer* m_SpriteRenderer = nullptr;
 
 public:
     Grid(glm::uvec2 dimensions);
