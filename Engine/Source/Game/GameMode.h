@@ -10,7 +10,7 @@ namespace TGL
         friend class Application;
         friend class EntityManager;
 
-    public:
+    protected:
         GameMode();
         ~GameMode() override;
 

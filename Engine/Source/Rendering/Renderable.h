@@ -12,7 +12,7 @@ namespace TGL
         Transform m_Transform;
         int m_ZIndex = 0;
 
-    public:
+    protected:
         Renderable() = default;
         virtual ~Renderable() = default;
 

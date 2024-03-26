@@ -45,6 +45,41 @@ void Window::SetFullscreen(const bool fullscreen)
     );
 }
 
+bool Window::IsMaximized()
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    return glfwGetWindowAttrib(s_Instance->m_WindowPtr, GLFW_MAXIMIZED);
+}
+
+void Window::Maximize()
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    glfwMaximizeWindow(s_Instance->m_WindowPtr);
+}
+
+bool Window::IsMinimized()
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    return glfwGetWindowAttrib(s_Instance->m_WindowPtr, GLFW_ICONIFIED);
+}
+
+void Window::Minimize()
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    glfwIconifyWindow(s_Instance->m_WindowPtr);
+}
+
+void Window::Restore()
+{
+    ASSERT_SINGLETON_INITIALIZED();
+
+    glfwRestoreWindow(s_Instance->m_WindowPtr);
+}
+
 std::string Window::GetTitle()
 {
     ASSERT_SINGLETON_INITIALIZED();
@@ -136,7 +171,7 @@ void Window::Init()
 
     glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* _, const int width, const int height)
     {
-        s_Instance->ResizeCallback(width, height);
+        s_Instance->SizeCallback(width, height);
     });
 
     glfwMakeContextCurrent(m_WindowPtr);
@@ -155,7 +190,7 @@ void Window::PositionCallback(int x, int y)
     m_Position = {x, y};
 }
 
-void Window::ResizeCallback(int width, int height)
+void Window::SizeCallback(int width, int height)
 {
     m_Resolution = {width, height};
     m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);

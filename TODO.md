@@ -12,6 +12,8 @@
 - [ ] Add a wiki with the engine documentation
 - [ ] Explain how to create a game (create the Application, set the game mode, etc...)
 - [ ] Explain the Game classes and how to create / destroy them
+- [ ] Explain how and why to use the Execution Order
+- [ ] Explain that the execution order should always return the same value (or the user will experience undefined behaviour)
 - [ ] Explain that the game mode should not delete anything in the destructor
 - [ ] Explain how the resources work (talk about the shared pointers)
 - [ ] Explain the public core systems (Clock, Input, Window, etc...)
@@ -27,6 +29,7 @@
 - [X] Add lazy pointers to the classes managed by the engine (Entity, Component, System, Resource)
 - [X] World to Screen and Screen to World methods
 - [ ] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
+- [ ] Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 
 ## Resource Manager
 

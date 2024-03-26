@@ -18,7 +18,7 @@ namespace TGL
     private:
         Transform m_Transform;
         std::vector<Component*> m_Components;
-
+    
     protected:
         Entity(bool shouldUpdate);
         ~Entity() override;

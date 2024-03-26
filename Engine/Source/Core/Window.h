@@ -37,6 +37,14 @@ namespace TGL
         static bool IsFullscreen();
         static void SetFullscreen(bool fullscreen);
 
+        static bool IsMaximized();
+        static void Maximize();
+
+        static bool IsMinimized();
+        static void Minimize();
+
+        static void Restore();
+
         static std::string GetTitle();
         static void SetTitle(const std::string& title);
 
@@ -57,7 +65,7 @@ namespace TGL
 
     private:
         void PositionCallback(int x, int y);
-        void ResizeCallback(int width, int height);
+        void SizeCallback(int width, int height);
 
     private:
         void SwapBuffers() const;

@@ -18,7 +18,7 @@ namespace TGL
         uint64_t m_Id = 0;
         bool m_ShouldUpdate;
 
-    public:
+    protected:
         Object(bool shouldUpdate);
         virtual ~Object() = default;
 
