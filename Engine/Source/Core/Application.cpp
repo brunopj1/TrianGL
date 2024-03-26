@@ -54,9 +54,7 @@ void Application::Run()
     {
         PollEvents();
 
-        Update();
-
-        Render();
+        NewFrame();
 
         Cleanup();
     }
@@ -126,27 +124,29 @@ void Application::Terminate() const
     m_Window.Terminate();
 }
 
-void Application::Update()
+void Application::NewFrame()
 {
-    const float deltaTime = m_Clock.Update();
-
-    m_EntityManager.Update(deltaTime);
-}
-
-void Application::Render() const
-{
-    Camera* camera = Camera::GetMainCamera();
-    camera->UpdateMatrices();
-
-    const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f);
+    // Prepare the ImGui frame
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 #endif
+
+    // Update
+
+    const float deltaTime = m_Clock.Update();
+    m_EntityManager.Update(deltaTime);
+
+    // Render
+
+    Camera* camera = Camera::GetMainCamera();
+    camera->UpdateMatrices();
+
+    const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f);
 
     if (camera != nullptr)
     {

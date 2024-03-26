@@ -6,12 +6,6 @@
 #include "Game/Component.h"
 #include "Util/Macros/SingletonMacros.h"
 
-#ifdef DEBUG
-#include "Rendering/ImGui/ImGuiRenderer.h"
-#include "Rendering/ImGui/ImGuiMenuRender.h"
-#include <imgui.h>
-#endif
-
 using namespace TGL;
 
 EntityManager::EntityManager()
@@ -60,33 +54,10 @@ void EntityManager::Update(const float deltaTime)
 
 void EntityManager::Render() const
 {
-    // Render queue
-
     for (const auto& renderable : m_RenderQueue)
     {
         renderable->Render();
     }
-
-    // ImGui windows / menus
-
-#ifdef DEBUG
-    if (!m_ImGuiMenuRenderQueue.empty())
-    {
-        ImGui::BeginMainMenuBar();
-
-        for (const auto& renderable : m_ImGuiMenuRenderQueue)
-        {
-            renderable->RenderImGuiMenu();
-        }
-
-        ImGui::EndMainMenuBar();
-    }
-
-    for (const auto& renderable : m_ImGuiRenderQueue)
-    {
-        renderable->RenderImGui();
-    }
-#endif
 }
 
 GameMode* EntityManager::GetGameMode()
@@ -160,26 +131,6 @@ void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Rendera
     queue.push_back(renderable);
 }
 
-#if DEBUG
-
-void EntityManager::AddToImGuiQueue(ImGuiMenuRenderer* renderer, std::vector<ImGuiMenuRenderer*>& queue)
-{
-    const auto order = renderer->GetRenderOrder();
-
-    for (auto it = queue.begin(); it != queue.end(); ++it)
-    {
-        if ((*it)->GetRenderOrder() > order)
-        {
-            queue.insert(it, renderer);
-            return;
-        }
-    }
-
-    queue.push_back(renderer);
-}
-
-#endif
-
 void EntityManager::StoreObjectCallbacks(Object* object)
 {
     // Updatable
@@ -193,20 +144,6 @@ void EntityManager::StoreObjectCallbacks(Object* object)
     {
         AddToRenderQueue(renderable, m_RenderQueue);
     }
-
-    // ImGui Renderer
-
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(object); imguiRenderer != nullptr)
-    {
-        m_ImGuiRenderQueue.push_back(imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(object); imguiMenuRenderer != nullptr)
-    {
-        AddToImGuiQueue(imguiMenuRenderer, m_ImGuiMenuRenderQueue);
-    }
-#endif
 }
 
 void EntityManager::RemoveObjectCallbacks(Object* object)
@@ -222,20 +159,6 @@ void EntityManager::RemoveObjectCallbacks(Object* object)
     {
         std::erase(m_RenderQueue, renderable);
     }
-
-    // ImGui Renderer
-
-#ifdef DEBUG
-    if (const auto imguiRenderer = dynamic_cast<ImGuiRenderer*>(object); imguiRenderer != nullptr)
-    {
-        std::erase(m_ImGuiRenderQueue, imguiRenderer);
-    }
-
-    if (const auto imguiMenuRenderer = dynamic_cast<ImGuiMenuRenderer*>(object); imguiMenuRenderer != nullptr)
-    {
-        std::erase(m_ImGuiMenuRenderQueue, imguiMenuRenderer);
-    }
-#endif
 }
 
 void EntityManager::UpdateRenderableOrder(Renderable* renderable)

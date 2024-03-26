@@ -31,4 +31,11 @@ public:
 private:
     void OnEarlyUpdate(float deltaTime) override;
     void OnLateUpdate(float deltaTime) override;
+
+#ifdef DEBUG
+
+private:
+    void RenderImGui();
+
+#endif
 };

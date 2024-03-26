@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Component.h"
-#include "Rendering/Renderable.h"
+#include "Game/Rendering/Renderable.h"
 #include <memory>
 
 namespace TGL

@@ -8,10 +8,12 @@
 #include "Core/Window.h"
 #include "Resources/Material.h"
 
+#ifdef DEBUG
+#include <imgui.h>
+#endif
+
 using namespace TGL;
 
-// TODO disable the loop around mechanic
-// TODO add imgui overlay to control the game
 // TODO add a more fluid motion to the snake
 
 SnakeGameMode::SnakeGameMode()
@@ -37,6 +39,10 @@ SnakeGameMode::SnakeGameMode()
 
 void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
 {
+#ifdef DEBUG
+    RenderImGui();
+#endif
+
     const glm::uvec2 currentWindowSize = Window::GetResolution();
 
     if (currentWindowSize != m_WindowSize)
@@ -68,3 +74,31 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
         }
     }
 }
+
+#ifdef DEBUG
+
+void SnakeGameMode::RenderImGui()
+{
+    ImGui::SetNextWindowSize({300, 200}, ImGuiCond_Appearing);
+
+    if (ImGui::Begin("Settings"))
+    {
+        ImGui::SliderFloat("Tick rate", &m_TickRate, 0.1f, 1.0f);
+
+        ImGui::Separator();
+
+        if (ImGui::Button("Randomize apple"))
+        {
+            Apple* apple = m_Apple.Get();
+
+            if (apple != nullptr)
+            {
+                apple->RandomizePosition(m_Grid);
+            }
+        }
+    }
+
+    ImGui::End();
+}
+
+#endif

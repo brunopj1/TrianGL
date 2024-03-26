@@ -43,8 +43,7 @@ namespace TGL
         void Terminate() const;
 
     private:
-        void Update();
-        void Render() const;
+        void NewFrame();
         void Cleanup();
         void PollEvents() const;
 

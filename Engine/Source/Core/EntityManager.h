@@ -8,17 +8,8 @@
 #include "Util/Macros/SpawnerMacros.h"
 #include <ranges>
 
-#ifdef DEBUG
-#include "Rendering/ImGui/ImGuiMenuRender.h"
-#endif
-
 namespace TGL
 {
-#ifdef DEBUG
-    class ImGuiRenderer;
-    class ImGuiMenuRenderer;
-#endif
-
     class EntityManager final
     {
     private:
@@ -54,11 +45,6 @@ namespace TGL
 
         std::vector<Renderable*> m_RenderQueue;
 
-#ifdef DEBUG
-        std::vector<ImGuiRenderer*> m_ImGuiRenderQueue;
-        std::vector<ImGuiMenuRenderer*> m_ImGuiMenuRenderQueue;
-#endif
-
     private:
         EntityManager();
         ~EntityManager();
@@ -81,10 +67,6 @@ namespace TGL
     private:
         static void AddToUpdateQueue(Object* object, std::vector<Object*>& queue);
         static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
-
-#ifdef DEBUG
-        static void AddToImGuiQueue(ImGuiMenuRenderer* renderer, std::vector<ImGuiMenuRenderer*>& queue);
-#endif
 
     private:
         void StoreObjectCallbacks(Object* object);
