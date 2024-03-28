@@ -9,25 +9,22 @@ namespace TGL
         friend class Application;
 
     private:
-        DECLARE_SINGLETON_INSTANCE_VAR(TGL::Clock);
+        static inline float s_TotalTime = 0.0f;
+        static inline float s_DeltaTime = 0.0f;
+
+        static inline unsigned int s_TotalFrameCount = 0;
+        static inline unsigned int s_SecondFrameCount = 0;
+        static inline unsigned int s_FrameRate = 1;
+
+        static inline float s_NextSecond = 1.0f;
+        static inline bool s_IsNewSecond = false;
+
+    public:
+        Clock() = delete;
+        ~Clock() = delete;
 
     private:
-        float m_TotalTime = 0.0f;
-        float m_DeltaTime = 0.0f;
-
-        unsigned int m_TotalFrameCount = 0;
-        unsigned int m_SecondFrameCount = 0;
-        unsigned int m_FrameRate = 1;
-
-        float m_NextSecond = 1.0f;
-        bool m_IsNewSecond = false;
-
-    private:
-        Clock();
-        ~Clock();
-
-    private:
-        float Update();
+        static float Update();
 
     public:
         static float GetTotalTime();

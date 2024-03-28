@@ -1,77 +1,56 @@
 ﻿#include "Clock.h"
 
 #include "GLFW/glfw3.h"
-#include "Util/Macros/SingletonMacros.h"
 
 using namespace TGL;
-
-Clock::Clock()
-{
-    s_Instance = this;
-}
-
-Clock::~Clock()
-{
-    s_Instance = nullptr;
-}
 
 float Clock::Update()
 {
     const float currentTime = static_cast<float>(glfwGetTime());
 
-    m_DeltaTime = currentTime - m_TotalTime;
-    m_TotalTime = currentTime;
+    s_DeltaTime = currentTime - s_TotalTime;
+    s_TotalTime = currentTime;
 
-    m_TotalFrameCount++;
-    m_SecondFrameCount++;
+    s_TotalFrameCount++;
+    s_SecondFrameCount++;
 
-    if (m_TotalTime >= m_NextSecond)
+    if (s_TotalTime >= s_NextSecond)
     {
-        m_IsNewSecond = true;
-        m_NextSecond += 1.0f;
+        s_IsNewSecond = true;
+        s_NextSecond += 1.0f;
 
-        m_FrameRate = m_SecondFrameCount;
-        m_SecondFrameCount = 0;
+        s_FrameRate = s_SecondFrameCount;
+        s_SecondFrameCount = 0;
     }
     else
     {
-        m_IsNewSecond = false;
+        s_IsNewSecond = false;
     }
 
-    return m_DeltaTime;
+    return s_DeltaTime;
 }
 
 float Clock::GetTotalTime()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_TotalTime;
+    return s_TotalTime;
 }
 
 float Clock::GetDeltaTime()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_DeltaTime;
+    return s_DeltaTime;
 }
 
 unsigned Clock::GetFrameCount()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_TotalFrameCount;
+    return s_TotalFrameCount;
 }
 
 unsigned Clock::GetFrameRate()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_FrameRate;
+    return s_FrameRate;
 }
 
 bool Clock::IsNewSecond()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_IsNewSecond;
+    return s_IsNewSecond;
 }

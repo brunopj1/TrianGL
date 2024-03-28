@@ -72,26 +72,12 @@ void SnakeGameMode::OnWindowResized(glm::uvec2 newResolution)
     m_Grid->FocusCamera();
 }
 
-void SnakeGameMode::OnWindowMaximized()
-{
-    std::cout << "Window maximized" << std::endl;
-}
-
-void SnakeGameMode::OnWindowRestored()
-{
-    std::cout << "Window restored" << std::endl;
-}
-
-void SnakeGameMode::OnWindowFullscreen(bool fullscreen)
-{
-    std::cout << "Fullscreen: " << fullscreen << std::endl;
-}
-
 #ifdef DEBUG
 
 void SnakeGameMode::RenderImGui()
 {
-    ImGui::SetNextWindowSize({300, 200}, ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos({10, 10}, ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize({250, 200}, ImGuiCond_Appearing);
 
     if (ImGui::Begin("Settings"))
     {

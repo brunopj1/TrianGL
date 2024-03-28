@@ -8,24 +8,18 @@
 
 using namespace TGL;
 
-EntityManager::EntityManager()
+void EntityManager::Init()
 {
-    s_Instance = this;
+    s_CanCreateAndDestroyObjects = true;
 }
 
-EntityManager::~EntityManager()
+void EntityManager::Terminate()
 {
-    // The objects are destroyed in the Terminate method
-    // to prevent destroying them after the OpenGL context is destroyed
+    s_CanCreateAndDestroyObjects = false;
 
-    s_Instance = nullptr;
-}
-
-void EntityManager::Terminate() const
-{
-    while (!m_Entities.empty())
+    while (!s_Entities.empty())
     {
-        DestroyEntity(m_Entities.begin()->second);
+        DestroyEntity(s_Entities.begin()->second);
     }
 
     DestroyGameMode();
@@ -33,15 +27,15 @@ void EntityManager::Terminate() const
 
 void EntityManager::Update(const float deltaTime)
 {
-    for (Object* object : m_OnStartQueue)
+    for (Object* object : s_OnStartQueue)
     {
         object->OnStart();
     }
-    m_OnStartQueue.clear();
+    s_OnStartQueue.clear();
 
-    m_GameMode->OnEarlyUpdate(deltaTime);
+    s_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (Object* object : m_OnUpdateQueue)
+    for (Object* object : s_OnUpdateQueue)
     {
         if (object->m_ShouldUpdate)
         {
@@ -49,12 +43,12 @@ void EntityManager::Update(const float deltaTime)
         }
     }
 
-    m_GameMode->OnLateUpdate(deltaTime);
+    s_GameMode->OnLateUpdate(deltaTime);
 }
 
-void EntityManager::Render() const
+void EntityManager::Render()
 {
-    for (const auto& renderable : m_RenderQueue)
+    for (const auto& renderable : s_RenderQueue)
     {
         renderable->Render();
     }
@@ -62,41 +56,31 @@ void EntityManager::Render() const
 
 GameMode* EntityManager::GetGameMode()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_GameMode;
+    return s_GameMode;
 }
 
 Entity* EntityManager::GetEntity(const uint64_t id)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    const auto it = s_Instance->m_Entities.find(id);
-    if (it != s_Instance->m_Entities.end()) return it->second;
+    const auto it = s_Entities.find(id);
+    if (it != s_Entities.end()) return it->second;
     return nullptr;
 }
 
 Component* EntityManager::GetComponent(const uint64_t id)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    const auto it = s_Instance->m_Components.find(id);
-    if (it != s_Instance->m_Components.end()) return it->second;
+    const auto it = s_Components.find(id);
+    if (it != s_Components.end()) return it->second;
     return nullptr;
 }
 
 size_t EntityManager::GetEntityCount()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Entities.size();
+    return s_Entities.size();
 }
 
 size_t EntityManager::GetComponentCount()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Components.size();
+    return s_Components.size();
 }
 
 void EntityManager::AddToUpdateQueue(Object* object, std::vector<Object*>& queue)
@@ -135,14 +119,14 @@ void EntityManager::StoreObjectCallbacks(Object* object)
 {
     // Updatable
 
-    AddToUpdateQueue(object, m_OnStartQueue);
-    AddToUpdateQueue(object, m_OnUpdateQueue);
+    AddToUpdateQueue(object, s_OnStartQueue);
+    AddToUpdateQueue(object, s_OnUpdateQueue);
 
     // Renderable
 
     if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
     {
-        AddToRenderQueue(renderable, m_RenderQueue);
+        AddToRenderQueue(renderable, s_RenderQueue);
     }
 }
 
@@ -150,24 +134,22 @@ void EntityManager::RemoveObjectCallbacks(Object* object)
 {
     // Updatable
 
-    std::erase(m_OnStartQueue, object);
-    std::erase(m_OnUpdateQueue, object);
+    std::erase(s_OnStartQueue, object);
+    std::erase(s_OnUpdateQueue, object);
 
     // Renderable
 
     if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
     {
-        std::erase(m_RenderQueue, renderable);
+        std::erase(s_RenderQueue, renderable);
     }
 }
 
 void EntityManager::UpdateRenderableOrder(Renderable* renderable)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    std::erase(s_RenderQueue, renderable);
 
-    std::erase(s_Instance->m_RenderQueue, renderable);
-
-    AddToRenderQueue(renderable, s_Instance->m_RenderQueue);
+    AddToRenderQueue(renderable, s_RenderQueue);
 }
 
 void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component)
@@ -178,26 +160,22 @@ void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* 
 
 void EntityManager::DestroyGameMode()
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    if (s_GameMode == nullptr) return;
 
-    if (s_Instance->m_GameMode == nullptr) return;
-
-    s_Instance->RemoveObjectCallbacks(s_Instance->m_GameMode);
+    RemoveObjectCallbacks(s_GameMode);
 
     PREPARE_SPAWNER_USAGE(GameMode);
 
-    delete s_Instance->m_GameMode;
+    delete s_GameMode;
 
-    s_Instance->m_GameMode = nullptr;
+    s_GameMode = nullptr;
 }
 
 void EntityManager::DestroyEntity(Entity* entity)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    if (const size_t num = s_Entities.erase(entity->m_Id); num == 0) return;
 
-    if (const size_t num = s_Instance->m_Entities.erase(entity->m_Id); num == 0) return;
-
-    s_Instance->RemoveObjectCallbacks(entity);
+    RemoveObjectCallbacks(entity);
 
     entity->DetachAllComponents();
 
@@ -208,11 +186,9 @@ void EntityManager::DestroyEntity(Entity* entity)
 
 void EntityManager::DestroyComponent(Component* component)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    if (const size_t num = s_Components.erase(component->m_Id); num == 0) return;
 
-    if (const size_t num = s_Instance->m_Components.erase(component->m_Id); num == 0) return;
-
-    s_Instance->RemoveObjectCallbacks(component);
+    RemoveObjectCallbacks(component);
 
     std::erase(component->m_Parent->m_Components, component);
 

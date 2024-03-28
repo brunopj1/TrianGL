@@ -16,10 +16,12 @@
 - [ ] Explain that the execution order should always return the same value (or the user will experience undefined behaviour)
 - [ ] Explain that the game mode should not delete anything in the destructor
 - [ ] Explain how the resources work (talk about the shared pointers)
+- [ ] Explain that the resources should not outlive the game mode (for example when stored in static variables)
 - [ ] Explain the public core systems (Clock, Input, Window, etc...)
 - [ ] Explain the existing entities and components (Camera, Texture Renderer, etc...)
 - [ ] Explain the lazy pointers and how to use them
 - [ ] Explain how to render ImGui windows (and say that it is debug only)
+- [ ] Explain how to use the callbacks
 - [ ] Add every new feature to the wiki
 
 ## General
@@ -28,7 +30,8 @@
 - [X] Reorganize the exceptions
 - [X] Add lazy pointers to the classes managed by the engine (Entity, Component, System, Resource)
 - [X] World to Screen and Screen to World methods
-- [ ] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
+- [X] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
+- [ ] Execute the callbacks after the ImGui NewFrame (to allow for example opening popups)
 - [ ] Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 
 ## Resource Manager
@@ -75,7 +78,6 @@
 - [X] Add a way to slice textures (texture sheet)
 - [X] Allow flipping the texture renderer (using the scale)
 - [ ] Implement View Frustum Culling
-- [ ] Add more engine material uniforms (window, camera, etc...)
 - [ ] Validate the material uniforms (repeated names, invalid type)
 - [ ] Add batch rendering (for the same material)
 - [ ] Use uniform buffers for the shaders

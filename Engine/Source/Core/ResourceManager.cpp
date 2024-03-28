@@ -7,19 +7,19 @@
 
 using namespace TGL;
 
-ResourceManager::ResourceManager()
+void ResourceManager::Init()
 {
-    s_Instance = this;
+    s_CanCreateAndDestroyObjects = true;
 }
 
-ResourceManager::~ResourceManager()
+void ResourceManager::Terminate()
 {
-    s_Instance = nullptr;
+    s_CanCreateAndDestroyObjects = false;
 }
 
 std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    ASSERT_SINGLETON_OBJECT_CREATION();
 
     PREPARE_SPAWNER_USAGE(Texture);
 
@@ -30,25 +30,25 @@ std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePat
     return instance;
 }
 
-void ResourceManager::UnloadTexture(Texture* texture)
-{
-    ASSERT_SINGLETON_INITIALIZED();
-
-    texture->Free();
-}
-
 std::shared_ptr<TextureSlice> ResourceManager::CreateTextureSlice(Texture* texture, int index)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    // No need to assert here since this doesn't interact with OpenGL
 
     PREPARE_SPAWNER_USAGE(TextureSlice);
 
     return std::make_shared<TextureSlice>(texture->shared_from_this(), index);
 }
 
+void ResourceManager::UnloadTexture(Texture* texture)
+{
+    ASSERT_SINGLETON_OBJECT_DESTRUCTION();
+
+    texture->Free();
+}
+
 void ResourceManager::UnloadMaterialUniforms(const Material* material)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    // No need to assert here since this doesn't interact with OpenGL
 
     for (const auto uniform : material->m_Uniforms)
     {
@@ -60,36 +60,36 @@ void ResourceManager::UnloadMaterialUniforms(const Material* material)
 
 Shader* ResourceManager::LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    // No need to assert here since this is only used internally
 
     const auto newShader = new Shader(vertexShaderPath, fragmentShaderPath);
-    const auto it = s_Instance->m_Shaders.find(newShader);
+    const auto it = s_Shaders.find(newShader);
 
-    if (it == s_Instance->m_Shaders.end())
+    if (it == s_Shaders.end())
     {
-        s_Instance->m_Shaders[newShader] = 1;
+        s_Shaders[newShader] = 1;
         newShader->Setup();
         return newShader;
     }
 
-    s_Instance->m_Shaders[it->first] = it->second + 1;
+    s_Shaders[it->first] = it->second + 1;
     delete newShader;
     return it->first;
 }
 
 void ResourceManager::UnloadShader(Shader* shader)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    // No need to assert here since this is only used internally
 
-    const auto it = s_Instance->m_Shaders.find(shader);
+    const auto it = s_Shaders.find(shader);
 
     if (it->second == 1)
     {
         it->first->Free();
-        s_Instance->m_Shaders.erase(it);
+        s_Shaders.erase(it);
         delete shader;
         return;
     }
 
-    s_Instance->m_Shaders[shader] = it->second - 1;
+    s_Shaders[shader] = it->second - 1;
 }

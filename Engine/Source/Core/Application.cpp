@@ -29,28 +29,28 @@
 using namespace TGL;
 
 Application::Application(const ApplicationConfig& config)
-    : m_Window(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync)
 {
-    Init();
+    Init(config);
 }
 
 Application::~Application()
 {
-    m_EntityManager.Terminate();
-
     Terminate();
 }
 
+// ReSharper disable once CppMemberFunctionMayBeStatic
 void Application::Run()
 {
-    if (!m_EntityManager.m_GameMode)
+    GameMode* gameMode = EntityManager::GetGameMode();
+
+    if (gameMode == nullptr)
     {
         throw GameModeMissingException();
     }
 
-    m_EntityManager.m_GameMode->OnStart();
+    gameMode->OnStart();
 
-    while (!m_Window.ShouldClose())
+    while (!Window::ShouldClose())
     {
         PollEvents();
 
@@ -60,7 +60,7 @@ void Application::Run()
     }
 }
 
-void Application::Init()
+void Application::Init(const ApplicationConfig& config)
 {
     glfwSetErrorCallback(ErrorCallback);
 
@@ -73,7 +73,7 @@ void Application::Init()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    m_Window.Init();
+    Window::Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))  // NOLINT(clang-diagnostic-cast-function-type-strict)
     {
@@ -87,7 +87,7 @@ void Application::Init()
 
     ImGui::StyleColorsDark();
 
-    if (!ImGui_ImplGlfw_InitForOpenGL(m_Window.GetGlfwWindow(), true))
+    if (!ImGui_ImplGlfw_InitForOpenGL(Window::GetGlfwWindow(), true))
     {
         throw FailedToInitializeEngineException("Failed to init ImGui for GLFW");
     }
@@ -106,14 +106,22 @@ void Application::Init()
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
 #endif
 
-    m_InputSystem.Init(m_Window.GetGlfwWindow());
+    InputSystem::Init(Window::GetGlfwWindow());
+
+    ResourceManager::Init();
+    EntityManager::Init();
 
     SpriteRenderer::Init();
 }
 
-void Application::Terminate() const
+void Application::Terminate()
 {
     SpriteRenderer::Terminate();
+
+    EntityManager::Terminate();
+    ResourceManager::Terminate();
+
+    InputSystem::Terminate();
 
 #ifdef DEBUG
     ImGui_ImplOpenGL3_Shutdown();
@@ -121,7 +129,7 @@ void Application::Terminate() const
     ImGui::DestroyContext();
 #endif
 
-    m_Window.Terminate();
+    Window::Terminate();
 }
 
 void Application::NewFrame()
@@ -136,8 +144,8 @@ void Application::NewFrame()
 
     // Update
 
-    const float deltaTime = m_Clock.Update();
-    m_EntityManager.Update(deltaTime);
+    const float deltaTime = Clock::Update();
+    EntityManager::Update(deltaTime);
 
     // Render
 
@@ -150,7 +158,7 @@ void Application::NewFrame()
 
     if (camera != nullptr)
     {
-        m_EntityManager.Render();
+        EntityManager::Render();
     }
 
 #ifdef DEBUG
@@ -162,17 +170,17 @@ void Application::NewFrame()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
 
-    m_Window.SwapBuffers();
+    Window::SwapBuffers();
 }
 
 void Application::Cleanup()
 {
-    m_InputSystem.OnEndOfFrame();
+    InputSystem::OnEndOfFrame();
 }
 
-void Application::PollEvents() const
+void Application::PollEvents()
 {
-    m_Window.PollEvents();
+    Window::PollEvents();
 }
 
 #ifdef DEBUG

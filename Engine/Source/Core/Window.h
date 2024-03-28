@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Util/Macros/SingletonMacros.h"
 #include <string>
 #include <glm/vec2.hpp>
 
@@ -16,22 +15,19 @@ namespace TGL
         friend class Application;
 
     private:
-        DECLARE_SINGLETON_INSTANCE_VAR(TGL::Window);
+        static inline GLFWwindow* s_WindowPtr = nullptr;
 
     private:
-        GLFWwindow* m_WindowPtr = nullptr;
+        static inline std::string s_Title;
+        static inline glm::ivec2 s_Position;
+        static inline glm::uvec2 s_Resolution;
+        static inline float s_AspectRatio;
+        static inline bool s_Fullscreen;
+        static inline bool s_Vsync;
 
-    private:
-        std::string m_Title;
-        glm::ivec2 m_Position;
-        glm::uvec2 m_Resolution;
-        float m_AspectRatio;
-        bool m_Fullscreen;
-        bool m_Vsync;
-
-    private:
-        Window(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
-        ~Window() = default;
+    public:
+        Window() = delete;
+        ~Window() = delete;
 
     public:
         static bool IsFullscreen();
@@ -60,12 +56,12 @@ namespace TGL
         static void SetVsync(bool vsync);
 
     private:
-        void Init();
-        void Terminate() const;
+        static void Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
+        static void Terminate();
 
     private:
-        void PositionCallback(int x, int y);
-        void SizeCallback(int width, int height);
+        static void PositionCallback(int x, int y);
+        static void SizeCallback(int width, int height);
 
         static void FullscreenCallback(bool fullscreen);
         static void MaximizeCallback();
@@ -73,11 +69,11 @@ namespace TGL
         static void RestoreCallback();
 
     private:
-        void SwapBuffers() const;
-        void PollEvents() const;
-        bool ShouldClose() const;
+        static void SwapBuffers();
+        static void PollEvents();
+        static bool ShouldClose();
 
     private:
-        GLFWwindow* GetGlfwWindow() const;
+        static GLFWwindow* GetGlfwWindow();
     };
 }

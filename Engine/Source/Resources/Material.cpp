@@ -18,9 +18,9 @@ Material::Material(const std::string& vertexShaderPath, const std::string& fragm
 
 Material::~Material()
 {
-    ResourceManager::UnloadShader(m_Shader);
-
     ResourceManager::UnloadMaterialUniforms(this);
+
+    ResourceManager::UnloadShader(m_Shader);
 }
 
 void Material::OnRenderSetup() const

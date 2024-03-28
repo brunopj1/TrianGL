@@ -25,31 +25,38 @@ namespace TGL
         friend class MaterialUniform;
 
     private:
-        DECLARE_SINGLETON_INSTANCE_VAR(TGL::ResourceManager);
-
-    private:
         DECLARE_SPAWNER_USAGE_VAR(Texture);
         DECLARE_SPAWNER_USAGE_VAR(TextureSlice);
         DECLARE_SPAWNER_USAGE_VAR(Material);
         DECLARE_SPAWNER_USAGE_VAR(MaterialUniform);
 
     private:
-        std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> m_Shaders;
+        static inline bool s_CanCreateAndDestroyObjects = false;
 
     private:
-        ResourceManager();
-        ~ResourceManager();
+        static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
+
+    public:
+        ResourceManager() = delete;
+        ~ResourceManager() = delete;
+
+    private:
+        static void Init();
+        static void Terminate();
 
     private:
         static std::shared_ptr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
 
-        static void UnloadTexture(Texture* texture);
-
         static std::shared_ptr<TextureSlice> CreateTextureSlice(Texture* texture, int index);
 
+        static void UnloadTexture(Texture* texture);
+
+    private:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
         static std::shared_ptr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
+            ASSERT_SINGLETON_OBJECT_CREATION();
+
             PREPARE_SPAWNER_USAGE(Material);
 
             std::shared_ptr<T> instance = std::make_shared<T>(std::forward<Args>(args)...);
@@ -60,6 +67,8 @@ namespace TGL
         template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
         static T* CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, unsigned char& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
         {
+            // No need to assert here since this doesn't interact with OpenGL
+
             PREPARE_SPAWNER_USAGE(MaterialUniform);
 
             T* instance = new T(shader, name);
@@ -86,6 +95,7 @@ namespace TGL
 
         static void UnloadMaterialUniforms(const Material* material);
 
+    private:
         static Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
         static void UnloadShader(Shader* shader);

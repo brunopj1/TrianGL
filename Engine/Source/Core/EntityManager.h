@@ -24,37 +24,38 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        DECLARE_SINGLETON_INSTANCE_VAR(TGL::EntityManager);
-
-    private:
         DECLARE_SPAWNER_USAGE_VAR(GameMode);
         DECLARE_SPAWNER_USAGE_VAR(Entity);
         DECLARE_SPAWNER_USAGE_VAR(Component);
 
     private:
-        uint64_t m_NextId = 1;
+        static inline bool s_CanCreateAndDestroyObjects = false;
 
     private:
-        GameMode* m_GameMode = nullptr;
-
-        std::unordered_map<uint64_t, Entity*> m_Entities;
-        std::unordered_map<uint64_t, Component*> m_Components;
-
-        std::vector<Object*> m_OnUpdateQueue;
-        std::vector<Object*> m_OnStartQueue;
-
-        std::vector<Renderable*> m_RenderQueue;
+        static inline uint64_t s_NextId = 1;
 
     private:
-        EntityManager();
-        ~EntityManager();
+        static inline GameMode* s_GameMode = nullptr;
+
+        static inline std::unordered_map<uint64_t, Entity*> s_Entities;
+        static inline std::unordered_map<uint64_t, Component*> s_Components;
+
+        static inline std::vector<Object*> s_OnUpdateQueue;
+        static inline std::vector<Object*> s_OnStartQueue;
+
+        static inline std::vector<Renderable*> s_RenderQueue;
+
+    public:
+        EntityManager() = delete;
+        ~EntityManager() = delete;
 
     private:
-        void Terminate() const;
+        static void Init();
+        static void Terminate();
 
     private:
-        void Update(float deltaTime);
-        void Render() const;
+        static void Update(float deltaTime);
+        static void Render();
 
     private:
         static GameMode* GetGameMode();
@@ -69,8 +70,8 @@ namespace TGL
         static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
     private:
-        void StoreObjectCallbacks(Object* object);
-        void RemoveObjectCallbacks(Object* object);
+        static void StoreObjectCallbacks(Object* object);
+        static void RemoveObjectCallbacks(Object* object);
 
     private:
         static void UpdateRenderableOrder(Renderable* renderable);
@@ -83,19 +84,19 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_INITIALIZED();
+            ASSERT_SINGLETON_OBJECT_CREATION();
 
-            if (s_Instance->m_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
+            if (s_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
 
             PREPARE_SPAWNER_USAGE(GameMode);
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            instance->m_Id = s_Instance->m_NextId++;
+            instance->m_Id = s_NextId++;
 
-            s_Instance->m_GameMode = instance;
+            s_GameMode = instance;
 
-            s_Instance->StoreObjectCallbacks(instance);
+            StoreObjectCallbacks(instance);
         }
 
         static void DestroyGameMode();
@@ -103,17 +104,17 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
         static T* CreateEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_INITIALIZED();
+            ASSERT_SINGLETON_OBJECT_CREATION();
 
             PREPARE_SPAWNER_USAGE(Entity);
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            instance->m_Id = s_Instance->m_NextId++;
+            instance->m_Id = s_NextId++;
 
-            s_Instance->m_Entities.emplace(instance->m_Id, instance);
+            s_Entities.emplace(instance->m_Id, instance);
 
-            s_Instance->StoreObjectCallbacks(instance);
+            StoreObjectCallbacks(instance);
 
             return instance;
         }
@@ -123,17 +124,17 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Component)>
         static T* CreateComponent(Entity* parent, Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_INITIALIZED();
+            ASSERT_SINGLETON_OBJECT_CREATION();
 
             PREPARE_SPAWNER_USAGE(Component);
 
             T* instance = new T(std::forward<Args>(args)...);
 
-            instance->m_Id = s_Instance->m_NextId++;
+            instance->m_Id = s_NextId++;
 
-            s_Instance->m_Components.emplace(instance->m_Id, instance);
+            s_Components.emplace(instance->m_Id, instance);
 
-            s_Instance->StoreObjectCallbacks(instance);
+            StoreObjectCallbacks(instance);
 
             SetupEntityComponentRelationship(parent, instance);
 
@@ -146,9 +147,7 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
         static T* FindEntityGlobally()
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
-            for (auto entity : s_Instance->m_Entities)
+            for (auto entity : s_Entities)
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -162,11 +161,9 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
         static std::vector<T*> FindEntitiesGlobally()
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
             std::vector<T*> entities;
 
-            for (auto entity : s_Instance->m_Entities | std::views::values)
+            for (auto entity : s_Entities | std::views::values)
             {
                 if (T* casted = dynamic_cast<T*>(entity))
                 {
@@ -180,9 +177,7 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
         static T* FindComponentGlobally()
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
-            for (auto component : s_Instance->m_Components | std::views::values)
+            for (auto component : s_Components | std::views::values)
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -196,11 +191,9 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
         static std::vector<T*> FindComponentsGlobally()
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
             std::vector<T*> components;
 
-            for (auto component : s_Instance->m_Components)
+            for (auto component : s_Components)
             {
                 if (T* casted = dynamic_cast<T*>(component))
                 {
@@ -214,8 +207,6 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
         static T* FindComponentInEntity(const std::vector<Component*>& entityComponents)
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
             for (auto component : entityComponents)
             {
                 if (T* casted = dynamic_cast<T*>(component))
@@ -230,8 +221,6 @@ namespace TGL
         template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
         static std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents)
         {
-            ASSERT_SINGLETON_INITIALIZED();
-
             std::vector<T*> components;
 
             for (auto component : entityComponents)

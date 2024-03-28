@@ -16,32 +16,22 @@ using namespace TGL;
 
 constexpr int minimun_window_resolution = 400;
 
-Window::Window(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
-    : m_Title(std::move(title)), m_Position(position), m_Resolution(resolution), m_AspectRatio(static_cast<float>(resolution.x) / static_cast<float>(resolution.y)), m_Fullscreen(fullscreen), m_Vsync(vsync)
-{
-    s_Instance = this;
-}
-
 bool Window::IsFullscreen()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Fullscreen;
+    return s_Fullscreen;
 }
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    ASSERT_SINGLETON_INITIALIZED();
+    if (fullscreen == s_Fullscreen) return;
 
-    if (fullscreen == s_Instance->m_Fullscreen) return;
-
-    s_Instance->m_Fullscreen = fullscreen;
+    s_Fullscreen = fullscreen;
 
     glfwSetWindowMonitor(
-        s_Instance->m_WindowPtr,
+        s_WindowPtr,
         fullscreen ? glfwGetPrimaryMonitor() : nullptr,
-        s_Instance->m_Position.x, s_Instance->m_Position.y,
-        s_Instance->m_Resolution.x, s_Instance->m_Resolution.y,
+        s_Position.x, s_Position.y,
+        s_Resolution.x, s_Resolution.y,
         GLFW_DONT_CARE
     );
 
@@ -50,178 +40,157 @@ void Window::SetFullscreen(const bool fullscreen)
 
 bool Window::IsMaximized()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return glfwGetWindowAttrib(s_Instance->m_WindowPtr, GLFW_MAXIMIZED);
+    return glfwGetWindowAttrib(s_WindowPtr, GLFW_MAXIMIZED);
 }
 
 void Window::Maximize()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    glfwMaximizeWindow(s_Instance->m_WindowPtr);
+    glfwMaximizeWindow(s_WindowPtr);
 }
 
 bool Window::IsMinimized()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return glfwGetWindowAttrib(s_Instance->m_WindowPtr, GLFW_ICONIFIED);
+    return glfwGetWindowAttrib(s_WindowPtr, GLFW_ICONIFIED);
 }
 
 void Window::Minimize()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    glfwIconifyWindow(s_Instance->m_WindowPtr);
+    glfwIconifyWindow(s_WindowPtr);
 }
 
 void Window::Restore()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    glfwRestoreWindow(s_Instance->m_WindowPtr);
+    glfwRestoreWindow(s_WindowPtr);
 }
 
 std::string Window::GetTitle()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Title;
+    return s_Title;
 }
 
 void Window::SetTitle(const std::string& title)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    s_Instance->m_Title = title;
-    glfwSetWindowTitle(s_Instance->m_WindowPtr, s_Instance->m_Title.c_str());
+    s_Title = title;
+    glfwSetWindowTitle(s_WindowPtr, s_Title.c_str());
 }
 
 glm::ivec2 Window::GetPosition()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Position;
+    return s_Position;
 }
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    // m_Position is updated in the callback
-    glfwSetWindowPos(s_Instance->m_WindowPtr, position.x, position.y);
+    // s_Position is updated in the callback
+    glfwSetWindowPos(s_WindowPtr, position.x, position.y);
 }
 
 glm::uvec2 Window::GetResolution()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Resolution;
+    return s_Resolution;
 }
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
     if (resolution.x == minimun_window_resolution || resolution.y == minimun_window_resolution)
     {
         throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
     }
 
-    // m_Resolution is updated in the callback
-    glfwSetWindowSize(s_Instance->m_WindowPtr, resolution.x, resolution.y);
+    // s_Resolution is updated in the callback
+    glfwSetWindowSize(s_WindowPtr, resolution.x, resolution.y);
 }
 
 float Window::GetAspectRatio()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_AspectRatio;
+    return s_AspectRatio;
 }
 
 bool Window::IsVsync()
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    return s_Instance->m_Vsync;
+    return s_Vsync;
 }
 
 void Window::SetVsync(const bool vsync)
 {
-    ASSERT_SINGLETON_INITIALIZED();
-
-    s_Instance->m_Vsync = vsync;
+    s_Vsync = vsync;
     glfwSwapInterval(vsync);
 }
 
-void Window::Init()
+void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
 {
-    m_WindowPtr = glfwCreateWindow(m_Resolution.x, m_Resolution.y, m_Title.c_str(), nullptr, nullptr);
+    s_Title = std::move(title);
+    s_Position = position;
+    s_Resolution = resolution;
+    s_AspectRatio = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
+    s_Fullscreen = fullscreen;
+    s_Vsync = vsync;
 
-    if (m_WindowPtr == nullptr)
+    s_WindowPtr = glfwCreateWindow(s_Resolution.x, s_Resolution.y, s_Title.c_str(), nullptr, nullptr);
+
+    if (s_WindowPtr == nullptr)
     {
         throw FailedToInitializeEngineException("Failed to create GLFW window");
     }
 
-    glfwSetWindowSizeLimits(m_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
-    glfwSetWindowPos(m_WindowPtr, 50, 50);
+    glfwSetWindowSizeLimits(s_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
+    glfwSetWindowPos(s_WindowPtr, 50, 50);
 
-    glfwSetWindowPosCallback(m_WindowPtr, [](GLFWwindow* _, const int x, const int y)
+    glfwSetWindowPosCallback(s_WindowPtr, [](GLFWwindow* _, const int x, const int y)
     {
-        s_Instance->PositionCallback(x, y);
+        PositionCallback(x, y);
     });
 
-    glfwSetWindowSizeCallback(m_WindowPtr, [](GLFWwindow* _, const int width, const int height)
+    glfwSetWindowSizeCallback(s_WindowPtr, [](GLFWwindow* _, const int width, const int height)
     {
-        s_Instance->SizeCallback(width, height);
+        SizeCallback(width, height);
     });
 
-    glfwSetWindowMaximizeCallback(m_WindowPtr, [](GLFWwindow* _, const int maximized)
+    glfwSetWindowMaximizeCallback(s_WindowPtr, [](GLFWwindow* _, const int maximized)
     {
         maximized ? MaximizeCallback() : RestoreCallback();
     });
 
-    glfwSetWindowIconifyCallback(m_WindowPtr, [](GLFWwindow* _, const int minimized)
+    glfwSetWindowIconifyCallback(s_WindowPtr, [](GLFWwindow* _, const int minimized)
     {
         minimized ? MinimizeCallback() : RestoreCallback();
     });
 
-    glfwMakeContextCurrent(m_WindowPtr);
+    glfwMakeContextCurrent(s_WindowPtr);
 
-    SetVsync(m_Vsync);
+    SetVsync(s_Vsync);
 }
 
-void Window::Terminate() const
+void Window::Terminate()
 {
-    glfwDestroyWindow(m_WindowPtr);
+    glfwDestroyWindow(s_WindowPtr);
     glfwTerminate();
 }
 
 void Window::PositionCallback(int x, int y)
 {
-    m_Position = {x, y};
+    s_Position = {x, y};
 
-    for (const auto listener : WindowMovedEvent::m_Listeners)
+    for (const auto listener : WindowMovedEvent::s_Listeners)
     {
-        listener->OnWindowMoved(m_Position);
+        listener->OnWindowMoved(s_Position);
     }
 }
 
 void Window::SizeCallback(int width, int height)
 {
-    m_Resolution = {width, height};
-    m_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    s_Resolution = {width, height};
+    s_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
     glViewport(0, 0, width, height);
 
     for (const auto camera : Entity::FindEntitiesGlobally<Camera>())
     {
-        camera->SetAspectRatio(m_AspectRatio);
+        camera->SetAspectRatio(s_AspectRatio);
     }
 
-    for (const auto listener : WindowResizedEvent::m_Listeners)
+    for (const auto listener : WindowResizedEvent::s_Listeners)
     {
-        listener->OnWindowResized(m_Resolution);
+        listener->OnWindowResized(s_Resolution);
     }
 }
 
@@ -229,7 +198,7 @@ void Window::FullscreenCallback(const bool fullscreen)
 {
     // The value is stored in the caller
 
-    for (const auto listener : WindowFullscreenEvent::m_Listeners)
+    for (const auto listener : WindowFullscreenEvent::s_Listeners)
     {
         listener->OnWindowFullscreen(fullscreen);
     }
@@ -237,7 +206,7 @@ void Window::FullscreenCallback(const bool fullscreen)
 
 void Window::MaximizeCallback()
 {
-    for (const auto listener : WindowMaximizedEvent::m_Listeners)
+    for (const auto listener : WindowMaximizedEvent::s_Listeners)
     {
         listener->OnWindowMaximized();
     }
@@ -245,7 +214,7 @@ void Window::MaximizeCallback()
 
 void Window::MinimizeCallback()
 {
-    for (const auto listener : WindowMinimizedEvent::m_Listeners)
+    for (const auto listener : WindowMinimizedEvent::s_Listeners)
     {
         listener->OnWindowMinimized();
     }
@@ -253,30 +222,30 @@ void Window::MinimizeCallback()
 
 void Window::RestoreCallback()
 {
-    for (const auto listener : WindowRestoredEvent::m_Listeners)
+    for (const auto listener : WindowRestoredEvent::s_Listeners)
     {
         listener->OnWindowRestored();
     }
 }
 
-void Window::SwapBuffers() const
+void Window::SwapBuffers()
 {
-    glfwSwapBuffers(m_WindowPtr);
+    glfwSwapBuffers(s_WindowPtr);
 }
 
 // ReSharper disable once CppMemberFunctionMayBeStatic
 
-void Window::PollEvents() const
+void Window::PollEvents()
 {
     glfwPollEvents();
 }
 
-bool Window::ShouldClose() const
+bool Window::ShouldClose()
 {
-    return glfwWindowShouldClose(m_WindowPtr);
+    return glfwWindowShouldClose(s_WindowPtr);
 }
 
-GLFWwindow* Window::GetGlfwWindow() const
+GLFWwindow* Window::GetGlfwWindow()
 {
-    return m_WindowPtr;
+    return s_WindowPtr;
 }

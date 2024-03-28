@@ -7,8 +7,6 @@
 #include "Core/EntityManager.h"
 #include "Core/InputSystem.h"
 
-// TODO Review what can be moved to a static inline variable (no more false positive memory leaks)
-
 namespace TGL
 {
     struct ApplicationConfig
@@ -22,17 +20,6 @@ namespace TGL
 
     class Application final
     {
-    private:
-        Window m_Window;
-
-        Clock m_Clock;
-
-        InputSystem m_InputSystem;
-
-        ResourceManager m_ResourceManager;
-
-        EntityManager m_EntityManager;
-
     public:
         Application(const ApplicationConfig& config = {});
         ~Application();
@@ -41,13 +28,13 @@ namespace TGL
         void Run();
 
     private:
-        void Init();
-        void Terminate() const;
+        static void Init(const ApplicationConfig& config);
+        static void Terminate();
 
     private:
-        void NewFrame();
-        void Cleanup();
-        void PollEvents() const;
+        static void NewFrame();
+        static void Cleanup();
+        static void PollEvents();
 
 #ifdef DEBUG
 

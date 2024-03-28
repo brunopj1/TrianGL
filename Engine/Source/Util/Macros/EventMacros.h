@@ -11,11 +11,11 @@
         friend class callerClass;                                 \
                                                                   \
     private:                                                      \
-        static inline std::vector<className*> m_Listeners;        \
+        static inline std::vector<className*> s_Listeners;        \
                                                                   \
     public:                                                       \
-        className() { m_Listeners.push_back(this); }              \
-        virtual ~className() { std::erase(m_Listeners, this); }   \
+        className() { s_Listeners.push_back(this); }              \
+        virtual ~className() { std::erase(s_Listeners, this); }   \
                                                                   \
     protected:                                                    \
         virtual void methodName() = 0;                            \
@@ -28,11 +28,11 @@
         friend class callerClass;                                                    \
                                                                                      \
     private:                                                                         \
-        static inline std::vector<className*> m_Listeners;                           \
+        static inline std::vector<className*> s_Listeners;                           \
                                                                                      \
     public:                                                                          \
-        className() { m_Listeners.push_back(this); }                                 \
-        virtual ~className() { std::erase(m_Listeners, this); }                      \
+        className() { s_Listeners.push_back(this); }                                 \
+        virtual ~className() { std::erase(s_Listeners, this); }                      \
                                                                                      \
     protected:                                                                       \
         virtual void methodName(argType argName) = 0;                                \

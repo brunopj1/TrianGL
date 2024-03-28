@@ -6,7 +6,7 @@ int main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - Snake";
-    config.Vsync = true;
+    config.Vsync = false;
 
     TGL::Application app{config};
     app.SetGameMode<SnakeGameMode>();
