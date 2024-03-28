@@ -1,18 +1,15 @@
 #pragma once
 
-#include "Implementations/Entities/Camera.h"
 #include "Entities/Snake.h"
 #include "Entities/Apple.h"
 #include "Entities/Grid.h"
+#include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
 #include "Util/Memory/LazyPtr.h"
 
-class SnakeGameMode final : public TGL::GameMode
+class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent
 {
 private:
-    TGL::Camera* m_Camera;
-    glm::uvec2 m_WindowSize;
-
     std::shared_ptr<TGL::Texture> m_SpriteSheet;
 
     Grid* m_Grid;
@@ -31,6 +28,9 @@ public:
 private:
     void OnEarlyUpdate(float deltaTime) override;
     void OnLateUpdate(float deltaTime) override;
+
+protected:
+    void OnWindowResized(glm::uvec2 newResolution) override;
 
 #ifdef DEBUG
 

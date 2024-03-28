@@ -18,8 +18,7 @@ using namespace TGL;
 
 SnakeGameMode::SnakeGameMode()
 {
-    m_Camera = SpawnEntity<Camera>(true);
-    m_WindowSize = {0, 0}; // Force the camera to focus on the grid
+    SpawnEntity<Camera>(true);
 
     auto textureParams = TextureParameters();
     textureParams.Filter = TextureFilterMode::Nearest;
@@ -35,6 +34,8 @@ SnakeGameMode::SnakeGameMode()
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 
     m_Apple = SpawnEntity<Apple>(m_Grid, m_SpriteSheet);
+
+    m_Grid->FocusCamera();
 }
 
 void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
@@ -42,15 +43,6 @@ void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
 #ifdef DEBUG
     RenderImGui();
 #endif
-
-    const glm::uvec2 currentWindowSize = Window::GetResolution();
-
-    if (currentWindowSize != m_WindowSize)
-    {
-        m_Grid->FocusCamera();
-    }
-
-    m_WindowSize = currentWindowSize;
 }
 
 void SnakeGameMode::OnLateUpdate(const float deltaTime)
@@ -73,6 +65,26 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
             m_Victory = true;
         }
     }
+}
+
+void SnakeGameMode::OnWindowResized(glm::uvec2 newResolution)
+{
+    m_Grid->FocusCamera();
+}
+
+void SnakeGameMode::OnWindowMaximized()
+{
+    std::cout << "Window maximized" << std::endl;
+}
+
+void SnakeGameMode::OnWindowRestored()
+{
+    std::cout << "Window restored" << std::endl;
+}
+
+void SnakeGameMode::OnWindowFullscreen(bool fullscreen)
+{
+    std::cout << "Fullscreen: " << fullscreen << std::endl;
 }
 
 #ifdef DEBUG

@@ -7,6 +7,8 @@
 #include "Core/EntityManager.h"
 #include "Core/InputSystem.h"
 
+// TODO Review what can be moved to a static inline variable (no more false positive memory leaks)
+
 namespace TGL
 {
     struct ApplicationConfig

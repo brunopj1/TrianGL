@@ -67,6 +67,11 @@ namespace TGL
         void PositionCallback(int x, int y);
         void SizeCallback(int width, int height);
 
+        static void FullscreenCallback(bool fullscreen);
+        static void MaximizeCallback();
+        static void MinimizeCallback();
+        static void RestoreCallback();
+
     private:
         void SwapBuffers() const;
         void PollEvents() const;

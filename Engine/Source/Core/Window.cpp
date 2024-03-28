@@ -1,5 +1,6 @@
 #include "Window.h"
 
+#include "Events/WindowEvents.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -43,6 +44,8 @@ void Window::SetFullscreen(const bool fullscreen)
         s_Instance->m_Resolution.x, s_Instance->m_Resolution.y,
         GLFW_DONT_CARE
     );
+
+    FullscreenCallback(fullscreen);
 }
 
 bool Window::IsMaximized()
@@ -174,6 +177,16 @@ void Window::Init()
         s_Instance->SizeCallback(width, height);
     });
 
+    glfwSetWindowMaximizeCallback(m_WindowPtr, [](GLFWwindow* _, const int maximized)
+    {
+        maximized ? MaximizeCallback() : RestoreCallback();
+    });
+
+    glfwSetWindowIconifyCallback(m_WindowPtr, [](GLFWwindow* _, const int minimized)
+    {
+        minimized ? MinimizeCallback() : RestoreCallback();
+    });
+
     glfwMakeContextCurrent(m_WindowPtr);
 
     SetVsync(m_Vsync);
@@ -188,6 +201,11 @@ void Window::Terminate() const
 void Window::PositionCallback(int x, int y)
 {
     m_Position = {x, y};
+
+    for (const auto listener : WindowMovedEvent::m_Listeners)
+    {
+        listener->OnWindowMoved(m_Position);
+    }
 }
 
 void Window::SizeCallback(int width, int height)
@@ -199,6 +217,45 @@ void Window::SizeCallback(int width, int height)
     for (const auto camera : Entity::FindEntitiesGlobally<Camera>())
     {
         camera->SetAspectRatio(m_AspectRatio);
+    }
+
+    for (const auto listener : WindowResizedEvent::m_Listeners)
+    {
+        listener->OnWindowResized(m_Resolution);
+    }
+}
+
+void Window::FullscreenCallback(const bool fullscreen)
+{
+    // The value is stored in the caller
+
+    for (const auto listener : WindowFullscreenEvent::m_Listeners)
+    {
+        listener->OnWindowFullscreen(fullscreen);
+    }
+}
+
+void Window::MaximizeCallback()
+{
+    for (const auto listener : WindowMaximizedEvent::m_Listeners)
+    {
+        listener->OnWindowMaximized();
+    }
+}
+
+void Window::MinimizeCallback()
+{
+    for (const auto listener : WindowMinimizedEvent::m_Listeners)
+    {
+        listener->OnWindowMinimized();
+    }
+}
+
+void Window::RestoreCallback()
+{
+    for (const auto listener : WindowRestoredEvent::m_Listeners)
+    {
+        listener->OnWindowRestored();
     }
 }
 
