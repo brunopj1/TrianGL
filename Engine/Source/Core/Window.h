@@ -15,6 +15,9 @@ namespace TGL
         friend class Application;
 
     private:
+        static inline bool s_IsAvailable = false;
+
+    private:
         static inline GLFWwindow* s_WindowPtr = nullptr;
 
     private:

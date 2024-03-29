@@ -23,6 +23,8 @@ bool Window::IsFullscreen()
 
 void Window::SetFullscreen(const bool fullscreen)
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     if (fullscreen == s_Fullscreen) return;
 
     s_Fullscreen = fullscreen;
@@ -40,26 +42,36 @@ void Window::SetFullscreen(const bool fullscreen)
 
 bool Window::IsMaximized()
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     return glfwGetWindowAttrib(s_WindowPtr, GLFW_MAXIMIZED);
 }
 
 void Window::Maximize()
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     glfwMaximizeWindow(s_WindowPtr);
 }
 
 bool Window::IsMinimized()
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     return glfwGetWindowAttrib(s_WindowPtr, GLFW_ICONIFIED);
 }
 
 void Window::Minimize()
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     glfwIconifyWindow(s_WindowPtr);
 }
 
 void Window::Restore()
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     glfwRestoreWindow(s_WindowPtr);
 }
 
@@ -70,6 +82,8 @@ std::string Window::GetTitle()
 
 void Window::SetTitle(const std::string& title)
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     s_Title = title;
     glfwSetWindowTitle(s_WindowPtr, s_Title.c_str());
 }
@@ -81,6 +95,8 @@ glm::ivec2 Window::GetPosition()
 
 void Window::SetPosition(const glm::ivec2 position)
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     // s_Position is updated in the callback
     glfwSetWindowPos(s_WindowPtr, position.x, position.y);
 }
@@ -92,6 +108,8 @@ glm::uvec2 Window::GetResolution()
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     if (resolution.x == minimun_window_resolution || resolution.y == minimun_window_resolution)
     {
         throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
@@ -113,6 +131,8 @@ bool Window::IsVsync()
 
 void Window::SetVsync(const bool vsync)
 {
+    ASSERT_SINGLETON_AVAILABILITY();
+
     s_Vsync = vsync;
     glfwSwapInterval(vsync);
 }
@@ -123,7 +143,7 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
     s_Position = position;
     s_Resolution = resolution;
     s_AspectRatio = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
-    s_Fullscreen = fullscreen;
+    s_Fullscreen = false; // This is updated later
     s_Vsync = vsync;
 
     s_WindowPtr = glfwCreateWindow(s_Resolution.x, s_Resolution.y, s_Title.c_str(), nullptr, nullptr);
@@ -134,7 +154,6 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
     }
 
     glfwSetWindowSizeLimits(s_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
-    glfwSetWindowPos(s_WindowPtr, 50, 50);
 
     glfwSetWindowPosCallback(s_WindowPtr, [](GLFWwindow* _, const int x, const int y)
     {
@@ -158,11 +177,19 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
 
     glfwMakeContextCurrent(s_WindowPtr);
 
+    s_IsAvailable = true;
+
+    SetPosition(s_Position);
+
+    if (fullscreen) SetFullscreen(true);
+
     SetVsync(s_Vsync);
 }
 
 void Window::Terminate()
 {
+    s_IsAvailable = false;
+
     glfwDestroyWindow(s_WindowPtr);
     glfwTerminate();
 }

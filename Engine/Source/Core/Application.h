@@ -12,7 +12,7 @@ namespace TGL
     struct ApplicationConfig
     {
         std::string WindowTitle = "TrianGL";
-        glm::ivec2 WindowPosition = {0, 0};
+        glm::ivec2 WindowPosition = {50, 50};
         glm::uvec2 WindowResolution = {1280, 720};
         bool Fullscreen = false;
         bool Vsync = true;

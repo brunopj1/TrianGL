@@ -55,6 +55,7 @@
 - [X] Add an abstract class for ImGui rendering
 - [X] Add ImGui menu overlay abstraction
 - [X] Add custom ordering for the ImGui menu overlay
+- [ ] Add Gizmos (World Grid, TextureRenderer Rect, TextureRenderer Pivot, etc...)
 
 ## Rendering with transparency
 - [X] Implement Z indexing

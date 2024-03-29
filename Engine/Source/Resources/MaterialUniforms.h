@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "glm/glm.hpp"
+#include "Util/Macros/MaterialMacros.h"
 #include <string>
 #include <memory>
 
@@ -35,27 +36,6 @@ namespace TGL
         void Bind() const;
         virtual void BindInternal() const = 0;
     };
-
-    // Macro
-
-    // @formatter:off
-    
-    #define MATERIAL_UNIFORM_IMPLEMENTATION(className, type, val)    \
-        class className final : public MaterialUniform               \
-        {                                                            \
-        public:                                                      \
-            type Value;                                              \
-                                                                     \
-        public:                                                      \
-            className(const Shader* shader, const std::string& name) \
-                : MaterialUniform(shader, name), Value(val) {}       \
-            ~className() override = default;                         \
-                                                                     \
-        private:                                                     \
-            void BindInternal() const override;                      \
-        }
-
-    // @formatter:on
 
     // Common implementations
 
