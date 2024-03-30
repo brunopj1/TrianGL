@@ -33,7 +33,7 @@ void Snake::OnUpdate(const float deltaTime)
     }
 }
 
-void Snake::Move(Grid* grid)
+void Snake::Move(Grid* grid, AudioManager* audioManager)
 {
     const glm::uvec2 gridSize = grid->GetSize();
     const glm::ivec2 headPosition = m_Body.front()->GetTransform().GetPosition();
@@ -50,6 +50,7 @@ void Snake::Move(Grid* grid)
         DestroyTailEnd(grid);
         SpawnHead(grid, nextPosition);
         UpdateTail();
+        audioManager->PlayMoveSound();
     }
     // Hit snake
     else if (const SnakeBody* hitBody = hitEntity->As<SnakeBody>(); hitBody != nullptr)
@@ -57,12 +58,14 @@ void Snake::Move(Grid* grid)
         DestroyTail(grid, hitBody);
         SpawnHead(grid, nextPosition);
         UpdateTail();
+        audioManager->PlayHurtSound();
     }
     // Hit apple
     else if (Apple* hitApple = hitEntity->As<Apple>(); hitApple != nullptr)
     {
         SpawnHead(grid, nextPosition);
         hitApple->RandomizePosition(grid);
+        audioManager->PlayAppleSound();
     }
 
     m_BodyDirection = m_MoveDirection;

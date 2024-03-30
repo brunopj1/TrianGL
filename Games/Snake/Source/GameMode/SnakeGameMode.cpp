@@ -12,6 +12,8 @@
 #include <imgui.h>
 #endif
 
+#include "Implementations/Components/AudioPlayer.h"
+
 using namespace TGL;
 
 // TODO add a more fluid motion to the snake
@@ -34,6 +36,8 @@ SnakeGameMode::SnakeGameMode()
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 
     m_Apple = SpawnEntity<Apple>(m_Grid, m_SpriteSheet);
+
+    m_AudioManager = SpawnEntity<AudioManager>();
 
     m_Grid->FocusCamera();
 }
@@ -58,7 +62,7 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
     {
         m_TickTimer = m_TickRate;
 
-        m_Snake->Move(m_Grid);
+        m_Snake->Move(m_Grid, m_AudioManager);
 
         if (m_Apple.Get() == nullptr)
         {

@@ -33,6 +33,18 @@
 - [X] Add Window callbacks with order of execution (onResize, onMove, onMinimize, onMaximize, onRestore, onToggleFullscreen)
 - [ ] Execute the callbacks after the ImGui NewFrame (to allow for example opening popups)
 - [ ] Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
+- [ ] Add a project generator script
+
+## Audio
+
+- [X] Add the audio engine
+- [X] Add the Sound class
+- [ ] Add the Music class
+- [X] Add the AudioPlayer class (play, pause and stop, loop, etc...)
+- [ ] Add volume settings to the Sound, Music and AudioPlayer classes (multiply the volumes to get the real volume)
+- [ ] Add a "PlayAndForget" static method to the AudioPlayer (the sound must be stored somewhere while being played to avoid being deleted)
+- [ ] Add more settings to the sound and audio player (pitch, pan, etc...) (check the soloud docs)
+- [ ] Add 3D audio support
 
 ## Resource Manager
 

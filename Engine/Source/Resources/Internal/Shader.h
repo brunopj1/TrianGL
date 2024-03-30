@@ -31,7 +31,7 @@ namespace TGL
         ~Shader() = default;
 
     private:
-        void Setup();
+        void Init();
         void Free();
 
     private:

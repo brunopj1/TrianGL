@@ -29,6 +29,5 @@ project "Snake"
     filter "configurations:Debug"
         includedirs {
             "../../Libs/imgui/imgui/",
-            "../../Libs/imgui/imgui/backends/",
-            "../../Libs/imgui/imgui-stdlib/"
+            "../../Libs/imgui_stdlib/imgui/"
         }

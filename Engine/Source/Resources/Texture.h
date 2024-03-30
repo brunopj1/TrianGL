@@ -109,7 +109,7 @@ namespace TGL
         void CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset);
 
     private:
-        void Setup(const TextureParameters& parameters);
+        void Init(const TextureParameters& parameters);
         void Free();
 
     private:

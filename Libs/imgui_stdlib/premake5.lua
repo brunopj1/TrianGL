@@ -9,8 +9,8 @@ project "ImGui-Stdlib"
 
 	files {
         "premake5.lua",
-		"imgui-stdlib/imgui_stdlib.cpp",
-		"imgui-stdlib/imgui_stdlib.h"
+		"imgui/imgui_stdlib.cpp",
+		"imgui/imgui_stdlib.h"
 	}
 	
 	links {

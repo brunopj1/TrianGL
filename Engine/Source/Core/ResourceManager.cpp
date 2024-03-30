@@ -1,20 +1,44 @@
 ﻿#include "ResourceManager.h"
 
+#include "soloud.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "soloud_wav.h"
+#include "stb_image.h"
+
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include "Resources/Material.h"
+#include "Resources/Sound.h"
 #include "Resources/Texture.h"
 #include "Util/Macros/SingletonMacros.h"
 #include <ranges>
+#include <thread>
 
 using namespace TGL;
 
 void ResourceManager::Init()
 {
     s_CanCreateAndDestroyObjects = true;
+
+    stbi_set_flip_vertically_on_load(true);
+
+    s_SoloudEngine = new SoLoud::Soloud();
+    const SoLoud::result result = s_SoloudEngine->init();
+    if (result != SoLoud::SO_NO_ERROR)
+    {
+        throw FailedToInitializeEngineException("Failed to init SoLoud");
+    }
+
+    s_SoloudEngine->setGlobalVolume(0.02f);
 }
 
 void ResourceManager::Terminate()
 {
     s_CanCreateAndDestroyObjects = false;
+
+    s_SoloudEngine->deinit();
+    delete s_SoloudEngine;
+    s_SoloudEngine = nullptr;
 }
 
 std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
@@ -25,7 +49,7 @@ std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePat
 
     std::shared_ptr<Texture> instance = std::make_shared<Texture>(filePath);
 
-    instance->Setup(parameters);
+    instance->Init(parameters);
 
     return instance;
 }
@@ -44,6 +68,24 @@ void ResourceManager::UnloadTexture(Texture* texture)
     ASSERT_SINGLETON_OBJECT_DESTRUCTION();
 
     texture->Free();
+}
+
+std::shared_ptr<Sound> ResourceManager::LoadSound(const std::string& filePath)
+{
+    PREPARE_SPAWNER_USAGE(Sound);
+
+    std::shared_ptr<Sound> instance = std::make_shared<Sound>(filePath);
+
+    instance->Init();
+
+    return instance;
+}
+
+void ResourceManager::UnloadSound(Sound* sound)
+{
+    ASSERT_SINGLETON_OBJECT_DESTRUCTION();
+
+    sound->Free();
 }
 
 void ResourceManager::UnloadMaterialUniforms(const Material* material)
@@ -68,7 +110,7 @@ Shader* ResourceManager::LoadShader(const std::string& vertexShaderPath, const s
     if (it == s_Shaders.end())
     {
         s_Shaders[newShader] = 1;
-        newShader->Setup();
+        newShader->Init();
         return newShader;
     }
 

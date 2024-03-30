@@ -2,11 +2,13 @@
 
 // @formatter:off
 
+// TODO why are there some keys missing? (Plus key)
+
 namespace TGL
 {
 
-enum class KeyCode
-{
+    enum class KeyCode
+    {
         /* Error key */
         Unkown             = -1, // GLFW_KEY_UNKNOWN
 

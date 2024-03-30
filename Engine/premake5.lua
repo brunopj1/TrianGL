@@ -9,6 +9,7 @@ project "Engine"
         "../Libs/glad/glad/include/",
         "../Libs/glfw/glfw/include/",
         "../Libs/glm/glm/",
+        "../Libs/soloud/soloud/include/",
         "../Libs/stb_image/stb_image/",
         "Source/"
     }
@@ -24,6 +25,7 @@ project "Engine"
         "GLAD",
         "GLFW",
         "GLM",
+        "SoLoud",
         "STB-Image"
     }
     
@@ -39,7 +41,7 @@ project "Engine"
         includedirs {
             "../Libs/imgui/imgui/",
             "../Libs/imgui/imgui/backends/",
-            "../Libs/imgui/imgui-stdlib/"
+            "../Libs/imgui_stdlib/imgui/"
         }
     
     filter "system:linux"

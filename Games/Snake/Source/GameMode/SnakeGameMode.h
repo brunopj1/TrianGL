@@ -2,9 +2,11 @@
 
 #include "Entities/Snake.h"
 #include "Entities/Apple.h"
+#include "Entities/AudioManager.h"
 #include "Entities/Grid.h"
 #include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
+#include "Resources/Sound.h"
 #include "Util/Memory/LazyPtr.h"
 
 class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent
@@ -13,6 +15,8 @@ private:
     std::shared_ptr<TGL::Texture> m_SpriteSheet;
 
     Grid* m_Grid;
+    AudioManager* m_AudioManager;
+
     Snake* m_Snake;
     TGL::LazyPtr<Apple> m_Apple;
 

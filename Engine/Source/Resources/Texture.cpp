@@ -170,7 +170,7 @@ void Texture::CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2
     m_Slices.push_back({resolution, offset, textureMatrix});
 }
 
-void Texture::Setup(const TextureParameters& parameters)
+void Texture::Init(const TextureParameters& parameters)
 {
     int width, height, channels;
     unsigned char* data = stbi_load(m_FilePath.c_str(), &width, &height, &channels, 0);

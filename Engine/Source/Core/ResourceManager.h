@@ -9,29 +9,42 @@
 #include <memory>
 #include <unordered_map>
 
+// Forward declarations
+namespace SoLoud
+{
+    class Soloud;
+}
+
 namespace TGL
 {
     // Forward declarations
     struct TextureParameters;
-    class TextureSlice;
 
     class ResourceManager
     {
     private:
         friend class Application;
+
         friend class Texture;
         friend class TextureSlice;
+        friend class Sound;
         friend class Material;
         friend class MaterialUniform;
+
+        friend class AudioPlayer;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR(Texture);
         DECLARE_SPAWNER_USAGE_VAR(TextureSlice);
+        DECLARE_SPAWNER_USAGE_VAR(Sound);
         DECLARE_SPAWNER_USAGE_VAR(Material);
         DECLARE_SPAWNER_USAGE_VAR(MaterialUniform);
 
     private:
         static inline bool s_CanCreateAndDestroyObjects = false;
+
+    private:
+        static inline SoLoud::Soloud* s_SoloudEngine = nullptr;
 
     private:
         static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
@@ -50,6 +63,11 @@ namespace TGL
         static std::shared_ptr<TextureSlice> CreateTextureSlice(Texture* texture, int index);
 
         static void UnloadTexture(Texture* texture);
+
+    private:
+        static std::shared_ptr<Sound> LoadSound(const std::string& filePath);
+
+        static void UnloadSound(Sound* sound);
 
     private:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>

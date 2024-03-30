@@ -84,7 +84,7 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION();
+            ASSERT_SINGLETON_OBJECT_CREATION_NO_RET();
 
             if (s_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
 
