@@ -41,7 +41,7 @@
 - [X] Add the Sound class
 - [ ] Add the Music class
 - [X] Add the AudioPlayer class (play, pause and stop, loop, etc...)
-- [ ] Add volume settings to the Sound, Music and AudioPlayer classes (multiply the volumes to get the real volume)
+- [X] Add volume settings to the Sound and AudioPlayer classes (multiply the volumes to get the real volume)
 - [ ] Add a "PlayAndForget" static method to the AudioPlayer (the sound must be stored somewhere while being played to avoid being deleted)
 - [ ] Add more settings to the sound and audio player (pitch, pan, etc...) (check the soloud docs)
 - [ ] Add 3D audio support

@@ -1,6 +1,8 @@
 ﻿#pragma once
+
 #include <memory>
 #include <string>
+#include <vector>
 
 // Forward declarations
 namespace SoLoud
@@ -20,6 +22,9 @@ namespace TGL
         std::string m_FilePath;
         SoLoud::Wav* m_SoloudSound = nullptr;
 
+    private:
+        std::pmr::vector<AudioPlayer*> m_CurrentPlayers;
+
     public:
         Sound(std::string filePath);
         ~Sound();
@@ -34,5 +39,9 @@ namespace TGL
     private:
         void Init();
         void Free();
+
+    private:
+        void AddPlayer(AudioPlayer* player);
+        void RemovePlayer(AudioPlayer* player);
     };
 }

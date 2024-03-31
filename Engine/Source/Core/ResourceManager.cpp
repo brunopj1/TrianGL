@@ -29,7 +29,7 @@ void ResourceManager::Init()
         throw FailedToInitializeEngineException("Failed to init SoLoud");
     }
 
-    s_SoloudEngine->setGlobalVolume(0.02f);
+    s_SoloudEngine->setGlobalVolume(0.1f);
 }
 
 void ResourceManager::Terminate()

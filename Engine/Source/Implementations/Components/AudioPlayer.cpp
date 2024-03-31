@@ -4,12 +4,18 @@
 #include "Core/ResourceManager.h"
 #include "Resources/Sound.h"
 #include "soloud_wav.h"
+#include <utility>
 
 using namespace TGL;
 
 AudioPlayer::AudioPlayer(std::shared_ptr<Sound> sound)
     : Component(true), m_Sound(std::move(sound))
 {}
+
+AudioPlayer::~AudioPlayer()
+{
+    Stop();
+}
 
 void AudioPlayer::OnUpdate(float deltaTime)
 {
@@ -21,8 +27,11 @@ void AudioPlayer::OnUpdate(float deltaTime)
 
     if (!soloudEngine->isValidVoiceHandle(m_Handle))
     {
-        m_Handle = -1;
         m_Status = AudioPlayerStatus::Stopped;
+
+        m_Handle = -1;
+
+        m_Sound->RemovePlayer(this);
     }
 }
 
@@ -56,6 +65,11 @@ void AudioPlayer::Play()
     if (m_Status == AudioPlayerStatus::Stopped)
     {
         m_Handle = soloudEngine->play(*m_Sound->m_SoloudSound);
+
+        m_Sound->AddPlayer(this);
+
+        UpdateCurrentSoundVolume();
+        UpdateCurrentSoundLoop();
     }
     else if (m_Status == AudioPlayerStatus::Paused)
     {
@@ -63,8 +77,6 @@ void AudioPlayer::Play()
     }
 
     m_Status = AudioPlayerStatus::Playing;
-
-    soloudEngine->setLooping(m_Handle, m_Looping);
 }
 
 void AudioPlayer::Pause()
@@ -91,24 +103,59 @@ void AudioPlayer::Stop()
     soloudEngine->stop(m_Handle);
 
     m_Status = AudioPlayerStatus::Stopped;
+
+    m_Handle = -1;
+
+    m_Sound->RemovePlayer(this);
 }
 
-bool AudioPlayer::GetLooping() const
+float AudioPlayer::GetVolume() const
 {
-    return m_Looping;
+    return m_Volume;
 }
 
-void AudioPlayer::SetLooping(const bool looping)
+void AudioPlayer::SetVolume(const float volume)
 {
-    m_Looping = looping;
-
-    // Update the currently playing sound
+    m_Volume = volume < 0.0f ? 0.0f : volume;
 
     if (m_Status == AudioPlayerStatus::Stopped) return;
 
+    UpdateCurrentSoundVolume();
+}
+
+float AudioPlayer::GetFinalVolume() const
+{
+    return m_Volume * m_Sound->GetVolume();
+}
+
+bool AudioPlayer::GetLoop() const
+{
+    return m_Loop;
+}
+
+void AudioPlayer::SetLoop(const bool loop)
+{
+    m_Loop = loop;
+
+    if (m_Status == AudioPlayerStatus::Stopped) return;
+
+    UpdateCurrentSoundLoop();
+}
+
+void AudioPlayer::UpdateCurrentSoundVolume() const
+{
     SoLoud::Soloud* soloudEngine = ResourceManager::s_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
-    soloudEngine->setLooping(m_Handle, m_Looping);
+    soloudEngine->setVolume(m_Handle, GetFinalVolume());
+}
+
+void AudioPlayer::UpdateCurrentSoundLoop() const
+{
+    SoLoud::Soloud* soloudEngine = ResourceManager::s_SoloudEngine;
+
+    if (soloudEngine == nullptr) return;
+
+    soloudEngine->setLooping(m_Handle, m_Loop);
 }

@@ -1,4 +1,4 @@
-project "Snake"
+project "AudioPlayground"
     kind "ConsoleApp"
     language "C++"
     

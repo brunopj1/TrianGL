@@ -17,6 +17,9 @@ namespace TGL
     class AudioPlayer final : public Component
     {
     private:
+        friend class Sound;
+
+    private:
         std::shared_ptr<Sound> m_Sound;
         int m_Handle = -1;
 
@@ -24,11 +27,12 @@ namespace TGL
         AudioPlayerStatus m_Status = AudioPlayerStatus::Stopped;
 
     private:
-        bool m_Looping = false;
+        float m_Volume = 1.0f;
+        bool m_Loop = false;
 
     public:
         AudioPlayer(std::shared_ptr<Sound> sound = nullptr);
-        ~AudioPlayer() override = default;
+        ~AudioPlayer() override;
 
     protected:
         void OnUpdate(float deltaTime) override;
@@ -46,7 +50,16 @@ namespace TGL
         void Stop();
 
     public:
-        bool GetLooping() const;
-        void SetLooping(bool looping);
+        float GetVolume() const;
+        void SetVolume(float volume);
+
+        float GetFinalVolume() const;
+
+        bool GetLoop() const;
+        void SetLoop(bool loop);
+
+    private:
+        void UpdateCurrentSoundVolume() const;
+        void UpdateCurrentSoundLoop() const;
     };
 }

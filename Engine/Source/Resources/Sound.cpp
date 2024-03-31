@@ -3,6 +3,7 @@
 #include "soloud_wav.h"
 #include "Core/ResourceManager.h"
 #include "Exceptions/Common/FileNotFoundException.h"
+#include "Implementations/Components/AudioPlayer.h"
 #include "Util/Macros/SpawnerMacros.h"
 
 using namespace TGL;
@@ -31,7 +32,12 @@ float Sound::GetVolume() const
 // ReSharper disable once CppMemberFunctionMayBeConst
 void Sound::SetVolume(const float volume)
 {
-    m_SoloudSound->mVolume = volume;
+    m_SoloudSound->mVolume = volume < 0.0f ? 0.0f : volume;
+
+    for (const AudioPlayer* player : m_CurrentPlayers)
+    {
+        player->UpdateCurrentSoundVolume();
+    }
 }
 
 void Sound::Init()
@@ -52,4 +58,14 @@ void Sound::Free()
 {
     delete m_SoloudSound;
     m_SoloudSound = nullptr;
+}
+
+void Sound::AddPlayer(AudioPlayer* player)
+{
+    m_CurrentPlayers.push_back(player);
+}
+
+void Sound::RemovePlayer(AudioPlayer* player)
+{
+    std::erase(m_CurrentPlayers, player);
 }

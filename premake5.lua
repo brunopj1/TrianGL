@@ -41,5 +41,8 @@ group "Dependencies"
     include "Libs/soloud/premake5.lua"
     include "Libs/stb_image/premake5.lua"
 
+group "Playground"
+    include "Playground/AudioPlayground/premake5.lua"
+
 group "Games"
     include "Games/Snake/premake5.lua"

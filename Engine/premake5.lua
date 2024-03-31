@@ -29,10 +29,6 @@ project "Engine"
         "STB-Image"
     }
     
-    defines {
-        "IMGUI_DEFINE_MATH_OPERATORS"
-    }
-    
     filter "configurations:Debug"
         links {
             "ImGui",
@@ -44,6 +40,10 @@ project "Engine"
             "../Libs/imgui_stdlib/imgui/"
         }
     
+        defines {
+            "IMGUI_DEFINE_MATH_OPERATORS"
+        }
+    
     filter "system:linux"
         links { "dl", "pthread" }
         defines { "_X11" }
@@ -52,6 +52,6 @@ project "Engine"
         defines { "_WINDOWS" }
         
         postbuildcommands {
-            -- "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/",
+            "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/",
             "{COPYDIR} Assets/ ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
         }
