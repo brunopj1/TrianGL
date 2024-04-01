@@ -1,14 +1,14 @@
 # Task list
 
-## Future ideas
+## Other tasks
 
-- [ ] Create a python script to validate the code (ensure the usage of namespaces, ensure that private / public variable naming, etc...)
-- [ ] Implement a sound system
-- [ ] List all the libraries used in the project (and their licenses)
+- [X] Create a python script to validate the code (ensure the usage of namespaces, etc)
+- [ ] Use github actions to validate the code
 
 ## Github wiki
 
 - [ ] Add a useful readme file
+- [ ] List all the libraries used in the project (and their licenses)
 - [ ] Add a wiki with the engine documentation
 - [ ] Explain how to create a game (create the Application, set the game mode, etc...)
 - [ ] Explain the Game classes and how to create / destroy them
@@ -38,11 +38,12 @@
 ## Audio
 
 - [X] Add the audio engine
-- [X] Add the Sound class
-- [ ] Add the Music class
+- [X] Add the Audio class (resource)
+- [X] Allow streaming audio files
 - [X] Add the AudioPlayer class (play, pause and stop, loop, etc...)
-- [X] Add volume settings to the Sound and AudioPlayer classes (multiply the volumes to get the real volume)
-- [ ] Add a "PlayAndForget" static method to the AudioPlayer (the sound must be stored somewhere while being played to avoid being deleted)
+- [X] Add volume settings to the Audio and AudioPlayer classes (multiply the volumes to get the real volume)
+- [ ] Add a duration method to the Audio class and a seek method to the AudioPlayer class
+- [ ] Add a "PlayAndForget" static method to the AudioPlayer (the audio must be stored somewhere while being played to avoid being deleted)
 - [ ] Add more settings to the sound and audio player (pitch, pan, etc...) (check the soloud docs)
 - [ ] Add 3D audio support
 
@@ -63,7 +64,15 @@
 - [X] Create methods to change the mouse behaviour (visible, hidden, locked)
 - [ ] Use raw mouse motion when the mouse is locked (if available)
 
+## Advanced Rendering
+
+- [ ] Add text rendering
+- [ ] Add multiple viewport support
+- [ ] Add multi-pass support
+- [ ] Implement a 2D lighting system
+
 ## Debug Rendering (ImGui)
+
 - [X] Add an abstract class for ImGui rendering
 - [X] Add ImGui menu overlay abstraction
 - [X] Add custom ordering for the ImGui menu overlay

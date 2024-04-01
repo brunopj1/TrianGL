@@ -3,12 +3,11 @@
 #include "soloud.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "soloud_wav.h"
 #include "stb_image.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include "Resources/Material.h"
-#include "Resources/Sound.h"
+#include "Resources/Audio.h"
 #include "Resources/Texture.h"
 #include "Util/Macros/SingletonMacros.h"
 #include <ranges>
@@ -70,22 +69,22 @@ void ResourceManager::UnloadTexture(Texture* texture)
     texture->Free();
 }
 
-std::shared_ptr<Sound> ResourceManager::LoadSound(const std::string& filePath)
+std::shared_ptr<Audio> ResourceManager::LoadAudio(const std::string& filePath, bool stream)
 {
-    PREPARE_SPAWNER_USAGE(Sound);
+    PREPARE_SPAWNER_USAGE(Audio);
 
-    std::shared_ptr<Sound> instance = std::make_shared<Sound>(filePath);
+    std::shared_ptr<Audio> instance = std::make_shared<Audio>(filePath, stream);
 
     instance->Init();
 
     return instance;
 }
 
-void ResourceManager::UnloadSound(Sound* sound)
+void ResourceManager::UnloadAudio(Audio* audio)
 {
     ASSERT_SINGLETON_OBJECT_DESTRUCTION();
 
-    sound->Free();
+    audio->Free();
 }
 
 void ResourceManager::UnloadMaterialUniforms(const Material* material)

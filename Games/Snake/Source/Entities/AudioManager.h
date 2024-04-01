@@ -1,15 +1,15 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Resources/Sound.h"
+#include "Resources/Audio.h"
 
 class AudioManager final : public TGL::Entity
 {
 private:
-    std::shared_ptr<TGL::Sound> m_MoveSound1;
-    std::shared_ptr<TGL::Sound> m_MoveSound2;
-    std::shared_ptr<TGL::Sound> m_HurtSound;
-    std::shared_ptr<TGL::Sound> m_AppleSound;
+    std::shared_ptr<TGL::Audio> m_MoveAudio1;
+    std::shared_ptr<TGL::Audio> m_MoveAudio2;
+    std::shared_ptr<TGL::Audio> m_HurtAudio;
+    std::shared_ptr<TGL::Audio> m_AppleAudio;
 
 private:
     TGL::AudioPlayer* m_AudioPlayer;
@@ -22,7 +22,7 @@ public:
     ~AudioManager() override = default;
 
 public:
-    void PlayMoveSound();
-    void PlayHurtSound() const;
-    void PlayAppleSound() const;
+    void PlayMoveAudio();
+    void PlayHurtAudio() const;
+    void PlayAppleAudio() const;
 };

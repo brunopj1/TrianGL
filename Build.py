@@ -22,7 +22,6 @@ def delete_vs_files_in_parent(directory : str):
 
 # Modify the working directory to the folder containing the script
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-print(os.getcwd())
 
 # Delete the Build folders
 shutil.rmtree("Bin", ignore_errors=True)

@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "Util/Macros/SingletonMacros.h"
 
 namespace TGL
 {

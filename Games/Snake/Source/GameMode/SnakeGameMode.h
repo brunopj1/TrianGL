@@ -6,7 +6,7 @@
 #include "Entities/Grid.h"
 #include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
-#include "Resources/Sound.h"
+#include "Resources/Audio.h"
 #include "Util/Memory/LazyPtr.h"
 
 class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent

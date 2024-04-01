@@ -27,7 +27,7 @@ namespace TGL
 
         friend class Texture;
         friend class TextureSlice;
-        friend class Sound;
+        friend class Audio;
         friend class Material;
         friend class MaterialUniform;
 
@@ -36,7 +36,7 @@ namespace TGL
     private:
         DECLARE_SPAWNER_USAGE_VAR(Texture);
         DECLARE_SPAWNER_USAGE_VAR(TextureSlice);
-        DECLARE_SPAWNER_USAGE_VAR(Sound);
+        DECLARE_SPAWNER_USAGE_VAR(Audio);
         DECLARE_SPAWNER_USAGE_VAR(Material);
         DECLARE_SPAWNER_USAGE_VAR(MaterialUniform);
 
@@ -65,9 +65,9 @@ namespace TGL
         static void UnloadTexture(Texture* texture);
 
     private:
-        static std::shared_ptr<Sound> LoadSound(const std::string& filePath);
+        static std::shared_ptr<Audio> LoadAudio(const std::string& filePath, bool stream);
 
-        static void UnloadSound(Sound* sound);
+        static void UnloadAudio(Audio* audio);
 
     private:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>

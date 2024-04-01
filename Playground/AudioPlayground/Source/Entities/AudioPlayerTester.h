@@ -12,7 +12,7 @@ private:
 private:
     TGL::AudioPlayer* m_AudioPlayer;
     int m_AudioPlayerId;
-    int m_SoundId = 0;
+    int m_AudioId = 0;
 
 public:
     AudioPlayerTester();

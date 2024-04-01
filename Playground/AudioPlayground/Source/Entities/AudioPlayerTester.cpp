@@ -1,6 +1,6 @@
 ﻿#include "AudioPlayerTester.h"
 
-#include "SoundTester.h"
+#include "AudioTester.h"
 #include "WindowConstants.h"
 #include <format>
 #include <imgui.h>
@@ -18,7 +18,7 @@ AudioPlayerTester::AudioPlayerTester()
 
 void AudioPlayerTester::OnUpdate(float deltaTime)
 {
-    ImGui::SetNextWindowPos(window_padding * ImVec2(1, 2) + ImVec2(0, sound_window_size.y) + (audio_player_window_size + window_padding) * ImVec2(m_AudioPlayerId - 1, 0), ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(window_padding * ImVec2(1, 2) + ImVec2(0, audio_window_size.y) + (audio_player_window_size + window_padding) * ImVec2(m_AudioPlayerId - 1, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(audio_player_window_size, ImGuiCond_Appearing);
 
     if (ImGui::Begin(std::format("Audio Player {}", m_AudioPlayerId).c_str()))
@@ -38,7 +38,7 @@ void AudioPlayerTester::OnUpdate(float deltaTime)
 
         ImGui::Separator();
 
-        SoundTester::RenderSoundSelector(m_AudioPlayer, m_SoundId);
+        AudioTester::RenderAudioSelector(m_AudioPlayer, m_AudioId);
 
         ImGui::Separator();
 

@@ -1,4 +1,5 @@
 ﻿#pragma once
+
 #include "Game/Component.h"
 #include <memory>
 
@@ -12,15 +13,15 @@ namespace TGL
     };
 
     // Forward declarations
-    class Sound;
+    class Audio;
 
     class AudioPlayer final : public Component
     {
     private:
-        friend class Sound;
+        friend class Audio;
 
     private:
-        std::shared_ptr<Sound> m_Sound;
+        std::shared_ptr<Audio> m_Audio;
         int m_Handle = -1;
 
     private:
@@ -31,15 +32,15 @@ namespace TGL
         bool m_Loop = false;
 
     public:
-        AudioPlayer(std::shared_ptr<Sound> sound = nullptr);
+        AudioPlayer(std::shared_ptr<Audio> audio = nullptr);
         ~AudioPlayer() override;
 
     protected:
         void OnUpdate(float deltaTime) override;
 
     public:
-        std::shared_ptr<Sound> GetSound() const;
-        void SetSound(std::shared_ptr<Sound> sound);
+        std::shared_ptr<Audio> GetAudio() const;
+        void SetAudio(std::shared_ptr<Audio> audio);
 
     public:
         AudioPlayerStatus GetStatus() const;
@@ -59,7 +60,7 @@ namespace TGL
         void SetLoop(bool loop);
 
     private:
-        void UpdateCurrentSoundVolume() const;
-        void UpdateCurrentSoundLoop() const;
+        void UpdateCurrentAudioVolume() const;
+        void UpdateCurrentAudioLoop() const;
     };
 }

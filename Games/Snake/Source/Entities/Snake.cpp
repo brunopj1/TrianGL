@@ -50,7 +50,7 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         DestroyTailEnd(grid);
         SpawnHead(grid, nextPosition);
         UpdateTail();
-        audioManager->PlayMoveSound();
+        audioManager->PlayMoveAudio();
     }
     // Hit snake
     else if (const SnakeBody* hitBody = hitEntity->As<SnakeBody>(); hitBody != nullptr)
@@ -58,14 +58,14 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         DestroyTail(grid, hitBody);
         SpawnHead(grid, nextPosition);
         UpdateTail();
-        audioManager->PlayHurtSound();
+        audioManager->PlayHurtAudio();
     }
     // Hit apple
     else if (Apple* hitApple = hitEntity->As<Apple>(); hitApple != nullptr)
     {
         SpawnHead(grid, nextPosition);
         hitApple->RandomizePosition(grid);
-        audioManager->PlayAppleSound();
+        audioManager->PlayAppleAudio();
     }
 
     m_BodyDirection = m_MoveDirection;

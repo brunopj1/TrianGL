@@ -1,0 +1,89 @@
+﻿#include "Audio.h"
+
+#include "soloud_wav.h"
+#include "soloud_wavstream.h"
+#include "Core/ResourceManager.h"
+#include "Exceptions/Common/FileNotFoundException.h"
+#include "Implementations/Components/AudioPlayer.h"
+#include "Util/Macros/SpawnerMacros.h"
+
+using namespace TGL;
+
+Audio::Audio(std::string filePath, const bool stream)
+    : m_FilePath(std::move(filePath)), m_Streamed(stream)
+{
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Audio);
+}
+
+Audio::~Audio()
+{
+    ResourceManager::UnloadAudio(this);
+}
+
+std::shared_ptr<Audio> Audio::Load(const std::string& filePath, const bool stream)
+{
+    return ResourceManager::LoadAudio(filePath, stream);
+}
+
+bool Audio::IsStreamed() const
+{
+    return m_Streamed;
+}
+
+float Audio::GetVolume() const
+{
+    return m_SoloudAudio->mVolume;
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void Audio::SetVolume(const float volume)
+{
+    m_SoloudAudio->mVolume = volume < 0.0f ? 0.0f : volume;
+
+    for (const AudioPlayer* player : m_CurrentPlayers)
+    {
+        player->UpdateCurrentAudioVolume();
+    }
+}
+
+void Audio::Init()
+{
+    SoLoud::result result;
+
+    if (m_Streamed)
+    {
+        SoLoud::WavStream* soloudAudio = new SoLoud::WavStream();
+        result = soloudAudio->load(m_FilePath.c_str());
+        m_SoloudAudio = soloudAudio;
+    }
+    else
+    {
+        SoLoud::Wav* soloudAudio = new SoLoud::Wav();
+        result = soloudAudio->load(m_FilePath.c_str());
+        m_SoloudAudio = soloudAudio;
+    }
+
+    if (result != SoLoud::SO_NO_ERROR)
+    {
+        delete m_SoloudAudio;
+        m_SoloudAudio = nullptr;
+
+        throw FileNotFoundException(m_FilePath);
+    }
+}
+
+void Audio::Free()
+{
+    delete m_SoloudAudio;
+    m_SoloudAudio = nullptr;
+}
+
+void Audio::AddPlayer(AudioPlayer* player)
+{
+    m_CurrentPlayers.push_back(player);
+}
+
+void Audio::RemovePlayer(AudioPlayer* player)
+{
+    std::erase(m_CurrentPlayers, player);
+}
