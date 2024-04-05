@@ -2,7 +2,7 @@
 
 projectName = "TestPlayground"
 
-isGame = True # True for a game, False for a playground
+isGame = True # If set to False, the project will be created in the 'Playgrounds' folder
 
 # Includes --------------------------------------------------------------------
 

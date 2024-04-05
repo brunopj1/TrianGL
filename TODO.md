@@ -4,11 +4,12 @@
 
 - [X] Create a python script to validate the code (ensure the usage of namespaces, etc)
 - [ ] Use github actions to validate the code
+- [ ] Check ig the imgui-stdlib dependency can be used directly from the imgui submodule
 
 ## Github wiki
 
-- [ ] Add a useful readme file
-- [ ] List all the libraries used in the project (and their licenses)
+- [X] Add a useful readme file
+- [X] List all the libraries used in the project (and their licenses)
 - [ ] Add a wiki with the engine documentation
 - [ ] Explain how to create a game (create the Application, set the game mode, etc...)
 - [ ] Explain the Game classes and how to create / destroy them
