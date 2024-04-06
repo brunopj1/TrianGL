@@ -22,3 +22,6 @@
 [submodule "Libs/soloud/soloud"]
 	path = Libs/soloud/soloud
 	url = https://github.com/jarikomppa/soloud.git
+[submodule "Wiki"]
+	path = Wiki
+	url = https://github.com/brunopj1/TrianGL.wiki.git
