@@ -15,7 +15,7 @@ namespace TGL
     class Audio final
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
         friend class AudioPlayer;
 
     private:

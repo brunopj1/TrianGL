@@ -2,25 +2,25 @@
 
 #include "MaterialUniforms.h"
 #include "Internal/Shader.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "Implementations/Entities/Camera.h"
 
 using namespace TGL;
 
 Material::Material(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Material);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Material);
 
-    m_Shader = ResourceManager::LoadShader(vertexShaderPath, fragmentShaderPath);
+    m_Shader = AssetManager::LoadShader(vertexShaderPath, fragmentShaderPath);
 
     CreateEngineUniforms();
 }
 
 Material::~Material()
 {
-    ResourceManager::UnloadMaterialUniforms(this);
+    AssetManager::UnloadMaterialUniforms(this);
 
-    ResourceManager::UnloadShader(m_Shader);
+    AssetManager::UnloadShader(m_Shader);
 }
 
 void Material::OnRenderSetup() const

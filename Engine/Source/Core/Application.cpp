@@ -105,7 +105,7 @@ void Application::Init(const ApplicationConfig &config)
 
     InputSystem::Init(Window::GetGlfwWindow());
 
-    ResourceManager::Init();
+    AssetManager::Init();
     EntityManager::Init();
 
     SpriteRenderer::Init();
@@ -116,7 +116,7 @@ void Application::Terminate()
     SpriteRenderer::Terminate();
 
     EntityManager::Terminate();
-    ResourceManager::Terminate();
+    AssetManager::Terminate();
 
     InputSystem::Terminate();
 

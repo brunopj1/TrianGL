@@ -72,7 +72,7 @@ namespace TGL
     class Texture final : public Sprite, public std::enable_shared_from_this<Texture>
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
         friend class TextureSlice;
         friend class SpriteUniform;
 

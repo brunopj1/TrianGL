@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Resources/Internal/Shader.h"
+#include "Assets/Internal/Shader.h"
 #include "Util/Macros/MaterialMacros.h"
 #include "Util/Macros/SingletonMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
@@ -20,7 +20,7 @@ namespace TGL
     // Forward declarations
     struct TextureParameters;
 
-    class ResourceManager
+    class AssetManager
     {
     private:
         friend class Application;
@@ -50,8 +50,8 @@ namespace TGL
         static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
 
     public:
-        ResourceManager() = delete;
-        ~ResourceManager() = delete;
+        AssetManager() = delete;
+        ~AssetManager() = delete;
 
     private:
         static void Init();

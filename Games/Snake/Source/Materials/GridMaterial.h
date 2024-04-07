@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Resources/Material.h"
+#include "Assets/Material.h"
 
 class GridMaterial final : public TGL::Material
 {

@@ -2,7 +2,7 @@
 
 #include "soloud_wav.h"
 #include "soloud_wavstream.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "Exceptions/Common/FileNotFoundException.h"
 #include "Implementations/Components/AudioPlayer.h"
 #include "Util/Macros/SpawnerMacros.h"
@@ -12,17 +12,17 @@ using namespace TGL;
 Audio::Audio(std::string filePath, const bool stream)
     : m_FilePath(std::move(filePath)), m_Streamed(stream)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Audio);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Audio);
 }
 
 Audio::~Audio()
 {
-    ResourceManager::UnloadAudio(this);
+    AssetManager::UnloadAudio(this);
 }
 
 std::shared_ptr<Audio> Audio::Load(const std::string& filePath, const bool stream)
 {
-    return ResourceManager::LoadAudio(filePath, stream);
+    return AssetManager::LoadAudio(filePath, stream);
 }
 
 bool Audio::IsStreamed() const

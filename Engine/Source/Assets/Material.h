@@ -2,7 +2,7 @@
 
 #include "Internal/Shader.h"
 #include "MaterialUniforms.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "Util/Macros/MaterialMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
 #include <memory>
@@ -15,7 +15,7 @@ namespace TGL
     class Material : public std::enable_shared_from_this<Material>
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
         friend class SpriteRenderer;
 
     private:
@@ -53,14 +53,14 @@ namespace TGL
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
         static std::shared_ptr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            return ResourceManager::LoadMaterial<T>(std::forward<Args>(args)...);
+            return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
         }
 
     protected:
         template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
         T* AddUniform(const std::string& name, const bool createIfInvalid = true)
         {
-            return ResourceManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
+            return AssetManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
         }
 
     private:

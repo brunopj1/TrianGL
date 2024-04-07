@@ -1,4 +1,4 @@
-﻿#include "ResourceManager.h"
+﻿#include "AssetManager.h"
 
 #include "soloud.h"
 
@@ -6,16 +6,16 @@
 #include "stb_image.h"
 
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include "Resources/Material.h"
-#include "Resources/Audio.h"
-#include "Resources/Texture.h"
+#include "Assets/Material.h"
+#include "Assets/Audio.h"
+#include "Assets/Texture.h"
 #include "Util/Macros/SingletonMacros.h"
 #include <ranges>
 #include <thread>
 
 using namespace TGL;
 
-void ResourceManager::Init()
+void AssetManager::Init()
 {
     s_CanCreateAndDestroyObjects = true;
 
@@ -31,7 +31,7 @@ void ResourceManager::Init()
     s_SoloudEngine->setGlobalVolume(0.1f);
 }
 
-void ResourceManager::Terminate()
+void AssetManager::Terminate()
 {
     s_CanCreateAndDestroyObjects = false;
 
@@ -40,7 +40,7 @@ void ResourceManager::Terminate()
     s_SoloudEngine = nullptr;
 }
 
-std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
+std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
     ASSERT_SINGLETON_OBJECT_CREATION();
 
@@ -53,7 +53,7 @@ std::shared_ptr<Texture> ResourceManager::LoadTexture(const std::string& filePat
     return instance;
 }
 
-std::shared_ptr<TextureSlice> ResourceManager::CreateTextureSlice(Texture* texture, int index)
+std::shared_ptr<TextureSlice> AssetManager::CreateTextureSlice(Texture* texture, int index)
 {
     // No need to assert here since this doesn't interact with OpenGL
 
@@ -62,14 +62,14 @@ std::shared_ptr<TextureSlice> ResourceManager::CreateTextureSlice(Texture* textu
     return std::make_shared<TextureSlice>(texture->shared_from_this(), index);
 }
 
-void ResourceManager::UnloadTexture(Texture* texture)
+void AssetManager::UnloadTexture(Texture* texture)
 {
     ASSERT_SINGLETON_OBJECT_DESTRUCTION();
 
     texture->Free();
 }
 
-std::shared_ptr<Audio> ResourceManager::LoadAudio(const std::string& filePath, bool stream)
+std::shared_ptr<Audio> AssetManager::LoadAudio(const std::string& filePath, bool stream)
 {
     PREPARE_SPAWNER_USAGE(Audio);
 
@@ -80,14 +80,14 @@ std::shared_ptr<Audio> ResourceManager::LoadAudio(const std::string& filePath, b
     return instance;
 }
 
-void ResourceManager::UnloadAudio(Audio* audio)
+void AssetManager::UnloadAudio(Audio* audio)
 {
     ASSERT_SINGLETON_OBJECT_DESTRUCTION();
 
     audio->Free();
 }
 
-void ResourceManager::UnloadMaterialUniforms(const Material* material)
+void AssetManager::UnloadMaterialUniforms(const Material* material)
 {
     // No need to assert here since this doesn't interact with OpenGL
 
@@ -99,7 +99,7 @@ void ResourceManager::UnloadMaterialUniforms(const Material* material)
     }
 }
 
-Shader* ResourceManager::LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+Shader* AssetManager::LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
     // No need to assert here since this is only used internally
 
@@ -118,7 +118,7 @@ Shader* ResourceManager::LoadShader(const std::string& vertexShaderPath, const s
     return it->first;
 }
 
-void ResourceManager::UnloadShader(Shader* shader)
+void AssetManager::UnloadShader(Shader* shader)
 {
     // No need to assert here since this is only used internally
 

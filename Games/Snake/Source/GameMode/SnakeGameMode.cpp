@@ -6,7 +6,7 @@
 #include "Implementations/Components/SpriteRenderer.h"
 #include "Core/InputSystem.h"
 #include "Core/Window.h"
-#include "Resources/Material.h"
+#include "Assets/Material.h"
 
 #ifdef DEBUG
 #include <imgui.h>

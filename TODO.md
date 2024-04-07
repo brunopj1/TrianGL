@@ -6,12 +6,17 @@
 - [ ] Use github actions to validate the code
 - [ ] Check ig the imgui-stdlib dependency can be used directly from the imgui submodule
 
+## Documentation
+
+- [ ] Use Doxygen to generate the documentation
+- [ ] Add a link in the wiki to the generated documentation
+
 ## Github wiki
 
 - [X] Add a useful readme file
 - [X] List all the libraries used in the project (and their licenses)
-- [ ] Add a wiki with the engine documentation
-- [ ] Explain how to create a game (create the Application, set the game mode, etc...)
+- [X] Add a wiki with the engine documentation
+- [X] Explain how to create a game (create the Application, set the game mode, etc...)
 - [ ] Explain the Game classes and how to create / destroy them
 - [ ] Explain how and why to use the Execution Order
 - [ ] Explain that the execution order should always return the same value (or the user will experience undefined behaviour)
@@ -55,6 +60,7 @@
 - [X] Create a method to load textures
 - [X] Create a method to load materials
 - [X] Move the static methods to the respective classes
+- [X] Rename the resource manager to AssetManager
 
 ## Input System
 

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Resources/Audio.h"
+#include "Assets/Audio.h"
 
 class AudioTester final : public TGL::Entity
 {

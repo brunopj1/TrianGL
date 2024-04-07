@@ -4,7 +4,7 @@
 
 #include "Apple.h"
 #include "Core/InputSystem.h"
-#include "Implementations/Resources/DefaultMaterial.h"
+#include "Implementations/Assets/DefaultMaterial.h"
 
 using namespace TGL;
 

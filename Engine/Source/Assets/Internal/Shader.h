@@ -8,7 +8,7 @@ namespace TGL
     class Shader final
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
         friend class Material;
         friend class MaterialUniform;
         friend class SpriteUniform;

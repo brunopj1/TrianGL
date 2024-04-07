@@ -2,8 +2,8 @@
 
 #include "Game/Entity.h"
 #include "glad/glad.h"
-#include "Resources/Material.h"
-#include "Implementations/Resources/DefaultMaterial.h"
+#include "Assets/Material.h"
+#include "Implementations/Assets/DefaultMaterial.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;

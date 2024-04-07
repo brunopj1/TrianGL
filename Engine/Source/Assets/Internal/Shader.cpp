@@ -16,7 +16,7 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
 {
     // Init() and Free() cannot be called in the constructor and destructor
     // because sometimes we create fake Shader objects to acess the unordered_map
-    // These methods are called by the TGL::ResourceManager
+    // These methods are called by the TGL::AssetManager
 }
 
 void Shader::Init()

@@ -2,7 +2,7 @@
 
 #include "glad/glad.h"
 #include "stb_image.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "Exceptions/Common/FileNotFoundException.h"
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -21,7 +21,7 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
 TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
     : m_Texture(std::move(texture)), m_Index(index)
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, TextureSlice);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, TextureSlice);
 }
 
 std::shared_ptr<Texture> TextureSlice::GetTexture() const
@@ -48,17 +48,17 @@ glm::mat4* TextureSlice::GetMatrix() const
 Texture::Texture(std::string filePath)
     : m_FilePath(std::move(filePath))
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, Texture);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Texture);
 }
 
 Texture::~Texture()
 {
-    ResourceManager::UnloadTexture(this);
+    AssetManager::UnloadTexture(this);
 }
 
 std::shared_ptr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
 {
-    return ResourceManager::LoadTexture(filePath, parameters);
+    return AssetManager::LoadTexture(filePath, parameters);
 }
 
 std::string Texture::GetFilePath() const
@@ -83,7 +83,7 @@ std::shared_ptr<TextureSlice> Texture::GetSlice(const unsigned int index)
         throw std::runtime_error("Invalid slice index");
     }
 
-    return ResourceManager::CreateTextureSlice(this, index);
+    return AssetManager::CreateTextureSlice(this, index);
 }
 
 int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)

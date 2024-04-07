@@ -4,7 +4,7 @@
 #include "Grid.h"
 #include "SnakeBody.h"
 #include "Game/Entity.h"
-#include "Resources/Texture.h"
+#include "Assets/Texture.h"
 
 class Snake final : public TGL::Entity
 {

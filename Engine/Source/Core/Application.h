@@ -2,7 +2,7 @@
 
 #include "Window.h"
 #include "Game/GameMode.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "Core/EntityManager.h"
 #include "Core/InputSystem.h"
 

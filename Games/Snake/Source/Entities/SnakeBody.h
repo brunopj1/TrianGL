@@ -2,7 +2,7 @@
 
 #include "Game/Entity.h"
 #include "Grid.h"
-#include "Resources/Texture.h"
+#include "Assets/Texture.h"
 
 enum class SnakeBodyType
 {

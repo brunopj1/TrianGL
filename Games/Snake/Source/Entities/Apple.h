@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Resources/Texture.h"
+#include "Assets/Texture.h"
 #include "Grid.h"
 
 class Apple final : public TGL::Entity

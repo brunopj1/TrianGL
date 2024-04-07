@@ -90,6 +90,7 @@ public:
     ~{projectName}GameMode() override = default;
 
 private:
+    void OnUpdate(float deltaTime) override;
     void OnEarlyUpdate(float deltaTime) override;
     void OnLateUpdate(float deltaTime) override;
 }};
@@ -105,6 +106,11 @@ using namespace TGL;
 {projectName}GameMode::{projectName}GameMode()
 {{
     Camera* camera = SpawnEntity<Camera>(true);
+}}
+
+void {projectName}GameMode::OnUpdate(float deltaTime)
+{{
+    
 }}
 
 void {projectName}GameMode::OnEarlyUpdate(float deltaTime)

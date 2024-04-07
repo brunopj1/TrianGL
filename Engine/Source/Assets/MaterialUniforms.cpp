@@ -1,7 +1,7 @@
 ﻿#include "MaterialUniforms.h"
 
 #include "Texture.h"
-#include "Core/ResourceManager.h"
+#include "Core/AssetManager.h"
 #include "glad/glad.h"
 #include "Internal/Shader.h"
 
@@ -10,12 +10,12 @@ using namespace TGL;
 MaterialUniform::MaterialUniform(const Shader* shader, const std::string& name)
     : m_Location(shader->GetUniformLocation(name))
 {
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::ResourceManager, MaterialUniform);
+    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 MaterialUniform::~MaterialUniform()
 {
-    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::ResourceManager, MaterialUniform);
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 bool MaterialUniform::IsValid() const

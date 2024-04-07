@@ -15,7 +15,7 @@ namespace TGL
     class MaterialUniform
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
         friend class Material;
 
     protected:
@@ -74,7 +74,7 @@ namespace TGL
     class SpriteUniform final : public MaterialUniform
     {
     private:
-        friend class ResourceManager;
+        friend class AssetManager;
 
     private:
         int m_MatrixLocation;
