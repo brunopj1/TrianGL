@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Object.h"
+#include "GameObject.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
 #include "Util/Macros/SpawnerMacros.h"
@@ -9,7 +9,7 @@
 
 namespace TGL
 {
-    class Entity : public Object
+    class Entity : public GameObject
     {
     private:
         friend class EntityManager;

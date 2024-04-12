@@ -15,9 +15,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
-- [ ] Explain the Game classes and how to create / destroy them
-- [ ] Explain how and why to use the Execution Order
-- [ ] Explain that the execution order should always return the same value (or the user will experience undefined behaviour)
+- [ ] Explain that destroying an entity will also destroy all of its components 
 - [ ] Explain that the game mode should not delete anything in the destructor
 - [ ] Explain how the assets work (talk about the shared pointers) (talk about how the asset folder is copied to the output directory)
 - [ ] Explain that the assets should not outlive the game mode (for example when stored in static variables)

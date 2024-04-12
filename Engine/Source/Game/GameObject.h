@@ -6,7 +6,7 @@
 
 namespace TGL
 {
-    class Object
+    class GameObject
     {
     private:
         friend class EntityManager;
@@ -19,8 +19,8 @@ namespace TGL
         bool m_ShouldUpdate;
 
     protected:
-        Object(bool shouldUpdate);
-        virtual ~Object() = default;
+        GameObject(bool shouldUpdate);
+        virtual ~GameObject() = default;
 
     protected:
         virtual int GetOrderOfExecution() const;
@@ -30,7 +30,7 @@ namespace TGL
         virtual void OnUpdate(float deltaTime);
 
     public:
-        template <typename T, typename = std::enable_if_t<std::is_base_of_v<Object, T>>>
+        template <typename T, typename = std::enable_if_t<std::is_base_of_v<GameObject, T>>>
         T* As()
         {
             return dynamic_cast<T*>(this);

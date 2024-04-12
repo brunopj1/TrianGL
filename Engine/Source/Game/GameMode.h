@@ -4,7 +4,7 @@
 
 namespace TGL
 {
-    class GameMode : public Object
+    class GameMode : public GameObject
     {
     private:
         friend class Application;

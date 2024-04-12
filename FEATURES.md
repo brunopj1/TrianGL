@@ -11,6 +11,10 @@
 - [ ] Linux support
 - [ ] MacOS support
 
+## General
+
+- [ ] Thread safety
+
 ## Entity System
 
 - [X] Automatic memory management for the GameMode, Entity, and Component classes
@@ -31,14 +35,15 @@
 
 - [X] Automatic rendering
 - [X] Z indexing with automatic sorting
-- [ ] Add text rendering
+- [ ] Text rendering
 - [ ] View Frustum Culling
-- [ ] Allow multiple viewports
-- [ ] Allow multiple render passes (for post-processing)
-- [ ] Implement a 2D lighting system
+- [ ] Multiple viewports
+- [ ] Multiple custom render passes
+- [ ] Particle system
+- [ ] 2D lighting with shadows
 
 ## Debug Rendering
 
 - [X] ImGui rendering in Debug configurations
-- [ ] Add immediate mode rendering for basic shapes
-- [ ] Add Gizmos (World Grid, TextureRenderer Rect, TextureRenderer Pivot, etc...)
+- [ ] Immediate mode rendering for basic shapes
+- [ ] Gizmos (World Grid, TextureRenderer Rect, TextureRenderer Pivot, etc...)

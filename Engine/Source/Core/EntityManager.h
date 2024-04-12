@@ -14,7 +14,7 @@ namespace TGL
     {
     private:
         friend class Application;
-        friend class Object;
+        friend class GameObject;
         friend class GameMode;
         friend class Entity;
         friend class Component;
@@ -40,8 +40,8 @@ namespace TGL
         static inline std::unordered_map<uint64_t, Entity*> s_Entities;
         static inline std::unordered_map<uint64_t, Component*> s_Components;
 
-        static inline std::vector<Object*> s_OnUpdateQueue;
-        static inline std::vector<Object*> s_OnStartQueue;
+        static inline std::vector<GameObject*> s_OnUpdateQueue;
+        static inline std::vector<GameObject*> s_OnStartQueue;
 
         static inline std::vector<Renderable*> s_RenderQueue;
 
@@ -66,12 +66,12 @@ namespace TGL
         static size_t GetComponentCount();
 
     private:
-        static void AddToUpdateQueue(Object* object, std::vector<Object*>& queue);
+        static void AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue);
         static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
     private:
-        static void StoreObjectCallbacks(Object* object);
-        static void RemoveObjectCallbacks(Object* object);
+        static void StoreObjectCallbacks(GameObject* object);
+        static void RemoveObjectCallbacks(GameObject* object);
 
     private:
         static void UpdateRenderableOrder(Renderable* renderable);

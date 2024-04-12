@@ -27,20 +27,23 @@ void EntityManager::Terminate()
 
 void EntityManager::Update(const float deltaTime)
 {
-    for (Object* object : s_OnStartQueue)
+    for (GameObject* object : s_OnStartQueue)
     {
         object->OnStart();
+
+        if (object->m_ShouldUpdate)
+        {
+            AddToUpdateQueue(object, s_OnUpdateQueue);
+        }
     }
+    
     s_OnStartQueue.clear();
 
     s_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (Object* object : s_OnUpdateQueue)
+    for (GameObject* object : s_OnUpdateQueue)
     {
-        if (object->m_ShouldUpdate)
-        {
-            object->OnUpdate(deltaTime);
-        }
+        object->OnUpdate(deltaTime);
     }
 
     s_GameMode->OnLateUpdate(deltaTime);
@@ -83,7 +86,7 @@ size_t EntityManager::GetComponentCount()
     return s_Components.size();
 }
 
-void EntityManager::AddToUpdateQueue(Object* object, std::vector<Object*>& queue)
+void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)
 {
     const auto order = object->GetOrderOfExecution();
 
@@ -115,12 +118,12 @@ void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Rendera
     queue.push_back(renderable);
 }
 
-void EntityManager::StoreObjectCallbacks(Object* object)
+void EntityManager::StoreObjectCallbacks(GameObject* object)
 {
     // Updatable
 
     AddToUpdateQueue(object, s_OnStartQueue);
-    AddToUpdateQueue(object, s_OnUpdateQueue);
+    // The object will be added to the update queue when it leaves the start queue
 
     // Renderable
 
@@ -130,7 +133,7 @@ void EntityManager::StoreObjectCallbacks(Object* object)
     }
 }
 
-void EntityManager::RemoveObjectCallbacks(Object* object)
+void EntityManager::RemoveObjectCallbacks(GameObject* object)
 {
     // Updatable
 

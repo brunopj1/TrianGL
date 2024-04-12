@@ -6,7 +6,7 @@
 using namespace TGL;
 
 Entity::Entity(const bool shouldUpdate)
-    : Object(shouldUpdate)
+    : GameObject(shouldUpdate)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
 }

@@ -4,7 +4,7 @@
 
 namespace TGL
 {
-    class Component : public Object
+    class Component : public GameObject
     {
     private:
         friend class EntityManager;

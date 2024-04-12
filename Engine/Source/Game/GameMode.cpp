@@ -5,7 +5,7 @@
 using namespace TGL;
 
 GameMode::GameMode()
-    : Object(true)
+    : GameObject(true)
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, GameMode);
 }
