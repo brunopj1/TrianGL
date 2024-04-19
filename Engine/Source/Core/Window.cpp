@@ -137,6 +137,13 @@ void Window::SetVsync(const bool vsync)
     glfwSwapInterval(vsync);
 }
 
+void Window::Close()
+{
+    ASSERT_SINGLETON_AVAILABILITY();
+
+    glfwSetWindowShouldClose(s_WindowPtr, GLFW_TRUE);
+}
+
 void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
 {
     s_Title = std::move(title);

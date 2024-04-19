@@ -58,6 +58,8 @@ namespace TGL
         static bool IsVsync();
         static void SetVsync(bool vsync);
 
+        static void Close();
+
     private:
         static void Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
         static void Terminate();

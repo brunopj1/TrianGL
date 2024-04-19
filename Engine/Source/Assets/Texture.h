@@ -96,7 +96,7 @@ namespace TGL
         glm::uvec2 GetResolution() const override; // Also used by Sprite class
 
     public:
-        size_t SliceCount() const;
+        size_t GetSliceCount() const;
         std::shared_ptr<TextureSlice> GetSlice(unsigned int index);
 
         int CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset); // Returns the slice index

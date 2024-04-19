@@ -71,7 +71,7 @@ glm::uvec2 Texture::GetResolution() const
     return m_Resolution;
 }
 
-size_t Texture::SliceCount() const
+size_t Texture::GetSliceCount() const
 {
     return m_Slices.size();
 }

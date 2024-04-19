@@ -153,8 +153,8 @@ namespace TGL
     {
         Normal             = 0x00034001, // GLFW_CURSOR_NORMAL
         Hidden             = 0x00034002, // GLFW_CURSOR_HIDDEN
-        Disabled           = 0x00034003, // GLFW_CURSOR_DISABLED
-        Captured           = 0x00034004  // GLFW_CURSOR_CAPTURED
+        Locked             = 0x00034003, // GLFW_CURSOR_DISABLED
+        Confined           = 0x00034004  // GLFW_CURSOR_CAPTURED
     };
 }
 
