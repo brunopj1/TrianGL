@@ -16,13 +16,11 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 ## Github wiki
 
 - Explain the existing entities and components (Camera, etc...)
-- Explain how to render ImGui windows (and say that it is debug only)
 - Explain how to use the callbacks
-- Add every new feature to the wiki
 
 ## General
 
-- Execute the callbacks after the ImGui NewFrame (to allow for example opening popups)
+- Execute the callbacks after the ImGui NewFrame (to allow for example opening popups, but first check if it is possible already)
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 - Create a custom shared pointer class that can be reset even if there are still references to it
 
