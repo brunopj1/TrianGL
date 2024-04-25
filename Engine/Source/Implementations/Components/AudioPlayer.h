@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Component.h"
-#include <memory>
+#include "Util/Memory/SharedPtr.h"
 
 namespace TGL
 {
@@ -21,7 +21,7 @@ namespace TGL
         friend class Audio;
 
     private:
-        std::shared_ptr<Audio> m_Audio;
+        SharedPtr<Audio> m_Audio;
         int m_Handle = -1;
 
     private:
@@ -32,15 +32,15 @@ namespace TGL
         bool m_Loop = false;
 
     public:
-        AudioPlayer(std::shared_ptr<Audio> audio = nullptr);
+        AudioPlayer(SharedPtr<Audio> audio = nullptr);
         ~AudioPlayer() override;
 
     protected:
         void OnUpdate(float deltaTime) override;
 
     public:
-        std::shared_ptr<Audio> GetAudio() const;
-        void SetAudio(std::shared_ptr<Audio> audio);
+        SharedPtr<Audio> GetAudio() const;
+        void SetAudio(SharedPtr<Audio> audio);
 
     public:
         AudioPlayerStatus GetStatus() const;

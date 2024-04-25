@@ -3,20 +3,18 @@
 #include "TextureParameters.h"
 #include "glm/mat2x2.hpp"
 #include "glm/vec2.hpp"
-#include <memory>
+#include "Util/Memory/SharedPtr.h"
 #include <string>
 #include <vector>
 
 namespace TGL
 {
-    // Binding class (for the material uniform)
-
     class Sprite
     {
     private:
         friend class SpriteUniform;
 
-    protected:
+    public:
         Sprite() = default;
         virtual ~Sprite() = default;
 
@@ -27,8 +25,6 @@ namespace TGL
         virtual glm::mat4* GetMatrix() const = 0;
         virtual glm::uvec2 GetResolution() const = 0;
     };
-
-    // Sprite slice struct and class
 
     struct TextureSliceInfo
     {
@@ -51,16 +47,16 @@ namespace TGL
         friend class Texture;
 
     private:
-        std::shared_ptr<Texture> m_Texture;
+        SharedPtr<Texture> m_Texture;
         int m_Index;
 
     public:
-        TextureSlice(std::shared_ptr<Texture> texture, int index);
+        TextureSlice(SharedPtr<Texture> texture, int index);
         ~TextureSlice() override = default;
 
     public:
-        std::shared_ptr<Texture> GetTexture() const;
-        glm::uvec2 GetResolution() const override;  // Also used by Sprite class
+        SharedPtr<Texture> GetTexture() const;
+        glm::uvec2 GetResolution() const override; // Also used by Sprite class
 
     private:
         void Bind(unsigned char slot) const override;
@@ -69,7 +65,7 @@ namespace TGL
 
     // Main class-
 
-    class Texture final : public Sprite, public std::enable_shared_from_this<Texture>
+    class Texture final : public Sprite, public SharedFromThis<Texture>
     {
     private:
         friend class AssetManager;
@@ -89,7 +85,7 @@ namespace TGL
         ~Texture() override;
 
     public:
-        static std::shared_ptr<Texture> Load(const std::string& filePath, const TextureParameters& parameters = {});
+        static SharedPtr<Texture> Load(const std::string& filePath, const TextureParameters& parameters = {});
 
     public:
         std::string GetFilePath() const;
@@ -97,13 +93,13 @@ namespace TGL
 
     public:
         size_t GetSliceCount() const;
-        std::shared_ptr<TextureSlice> GetSlice(unsigned int index);
+        SharedPtr<TextureSlice> GetSlice(unsigned int index);
 
         int CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset); // Returns the slice index
-        std::shared_ptr<TextureSlice> CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset);
+        SharedPtr<TextureSlice> CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset);
 
         int CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0}); // Returns the slice index
-        std::vector<std::shared_ptr<TextureSlice>> CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0});
+        std::vector<SharedPtr<TextureSlice>> CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0});
 
     private:
         void CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset);

@@ -8,21 +8,21 @@
 
 using namespace TGL;
 
-SpriteRenderer::SpriteRenderer(std::shared_ptr<Material> material)
+SpriteRenderer::SpriteRenderer(SharedPtr<Material> material)
     : Component(false), m_Material(std::move(material))
 {}
 
-std::shared_ptr<Material> SpriteRenderer::GetMaterial() const
+SharedPtr<Material> SpriteRenderer::GetMaterial() const
 {
     return m_Material;
 }
 
-void SpriteRenderer::SetMaterial(std::shared_ptr<Material> material)
+void SpriteRenderer::SetMaterial(SharedPtr<Material> material)
 {
     m_Material = std::move(material);
 }
 
-std::shared_ptr<DefaultMaterial> SpriteRenderer::UseDefaultMaterial()
+SharedPtr<DefaultMaterial> SpriteRenderer::UseDefaultMaterial()
 {
     auto defaultMaterial = Material::CreateInstanceOf<DefaultMaterial>();
     m_Material = defaultMaterial;

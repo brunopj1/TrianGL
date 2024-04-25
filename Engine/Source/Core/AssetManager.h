@@ -4,6 +4,7 @@
 #include "Util/Macros/MaterialMacros.h"
 #include "Util/Macros/SingletonMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
+#include "Util/Memory/SharedPtr.h"
 
 #include <string>
 #include <memory>
@@ -33,6 +34,8 @@ namespace TGL
 
         friend class AudioPlayer;
 
+        friend class ReferenceCounter;
+
     private:
         DECLARE_SPAWNER_USAGE_VAR(Texture);
         DECLARE_SPAWNER_USAGE_VAR(TextureSlice);
@@ -49,6 +52,9 @@ namespace TGL
     private:
         static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
 
+    private:
+        static inline std::vector<ReferenceCounter*> s_AssetReferenceCounters; 
+        
     public:
         AssetManager() = delete;
         ~AssetManager() = delete;
@@ -58,26 +64,26 @@ namespace TGL
         static void Terminate();
 
     private:
-        static std::shared_ptr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
+        static SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
 
-        static std::shared_ptr<TextureSlice> CreateTextureSlice(Texture* texture, int index);
+        static SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, int index);
 
         static void UnloadTexture(Texture* texture);
 
     private:
-        static std::shared_ptr<Audio> LoadAudio(const std::string& filePath, bool stream);
+        static SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
 
         static void UnloadAudio(Audio* audio);
 
     private:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
-        static std::shared_ptr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        static SharedPtr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
 
             PREPARE_SPAWNER_USAGE(Material);
 
-            std::shared_ptr<T> instance = std::make_shared<T>(std::forward<Args>(args)...);
+            T* instance = new T(std::forward<Args>(args)...);
 
             return instance;
         }
@@ -117,5 +123,10 @@ namespace TGL
         static Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
         static void UnloadShader(Shader* shader);
+
+    private:
+        static void StoreReferenceCounter(ReferenceCounter* referenceCounter);
+
+        static void RemoveReferenceCounter(ReferenceCounter* referenceCounter);
     };
 }

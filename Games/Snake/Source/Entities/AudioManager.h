@@ -6,10 +6,10 @@
 class AudioManager final : public TGL::Entity
 {
 private:
-    std::shared_ptr<TGL::Audio> m_MoveAudio1;
-    std::shared_ptr<TGL::Audio> m_MoveAudio2;
-    std::shared_ptr<TGL::Audio> m_HurtAudio;
-    std::shared_ptr<TGL::Audio> m_AppleAudio;
+    TGL::SharedPtr<TGL::Audio> m_MoveAudio1;
+    TGL::SharedPtr<TGL::Audio> m_MoveAudio2;
+    TGL::SharedPtr<TGL::Audio> m_HurtAudio;
+    TGL::SharedPtr<TGL::Audio> m_AppleAudio;
 
 private:
     TGL::AudioPlayer* m_AudioPlayer;

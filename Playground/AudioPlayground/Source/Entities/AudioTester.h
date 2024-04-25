@@ -10,7 +10,7 @@ private:
     static inline std::vector<AudioTester*> s_Instances;
 
 private:
-    std::shared_ptr<TGL::Audio> m_Audio;
+    TGL::SharedPtr<TGL::Audio> m_Audio;
     int m_AudioId;
 
 public:

@@ -20,7 +20,7 @@ namespace TGL
         friend class Component;
         friend class Renderable;
 
-        template <typename T, typename Condition>
+        template <typename Type, typename Condition>
         friend class LazyPtr;
 
     private:

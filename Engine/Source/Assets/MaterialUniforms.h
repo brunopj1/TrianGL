@@ -2,8 +2,8 @@
 
 #include "glm/glm.hpp"
 #include "Util/Macros/MaterialMacros.h"
+#include "Util/Memory/SharedPtr.h"
 #include <string>
-#include <memory>
 
 namespace TGL
 {
@@ -78,11 +78,11 @@ namespace TGL
 
     private:
         int m_MatrixLocation;
-        int m_ResoultionLocation;
+        int m_ResolutionLocation;
         unsigned char m_Slot;
 
     public:
-        std::shared_ptr<Sprite> Value;
+        SharedPtr<Sprite> Value;
 
     public:
         SpriteUniform(const Shader* shader, const std::string& name);

@@ -15,10 +15,10 @@ private:
     std::vector<SnakeBody*> m_Body;
 
 private:
-    std::shared_ptr<TGL::Texture> m_SpriteSheet;
+    TGL::SharedPtr<TGL::Texture> m_SpriteSheet;
 
 public:
-    Snake(Grid* grid, std::shared_ptr<TGL::Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction);
+    Snake(Grid* grid, TGL::SharedPtr<TGL::Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction);
     ~Snake() override = default;
 
 protected:

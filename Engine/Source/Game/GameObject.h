@@ -11,7 +11,7 @@ namespace TGL
     private:
         friend class EntityManager;
 
-        template <typename T, typename Condition>
+        template <typename Type, typename Condition>
         friend class LazyPtr;
 
     private:
@@ -31,7 +31,7 @@ namespace TGL
 
     public:
         template <typename T, typename = std::enable_if_t<std::is_base_of_v<GameObject, T>>>
-        T* As()
+        T* CastTo()
         {
             return dynamic_cast<T*>(this);
         }

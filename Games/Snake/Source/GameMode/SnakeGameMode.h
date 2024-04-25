@@ -12,7 +12,7 @@
 class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent
 {
 private:
-    std::shared_ptr<TGL::Texture> m_SpriteSheet;
+    TGL::SharedPtr<TGL::Texture> m_SpriteSheet;
 
     Grid* m_Grid;
     AudioManager* m_AudioManager;

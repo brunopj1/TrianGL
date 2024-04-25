@@ -18,8 +18,9 @@
 ## Entity System
 
 - [X] Automatic memory management for the GameMode, Entity, and Component classes
-- [X] Autimatic update of the GameMode, Entity, and Component classes
+- [X] Automatic update of the GameMode, Entity, and Component classes
 - [X] Lazy pointers for the GameMode, Entity, and Component classes
+- [ ] Shared pointers for the Asset classes
 - [ ] Entity parenting
 
 ## Input System
@@ -45,5 +46,5 @@
 ## Debug Rendering
 
 - [X] ImGui rendering in Debug configurations
-- [ ] Immediate mode rendering for basic shapes
-- [ ] Gizmos (World Grid, TextureRenderer Rect, TextureRenderer Pivot, etc...)
+- [ ] Predefined Gizmos: World Grid, TextureRenderer Rect, TextureRenderer Pivot, etc...
+- [ ] Custom Gizmos: immediate mode rendering for basic shapes

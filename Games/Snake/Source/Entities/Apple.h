@@ -7,10 +7,10 @@
 class Apple final : public TGL::Entity
 {
 private:
-    std::shared_ptr<TGL::Texture> m_SpriteSheet;
+    TGL::SharedPtr<TGL::Texture> m_SpriteSheet;
 
 public:
-    Apple(Grid* grid, std::shared_ptr<TGL::Texture> spriteSheet);
+    Apple(Grid* grid, TGL::SharedPtr<TGL::Texture> spriteSheet);
     ~Apple() override = default;
 
 public:

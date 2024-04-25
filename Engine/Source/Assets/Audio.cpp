@@ -20,7 +20,7 @@ Audio::~Audio()
     AssetManager::UnloadAudio(this);
 }
 
-std::shared_ptr<Audio> Audio::Load(const std::string& filePath, const bool stream)
+SharedPtr<Audio> Audio::Load(const std::string& filePath, const bool stream)
 {
     return AssetManager::LoadAudio(filePath, stream);
 }

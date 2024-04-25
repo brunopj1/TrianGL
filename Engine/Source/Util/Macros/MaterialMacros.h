@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+// ReSharper disable CppClangTidyBugproneMacroParentheses
+
 #include <type_traits>
 
 #define UNIFORM_TEMPLATE_SPAWN_CONDITION                               \

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <memory>
+#include "Util/Memory/SharedPtr.h"
 #include <string>
 #include <vector>
 
@@ -31,7 +31,7 @@ namespace TGL
         ~Audio();
 
     public:
-        static std::shared_ptr<Audio> Load(const std::string& filePath, bool stream = false);
+        static SharedPtr<Audio> Load(const std::string& filePath, bool stream = false);
 
     public:
         bool IsStreamed() const;

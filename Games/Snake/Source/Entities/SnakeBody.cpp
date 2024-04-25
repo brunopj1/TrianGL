@@ -7,7 +7,7 @@
 
 using namespace TGL;
 
-SnakeBody::SnakeBody(Grid* grid, std::shared_ptr<Texture> texture, const glm::ivec2& position, const glm::ivec2& direction)
+SnakeBody::SnakeBody(Grid* grid, SharedPtr<Texture> texture, const glm::ivec2& position, const glm::ivec2& direction)
     : Entity(false), m_Type(SnakeBodyType::Head), m_BackDirection(direction), m_FrontDirection(direction), m_Texture(std::move(texture))
 {
     m_SpriteRenderer = AttachComponent<SpriteRenderer>();
@@ -50,7 +50,7 @@ void SnakeBody::UpdateTexture()
 {
     // Find the correct texture slice
 
-    std::shared_ptr<TextureSlice> texture = nullptr;
+    SharedPtr<TextureSlice> texture = nullptr;
 
     if (m_Type == SnakeBodyType::Tail)
     {
@@ -66,7 +66,7 @@ void SnakeBody::UpdateTexture()
         texture = m_Texture->GetSlice(idx);
     }
 
-    m_SpriteRenderer->GetMaterial()->As<DefaultMaterial>()->Sprite->Value = texture;
+    m_SpriteRenderer->GetMaterial().CastTo<DefaultMaterial>()->Sprite->Value = texture;
 
     // Rotate the texture
 

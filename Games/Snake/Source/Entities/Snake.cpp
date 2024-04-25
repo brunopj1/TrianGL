@@ -8,7 +8,7 @@
 
 using namespace TGL;
 
-Snake::Snake(Grid* grid, std::shared_ptr<Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction)
+Snake::Snake(Grid* grid, SharedPtr<Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction)
     : Entity(true), m_SpriteSheet(std::move(spriteSheet))
 {
     m_BodyDirection = m_MoveDirection = direction;
@@ -53,7 +53,7 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         audioManager->PlayMoveAudio();
     }
     // Hit snake
-    else if (const SnakeBody* hitBody = hitEntity->As<SnakeBody>(); hitBody != nullptr)
+    else if (const SnakeBody* hitBody = hitEntity->CastTo<SnakeBody>(); hitBody != nullptr)
     {
         DestroyTail(grid, hitBody);
         SpawnHead(grid, nextPosition);
@@ -61,7 +61,7 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         audioManager->PlayHurtAudio();
     }
     // Hit apple
-    else if (Apple* hitApple = hitEntity->As<Apple>(); hitApple != nullptr)
+    else if (Apple* hitApple = hitEntity->CastTo<Apple>(); hitApple != nullptr)
     {
         SpawnHead(grid, nextPosition);
         hitApple->RandomizePosition(grid);

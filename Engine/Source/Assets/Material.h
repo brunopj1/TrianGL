@@ -5,14 +5,16 @@
 #include "Core/AssetManager.h"
 #include "Util/Macros/MaterialMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
-#include <memory>
+#include "Util/Memory/SharedPtr.h"
 #include <string>
 #include <vector>
+
+// TODO add CastTo method directly to the material class
 
 // Forward declarations
 namespace TGL
 {
-    class Material : public std::enable_shared_from_this<Material>
+    class Material
     {
     private:
         friend class AssetManager;
@@ -43,15 +45,8 @@ namespace TGL
         virtual void OnRenderSetup() const;
 
     public:
-        template <typename T, typename = std::enable_if_t<std::is_base_of_v<Material, T>>>
-        std::shared_ptr<T> As()
-        {
-            return std::dynamic_pointer_cast<T>(shared_from_this());
-        }
-
-    public:
         template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
-        static std::shared_ptr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        static SharedPtr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
         }

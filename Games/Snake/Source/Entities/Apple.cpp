@@ -7,7 +7,7 @@
 
 using namespace TGL;
 
-Apple::Apple(Grid* grid, std::shared_ptr<Texture> spriteSheet)
+Apple::Apple(Grid* grid, SharedPtr<Texture> spriteSheet)
     : Entity(false), m_SpriteSheet(std::move(spriteSheet))
 {
     SpriteRenderer* sr = AttachComponent<SpriteRenderer>();

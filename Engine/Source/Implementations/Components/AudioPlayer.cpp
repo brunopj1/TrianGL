@@ -3,12 +3,11 @@
 #include "soloud.h"
 #include "Core/AssetManager.h"
 #include "Assets/Audio.h"
-#include "soloud_wav.h"
 #include <utility>
 
 using namespace TGL;
 
-AudioPlayer::AudioPlayer(std::shared_ptr<Audio> audio)
+AudioPlayer::AudioPlayer(SharedPtr<Audio> audio)
     : Component(true), m_Audio(std::move(audio))
 {}
 
@@ -35,12 +34,12 @@ void AudioPlayer::OnUpdate(float deltaTime)
     }
 }
 
-std::shared_ptr<Audio> AudioPlayer::GetAudio() const
+SharedPtr<Audio> AudioPlayer::GetAudio() const
 {
     return m_Audio;
 }
 
-void AudioPlayer::SetAudio(std::shared_ptr<Audio> audio)
+void AudioPlayer::SetAudio(SharedPtr<Audio> audio)
 {
     Stop();
 

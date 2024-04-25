@@ -104,13 +104,13 @@ void Mat4Uniform::BindInternal() const
 SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
     : MaterialUniform(shader, name),
       m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")),
-      m_ResoultionLocation(shader->GetUniformLocation(name + "Resolution")),
+      m_ResolutionLocation(shader->GetUniformLocation(name + "Resolution")),
       m_Slot(0), Value(nullptr) // The slot is updated by the spawner
 {}
 
 bool SpriteUniform::IsValid() const
 {
-    return m_Location != -1 || m_MatrixLocation != -1 || m_ResoultionLocation != -1;
+    return m_Location != -1 || m_MatrixLocation != -1 || m_ResolutionLocation != -1;
 }
 
 void SpriteUniform::BindInternal() const
@@ -141,8 +141,8 @@ void SpriteUniform::BindInternal() const
         }
     }
 
-    if (m_ResoultionLocation != -1)
+    if (m_ResolutionLocation != -1)
     {
-        glUniform2uiv(m_ResoultionLocation, 1, &Value->GetResolution()[0]);
+        glUniform2uiv(m_ResolutionLocation, 1, &Value->GetResolution()[0]);
     }
 }

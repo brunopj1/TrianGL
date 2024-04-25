@@ -33,6 +33,11 @@ void AssetManager::Init()
 
 void AssetManager::Terminate()
 {
+    for (const auto referenceCounter : s_AssetReferenceCounters)
+    {
+        // TODO delete the shared pointers
+    }
+    
     s_CanCreateAndDestroyObjects = false;
 
     s_SoloudEngine->deinit();
@@ -40,26 +45,26 @@ void AssetManager::Terminate()
     s_SoloudEngine = nullptr;
 }
 
-std::shared_ptr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
+SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
     ASSERT_SINGLETON_OBJECT_CREATION();
 
     PREPARE_SPAWNER_USAGE(Texture);
 
-    std::shared_ptr<Texture> instance = std::make_shared<Texture>(filePath);
+    Texture* instance = new Texture(filePath);
 
     instance->Init(parameters);
 
     return instance;
 }
 
-std::shared_ptr<TextureSlice> AssetManager::CreateTextureSlice(Texture* texture, int index)
+SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const int index)
 {
     // No need to assert here since this doesn't interact with OpenGL
 
     PREPARE_SPAWNER_USAGE(TextureSlice);
 
-    return std::make_shared<TextureSlice>(texture->shared_from_this(), index);
+    return new TextureSlice(std::move(texture), index);
 }
 
 void AssetManager::UnloadTexture(Texture* texture)
@@ -69,11 +74,11 @@ void AssetManager::UnloadTexture(Texture* texture)
     texture->Free();
 }
 
-std::shared_ptr<Audio> AssetManager::LoadAudio(const std::string& filePath, bool stream)
+SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
     PREPARE_SPAWNER_USAGE(Audio);
 
-    std::shared_ptr<Audio> instance = std::make_shared<Audio>(filePath, stream);
+    Audio* instance = new Audio(filePath, stream);
 
     instance->Init();
 
@@ -133,4 +138,14 @@ void AssetManager::UnloadShader(Shader* shader)
     }
 
     s_Shaders[shader] = it->second - 1;
+}
+
+void AssetManager::StoreReferenceCounter(ReferenceCounter* referenceCounter)
+{
+    s_AssetReferenceCounters.push_back(referenceCounter);
+}
+
+void AssetManager::RemoveReferenceCounter(ReferenceCounter* referenceCounter)
+{
+    std::erase(s_AssetReferenceCounters, referenceCounter);
 }

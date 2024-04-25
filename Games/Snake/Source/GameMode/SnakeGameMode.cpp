@@ -12,8 +12,6 @@
 #include <imgui.h>
 #endif
 
-#include "Implementations/Components/AudioPlayer.h"
-
 using namespace TGL;
 
 // TODO add a more fluid motion to the snake

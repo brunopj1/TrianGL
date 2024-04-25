@@ -18,13 +18,11 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
     : Resolution(resolution), Offset(offset), TextureMatrix(textureMatrix)
 {}
 
-TextureSlice::TextureSlice(std::shared_ptr<Texture> texture, const int index)
+TextureSlice::TextureSlice(SharedPtr<Texture> texture, const int index)
     : m_Texture(std::move(texture)), m_Index(index)
-{
-    ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, TextureSlice);
-}
+{}
 
-std::shared_ptr<Texture> TextureSlice::GetTexture() const
+SharedPtr<Texture> TextureSlice::GetTexture() const
 {
     return m_Texture;
 }
@@ -56,7 +54,7 @@ Texture::~Texture()
     AssetManager::UnloadTexture(this);
 }
 
-std::shared_ptr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
+SharedPtr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
 {
     return AssetManager::LoadTexture(filePath, parameters);
 }
@@ -76,14 +74,14 @@ size_t Texture::GetSliceCount() const
     return m_Slices.size();
 }
 
-std::shared_ptr<TextureSlice> Texture::GetSlice(const unsigned int index)
+SharedPtr<TextureSlice> Texture::GetSlice(const unsigned int index)
 {
     if (index >= m_Slices.size())
     {
         throw std::runtime_error("Invalid slice index");
     }
 
-    return AssetManager::CreateTextureSlice(this, index);
+    return AssetManager::CreateTextureSlice(ToSharedPtr(), index);
 }
 
 int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
@@ -99,7 +97,7 @@ int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
     return static_cast<int>(m_Slices.size()) - 1;
 }
 
-std::shared_ptr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
+SharedPtr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
     const int index = CreateSlice(resolution, offset);
     return GetSlice(index);
@@ -135,11 +133,11 @@ int Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& pad
     return sliceCount.x * sliceCount.y;
 }
 
-std::vector<std::shared_ptr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+std::vector<SharedPtr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
 {
     const int sliceCount = CreateSliceGrid(resolution, padding, spacing);
 
-    std::vector<std::shared_ptr<TextureSlice>> slices;
+    std::vector<SharedPtr<TextureSlice>> slices;
     slices.reserve(sliceCount);
 
     for (int i = static_cast<int>(m_Slices.size()) - sliceCount; i < m_Slices.size(); i++)
