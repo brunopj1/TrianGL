@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Assets/Texture.h" // Required for SharedPtr<Sprite>
 #include "glm/glm.hpp"
 #include "Util/Macros/MaterialMacros.h"
 #include "Util/Memory/SharedPtr.h"
@@ -9,7 +10,6 @@ namespace TGL
 {
     // Forward declaration
     class Shader;
-    class Sprite;
 
     // Base class
     class MaterialUniform

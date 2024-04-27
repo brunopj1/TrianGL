@@ -18,6 +18,8 @@ Material::Material(const std::string& vertexShaderPath, const std::string& fragm
 
 Material::~Material()
 {
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+    
     AssetManager::UnloadMaterialUniforms(this);
 
     AssetManager::UnloadShader(m_Shader);

@@ -51,9 +51,6 @@ namespace TGL
 
     private:
         static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
-
-    private:
-        static inline std::vector<ReferenceCounter*> s_AssetReferenceCounters; 
         
     public:
         AssetManager() = delete;
@@ -123,10 +120,5 @@ namespace TGL
         static Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
         static void UnloadShader(Shader* shader);
-
-    private:
-        static void StoreReferenceCounter(ReferenceCounter* referenceCounter);
-
-        static void RemoveReferenceCounter(ReferenceCounter* referenceCounter);
     };
 }

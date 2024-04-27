@@ -52,7 +52,7 @@ namespace TGL
 
     public:
         TextureSlice(SharedPtr<Texture> texture, int index);
-        ~TextureSlice() override = default;
+        ~TextureSlice() override;
 
     public:
         SharedPtr<Texture> GetTexture() const;

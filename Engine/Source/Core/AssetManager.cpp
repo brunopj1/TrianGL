@@ -33,11 +33,6 @@ void AssetManager::Init()
 
 void AssetManager::Terminate()
 {
-    for (const auto referenceCounter : s_AssetReferenceCounters)
-    {
-        // TODO delete the shared pointers
-    }
-    
     s_CanCreateAndDestroyObjects = false;
 
     s_SoloudEngine->deinit();
@@ -138,14 +133,4 @@ void AssetManager::UnloadShader(Shader* shader)
     }
 
     s_Shaders[shader] = it->second - 1;
-}
-
-void AssetManager::StoreReferenceCounter(ReferenceCounter* referenceCounter)
-{
-    s_AssetReferenceCounters.push_back(referenceCounter);
-}
-
-void AssetManager::RemoveReferenceCounter(ReferenceCounter* referenceCounter)
-{
-    std::erase(s_AssetReferenceCounters, referenceCounter);
 }

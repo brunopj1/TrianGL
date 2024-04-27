@@ -9,8 +9,6 @@
 #include <string>
 #include <vector>
 
-// TODO add CastTo method directly to the material class
-
 // Forward declarations
 namespace TGL
 {

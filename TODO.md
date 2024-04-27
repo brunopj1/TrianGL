@@ -6,7 +6,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 ## Other tasks
 
 - Use github actions to validate the code
-- Check ig the imgui-stdlib dependency can be used directly from the imgui submodule
+- Check if the imgui-stdlib dependency can be used directly from the imgui submodule
 
 ## Documentation
 
@@ -15,10 +15,17 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Replace the std::shared_ptr with the TGL::SharedPtr in the wiki
+- Talk about casting materials using the SharedPtr::CastTo method
 - Talk about uniform creation
 - Talk about the engine uniforms and the other automatic uniforms (texture matrix, texture resolution, etc...)
 - Explain the existing entities and components (Camera, etc...)
 - Explain how to use the callbacks
+
+## Modern C++
+
+- Check if it is worth to start using modules
+- Check if it is worth to start using concepts
 
 ## General
 

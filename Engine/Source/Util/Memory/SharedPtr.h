@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Util/Macros/SmartPointerMacros.h"
+#include "Util/Macros/SpawnerMacros.h"
 
-// TODO only allow destruction from inside the reference counter (SPAWNER MACROS)
+// TODO add static assert or std::enable_if
 
 namespace TGL
 {
@@ -16,6 +16,31 @@ namespace TGL
 		unsigned int m_Counter = 1;
 	};
 
+	class SharedPtrSpawnerUtil final
+	{
+	private:
+		template <typename T>
+		friend class SharedPtr;
+
+		friend class Audio;
+		friend class Material;
+		friend class Texture;
+		friend class TextureSlice;
+		
+	private:
+		DECLARE_SPAWNER_USAGE_VAR(Asset);
+		
+	public:
+		SharedPtrSpawnerUtil() = delete;
+		~SharedPtrSpawnerUtil() = delete;
+
+	public:
+		SharedPtrSpawnerUtil(const SharedPtrSpawnerUtil&) = delete;
+		SharedPtrSpawnerUtil& operator=(const SharedPtrSpawnerUtil&) = delete;
+		SharedPtrSpawnerUtil(SharedPtrSpawnerUtil&&) = delete;
+		SharedPtrSpawnerUtil& operator=(SharedPtrSpawnerUtil&&) = delete;
+	};
+	
 	template <typename T>
 	class SharedPtr final
 	{
@@ -195,6 +220,8 @@ namespace TGL
 
 			if (m_ReferenceCounter->m_Counter == 0)
 			{
+				PREPARE_SPAWNER_USAGE_EXT(SharedPtrSpawnerUtil, Asset);
+				
 				delete m_ReferenceCounter;
 				delete m_Pointer;
 			}

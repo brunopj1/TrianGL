@@ -18,6 +18,7 @@ AudioPlayerTester::AudioPlayerTester()
 
 void AudioPlayerTester::OnUpdate(float deltaTime)
 {
+    // TODO precompute this
     ImGui::SetNextWindowPos(window_padding * ImVec2(1, 2) + ImVec2(0, audio_window_size.y) + (audio_player_window_size + window_padding) * ImVec2(m_AudioPlayerId - 1, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(audio_player_window_size, ImGuiCond_Appearing);
 

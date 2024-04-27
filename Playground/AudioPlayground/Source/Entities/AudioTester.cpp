@@ -17,6 +17,7 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
 
 void AudioTester::OnUpdate(float deltaTime)
 {
+    // TODO precompute this
     ImGui::SetNextWindowPos(window_padding + (audio_window_size + window_padding) * ImVec2(m_AudioId - 1, 0), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(audio_window_size, ImGuiCond_Appearing);
 

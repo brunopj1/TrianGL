@@ -22,6 +22,11 @@ TextureSlice::TextureSlice(SharedPtr<Texture> texture, const int index)
     : m_Texture(std::move(texture)), m_Index(index)
 {}
 
+TextureSlice::~TextureSlice()
+{
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+}
+
 SharedPtr<Texture> TextureSlice::GetTexture() const
 {
     return m_Texture;
@@ -51,6 +56,8 @@ Texture::Texture(std::string filePath)
 
 Texture::~Texture()
 {
+    ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+    
     AssetManager::UnloadTexture(this);
 }
 
