@@ -14,13 +14,16 @@ AudioPlayerTester::AudioPlayerTester()
     s_Instances.push_back(this);
 
     m_AudioPlayer = AttachComponent<AudioPlayer>();
+
+    m_WindowPos = window_padding * glm::vec2(1, 2); // Padding from the top left corner
+    m_WindowPos.y += audio_window_size.y; // Skip the audio window vertically
+    m_WindowPos.x += (audio_player_window_size.x + window_padding.x) * (m_AudioPlayerId - 1); // Skip the previous audio player windows horizontally
 }
 
 void AudioPlayerTester::OnUpdate(float deltaTime)
 {
-    // TODO precompute this
-    ImGui::SetNextWindowPos(window_padding * ImVec2(1, 2) + ImVec2(0, audio_window_size.y) + (audio_player_window_size + window_padding) * ImVec2(m_AudioPlayerId - 1, 0), ImGuiCond_Appearing);
-    ImGui::SetNextWindowSize(audio_player_window_size, ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(ImVec2(audio_player_window_size.x, audio_player_window_size.y), ImGuiCond_Appearing);
 
     if (ImGui::Begin(std::format("Audio Player {}", m_AudioPlayerId).c_str()))
     {

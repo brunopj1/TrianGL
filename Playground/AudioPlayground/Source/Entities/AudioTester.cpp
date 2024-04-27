@@ -13,13 +13,15 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
     s_Instances.push_back(this);
 
     m_Audio = Audio::Load(path, stream);
+
+    m_WindowPos = window_padding; // Padding from the top left corner
+    m_WindowPos.x += (audio_window_size.x + window_padding.x) * (m_AudioId - 1); // Skip the previous audio windows horizontally
 }
 
 void AudioTester::OnUpdate(float deltaTime)
 {
-    // TODO precompute this
-    ImGui::SetNextWindowPos(window_padding + (audio_window_size + window_padding) * ImVec2(m_AudioId - 1, 0), ImGuiCond_Appearing);
-    ImGui::SetNextWindowSize(audio_window_size, ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(ImVec2(audio_window_size.x, audio_window_size.y), ImGuiCond_Appearing);
 
     if (ImGui::Begin(std::format("Audio {}", m_AudioId).c_str()))
     {

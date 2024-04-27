@@ -13,6 +13,9 @@ private:
     TGL::SharedPtr<TGL::Audio> m_Audio;
     int m_AudioId;
 
+private:
+    glm::vec2 m_WindowPos;
+
 public:
     AudioTester(const std::string& path, bool stream = false);
     ~AudioTester() override = default;

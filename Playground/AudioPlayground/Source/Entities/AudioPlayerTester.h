@@ -14,6 +14,9 @@ private:
     int m_AudioPlayerId;
     int m_AudioId = 0;
 
+private:
+    glm::vec2 m_WindowPos;
+
 public:
     AudioPlayerTester();
     ~AudioPlayerTester() override = default;
