@@ -29,7 +29,7 @@ SnakeGameMode::SnakeGameMode()
 
     m_TickRate = m_TickTimer = 0.25f;
 
-    m_Grid = SpawnEntity<Grid>(glm::uvec2(15));
+    m_Grid = SpawnEntity<Grid>(glm::uvec2(5));
 
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 
@@ -62,7 +62,7 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
 
         m_Snake->Move(m_Grid, m_AudioManager);
 
-        if (m_Apple.Get() == nullptr)
+        if (!m_Apple.IsValid())
         {
             m_Victory = true;
         }

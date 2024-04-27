@@ -144,7 +144,7 @@ namespace TGL
 		template <typename U>
 		operator SharedPtr<U>() const // NOLINT
 		{
-			static_assert(std::is_base_of_v<U, T>, "Cannot convert T to the unrelated type U");
+            static_assert(std::is_base_of_v<U, T>, "U must be a base class of T");
 			return SharedPtr<U>(m_Pointer, m_ReferenceCounter);
 		}
 

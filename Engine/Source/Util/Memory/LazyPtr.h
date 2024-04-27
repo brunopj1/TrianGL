@@ -5,21 +5,21 @@
 #include "Game/Entity.h"
 #include "Game/Component.h"
 
-// TODO remove the get and is valid methods and overload the relevant operators
-// TODO add the copy / move / assignment operators for convertible types
-// TODO add the comparison operators for convertible types
-
 namespace TGL
 {
     template <typename T, typename = LAZY_POINTER_TEMPLATE_CONDITION>
     class LazyPtr
     {
     private:
+        template <typename U, typename C>
+        friend class LazyPtr;
+        
+    private:
         uint64_t m_Id;
 
     public:
-        LazyPtr(T* value)
-            : m_Id(value ? value->m_Id : 0)
+        LazyPtr(T* ptr)
+            : m_Id(ptr ? ptr->m_Id : 0)
         {}
 
         LazyPtr()
@@ -28,6 +28,11 @@ namespace TGL
 
         ~LazyPtr() = default;
 
+    private:
+        LazyPtr(const uint64_t id)
+            : m_Id(id)
+        {}
+        
     public:
         LazyPtr(const LazyPtr& other)
             : m_Id(other.m_Id)
@@ -35,7 +40,9 @@ namespace TGL
 
         LazyPtr(LazyPtr&& other) noexcept
             : m_Id(other.m_Id)
-        {}
+        {
+            other.m_Id = 0;
+        }
 
         LazyPtr& operator=(const LazyPtr& other)
         {
@@ -52,15 +59,40 @@ namespace TGL
             if (this != &other)
             {
                 m_Id = other.m_Id;
+                other.m_Id = 0;
             }
             
             return *this;
         }
 
-        LazyPtr& operator=(const T* value)
+        LazyPtr& operator=(const T* ptr)
         {
-            m_Id = value != nullptr ? value->m_Id : 0;
+            m_Id = ptr != nullptr ? ptr->m_Id : 0;
             return *this;
+        }
+
+    public:
+        template <typename U, typename = std::enable_if_t<std::is_base_of_v<U, T>>>
+        operator LazyPtr<U>() const // NOLINT
+        {
+            return LazyPtr<U>(m_Id);
+        }
+        
+        template <typename U>
+        SharedPtr<U> CastTo()
+        {
+            T* ptr = Get();
+            
+            if (ptr == nullptr) return nullptr;
+            
+            U* casted = dynamic_cast<U*>(ptr);
+            
+            if (casted != nullptr)
+            {
+                return SharedPtr<U>(casted);
+            }
+            
+            return nullptr;
         }
 
     public:
@@ -124,6 +156,18 @@ namespace TGL
             return left.m_Id >= 0; // NOLINT
         }
 
+    public:
+        T* operator->() const
+        {
+            return Get();
+        }
+
+        T* operator*() const
+        {
+            return Get();
+        }
+
+    public:
         T* Get()
         {
             if (m_Id == 0) return nullptr;
@@ -149,6 +193,33 @@ namespace TGL
             }
         }
 
+        T* Get() const
+        {
+            if (m_Id == 0) return nullptr;
+
+            if constexpr (std::is_base_of_v<Entity, T>)
+            {
+                Entity* entityPtr = EntityManager::GetEntity(m_Id);
+                T* ptr = entityPtr ? entityPtr->CastTo<T>() : nullptr;
+                return ptr;
+            }
+            else if constexpr (std::is_base_of_v<Component, T>)
+            {
+                Component* componentPtr = EntityManager::GetComponent(m_Id);
+                T* ptr = componentPtr ? componentPtr->CastTo<T>() : nullptr;
+                return ptr;
+            }
+            else
+            {
+                return nullptr;
+            }
+        }
+
+        bool IsValid()
+        {
+            return Get() != nullptr;
+        }
+        
         bool IsValid() const
         {
             return Get() != nullptr;
