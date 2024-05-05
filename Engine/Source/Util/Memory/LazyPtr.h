@@ -13,7 +13,7 @@ namespace TGL
     private:
         template <LazyPointerValue U>
         friend class LazyPtr;
-        
+
     private:
         uint64_t m_Id;
 
@@ -32,7 +32,7 @@ namespace TGL
         LazyPtr(const uint64_t id)
             : m_Id(id)
         {}
-        
+
     public:
         LazyPtr(const LazyPtr& other)
             : m_Id(other.m_Id)
@@ -50,7 +50,7 @@ namespace TGL
             {
                 m_Id = other.m_Id;
             }
-            
+
             return *this;
         }
 
@@ -61,7 +61,7 @@ namespace TGL
                 m_Id = other.m_Id;
                 other.m_Id = 0;
             }
-            
+
             return *this;
         }
 
@@ -73,25 +73,25 @@ namespace TGL
 
     public:
         template <typename U, typename = std::enable_if_t<std::is_base_of_v<U, T>>>
-        operator LazyPtr<U>() const // NOLINT
+        operator LazyPtr<U>() const // NOLINT(CppNonExplicitConversionOperator)
         {
             return LazyPtr<U>(m_Id);
         }
-        
+
         template <typename U>
         LazyPtr<U> CastTo()
         {
             T* ptr = Get();
-            
+
             if (ptr == nullptr) return nullptr;
-            
+
             U* casted = dynamic_cast<U*>(ptr);
-            
+
             if (casted != nullptr)
             {
                 return LazyPtr<U>(casted);
             }
-            
+
             return nullptr;
         }
 
@@ -105,7 +105,7 @@ namespace TGL
         {
             return left.m_Id == 0;
         }
-        
+
         friend bool operator!=(const LazyPtr& left, const LazyPtr& right)
         {
             return left.m_Id != right.m_Id;
@@ -125,7 +125,7 @@ namespace TGL
         {
             return left.m_Id < 0;
         }
-        
+
         friend bool operator<=(const LazyPtr& left, const LazyPtr& right)
         {
             return left.m_Id <= right.m_Id;
@@ -135,7 +135,7 @@ namespace TGL
         {
             return left.m_Id <= 0;
         }
-        
+
         friend bool operator>(const LazyPtr& left, const LazyPtr& right)
         {
             return left.m_Id > right.m_Id;
@@ -145,7 +145,7 @@ namespace TGL
         {
             return left.m_Id > 0;
         }
-        
+
         friend bool operator>=(const LazyPtr& left, const LazyPtr& right)
         {
             return left.m_Id >= right.m_Id;
@@ -153,7 +153,7 @@ namespace TGL
 
         friend bool operator>=(const LazyPtr& left, std::nullptr_t)
         {
-            return left.m_Id >= 0; // NOLINT
+            return left.m_Id >= 0; // NOLINT(CppUnsignedZeroComparison)
         }
 
     public:
@@ -219,7 +219,7 @@ namespace TGL
         {
             return Get() != nullptr;
         }
-        
+
         bool IsValid() const
         {
             return Get() != nullptr;

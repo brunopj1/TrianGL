@@ -16,7 +16,7 @@ namespace TGL
     private:
         Transform m_Transform;
         std::vector<Component*> m_Components;
-    
+
     protected:
         Entity(bool shouldUpdate);
         ~Entity() override;
@@ -30,7 +30,7 @@ namespace TGL
 
     public:
         template <typename T, typename... Args>
-        requires SpawnableComponent<T, Args...>
+            requires SpawnableComponent<T, Args...>
         T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return EntityManager::CreateComponent<T>(this, std::forward<Args>(args)...);

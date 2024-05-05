@@ -9,246 +9,246 @@
 
 namespace TGL
 {
-	class ReferenceCounter final
-	{
-	private:
-		template <typename T>
-		friend class SharedPtr;
+    class ReferenceCounter final
+    {
+    private:
+        template <typename T>
+        friend class SharedPtr;
 
-	private:
-		unsigned int m_Counter = 1;
-	};
+    private:
+        unsigned int m_Counter = 1;
+    };
 
-	// TODO can the spawner var be moved to the AssetManager?
-	class SharedPtrSpawnerUtil final
-	{
-	private:
-		template <typename T>
-		friend class SharedPtr;
+    // TODO can the spawner var be moved to the AssetManager?
+    class SharedPtrSpawnerUtil final
+    {
+    private:
+        template <typename T>
+        friend class SharedPtr;
 
-		friend class Audio;
-		friend class Material;
-		friend class Texture;
-		friend class TextureSlice;
-		
-	private:
-		DECLARE_SPAWNER_USAGE_VAR(Asset);
-		
-	public:
-		SharedPtrSpawnerUtil() = delete;
-		~SharedPtrSpawnerUtil() = delete;
+        friend class Audio;
+        friend class Material;
+        friend class Texture;
+        friend class TextureSlice;
 
-	public:
-		SharedPtrSpawnerUtil(const SharedPtrSpawnerUtil&) = delete;
-		SharedPtrSpawnerUtil& operator=(const SharedPtrSpawnerUtil&) = delete;
-		SharedPtrSpawnerUtil(SharedPtrSpawnerUtil&&) = delete;
-		SharedPtrSpawnerUtil& operator=(SharedPtrSpawnerUtil&&) = delete;
-	};
-	
-	template <typename T>
-	class SharedPtr final
-	{
-	private:
-		friend class AssetManager;
+    private:
+        DECLARE_SPAWNER_USAGE_VAR(Asset);
 
-		template <typename U>
-		friend class SharedPtr;
+    public:
+        SharedPtrSpawnerUtil() = delete;
+        ~SharedPtrSpawnerUtil() = delete;
 
-		template <typename U>
-		friend class SharedFromThis;
+    public:
+        SharedPtrSpawnerUtil(const SharedPtrSpawnerUtil&) = delete;
+        SharedPtrSpawnerUtil& operator=(const SharedPtrSpawnerUtil&) = delete;
+        SharedPtrSpawnerUtil(SharedPtrSpawnerUtil&&) = delete;
+        SharedPtrSpawnerUtil& operator=(SharedPtrSpawnerUtil&&) = delete;
+    };
 
-	private:
-		T* m_Pointer;
-		ReferenceCounter* m_ReferenceCounter;
+    template <typename T>
+    class SharedPtr final
+    {
+    private:
+        friend class AssetManager;
 
-	public:
-		SharedPtr()
-			: m_Pointer(nullptr), m_ReferenceCounter(nullptr)
-		{}
+        template <typename U>
+        friend class SharedPtr;
 
-		SharedPtr(std::nullptr_t)
-			: m_Pointer(nullptr), m_ReferenceCounter(nullptr)
-		{}
+        template <typename U>
+        friend class SharedFromThis;
 
-	private:
-		SharedPtr(T* ptr)
-			: m_Pointer(ptr), m_ReferenceCounter(ptr != nullptr ? new ReferenceCounter() : nullptr)
-		{
-			if constexpr (std::is_base_of_v<SharedFromThis<T>, T>)
-			{
-				if (ptr != nullptr)
-				{
-					ptr->m_Pointer = ptr;
-					ptr->m_ReferenceCounter = m_ReferenceCounter;
-				}
-			}
-		}
+    private:
+        T* m_Pointer;
+        ReferenceCounter* m_ReferenceCounter;
 
-		SharedPtr(T* ptr, ReferenceCounter* referenceCounter)
-			: m_Pointer(ptr), m_ReferenceCounter(referenceCounter)
-		{
-			Increment();
-		}
+    public:
+        SharedPtr()
+            : m_Pointer(nullptr), m_ReferenceCounter(nullptr)
+        {}
 
-	public:
-		~SharedPtr()
-		{
-			Decrement();
-		}
+        SharedPtr(std::nullptr_t)
+            : m_Pointer(nullptr), m_ReferenceCounter(nullptr)
+        {}
 
-	public:
-		SharedPtr(const SharedPtr& other)
-			: m_Pointer(other.m_Pointer), m_ReferenceCounter(other.m_ReferenceCounter)
-		{
-			Increment();
-		}
+    private:
+        SharedPtr(T* ptr)
+            : m_Pointer(ptr), m_ReferenceCounter(ptr != nullptr ? new ReferenceCounter() : nullptr)
+        {
+            if constexpr (std::is_base_of_v<SharedFromThis<T>, T>)
+            {
+                if (ptr != nullptr)
+                {
+                    ptr->m_Pointer = ptr;
+                    ptr->m_ReferenceCounter = m_ReferenceCounter;
+                }
+            }
+        }
 
-		SharedPtr(SharedPtr&& other) noexcept
-			: m_Pointer(other.m_Pointer), m_ReferenceCounter(other.m_ReferenceCounter)
-		{
-			other.m_Pointer = nullptr;
-			other.m_ReferenceCounter = nullptr;
-		}
+        SharedPtr(T* ptr, ReferenceCounter* referenceCounter)
+            : m_Pointer(ptr), m_ReferenceCounter(referenceCounter)
+        {
+            Increment();
+        }
 
-		SharedPtr& operator=(const SharedPtr& other) // NOLINT
-		{
-			if (this != &other)
-			{
-				Decrement();
-				m_Pointer = other.m_Pointer;
-				m_ReferenceCounter = other.m_ReferenceCounter;
-				Increment();
-			}
+    public:
+        ~SharedPtr()
+        {
+            Decrement();
+        }
 
-			return *this;
-		}
+    public:
+        SharedPtr(const SharedPtr& other)
+            : m_Pointer(other.m_Pointer), m_ReferenceCounter(other.m_ReferenceCounter)
+        {
+            Increment();
+        }
 
-		SharedPtr& operator=(SharedPtr&& other) noexcept
-		{
-			if (this != &other)
-			{
-				Decrement();
-				m_Pointer = other.m_Pointer;
-				m_ReferenceCounter = other.m_ReferenceCounter;
-				other.m_Pointer = nullptr;
-				other.m_ReferenceCounter = nullptr;
-			}
+        SharedPtr(SharedPtr&& other) noexcept
+            : m_Pointer(other.m_Pointer), m_ReferenceCounter(other.m_ReferenceCounter)
+        {
+            other.m_Pointer = nullptr;
+            other.m_ReferenceCounter = nullptr;
+        }
 
-			return *this;
-		}
+        SharedPtr& operator=(const SharedPtr& other)  // NOLINT(bugprone-unhandled-self-assignment)
+        {
+            if (this != &other)
+            {
+                Decrement();
+                m_Pointer = other.m_Pointer;
+                m_ReferenceCounter = other.m_ReferenceCounter;
+                Increment();
+            }
 
-		SharedPtr& operator=(std::nullptr_t)
-		{
-			Decrement();
-			m_Pointer = nullptr;
-			m_ReferenceCounter = nullptr;
-			return *this;
-		}
+            return *this;
+        }
 
-		template <typename U>
-		operator SharedPtr<U>() const // NOLINT
-		{
+        SharedPtr& operator=(SharedPtr&& other) noexcept
+        {
+            if (this != &other)
+            {
+                Decrement();
+                m_Pointer = other.m_Pointer;
+                m_ReferenceCounter = other.m_ReferenceCounter;
+                other.m_Pointer = nullptr;
+                other.m_ReferenceCounter = nullptr;
+            }
+
+            return *this;
+        }
+
+        SharedPtr& operator=(std::nullptr_t)
+        {
+            Decrement();
+            m_Pointer = nullptr;
+            m_ReferenceCounter = nullptr;
+            return *this;
+        }
+
+        template <typename U>
+        operator SharedPtr<U>() const // NOLINT(CppNonExplicitConversionOperator)
+        {
             static_assert(std::is_base_of_v<U, T>, "U must be a base class of T");
-			return SharedPtr<U>(m_Pointer, m_ReferenceCounter);
-		}
+            return SharedPtr<U>(m_Pointer, m_ReferenceCounter);
+        }
 
-	public:
-		friend bool operator==(const SharedPtr& left, const SharedPtr& right)
-		{
-			return left.m_ReferenceCounter == right.m_ReferenceCounter;
-		}
+    public:
+        friend bool operator==(const SharedPtr& left, const SharedPtr& right)
+        {
+            return left.m_ReferenceCounter == right.m_ReferenceCounter;
+        }
 
-		friend bool operator!=(const SharedPtr& left, const SharedPtr& right)
-		{
-			return left.m_ReferenceCounter != right.m_ReferenceCounter;
-		}
+        friend bool operator!=(const SharedPtr& left, const SharedPtr& right)
+        {
+            return left.m_ReferenceCounter != right.m_ReferenceCounter;
+        }
 
-		friend bool operator==(const SharedPtr& left, std::nullptr_t)
-		{
-			return left.Get() == nullptr;
-		}
+        friend bool operator==(const SharedPtr& left, std::nullptr_t)
+        {
+            return left.Get() == nullptr;
+        }
 
-		friend bool operator!=(const SharedPtr& left, std::nullptr_t)
-		{
-			return left.Get() != nullptr;
-		}
+        friend bool operator!=(const SharedPtr& left, std::nullptr_t)
+        {
+            return left.Get() != nullptr;
+        }
 
-	public:
-		T* operator->() const
-		{
-			return Get();
-		}
+    public:
+        T* operator->() const
+        {
+            return Get();
+        }
 
-		T* operator*() const
-		{
-			return Get();
-		}
+        T* operator*() const
+        {
+            return Get();
+        }
 
-	public:
-		T* Get() const
-		{
-			return m_Pointer;
-		}
+    public:
+        T* Get() const
+        {
+            return m_Pointer;
+        }
 
-		bool IsValid() const
-		{
-			return Get() != nullptr;
-		}
+        bool IsValid() const
+        {
+            return Get() != nullptr;
+        }
 
-		template <typename U>
-		SharedPtr<U> CastTo()
-		{
-			U* casted = dynamic_cast<U*>(m_Pointer);
+        template <typename U>
+        SharedPtr<U> CastTo()
+        {
+            U* casted = dynamic_cast<U*>(m_Pointer);
 
-			if (casted != nullptr)
-			{
-				return SharedPtr<U>(casted, m_ReferenceCounter);
-			}
+            if (casted != nullptr)
+            {
+                return SharedPtr<U>(casted, m_ReferenceCounter);
+            }
 
-			return nullptr;
-		}
+            return nullptr;
+        }
 
-	private:
-		void Increment() const
-		{
-			if (m_ReferenceCounter == nullptr) return;
+    private:
+        void Increment() const
+        {
+            if (m_ReferenceCounter == nullptr) return;
 
-			m_ReferenceCounter->m_Counter++;
-		}
+            m_ReferenceCounter->m_Counter++;
+        }
 
-		void Decrement() const
-		{
-			if (m_ReferenceCounter == nullptr) return;
+        void Decrement() const
+        {
+            if (m_ReferenceCounter == nullptr) return;
 
-			m_ReferenceCounter->m_Counter--;
+            m_ReferenceCounter->m_Counter--;
 
-			if (m_ReferenceCounter->m_Counter == 0)
-			{
-				PREPARE_SPAWNER_USAGE_EXT(SharedPtrSpawnerUtil, Asset);
-				
-				delete m_ReferenceCounter;
-				delete m_Pointer;
-			}
-		}
-	};
+            if (m_ReferenceCounter->m_Counter == 0)
+            {
+                PREPARE_SPAWNER_USAGE_EXT(SharedPtrSpawnerUtil, Asset);
 
-	template <typename T>
-	class SharedFromThis
-	{
-	private:
-		friend class AssetManager;
+                delete m_ReferenceCounter;
+                delete m_Pointer;
+            }
+        }
+    };
 
-		template <typename U>
-		friend class SharedPtr;
+    template <typename T>
+    class SharedFromThis
+    {
+    private:
+        friend class AssetManager;
 
-	private:
-		T* m_Pointer = nullptr;
-		ReferenceCounter* m_ReferenceCounter = nullptr;
+        template <typename U>
+        friend class SharedPtr;
 
-	protected:
-		SharedPtr<T> ToSharedPtr()
-		{
-			return SharedPtr<T>(m_Pointer, m_ReferenceCounter);
-		}
-	};
+    private:
+        T* m_Pointer = nullptr;
+        ReferenceCounter* m_ReferenceCounter = nullptr;
+
+    protected:
+        SharedPtr<T> ToSharedPtr()
+        {
+            return SharedPtr<T>(m_Pointer, m_ReferenceCounter);
+        }
+    };
 }

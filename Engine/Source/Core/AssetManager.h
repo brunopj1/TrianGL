@@ -54,7 +54,7 @@ namespace TGL
 
     private:
         static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
-        
+
     public:
         AssetManager() = delete;
         ~AssetManager() = delete;
@@ -77,7 +77,7 @@ namespace TGL
 
     private:
         template <typename T, typename... Args>
-        requires SpawnableMaterial<T, Args...>
+            requires SpawnableMaterial<T, Args...>
         static SharedPtr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();

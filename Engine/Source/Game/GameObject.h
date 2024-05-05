@@ -38,7 +38,7 @@ namespace TGL
 
     public:
         template <typename T, typename... Args>
-        requires SpawnableEntity<T, Args...>
+            requires SpawnableEntity<T, Args...>
         static T* SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);

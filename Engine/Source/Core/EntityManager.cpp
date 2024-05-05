@@ -36,7 +36,7 @@ void EntityManager::Update(const float deltaTime)
             AddToUpdateQueue(object, s_OnUpdateQueue);
         }
     }
-    
+
     s_OnStartQueue.clear();
 
     s_GameMode->OnEarlyUpdate(deltaTime);

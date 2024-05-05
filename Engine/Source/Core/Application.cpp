@@ -1,7 +1,5 @@
 #include "Application.h"
 
-// TODO also specify the warning when using NOLINT
-
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #include "glad/glad.h"
 
@@ -30,7 +28,7 @@
 
 using namespace TGL;
 
-Application::Application(const ApplicationConfig &config)
+Application::Application(const ApplicationConfig& config)
 {
     Init(config);
 }
@@ -43,7 +41,7 @@ Application::~Application()
 // ReSharper disable once CppMemberFunctionMayBeStatic
 void Application::Run()
 {
-    GameMode *gameMode = EntityManager::GetGameMode();
+    GameMode* gameMode = EntityManager::GetGameMode();
 
     if (gameMode == nullptr)
     {
@@ -62,7 +60,7 @@ void Application::Run()
     }
 }
 
-void Application::Init(const ApplicationConfig &config)
+void Application::Init(const ApplicationConfig& config)
 {
     glfwSetErrorCallback(ErrorCallback);
 
@@ -149,7 +147,7 @@ void Application::NewFrame()
 
     // Render
 
-    Camera *camera = Camera::GetMainCamera();
+    Camera* camera = Camera::GetMainCamera();
     if (camera != nullptr) camera->UpdateMatrices();
 
     const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
@@ -193,18 +191,18 @@ void Application::RenderDebugInfo()
     std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
     message += std::format("Entities: {0} | Components: {1}", EntityManager::GetEntityCount(), EntityManager::GetComponentCount());
 
-    const char *cMessage = message.c_str();
+    const char* cMessage = message.c_str();
 
-    const ImGuiViewport *viewport = ImGui::GetMainViewport();
+    const ImGuiViewport* viewport = ImGui::GetMainViewport();
     const ImVec2 windowPos = viewport->WorkPos + ImVec2(10, viewport->WorkSize.y - ImGui::CalcTextSize(cMessage).y - 10);
 
-    ImDrawList *drawList = ImGui::GetForegroundDrawList();
+    ImDrawList* drawList = ImGui::GetForegroundDrawList();
     drawList->AddText(windowPos, IM_COL32(255, 255, 255, 255), cMessage);
 }
 
 #endif
 
-void Application::ErrorCallback(const int error, const char *description)
+void Application::ErrorCallback(const int error, const char* description)
 {
     throw OpenGlException(error, description);
 }

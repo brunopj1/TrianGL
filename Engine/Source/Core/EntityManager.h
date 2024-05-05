@@ -84,7 +84,7 @@ namespace TGL
 
     private:
         template <typename T, typename... Args>
-        requires SpawnableGameMode<T, Args...>
+            requires SpawnableGameMode<T, Args...>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
@@ -105,7 +105,7 @@ namespace TGL
         static void DestroyGameMode();
 
         template <typename T, typename... Args>
-        requires SpawnableEntity<T, Args...>
+            requires SpawnableEntity<T, Args...>
         static T* CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
@@ -126,7 +126,7 @@ namespace TGL
         static void DestroyEntity(Entity* entity);
 
         template <typename T, typename... Args>
-        requires SpawnableComponent<T, Args...>
+            requires SpawnableComponent<T, Args...>
         static T* CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();

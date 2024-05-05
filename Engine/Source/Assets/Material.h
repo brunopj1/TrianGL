@@ -44,7 +44,7 @@ namespace TGL
 
     public:
         template <typename T, typename... Args>
-        requires SpawnableMaterial<T, Args...>
+            requires SpawnableMaterial<T, Args...>
         static SharedPtr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);

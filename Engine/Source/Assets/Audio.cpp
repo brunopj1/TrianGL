@@ -18,7 +18,7 @@ Audio::Audio(std::string filePath, const bool stream)
 Audio::~Audio()
 {
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
-    
+
     AssetManager::UnloadAudio(this);
 }
 

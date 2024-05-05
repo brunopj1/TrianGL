@@ -57,7 +57,7 @@ Texture::Texture(std::string filePath)
 Texture::~Texture()
 {
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
-    
+
     AssetManager::UnloadTexture(this);
 }
 
