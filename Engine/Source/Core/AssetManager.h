@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Assets/Internal/Shader.h"
-#include "Util/Macros/MaterialMacros.h"
+#include "Util/Concepts/MaterialConcepts.h"
 #include "Util/Macros/SingletonMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
 #include "Util/Memory/SharedPtr.h"
@@ -35,6 +35,9 @@ namespace TGL
         friend class AudioPlayer;
 
         friend class ReferenceCounter;
+
+        template <typename T>
+        friend class SharedPtr;
 
     private:
         DECLARE_SPAWNER_USAGE_VAR(Texture);
@@ -73,7 +76,8 @@ namespace TGL
         static void UnloadAudio(Audio* audio);
 
     private:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
+        template <typename T, typename... Args>
+        requires SpawnableMaterial<T, Args...>
         static SharedPtr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
@@ -85,7 +89,7 @@ namespace TGL
             return instance;
         }
 
-        template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
+        template <SpawnableMaterialUniform T>
         static T* CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, unsigned char& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
         {
             // No need to assert here since this doesn't interact with OpenGL

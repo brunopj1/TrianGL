@@ -1,17 +1,17 @@
 ﻿#pragma once
 
-#include "Util/Macros/SmartPointerMacros.h"
+#include "Util/Concepts/SmartPointerConcepts.h"
 #include "Core/EntityManager.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
 
 namespace TGL
 {
-    template <typename T, typename = LAZY_POINTER_TEMPLATE_CONDITION>
+    template <LazyPointerValue T>
     class LazyPtr
     {
     private:
-        template <typename U, typename C>
+        template <LazyPointerValue U>
         friend class LazyPtr;
         
     private:
@@ -79,7 +79,7 @@ namespace TGL
         }
         
         template <typename U>
-        SharedPtr<U> CastTo()
+        LazyPtr<U> CastTo()
         {
             T* ptr = Get();
             
@@ -89,7 +89,7 @@ namespace TGL
             
             if (casted != nullptr)
             {
-                return SharedPtr<U>(casted);
+                return LazyPtr<U>(casted);
             }
             
             return nullptr;

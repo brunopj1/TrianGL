@@ -4,6 +4,8 @@
 
 // ReSharper disable CppClangTidyBugproneMacroParentheses
 
+// TODO use templates instead of macros
+
 #define DECLARE_EVENT_NO_ARGS(callerClass, className, methodName) \
     class className                                               \
     {                                                             \

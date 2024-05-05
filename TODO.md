@@ -24,8 +24,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Modern C++
 
-- Check if it is worth to start using modules
-- Check if it is worth to start using concepts
+- Use C++20 modules instead of regular headers and source files
 
 ## General
 

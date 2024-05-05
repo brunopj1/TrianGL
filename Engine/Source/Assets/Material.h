@@ -3,8 +3,8 @@
 #include "Internal/Shader.h"
 #include "MaterialUniforms.h"
 #include "Core/AssetManager.h"
+#include "Util/Concepts/MaterialConcepts.h"
 #include "Util/Macros/MaterialMacros.h"
-#include "Util/Macros/SpawnerMacros.h"
 #include "Util/Memory/SharedPtr.h"
 #include <string>
 #include <vector>
@@ -43,14 +43,15 @@ namespace TGL
         virtual void OnRenderSetup() const;
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Material)>
+        template <typename T, typename... Args>
+        requires SpawnableMaterial<T, Args...>
         static SharedPtr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
         }
 
     protected:
-        template <typename T, typename = UNIFORM_TEMPLATE_SPAWN_CONDITION>
+        template <SpawnableMaterialUniform T>
         T* AddUniform(const std::string& name, const bool createIfInvalid = true)
         {
             return AssetManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);

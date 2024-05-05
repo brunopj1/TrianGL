@@ -1,8 +1,11 @@
 ﻿#pragma once
 
+#include "Util/Concepts/SmartPointerConcepts.h"
 #include "Util/Macros/SpawnerMacros.h"
+#include <cstddef>
+#include <type_traits>
 
-// TODO add static assert or std::enable_if
+// TODO add the concept to the all templated classes
 
 namespace TGL
 {
@@ -16,6 +19,7 @@ namespace TGL
 		unsigned int m_Counter = 1;
 	};
 
+	// TODO can the spawner var be moved to the AssetManager?
 	class SharedPtrSpawnerUtil final
 	{
 	private:

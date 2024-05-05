@@ -6,8 +6,7 @@
 
 // Memory leaks
 #ifdef DEBUG
-// ReSharper disable once CppInconsistentNaming, bugprone-reserved-identifier, clang-diagnostic-reserved-macro-identifier
-#define _CRTDBG_MAP_ALLOC
+// ReSharper disable once IdentifierTypo, CppInconsistentNaming, bugprone-reserved-identifier, clang-diagnostic-reserved-macro-identifier
 #include <crtdbg.h>
 #define DEBUG_MEMORY_LEAKS()                                        \
 	std::cerr << std::endl;                                         \

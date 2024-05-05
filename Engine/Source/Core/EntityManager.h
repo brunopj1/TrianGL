@@ -4,6 +4,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include "Util/Concepts/SmartPointerConcepts.h"
+#include "Util/Concepts/EntitySystemConcepts.h"
 #include "Util/Macros/SingletonMacros.h"
 #include "Util/Macros/SpawnerMacros.h"
 #include <ranges>
@@ -20,7 +22,7 @@ namespace TGL
         friend class Component;
         friend class Renderable;
 
-        template <typename Type, typename Condition>
+        template <LazyPointerValue T>
         friend class LazyPtr;
 
     private:
@@ -81,10 +83,11 @@ namespace TGL
         static void SetupEntityComponentRelationship(Entity* entity, Component* component);
 
     private:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
+        template <typename T, typename... Args>
+        requires SpawnableGameMode<T, Args...>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION_NO_RET();
+            ASSERT_SINGLETON_OBJECT_CREATION();
 
             if (s_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
 
@@ -101,8 +104,9 @@ namespace TGL
 
         static void DestroyGameMode();
 
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
-        static T* CreateEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        template <typename T, typename... Args>
+        requires SpawnableEntity<T, Args...>
+        static T* CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
 
@@ -121,8 +125,9 @@ namespace TGL
 
         static void DestroyEntity(Entity* entity);
 
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Component)>
-        static T* CreateComponent(Entity* parent, Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        template <typename T, typename... Args>
+        requires SpawnableComponent<T, Args...>
+        static T* CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_SINGLETON_OBJECT_CREATION();
 
@@ -144,7 +149,7 @@ namespace TGL
         static void DestroyComponent(Component* component);
 
     private:
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
+        template <SearchableEntity T>
         static T* FindEntityGlobally()
         {
             for (auto entity : s_Entities)
@@ -158,7 +163,7 @@ namespace TGL
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
+        template <SearchableEntity T>
         static std::vector<T*> FindEntitiesGlobally()
         {
             std::vector<T*> entities;
@@ -174,7 +179,7 @@ namespace TGL
             return entities;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static T* FindComponentGlobally()
         {
             for (auto component : s_Components | std::views::values)
@@ -188,7 +193,7 @@ namespace TGL
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static std::vector<T*> FindComponentsGlobally()
         {
             std::vector<T*> components;
@@ -204,7 +209,7 @@ namespace TGL
             return components;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static T* FindComponentInEntity(const std::vector<Component*>& entityComponents)
         {
             for (auto component : entityComponents)
@@ -218,7 +223,7 @@ namespace TGL
             return nullptr;
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents)
         {
             std::vector<T*> components;

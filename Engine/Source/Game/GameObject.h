@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Core/EntityManager.h"
-#include "Util/Macros/SpawnerMacros.h"
+#include "Util/Concepts/SmartPointerConcepts.h"
 #include <cstdint>
 
 namespace TGL
@@ -11,7 +11,7 @@ namespace TGL
     private:
         friend class EntityManager;
 
-        template <typename Type, typename Condition>
+        template <LazyPointerValue T>
         friend class LazyPtr;
 
     private:
@@ -37,33 +37,34 @@ namespace TGL
         }
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Entity)>
-        static T* SpawnEntity(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        template <typename T, typename... Args>
+        requires SpawnableEntity<T, Args...>
+        static T* SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);
         }
 
     public:
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
+        template <SearchableEntity T>
         static T* FindEntityGlobally()
         {
             return EntityManager::FindEntityGlobally<T>();
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Entity)>
+        template <SearchableEntity T>
         static std::vector<T*> FindEntitiesGlobally()
         {
             return EntityManager::FindEntitiesGlobally<T>();
         }
 
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static T* FindComponentGlobally()
         {
             return EntityManager::FindComponentGlobally<T>();
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         static std::vector<T*> FindComponentsGlobally()
         {
             return EntityManager::FindComponentsGlobally<T>();

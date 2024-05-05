@@ -2,12 +2,12 @@
 
 #include "Entities/Snake.h"
 #include "Entities/Apple.h"
+#include "Util/Memory/LazyPtr.h"
 #include "Entities/AudioManager.h"
 #include "Entities/Grid.h"
 #include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
 #include "Assets/Audio.h"
-#include "Util/Memory/LazyPtr.h"
 
 class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent
 {

@@ -1,11 +1,14 @@
 #include "Application.h"
 
+// TODO also specify the warning when using NOLINT
+
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #include "glad/glad.h"
 
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
+#include "Window.h"
 #include "Clock.h"
 #include "Implementations/Components/SpriteRenderer.h"
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Window.h"
 #include "Game/GameMode.h"
 #include "Core/AssetManager.h"
 #include "Core/EntityManager.h"
@@ -53,8 +52,8 @@ namespace TGL
         [[noreturn]] static void ErrorCallback(int error, const char* description);
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::GameMode)>
-        void SetGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        template <SpawnableGameMode T, typename... Args>
+        void SetGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
         }

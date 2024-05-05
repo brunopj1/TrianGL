@@ -3,8 +3,6 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Core/EntityManager.h"
-#include "Util/Macros/SpawnerMacros.h"
-#include <ranges>
 #include <vector>
 
 namespace TGL
@@ -31,7 +29,8 @@ namespace TGL
         void Destroy();
 
     public:
-        template <typename T, typename... Args, typename = SPAWNER_TEMPLATE_CONDITION(TGL::Component)>
+        template <typename T, typename... Args>
+        requires SpawnableComponent<T, Args...>
         T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             return EntityManager::CreateComponent<T>(this, std::forward<Args>(args)...);
@@ -40,13 +39,13 @@ namespace TGL
         void DetachAllComponents() const;
 
     public:
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         T* FindComponent()
         {
             return EntityManager::FindComponentInEntity<T>(m_Components);
         }
 
-        template <typename T, typename = SPAWNER_LOOKUP_TEMPLATE_CONDITION(TGL::Component)>
+        template <SearchableComponent T>
         std::vector<T*> FindComponents()
         {
             return EntityManager::FindComponentsInEntity<T>(m_Components);
