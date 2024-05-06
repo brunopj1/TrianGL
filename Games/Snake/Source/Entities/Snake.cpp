@@ -53,7 +53,7 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         audioManager->PlayMoveAudio();
     }
     // Hit snake
-    else if (const SnakeBody* hitBody = hitEntity->CastTo<SnakeBody>(); hitBody != nullptr)
+    else if (const SnakeBody* hitBody = CastTo<SnakeBody>(hitEntity); hitBody != nullptr)
     {
         DestroyTail(grid, hitBody);
         SpawnHead(grid, nextPosition);
@@ -61,7 +61,7 @@ void Snake::Move(Grid* grid, AudioManager* audioManager)
         audioManager->PlayHurtAudio();
     }
     // Hit apple
-    else if (Apple* hitApple = hitEntity->CastTo<Apple>(); hitApple != nullptr)
+    else if (Apple* hitApple = CastTo<Apple>(hitEntity); hitApple != nullptr)
     {
         SpawnHead(grid, nextPosition);
         hitApple->RandomizePosition(grid);

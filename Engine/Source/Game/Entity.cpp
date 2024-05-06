@@ -1,7 +1,7 @@
-﻿#include "Entity.h"
+﻿#include <Game/Entity.h>
 
-#include "Component.h"
-#include "Core/EntityManager.h"
+#include <Game/Component.h>
+#include <Core/EntityManager.h>
 
 using namespace TGL;
 

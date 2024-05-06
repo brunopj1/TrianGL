@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Game/GameMode.h"
-#include "Core/AssetManager.h"
-#include "Core/EntityManager.h"
-#include "Core/InputSystem.h"
+#include <Game/GameMode.h>
+#include <Core/AssetManager.h>
+#include <Core/EntityManager.h>
+#include <Core/InputSystem.h>
 
 // Forward declarations
 // ReSharper disable once CppInconsistentNaming

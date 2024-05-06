@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Game/Component.h"
-#include "Game/Rendering/Renderable.h"
-#include "Util/Memory/SharedPtr.h"
+#include <Game/Component.h>
+#include <Game/Rendering/Renderable.h>
+#include <Memory/SharedPtr.h>
 
-#include "Implementations/Assets/DefaultMaterial.h"
+#include <Implementations/Assets/DefaultMaterial.h>
 
 namespace TGL
 {

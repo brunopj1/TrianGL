@@ -1,15 +1,15 @@
-﻿#include "AssetManager.h"
+﻿#include <Core/AssetManager.h>
 
-#include "soloud.h"
+#include <soloud.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.h>
 
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include "Assets/Material.h"
-#include "Assets/Audio.h"
-#include "Assets/Texture.h"
-#include "Util/Asserts/ApplicationAsserts.h"
+#include <Exceptions/Core/FailedToInitializeEngineException.h>
+#include <Assets/Material.h>
+#include <Assets/Audio.h>
+#include <Assets/Texture.h>
+#include <Internal/Asserts/ApplicationAsserts.h>
 #include <ranges>
 #include <thread>
 

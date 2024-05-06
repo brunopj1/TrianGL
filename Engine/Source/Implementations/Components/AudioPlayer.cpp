@@ -1,8 +1,8 @@
-﻿#include "AudioPlayer.h"
+﻿#include <Implementations/Components/AudioPlayer.h>
 
-#include "soloud.h"
-#include "Core/AssetManager.h"
-#include "Assets/Audio.h"
+#include <soloud.h>
+#include <Core/AssetManager.h>
+#include <Assets/Audio.h>
 #include <utility>
 
 using namespace TGL;

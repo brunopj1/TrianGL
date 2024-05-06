@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Internal/Shader.h"
-#include "MaterialUniforms.h"
-#include "Core/AssetManager.h"
-#include "Util/Concepts/MaterialConcepts.h"
-#include "Util/Memory/SharedPtr.h"
+#include <Assets/Internal/Shader.h>
+#include <Assets/MaterialUniforms.h>
+#include <Core/AssetManager.h>
+#include <Internal/Concepts/MaterialConcepts.h>
+#include <Memory/SharedPtr.h>
 #include <string>
 #include <vector>
 
@@ -40,7 +40,7 @@ namespace TGL
 
     protected:
         virtual void OnRenderSetup() const;
-
+        
     public:
         template <typename T, typename... Args>
             requires SpawnableMaterial<T, Args...>

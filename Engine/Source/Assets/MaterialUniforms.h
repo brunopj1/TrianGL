@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Assets/Texture.h" // Required for SharedPtr<Sprite>
-#include "glm/glm.hpp"
-#include "Util/Memory/SharedPtr.h"
+#include <Assets/Texture.h> // Required for SharedPtr<Sprite>
+#include <glm/glm.hpp>
+#include <Memory/SharedPtr.h>
 #include <string>
 
 namespace TGL

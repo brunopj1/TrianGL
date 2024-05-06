@@ -1,11 +1,11 @@
-﻿#include "Audio.h"
+﻿#include <Assets/Audio.h>
 
-#include "soloud_wav.h"
-#include "soloud_wavstream.h"
-#include "Core/AssetManager.h"
-#include "Exceptions/Common/FileNotFoundException.h"
-#include "Implementations/Components/AudioPlayer.h"
-#include "Util/Asserts/SpawnerAsserts.h"
+#include <soloud_wav.h>
+#include <soloud_wavstream.h>
+#include <Core/AssetManager.h>
+#include <Exceptions/Common/FileNotFoundException.h>
+#include <Implementations/Components/AudioPlayer.h>
+#include <Internal/Asserts/SpawnerAsserts.h>
 
 using namespace TGL;
 

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Util/Macros/EventMacros.h"
-#include "glm/vec2.hpp"
+#include <Internal/Macros/EventMacros.h>
+#include <glm/vec2.hpp>
 
 namespace TGL
 {

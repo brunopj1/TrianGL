@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include "Exceptions/Game/GameModeAlreadySpecifiedException.h"
+#include <Exceptions/Game/GameModeAlreadySpecifiedException.h>
 #include <vector>
 #include <unordered_map>
 
-#include "Util/Concepts/SmartPointerConcepts.h"
-#include "Util/Concepts/EntitySystemConcepts.h"
-#include "Util/Asserts/ApplicationAsserts.h"
-#include "Util/Asserts/SpawnerAsserts.h"
+#include <Internal/Concepts/SmartPointerConcepts.h>
+#include <Internal/Concepts/EntitySystemConcepts.h>
+#include <Internal/Asserts/ApplicationAsserts.h>
+#include <Internal/Asserts/SpawnerAsserts.h>
 #include <ranges>
 
 namespace TGL

@@ -1,20 +1,20 @@
-#include "Application.h"
+#include <Core/Application.h>
 
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
-#include "glad/glad.h"
+#include <glad/glad.h>
 
 #define GLFW_INCLUDE_NONE
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
-#include "Window.h"
-#include "Clock.h"
-#include "Implementations/Components/SpriteRenderer.h"
+#include <Core/Window.h>
+#include <Core/Clock.h>
+#include <Implementations/Components/SpriteRenderer.h>
 
-#include "Implementations/Entities/Camera.h"
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include <Implementations/Entities/Camera.h>
+#include <Exceptions/Core/FailedToInitializeEngineException.h>
 
-#include "Exceptions/Game/MissingGameModeException.h"
-#include "Exceptions/OpenGL/OpenGlException.h"
+#include <Exceptions/Game/MissingGameModeException.h>
+#include <Exceptions/OpenGL/OpenGlException.h>
 
 #ifdef DEBUG
 #include <iostream>

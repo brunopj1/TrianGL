@@ -1,10 +1,10 @@
-﻿#include "Shader.h"
+﻿#include <Assets/Internal/Shader.h>
 
-#include "Exceptions/Common/FileNotFoundException.h"
-#include "Exceptions/Common/FileTooBigException.h"
-#include "Exceptions/OpenGL/ShaderCompilationException.h"
-#include "glad/glad.h"
-#include "Util/Asserts/ApplicationAsserts.h"
+#include <Exceptions/Common/FileNotFoundException.h>
+#include <Exceptions/Common/FileTooBigException.h>
+#include <Exceptions/OpenGL/ShaderCompilationException.h>
+#include <glad/glad.h>
+#include <Internal/Asserts/ApplicationAsserts.h>
 #include <codecvt>
 #include <fstream>
 #include <sstream>

@@ -20,8 +20,15 @@
 - [X] Automatic memory management for the GameMode, Entity, and Component classes
 - [X] Automatic update of the GameMode, Entity, and Component classes
 - [X] Lazy pointers for the GameMode, Entity, and Component classes
-- [ ] Shared pointers for the Asset classes
 - [ ] Entity parenting
+
+## Managed Asset
+
+- [X] Automatic file management using shared pointers
+- [X] Materials
+- [X] Textures and Texture Slices
+- [X] Audio files (sounds and music)
+- [ ] General text / binary files
 
 ## Input System
 
@@ -41,7 +48,9 @@
 - [ ] Multiple viewports
 - [ ] Multiple custom render passes
 - [ ] Particle system
+- [ ] Tilemaps
 - [ ] 2D lighting with shadows
+- [ ] UI abstraction
 
 ## Debug Rendering
 

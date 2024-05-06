@@ -1,6 +1,6 @@
-﻿#include "Renderable.h"
+﻿#include <Game/Rendering/Renderable.h>
 
-#include "Core/EntityManager.h"
+#include <Core/EntityManager.h>
 
 using namespace TGL;
 

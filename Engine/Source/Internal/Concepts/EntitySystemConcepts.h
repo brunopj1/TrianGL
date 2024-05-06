@@ -5,10 +5,17 @@
 namespace TGL
 {
     // Forward declarations
+    class GameObject;
+    class GameMode;
     class Entity;
     class Component;
-    class GameMode;
 
+    // Castable concepts
+
+    template <typename T>
+    concept CastableGameObject =
+        std::is_base_of_v<GameObject, T>;
+    
     // Spawnable concepts
 
     template <typename T, typename... Args>

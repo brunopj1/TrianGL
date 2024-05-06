@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Game/Component.h"
-#include "Util/Memory/SharedPtr.h"
+#include <Game/Component.h>
+#include <Memory/SharedPtr.h>
 
 namespace TGL
 {

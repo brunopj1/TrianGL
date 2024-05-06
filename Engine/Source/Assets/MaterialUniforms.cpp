@@ -1,9 +1,9 @@
-﻿#include "MaterialUniforms.h"
+﻿#include <Assets/MaterialUniforms.h>
 
-#include "Texture.h"
-#include "Core/AssetManager.h"
-#include "glad/glad.h"
-#include "Internal/Shader.h"
+#include <Assets/Texture.h>
+#include <Core/AssetManager.h>
+#include <glad/glad.h>
+#include <Assets/Internal/Shader.h>
 
 using namespace TGL;
 

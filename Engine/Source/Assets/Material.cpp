@@ -1,9 +1,9 @@
-﻿#include "Material.h"
+﻿#include <Assets/Material.h>
 
-#include "MaterialUniforms.h"
-#include "Internal/Shader.h"
-#include "Core/AssetManager.h"
-#include "Implementations/Entities/Camera.h"
+#include <Assets/MaterialUniforms.h>
+#include <Assets/Internal/Shader.h>
+#include <Core/AssetManager.h>
+#include <Implementations/Entities/Camera.h>
 
 using namespace TGL;
 

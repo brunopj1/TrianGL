@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Core/EntityManager.h"
-#include "Util/Concepts/SmartPointerConcepts.h"
+#include <Core/EntityManager.h>
+#include <Internal/Concepts/EntitySystemConcepts.h>
 #include <cstdint>
 
 namespace TGL
@@ -28,13 +28,6 @@ namespace TGL
     protected:
         virtual void OnStart();
         virtual void OnUpdate(float deltaTime);
-
-    public:
-        template <typename T, typename = std::enable_if_t<std::is_base_of_v<GameObject, T>>>
-        T* CastTo()
-        {
-            return dynamic_cast<T*>(this);
-        }
 
     public:
         template <typename T, typename... Args>
@@ -70,4 +63,23 @@ namespace TGL
             return EntityManager::FindComponentsGlobally<T>();
         }
     };
+    
+    template <CastableGameObject To, CastableGameObject From>
+    To* CastTo(From* object)
+    {
+        if (object == nullptr) return nullptr;
+        
+        if constexpr (std::is_base_of_v<To, From>)
+        {
+            return static_cast<To*>(object);
+        }
+        else if constexpr (std::is_base_of_v<From, To>)
+        {
+            return dynamic_cast<To*>(object);
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
 }

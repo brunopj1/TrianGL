@@ -1,8 +1,8 @@
-﻿#include "Camera.h"
+﻿#include <Implementations/Entities/Camera.h>
 
-#include "Core/Window.h"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/matrix_transform.hpp"
+#include <Core/Window.h>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <stdexcept>
 
 using namespace TGL;

@@ -58,7 +58,7 @@ static_assert(false, "The Playground projects are only available in Debug config
 mainSourceTemplate = f"""
 #include "Core/Application.h"
 #include <GameMode/{projectName}GameMode.h>
-#include "Util/Macros/MemoryLeakMacros.h"
+#include "Util/MemoryLeakDetection.h"
 {mainSourceStaticAssert if not isGame else ""}
 int main()
 {{
@@ -71,8 +71,8 @@ int main()
 
     app.Run();
 
-    // Memory leaks (Will only run in Debug configurations)
-    DEBUG_MEMORY_LEAKS();
+    // Detect memory leaks (Will only run in Debug configurations)
+    TGL::DetectMemoryLeaks();
 
     return 0;
 }}

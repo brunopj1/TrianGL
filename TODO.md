@@ -15,7 +15,9 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Explain the new CastTo functions (GameObject, LazyPtr and SharedPtr)
 - Replace the std::shared_ptr with the TGL::SharedPtr in the wiki
+- Mention that the LazyPtr can be accessed using the -> operator but if it needs to be accessed multiple times it is better to store it in a variable
 - Talk about casting materials using the SharedPtr::CastTo method
 - Talk about uniform creation
 - Talk about the engine uniforms and the other automatic uniforms (texture matrix, texture resolution, etc...)
@@ -31,6 +33,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## General
 
+- Move the spawning and lookup methods to global functions (and update the wiki)
 - Execute the callbacks after the ImGui NewFrame (to allow for example opening popups, but first check if it is possible already)
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 - Create a custom shared pointer class that can be reset even if there are still references to it

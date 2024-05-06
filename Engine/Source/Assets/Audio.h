@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Util/Memory/SharedPtr.h"
+#include <Memory/SharedPtr.h>
 #include <string>
 #include <vector>
 

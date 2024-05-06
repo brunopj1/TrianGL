@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Assets/Material.h"
+#include <Assets/Material.h>
 
 namespace TGL
 {

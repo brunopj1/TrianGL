@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "Util/Concepts/SmartPointerConcepts.h"
-#include "Util/Asserts/SpawnerAsserts.h"
+#include <Internal/Asserts/SpawnerAsserts.h>
 #include <cstddef>
 #include <type_traits>
 
@@ -56,6 +55,9 @@ namespace TGL
 
         template <typename U>
         friend class SharedFromThis;
+
+        template <typename To, typename From>
+        friend SharedPtr<To> CastTo(const SharedPtr<From>& object);
 
     private:
         T* m_Pointer;
@@ -195,19 +197,6 @@ namespace TGL
             return Get() != nullptr;
         }
 
-        template <typename U>
-        SharedPtr<U> CastTo()
-        {
-            U* casted = dynamic_cast<U*>(m_Pointer);
-
-            if (casted != nullptr)
-            {
-                return SharedPtr<U>(casted, m_ReferenceCounter);
-            }
-
-            return nullptr;
-        }
-
     private:
         void Increment() const
         {
@@ -251,4 +240,23 @@ namespace TGL
             return SharedPtr<T>(m_Pointer, m_ReferenceCounter);
         }
     };
+
+    template <typename To, typename From>
+    SharedPtr<To> CastTo(const SharedPtr<From>& object)
+    {
+        if (object == nullptr) return nullptr;
+            
+        if constexpr (std::is_base_of_v<To, From>)
+        {
+            return SharedPtr(static_cast<To*>(object.Get()), object.m_ReferenceCounter);
+        }
+        else if constexpr (std::is_base_of_v<From, To>)
+        {
+            return SharedPtr(dynamic_cast<To*>(object.Get()), object.m_ReferenceCounter);
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
 }

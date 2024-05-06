@@ -77,7 +77,7 @@ void Grid::Resize(const glm::uvec2& size)
 {
     m_Size = size;
 
-    const auto material = m_SpriteRenderer->GetMaterial().CastTo<GridMaterial>();
+    const auto material = CastTo<GridMaterial>(m_SpriteRenderer->GetMaterial());
     material->GridSize->Value = m_Size;
 
     const unsigned gridSize = m_Size.x * m_Size.y;

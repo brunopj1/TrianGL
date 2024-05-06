@@ -1,12 +1,12 @@
-#include "Window.h"
+#include <Core/Window.h>
 
-#include "Events/WindowEvents.h"
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include <Events/WindowEvents.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-#include "Implementations/Entities/Camera.h"
+#include <Implementations/Entities/Camera.h>
 
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include <Exceptions/Core/FailedToInitializeEngineException.h>
 #include <format>
 #include <stdexcept>
 #include <utility>

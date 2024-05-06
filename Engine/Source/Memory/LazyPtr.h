@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Util/Concepts/SmartPointerConcepts.h"
-#include "Core/EntityManager.h"
-#include "Game/Entity.h"
-#include "Game/Component.h"
+#include <Internal/Concepts/SmartPointerConcepts.h>
+#include <Core/EntityManager.h>
+#include <Game/Entity.h>
+#include <Game/Component.h>
 
 namespace TGL
 {
@@ -76,23 +76,6 @@ namespace TGL
         operator LazyPtr<U>() const // NOLINT(CppNonExplicitConversionOperator)
         {
             return LazyPtr<U>(m_Id);
-        }
-
-        template <typename U>
-        LazyPtr<U> CastTo()
-        {
-            T* ptr = Get();
-
-            if (ptr == nullptr) return nullptr;
-
-            U* casted = dynamic_cast<U*>(ptr);
-
-            if (casted != nullptr)
-            {
-                return LazyPtr<U>(casted);
-            }
-
-            return nullptr;
         }
 
     public:
@@ -175,14 +158,14 @@ namespace TGL
             if constexpr (std::is_base_of_v<Entity, T>)
             {
                 Entity* entityPtr = EntityManager::GetEntity(m_Id);
-                T* ptr = entityPtr ? entityPtr->CastTo<T>() : nullptr;
+                T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
                 if (ptr == nullptr) m_Id = 0;
                 return ptr;
             }
             else if constexpr (std::is_base_of_v<Component, T>)
             {
                 Component* componentPtr = EntityManager::GetComponent(m_Id);
-                T* ptr = componentPtr ? componentPtr->CastTo<T>() : nullptr;
+                T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
                 if (ptr == nullptr) m_Id = 0;
                 return ptr;
             }
@@ -200,13 +183,13 @@ namespace TGL
             if constexpr (std::is_base_of_v<Entity, T>)
             {
                 Entity* entityPtr = EntityManager::GetEntity(m_Id);
-                T* ptr = entityPtr ? entityPtr->CastTo<T>() : nullptr;
+                T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
                 return ptr;
             }
             else if constexpr (std::is_base_of_v<Component, T>)
             {
                 Component* componentPtr = EntityManager::GetComponent(m_Id);
-                T* ptr = componentPtr ? componentPtr->CastTo<T>() : nullptr;
+                T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
                 return ptr;
             }
             else
@@ -225,4 +208,23 @@ namespace TGL
             return Get() != nullptr;
         }
     };
+
+    template <LazyPointerValue To, LazyPointerValue From>
+    LazyPtr<To> CastTo(const LazyPtr<From>& object)
+    {
+        if (object == nullptr) return nullptr;
+            
+        if constexpr (std::is_base_of_v<To, From>)
+        {
+            return LazyPtr(static_cast<To*>(object.Get()));
+        }
+        else if constexpr (std::is_base_of_v<From, To>)
+        {
+            return LazyPtr(dynamic_cast<To*>(object.Get()));
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
 }

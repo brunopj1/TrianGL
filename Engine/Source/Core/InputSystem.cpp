@@ -1,6 +1,6 @@
-﻿#include "InputSystem.h"
+﻿#include <Core/InputSystem.h>
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 #ifdef DEBUG
 #include <imgui_impl_glfw.h>

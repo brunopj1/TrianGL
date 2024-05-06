@@ -1,4 +1,4 @@
-﻿#include "DefaultMaterial.h"
+﻿#include <Implementations/Assets/DefaultMaterial.h>
 
 using namespace TGL;
 

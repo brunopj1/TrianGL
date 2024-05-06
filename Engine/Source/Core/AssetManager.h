@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Assets/Internal/Shader.h"
-#include "Util/Concepts/MaterialConcepts.h"
-#include "Util/Asserts/ApplicationAsserts.h"
-#include "Util/Asserts/SpawnerAsserts.h"
-#include "Util/Memory/SharedPtr.h"
+#include <Assets/Internal/Shader.h>
+#include <Internal/Concepts/MaterialConcepts.h>
+#include <Internal/Asserts/ApplicationAsserts.h>
+#include <Internal/Asserts/SpawnerAsserts.h>
+#include <Memory/SharedPtr.h>
 
 #include <string>
 #include <memory>

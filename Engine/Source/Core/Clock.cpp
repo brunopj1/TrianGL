@@ -1,6 +1,6 @@
-﻿#include "Clock.h"
+﻿#include <Core/Clock.h>
 
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 using namespace TGL;
 

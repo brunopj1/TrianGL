@@ -1,6 +1,6 @@
 #include "Core/Application.h"
 #include <GameMode/AudioPlaygroundGameMode.h>
-#include "Util/Macros/MemoryLeakMacros.h"
+#include "Util/MemoryLeakDetection.h"
 
 int main()
 {
@@ -13,8 +13,8 @@ int main()
 
     app.Run();
 
-    // Memory leaks (Will only run in Debug configurations)
-    DEBUG_MEMORY_LEAKS();
+    // Detect memory leaks (Will only run in Debug configurations)
+    TGL::DetectMemoryLeaks();
 
     return 0;
 }

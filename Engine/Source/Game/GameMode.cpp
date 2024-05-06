@@ -1,6 +1,6 @@
-﻿#include "GameMode.h"
+﻿#include <Game/GameMode.h>
 
-#include "Core/EntityManager.h"
+#include <Core/EntityManager.h>
 
 using namespace TGL;
 

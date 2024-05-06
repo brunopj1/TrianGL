@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "InputCodes.h"
-#include "glm/vec2.hpp"
+#include <Core/InputCodes.h>
+#include <glm/vec2.hpp>
 #include <unordered_set>
 
 // Forward declarations

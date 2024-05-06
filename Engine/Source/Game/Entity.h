@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "GameObject.h"
-#include "Transform.h"
-#include "Core/EntityManager.h"
+#include <Game/GameObject.h>
+#include <Game/Transform.h>
+#include <Core/EntityManager.h>
 #include <vector>
 
 namespace TGL

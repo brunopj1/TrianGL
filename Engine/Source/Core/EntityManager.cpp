@@ -1,10 +1,10 @@
-﻿#include "EntityManager.h"
+﻿#include <Core/EntityManager.h>
 
-#include "Implementations/Components/SpriteRenderer.h"
-#include "Game/GameMode.h"
-#include "Game/Entity.h"
-#include "Game/Component.h"
-#include "Util/Asserts/ApplicationAsserts.h"
+#include <Implementations/Components/SpriteRenderer.h>
+#include <Game/GameMode.h>
+#include <Game/Entity.h>
+#include <Game/Component.h>
+#include <Internal/Asserts/ApplicationAsserts.h>
 
 using namespace TGL;
 

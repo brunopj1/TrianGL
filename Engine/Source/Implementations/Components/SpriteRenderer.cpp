@@ -1,9 +1,9 @@
-﻿#include "SpriteRenderer.h"
+﻿#include <Implementations/Components/SpriteRenderer.h>
 
-#include "Game/Entity.h"
-#include "glad/glad.h"
-#include "Assets/Material.h"
-#include "Implementations/Assets/DefaultMaterial.h"
+#include <Game/Entity.h>
+#include <glad/glad.h>
+#include <Assets/Material.h>
+#include <Implementations/Assets/DefaultMaterial.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;
