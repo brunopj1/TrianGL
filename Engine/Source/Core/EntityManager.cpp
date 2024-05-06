@@ -4,7 +4,7 @@
 #include "Game/GameMode.h"
 #include "Game/Entity.h"
 #include "Game/Component.h"
-#include "Util/Macros/SingletonMacros.h"
+#include "Util/Asserts/ApplicationAsserts.h"
 
 using namespace TGL;
 
@@ -167,7 +167,7 @@ void EntityManager::DestroyGameMode()
 
     RemoveObjectCallbacks(s_GameMode);
 
-    PREPARE_SPAWNER_USAGE(GameMode);
+    PREPARE_SPAWNER_ASSERT(GameMode);
 
     delete s_GameMode;
 
@@ -182,7 +182,7 @@ void EntityManager::DestroyEntity(Entity* entity)
 
     entity->DetachAllComponents();
 
-    PREPARE_SPAWNER_USAGE(Entity);
+    PREPARE_SPAWNER_ASSERT(Entity);
 
     delete entity;
 }
@@ -195,7 +195,7 @@ void EntityManager::DestroyComponent(Component* component)
 
     std::erase(component->m_Parent->m_Components, component);
 
-    PREPARE_SPAWNER_USAGE(Component);
+    PREPARE_SPAWNER_ASSERT(Component);
 
     delete component;
 }

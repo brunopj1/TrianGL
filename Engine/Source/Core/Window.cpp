@@ -23,7 +23,7 @@ bool Window::IsFullscreen()
 
 void Window::SetFullscreen(const bool fullscreen)
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     if (fullscreen == s_Fullscreen) return;
 
@@ -42,35 +42,35 @@ void Window::SetFullscreen(const bool fullscreen)
 
 bool Window::IsMaximized()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     return glfwGetWindowAttrib(s_WindowPtr, GLFW_MAXIMIZED);
 }
 
 void Window::Maximize()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     glfwMaximizeWindow(s_WindowPtr);
 }
 
 bool Window::IsMinimized()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     return glfwGetWindowAttrib(s_WindowPtr, GLFW_ICONIFIED);
 }
 
 void Window::Minimize()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     glfwIconifyWindow(s_WindowPtr);
 }
 
 void Window::Restore()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     glfwRestoreWindow(s_WindowPtr);
 }
@@ -82,7 +82,7 @@ std::string Window::GetTitle()
 
 void Window::SetTitle(const std::string& title)
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     s_Title = title;
     glfwSetWindowTitle(s_WindowPtr, s_Title.c_str());
@@ -95,7 +95,7 @@ glm::ivec2 Window::GetPosition()
 
 void Window::SetPosition(const glm::ivec2 position)
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     // s_Position is updated in the callback
     glfwSetWindowPos(s_WindowPtr, position.x, position.y);
@@ -108,7 +108,7 @@ glm::uvec2 Window::GetResolution()
 
 void Window::SetResolution(const glm::uvec2 resolution)
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     if (resolution.x == minimun_window_resolution || resolution.y == minimun_window_resolution)
     {
@@ -131,7 +131,7 @@ bool Window::IsVsync()
 
 void Window::SetVsync(const bool vsync)
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     s_Vsync = vsync;
     glfwSwapInterval(vsync);
@@ -139,7 +139,7 @@ void Window::SetVsync(const bool vsync)
 
 void Window::Close()
 {
-    ASSERT_SINGLETON_AVAILABILITY();
+    ASSERT_APPLICATION_AVAILABILITY();
 
     glfwSetWindowShouldClose(s_WindowPtr, GLFW_TRUE);
 }

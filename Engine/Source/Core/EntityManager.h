@@ -6,8 +6,8 @@
 
 #include "Util/Concepts/SmartPointerConcepts.h"
 #include "Util/Concepts/EntitySystemConcepts.h"
-#include "Util/Macros/SingletonMacros.h"
-#include "Util/Macros/SpawnerMacros.h"
+#include "Util/Asserts/ApplicationAsserts.h"
+#include "Util/Asserts/SpawnerAsserts.h"
 #include <ranges>
 
 namespace TGL
@@ -26,9 +26,9 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        DECLARE_SPAWNER_USAGE_VAR(GameMode);
-        DECLARE_SPAWNER_USAGE_VAR(Entity);
-        DECLARE_SPAWNER_USAGE_VAR(Component);
+        DECLARE_SPAWNER_ASSERT_VAR(GameMode);
+        DECLARE_SPAWNER_ASSERT_VAR(Entity);
+        DECLARE_SPAWNER_ASSERT_VAR(Component);
 
     private:
         static inline bool s_CanCreateAndDestroyObjects = false;
@@ -87,11 +87,11 @@ namespace TGL
             requires SpawnableGameMode<T, Args...>
         static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION();
+            ASSERT_APPLICATION_OBJECT_CREATION();
 
             if (s_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
 
-            PREPARE_SPAWNER_USAGE(GameMode);
+            PREPARE_SPAWNER_ASSERT(GameMode);
 
             T* instance = new T(std::forward<Args>(args)...);
 
@@ -108,9 +108,9 @@ namespace TGL
             requires SpawnableEntity<T, Args...>
         static T* CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION();
+            ASSERT_APPLICATION_OBJECT_CREATION();
 
-            PREPARE_SPAWNER_USAGE(Entity);
+            PREPARE_SPAWNER_ASSERT(Entity);
 
             T* instance = new T(std::forward<Args>(args)...);
 
@@ -129,9 +129,9 @@ namespace TGL
             requires SpawnableComponent<T, Args...>
         static T* CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION();
+            ASSERT_APPLICATION_OBJECT_CREATION();
 
-            PREPARE_SPAWNER_USAGE(Component);
+            PREPARE_SPAWNER_ASSERT(Component);
 
             T* instance = new T(std::forward<Args>(args)...);
 

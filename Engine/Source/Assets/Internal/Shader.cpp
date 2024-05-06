@@ -4,7 +4,7 @@
 #include "Exceptions/Common/FileTooBigException.h"
 #include "Exceptions/OpenGL/ShaderCompilationException.h"
 #include "glad/glad.h"
-#include "Util/Macros/SingletonMacros.h"
+#include "Util/Asserts/ApplicationAsserts.h"
 #include <codecvt>
 #include <fstream>
 #include <sstream>

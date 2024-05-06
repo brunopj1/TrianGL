@@ -4,7 +4,6 @@
 #include "MaterialUniforms.h"
 #include "Core/AssetManager.h"
 #include "Util/Concepts/MaterialConcepts.h"
-#include "Util/Macros/MaterialMacros.h"
 #include "Util/Memory/SharedPtr.h"
 #include <string>
 #include <vector>

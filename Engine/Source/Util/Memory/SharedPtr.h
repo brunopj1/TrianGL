@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Util/Concepts/SmartPointerConcepts.h"
-#include "Util/Macros/SpawnerMacros.h"
+#include "Util/Asserts/SpawnerAsserts.h"
 #include <cstddef>
 #include <type_traits>
 
@@ -32,7 +32,7 @@ namespace TGL
         friend class TextureSlice;
 
     private:
-        DECLARE_SPAWNER_USAGE_VAR(Asset);
+        DECLARE_SPAWNER_ASSERT_VAR(Asset);
 
     public:
         SharedPtrSpawnerUtil() = delete;
@@ -224,7 +224,7 @@ namespace TGL
 
             if (m_ReferenceCounter->m_Counter == 0)
             {
-                PREPARE_SPAWNER_USAGE_EXT(SharedPtrSpawnerUtil, Asset);
+                PREPARE_SPAWNER_ASSERT_EXT(SharedPtrSpawnerUtil, Asset);
 
                 delete m_ReferenceCounter;
                 delete m_Pointer;

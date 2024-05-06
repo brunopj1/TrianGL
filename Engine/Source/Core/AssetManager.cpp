@@ -9,7 +9,7 @@
 #include "Assets/Material.h"
 #include "Assets/Audio.h"
 #include "Assets/Texture.h"
-#include "Util/Macros/SingletonMacros.h"
+#include "Util/Asserts/ApplicationAsserts.h"
 #include <ranges>
 #include <thread>
 
@@ -42,9 +42,9 @@ void AssetManager::Terminate()
 
 SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
-    ASSERT_SINGLETON_OBJECT_CREATION();
+    ASSERT_APPLICATION_OBJECT_CREATION();
 
-    PREPARE_SPAWNER_USAGE(Texture);
+    PREPARE_SPAWNER_ASSERT(Texture);
 
     Texture* instance = new Texture(filePath);
 
@@ -57,21 +57,21 @@ SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> text
 {
     // No need to assert here since this doesn't interact with OpenGL
 
-    PREPARE_SPAWNER_USAGE(TextureSlice);
+    PREPARE_SPAWNER_ASSERT(TextureSlice);
 
     return new TextureSlice(std::move(texture), index);
 }
 
 void AssetManager::UnloadTexture(Texture* texture)
 {
-    ASSERT_SINGLETON_OBJECT_DESTRUCTION();
+    ASSERT_APPLICATION_OBJECT_DESTRUCTION();
 
     texture->Free();
 }
 
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
-    PREPARE_SPAWNER_USAGE(Audio);
+    PREPARE_SPAWNER_ASSERT(Audio);
 
     Audio* instance = new Audio(filePath, stream);
 
@@ -82,7 +82,7 @@ SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool
 
 void AssetManager::UnloadAudio(Audio* audio)
 {
-    ASSERT_SINGLETON_OBJECT_DESTRUCTION();
+    ASSERT_APPLICATION_OBJECT_DESTRUCTION();
 
     audio->Free();
 }
@@ -93,7 +93,7 @@ void AssetManager::UnloadMaterialUniforms(const Material* material)
 
     for (const auto uniform : material->m_Uniforms)
     {
-        PREPARE_SPAWNER_USAGE(MaterialUniform);
+        PREPARE_SPAWNER_ASSERT(MaterialUniform);
 
         delete uniform;
     }

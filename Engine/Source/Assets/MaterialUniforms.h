@@ -2,7 +2,6 @@
 
 #include "Assets/Texture.h" // Required for SharedPtr<Sprite>
 #include "glm/glm.hpp"
-#include "Util/Macros/MaterialMacros.h"
 #include "Util/Memory/SharedPtr.h"
 #include <string>
 
@@ -37,40 +36,60 @@ namespace TGL
         virtual void BindInternal() const = 0;
     };
 
+    // Template class
+
+    template<typename T>
+    class MaterialUniformImpl final : public MaterialUniform
+    {
+    public:
+        T Value;
+
+    public:
+        MaterialUniformImpl(const Shader* shader, const std::string& name)
+            : MaterialUniform(shader, name), Value() {}
+        
+        ~MaterialUniformImpl() override = default;
+
+    private:
+        void BindInternal() const override;
+    };
+    
     // Common implementations
 
-    MATERIAL_UNIFORM_IMPLEMENTATION(IntUniform, int, 0);
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Int2Uniform, glm::ivec2, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Int3Uniform, glm::ivec3, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Int4Uniform, glm::ivec4, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(UintUniform, unsigned int, 0);
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Uint2Uniform, glm::uvec2, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Uint3Uniform, glm::uvec3, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Uint4Uniform, glm::uvec4, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(FloatUniform, float, 0.0f);
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Float2Uniform, glm::vec2, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Float3Uniform, glm::vec3, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Float4Uniform, glm::vec4, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Mat2Uniform, glm::mat2, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Mat3Uniform, glm::mat3, {});
-
-    MATERIAL_UNIFORM_IMPLEMENTATION(Mat4Uniform, glm::mat4, {});
-
+    using IntUniform = MaterialUniformImpl<int>;
+    
+    using Int2Uniform = MaterialUniformImpl<glm::ivec2>;
+    
+    using Int3Uniform = MaterialUniformImpl<glm::ivec3>;
+    
+    using Int4Uniform = MaterialUniformImpl<glm::ivec4>;
+    
+    using UintUniform = MaterialUniformImpl<unsigned int>;
+    
+    using Uint2Uniform = MaterialUniformImpl<glm::uvec2>;
+    
+    using Uint3Uniform = MaterialUniformImpl<glm::uvec3>;
+    
+    using Uint4Uniform = MaterialUniformImpl<glm::uvec4>;
+    
+    using FloatUniform = MaterialUniformImpl<float>;
+    
+    using Float2Uniform = MaterialUniformImpl<glm::vec2>;
+    
+    using Float3Uniform = MaterialUniformImpl<glm::vec3>;
+    
+    using Float4Uniform = MaterialUniformImpl<glm::vec4>;
+    
+    using Mat2Uniform = MaterialUniformImpl<glm::mat2>;
+    
+    using Mat3Uniform = MaterialUniformImpl<glm::mat3>;
+    
+    using Mat4Uniform = MaterialUniformImpl<glm::mat4>;
+    
     // Sprite uniform
 
+    // TODO also use the template class for the SpriteUniform
+    
     class SpriteUniform final : public MaterialUniform
     {
     private:

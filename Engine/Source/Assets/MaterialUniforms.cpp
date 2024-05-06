@@ -31,72 +31,78 @@ void MaterialUniform::Bind() const
     }
 }
 
-void IntUniform::BindInternal() const
+template<>
+void MaterialUniformImpl<int>::BindInternal() const
 {
     glUniform1i(m_Location, Value);
 }
 
-void Int2Uniform::BindInternal() const
+void MaterialUniformImpl<glm::ivec2>::BindInternal() const
 {
     glUniform2iv(m_Location, 1, &Value[0]);
 }
 
-void Int3Uniform::BindInternal() const
+void MaterialUniformImpl<glm::ivec3>::BindInternal() const
 {
     glUniform3iv(m_Location, 1, &Value[0]);
 }
 
-void Int4Uniform::BindInternal() const
+void MaterialUniformImpl<glm::ivec4>::BindInternal() const
 {
     glUniform4iv(m_Location, 1, &Value[0]);
 }
 
-void UintUniform::BindInternal() const
+void MaterialUniformImpl<unsigned int>::BindInternal() const
 {
     glUniform1ui(m_Location, Value);
 }
 
-void Uint2Uniform::BindInternal() const
+void MaterialUniformImpl<glm::uvec2>::BindInternal() const
 {
     glUniform2uiv(m_Location, 1, &Value[0]);
 }
 
-void Uint3Uniform::BindInternal() const
+void MaterialUniformImpl<glm::uvec3>::BindInternal() const
 {
     glUniform3uiv(m_Location, 1, &Value[0]);
 }
 
-void FloatUniform::BindInternal() const
+void MaterialUniformImpl<glm::uvec4>::BindInternal() const
+{
+    glUniform4uiv(m_Location, 1, &Value[0]);
+}
+
+void MaterialUniformImpl<float>::BindInternal() const
 {
     glUniform1f(m_Location, Value);
 }
 
-void Float2Uniform::BindInternal() const
+void MaterialUniformImpl<glm::vec2>::BindInternal() const
 {
     glUniform2fv(m_Location, 1, &Value[0]);
 }
 
-void Float3Uniform::BindInternal() const
+void MaterialUniformImpl<glm::vec3>::BindInternal() const
 {
     glUniform3fv(m_Location, 1, &Value[0]);
 }
 
-void Float4Uniform::BindInternal() const
+void MaterialUniformImpl<glm::vec4>::BindInternal() const
 {
     glUniform4fv(m_Location, 1, &Value[0]);
 }
 
-void Mat2Uniform::BindInternal() const
+void MaterialUniformImpl<glm::mat2>::BindInternal() const
 {
     glUniformMatrix2fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }
 
-void Mat3Uniform::BindInternal() const
+void MaterialUniformImpl<glm::mat3>::BindInternal() const
 {
     glUniformMatrix3fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }
 
-void Mat4Uniform::BindInternal() const
+void MaterialUniformImpl<glm::mat4>::BindInternal() const
 {
     glUniformMatrix4fv(m_Location, 1, GL_FALSE, &Value[0][0]);
 }

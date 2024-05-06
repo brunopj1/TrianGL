@@ -2,8 +2,8 @@
 
 #include "Assets/Internal/Shader.h"
 #include "Util/Concepts/MaterialConcepts.h"
-#include "Util/Macros/SingletonMacros.h"
-#include "Util/Macros/SpawnerMacros.h"
+#include "Util/Asserts/ApplicationAsserts.h"
+#include "Util/Asserts/SpawnerAsserts.h"
 #include "Util/Memory/SharedPtr.h"
 
 #include <string>
@@ -40,11 +40,11 @@ namespace TGL
         friend class SharedPtr;
 
     private:
-        DECLARE_SPAWNER_USAGE_VAR(Texture);
-        DECLARE_SPAWNER_USAGE_VAR(TextureSlice);
-        DECLARE_SPAWNER_USAGE_VAR(Audio);
-        DECLARE_SPAWNER_USAGE_VAR(Material);
-        DECLARE_SPAWNER_USAGE_VAR(MaterialUniform);
+        DECLARE_SPAWNER_ASSERT_VAR(Texture);
+        DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
+        DECLARE_SPAWNER_ASSERT_VAR(Audio);
+        DECLARE_SPAWNER_ASSERT_VAR(Material);
+        DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
 
     private:
         static inline bool s_CanCreateAndDestroyObjects = false;
@@ -80,9 +80,9 @@ namespace TGL
             requires SpawnableMaterial<T, Args...>
         static SharedPtr<T> LoadMaterial(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
-            ASSERT_SINGLETON_OBJECT_CREATION();
+            ASSERT_APPLICATION_OBJECT_CREATION();
 
-            PREPARE_SPAWNER_USAGE(Material);
+            PREPARE_SPAWNER_ASSERT(Material);
 
             T* instance = new T(std::forward<Args>(args)...);
 
@@ -94,7 +94,7 @@ namespace TGL
         {
             // No need to assert here since this doesn't interact with OpenGL
 
-            PREPARE_SPAWNER_USAGE(MaterialUniform);
+            PREPARE_SPAWNER_ASSERT(MaterialUniform);
 
             T* instance = new T(shader, name);
 
@@ -109,7 +109,7 @@ namespace TGL
             }
             else if (!createIfInvalid)
             {
-                PREPARE_SPAWNER_USAGE(MaterialUniform);
+                PREPARE_SPAWNER_ASSERT(MaterialUniform);
 
                 delete instance;
                 instance = nullptr;

@@ -5,7 +5,7 @@
 #include "Core/AssetManager.h"
 #include "Exceptions/Common/FileNotFoundException.h"
 #include "Implementations/Components/AudioPlayer.h"
-#include "Util/Macros/SpawnerMacros.h"
+#include "Util/Asserts/SpawnerAsserts.h"
 
 using namespace TGL;
 
