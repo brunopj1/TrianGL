@@ -7,7 +7,6 @@
 #include "Entities/Grid.h"
 #include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
-#include "Assets/Audio.h"
 
 class SnakeGameMode final : public TGL::GameMode, private TGL::WindowResizedEvent
 {

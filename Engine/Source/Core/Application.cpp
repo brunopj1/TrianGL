@@ -8,6 +8,7 @@
 
 #include <Core/Window.h>
 #include <Core/Clock.h>
+#include "Util/Random.h"
 #include <Implementations/Components/SpriteRenderer.h>
 
 #include <Implementations/Entities/Camera.h>
@@ -104,21 +105,26 @@ void Application::Init(const ApplicationConfig& config)
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
 #endif
 
+    // Core systems
     InputSystem::Init(Window::GetGlfwWindow());
-
     AssetManager::Init();
     EntityManager::Init();
 
+    // Implementations
     SpriteRenderer::Init();
+
+    // Util
+    Random::InitSeed();
 }
 
 void Application::Terminate()
 {
+    // Implementations
     SpriteRenderer::Terminate();
 
+    // Core systems
     EntityManager::Terminate();
     AssetManager::Terminate();
-
     InputSystem::Terminate();
 
 #ifdef DEBUG
