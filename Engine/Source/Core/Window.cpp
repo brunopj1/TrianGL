@@ -1,5 +1,6 @@
 #include <Core/Window.h>
 
+#include <Core/Application.h>
 #include <Events/WindowEvents.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -184,8 +185,6 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
 
     glfwMakeContextCurrent(s_WindowPtr);
 
-    s_IsAvailable = true;
-
     SetPosition(s_Position);
 
     if (fullscreen) SetFullscreen(true);
@@ -195,8 +194,6 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
 
 void Window::Terminate()
 {
-    s_IsAvailable = false;
-
     glfwDestroyWindow(s_WindowPtr);
     glfwTerminate();
 }

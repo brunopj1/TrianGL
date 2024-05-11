@@ -55,7 +55,7 @@ SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const 
 
 SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const int index)
 {
-    // No need to assert here since this doesn't interact with OpenGL
+    ASSERT_APPLICATION_OBJECT_CREATION();
 
     PREPARE_SPAWNER_ASSERT(TextureSlice);
 
@@ -71,6 +71,8 @@ void AssetManager::UnloadTexture(Texture* texture)
 
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
+    ASSERT_APPLICATION_OBJECT_CREATION();
+    
     PREPARE_SPAWNER_ASSERT(Audio);
 
     Audio* instance = new Audio(filePath, stream);

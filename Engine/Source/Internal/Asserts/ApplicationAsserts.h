@@ -3,7 +3,7 @@
 #include <cassert>
 
 #ifdef DEBUG
-#define ASSERT_APPLICATION_AVAILABILITY() assert(s_IsAvailable && "Cannot call this method because the application is not running")
+#define ASSERT_APPLICATION_AVAILABILITY() assert(Application::s_IsAvailable && "Cannot call this method because the application is not available")
 #else
 #define ASSERT_APPLICATION_AVAILABILITY() static_assert(true, "")
 #endif

@@ -23,6 +23,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Talk about the engine uniforms and the other automatic uniforms (texture matrix, texture resolution, etc...)
 - Explain the existing entities and components (Camera, etc...)
 - Explain how to use the callbacks
+- Mention the Util classes (Random only for now)
 
 ## Modern C++
 

@@ -5,10 +5,6 @@
 #include <Core/EntityManager.h>
 #include <Core/InputSystem.h>
 
-// Forward declarations
-// ReSharper disable once CppInconsistentNaming
-struct ma_engine;
-
 namespace TGL
 {
     struct ApplicationConfig
@@ -22,12 +18,16 @@ namespace TGL
 
     class Application final
     {
+    private:
+        friend class Window;
+        friend class Random;
+        
+    private:
+        static inline bool s_IsAvailable = false;
+        
     public:
         Application(const ApplicationConfig& config = {});
         ~Application();
-
-    private:
-        ma_engine* m_MiniAudioEngine = nullptr;
 
     public:
         void Run();
