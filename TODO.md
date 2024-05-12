@@ -34,7 +34,6 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## General
 
-- Allow random number generation with predictable results (class instances use a fixed seed)
 - Move the spawning and lookup methods to global functions (and update the wiki)
 - Execute the callbacks after the ImGui NewFrame (to allow for example opening popups, but first check if it is possible already)
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)

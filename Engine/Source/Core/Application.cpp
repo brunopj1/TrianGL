@@ -8,7 +8,6 @@
 
 #include <Core/Window.h>
 #include <Core/Clock.h>
-#include "Util/Random.h"
 #include <Implementations/Components/SpriteRenderer.h>
 
 #include <Implementations/Entities/Camera.h>
@@ -115,9 +114,6 @@ void Application::Init(const ApplicationConfig& config)
 
     // Implementations
     SpriteRenderer::Init();
-
-    // Util
-    Random::InitSeed();
 }
 
 void Application::Terminate()

@@ -5,7 +5,7 @@
 #include "Implementations/Entities/Camera.h"
 #include "Materials/GridMaterial.h"
 #include "glm/glm.hpp"
-#include "Util/Random.h"
+#include "Util/RandomNumberGenerator.h"
 #include <stdexcept>
 
 using namespace TGL;
@@ -53,7 +53,7 @@ void Grid::SetCell(const glm::uvec2& position, Entity* entity)
     }
 }
 
-std::optional<glm::ivec2> Grid::GetRandomFreeCell() const
+std::optional<glm::ivec2> Grid::GetRandomFreeCell()
 {
     std::vector<unsigned> freeIndices;
 
@@ -70,7 +70,7 @@ std::optional<glm::ivec2> Grid::GetRandomFreeCell() const
         return std::nullopt;
     }
 
-    const unsigned randomIndex = freeIndices[Random::GetUint(0, freeIndices.size() - 1)];
+    const unsigned randomIndex = freeIndices[m_Random.GetUint(0, freeIndices.size() - 1)];
     return glm::ivec2(randomIndex % m_Size.x, randomIndex / m_Size.x);
 }
 

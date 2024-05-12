@@ -20,7 +20,7 @@ namespace TGL
     {
     private:
         friend class Window;
-        friend class Random;
+        friend class RandomNumberGenerator;
         
     private:
         static inline bool s_IsAvailable = false;
