@@ -3,6 +3,7 @@
 #include <soloud.h>
 
 #define STB_IMAGE_IMPLEMENTATION
+#include "Assets/Internal/Quad.h"
 #include <stb_image.h>
 
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
@@ -19,8 +20,10 @@ void AssetManager::Init()
 {
     s_CanCreateAndDestroyObjects = true;
 
+    // STBI
     stbi_set_flip_vertically_on_load(true);
 
+    // SoLoud
     s_SoloudEngine = new SoLoud::Soloud();
     const SoLoud::result result = s_SoloudEngine->init();
     if (result != SoLoud::SO_NO_ERROR)
@@ -29,12 +32,19 @@ void AssetManager::Init()
     }
 
     s_SoloudEngine->setGlobalVolume(0.1f);
+
+    // Quad asset
+    Quad::Init();
 }
 
 void AssetManager::Terminate()
 {
     s_CanCreateAndDestroyObjects = false;
 
+    // Quad asset
+    Quad::Terminate();
+    
+    // SoLoud
     s_SoloudEngine->deinit();
     delete s_SoloudEngine;
     s_SoloudEngine = nullptr;

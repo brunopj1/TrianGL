@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <Assets/TextureParameters.h>
 #include <glm/mat2x2.hpp>
 #include <glm/vec2.hpp>
 #include <Memory/SharedPtr.h>
@@ -9,6 +8,28 @@
 
 namespace TGL
 {
+    enum class TextureWrapMode
+    {
+        Repeat,
+        MirroredRepeat,
+        ClampToEdge,
+        ClampToBorder
+    };
+
+    enum class TextureFilterMode
+    {
+        Nearest,
+        Linear
+    };
+
+    struct TextureParameters
+    {
+        bool GenerateMipmaps = true;
+        TextureWrapMode Wrap = TextureWrapMode::Repeat;
+        TextureFilterMode Filter = TextureFilterMode::Linear;
+        TextureFilterMode MipmapFilter = TextureFilterMode::Linear;
+    };
+    
     class Sprite
     {
     private:

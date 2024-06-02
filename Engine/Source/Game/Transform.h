@@ -9,6 +9,7 @@ namespace TGL
     {
     private:
         friend class SpriteRenderer;
+        friend class ParticleSystem;
 
     private:
         glm::vec2 m_Position = {0.0f, 0.0f};

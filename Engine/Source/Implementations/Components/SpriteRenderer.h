@@ -15,12 +15,7 @@ namespace TGL
     {
     private:
         friend class Application;
-
-    private:
-        static inline unsigned int s_QuadVao = 0;
-        static inline unsigned int s_QuadVbo = 0;
-        static inline unsigned int s_QuadEbo = 0;
-
+        
     private:
         SharedPtr<Material> m_Material = nullptr;
         glm::vec2 m_Pivot = glm::vec2(0.5f);
@@ -37,10 +32,6 @@ namespace TGL
 
         glm::vec2 GetPivot() const;
         void SetPivot(const glm::vec2& pivot);
-
-    private:
-        static void Init();
-        static void Terminate();
 
     private:
         void Render() override;

@@ -51,9 +51,10 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Use raw mouse motion when the mouse is locked (if available)
 
 ## Rendering
-
+ 
 - Add batch rendering (for the same material)
 - Use uniform buffers for the shaders
+- Validate the shader attributes
 
 ## Entity system
 

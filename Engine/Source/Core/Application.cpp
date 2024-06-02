@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 #define GLFW_INCLUDE_NONE
+#include "Assets/Internal/Quad.h"
 #include <GLFW/glfw3.h>
 
 #include <Core/Window.h>
@@ -111,16 +112,10 @@ void Application::Init(const ApplicationConfig& config)
     InputSystem::Init(Window::GetGlfwWindow());
     AssetManager::Init();
     EntityManager::Init();
-
-    // Implementations
-    SpriteRenderer::Init();
 }
 
 void Application::Terminate()
 {
-    // Implementations
-    SpriteRenderer::Terminate();
-
     // Core systems
     EntityManager::Terminate();
     AssetManager::Terminate();

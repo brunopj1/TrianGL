@@ -2,6 +2,8 @@
 
 namespace TGL
 {
+    // TODO Add static versions of the methods
+    
     class RandomNumberGenerator
     {
     private:
@@ -29,6 +31,8 @@ namespace TGL
         
         double GetDouble();
         double GetDouble(double min, double max);
+
+        // TODO add vector generation with atomic and vector min/max values
 
     private:
         void UpdateSeed();

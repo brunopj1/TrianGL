@@ -16,6 +16,7 @@ namespace TGL
     private:
         friend class AssetManager;
         friend class SpriteRenderer;
+        friend class ParticleSystem;
 
     private:
         Shader* m_Shader;

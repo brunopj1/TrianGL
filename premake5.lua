@@ -43,6 +43,7 @@ group "Dependencies"
 
 group "Playground"
     include "Playground/AudioPlayground/premake5.lua"
+    include "Playground/ParticlePlayground/premake5.lua"
 
 group "Games"
     include "Games/Snake/premake5.lua"

@@ -1,8 +1,8 @@
 # Configuration ---------------------------------------------------------------
 
-projectName = "TestPlayground"
+projectName = "ParticlePlayground"
 
-isGame = True # If set to False, the project will be created in the 'Playgrounds' folder
+isGame = False # If set to False, the project will be created in the 'Playgrounds' folder
 
 # Includes --------------------------------------------------------------------
 

@@ -1,5 +1,8 @@
 ﻿#pragma once
+
 #include <Game/Transform.h>
+
+// TODO move the material here?
 
 namespace TGL
 {

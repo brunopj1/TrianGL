@@ -19,6 +19,12 @@ Apple::Apple(Grid* grid, SharedPtr<Texture> spriteSheet)
 
 void Apple::RandomizePosition(Grid* grid)
 {
+    const glm::uvec2 currentPos = GetTransform().GetPosition();
+    if (grid->GetCell(currentPos) == this)
+    {
+        grid->SetCell(currentPos, nullptr);
+    }
+    
     const std::optional<glm::ivec2> freeCell = grid->GetRandomFreeCell();
 
     if (freeCell.has_value())

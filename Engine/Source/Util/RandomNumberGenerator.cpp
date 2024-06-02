@@ -1,7 +1,7 @@
-﻿#include "RandomNumberGenerator.h"
+﻿#include <Util/RandomNumberGenerator.h>
 
 #include <Core/Application.h>
-#include "Internal/Asserts/ApplicationAsserts.h"
+#include <Internal/Asserts/ApplicationAsserts.h>
 #include <cassert>
 #include <chrono>
 
