@@ -2,7 +2,7 @@
 
 #include "Grid.h"
 #include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Assets/DefaultMaterial.h"
+#include "Implementations/Assets/DefaultSpriteMaterial.h"
 #include "Assets/Texture.h"
 
 using namespace TGL;

@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Assets/DefaultMaterial.h"
+#include "Implementations/Assets/DefaultSpriteMaterial.h"
 
 using namespace TGL;
 
@@ -66,7 +66,7 @@ void SnakeBody::UpdateTexture()
         texture = m_Texture->GetSlice(idx);
     }
 
-    const auto material = CastTo<DefaultMaterial>(m_SpriteRenderer->GetMaterial());
+    const auto material = CastTo<DefaultSpriteMaterial>(m_SpriteRenderer->GetMaterial());
     material->Sprite->Value = texture;
 
     // Rotate the texture

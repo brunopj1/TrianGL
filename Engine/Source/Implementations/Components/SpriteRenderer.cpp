@@ -4,7 +4,7 @@
 #include <Game/Entity.h>
 #include <glad/glad.h>
 #include <Assets/Material.h>
-#include <Implementations/Assets/DefaultMaterial.h>
+#include <Implementations/Assets/DefaultSpriteMaterial.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;
@@ -23,9 +23,9 @@ void SpriteRenderer::SetMaterial(SharedPtr<Material> material)
     m_Material = std::move(material);
 }
 
-SharedPtr<DefaultMaterial> SpriteRenderer::UseDefaultMaterial()
+SharedPtr<DefaultSpriteMaterial> SpriteRenderer::UseDefaultMaterial()
 {
-    auto defaultMaterial = Material::CreateInstanceOf<DefaultMaterial>();
+    auto defaultMaterial = Material::CreateInstanceOf<DefaultSpriteMaterial>();
     m_Material = defaultMaterial;
     return defaultMaterial;
 }

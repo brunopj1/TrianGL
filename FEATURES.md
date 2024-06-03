@@ -43,12 +43,12 @@
 
 - [X] Automatic rendering
 - [X] Z indexing with automatic sorting
+- [X] Particle system
+- [ ] Tilemaps
 - [ ] Text rendering
 - [ ] View Frustum Culling
 - [ ] Multiple viewports
 - [ ] Multiple custom render passes
-- [ ] Particle system
-- [ ] Tilemaps
 - [ ] 2D lighting with shadows
 - [ ] UI abstraction
 

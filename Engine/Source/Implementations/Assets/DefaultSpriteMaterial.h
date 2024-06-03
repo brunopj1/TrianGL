@@ -4,7 +4,7 @@
 
 namespace TGL
 {
-    class DefaultMaterial final : public Material
+    class DefaultSpriteMaterial final : public Material
     {
     public:
         SpriteUniform* const Sprite = AddUniform<SpriteUniform>("uSprite");
@@ -14,8 +14,8 @@ namespace TGL
         IntUniform* const IsSpriteValid = AddUniform<IntUniform>("uIsSpriteValid");
 
     public:
-        DefaultMaterial();
-        ~DefaultMaterial() override = default;
+        DefaultSpriteMaterial();
+        ~DefaultSpriteMaterial() override = default;
 
     protected:
         void OnRenderSetup() const override;

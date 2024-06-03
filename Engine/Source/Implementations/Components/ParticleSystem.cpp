@@ -1,6 +1,5 @@
 ﻿#include "Assets/Material.h"
 #include "Assets/Internal/Quad.h"
-#include "Util/RandomNumberGenerator.h"
 
 #include <Implementations/Components/ParticleSystem.h>
 
@@ -9,8 +8,8 @@
 
 using namespace TGL;
 
-ParticleSystem::ParticleSystem(const unsigned int maxParticles)
-    : Component(true), m_MaxParticles(maxParticles)
+ParticleSystem::ParticleSystem(const unsigned int maxParticles, SharedPtr<Material> material)
+    : Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
     Init();
 }
@@ -25,30 +24,80 @@ void ParticleSystem::SetMaterial(SharedPtr<Material> material)
     m_Material = std::move(material);
 }
 
-bool ParticleSystem::Emit(const glm::vec2& position, const glm::vec2& velocity, const glm::vec4& color, const float life)
+SharedPtr<DefaultParticleMaterial> ParticleSystem::UseDefaultMaterial()
+{
+    auto defaultMaterial = Material::CreateInstanceOf<DefaultParticleMaterial>();
+    m_Material = defaultMaterial;
+    return defaultMaterial;
+}
+
+bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 {
     const unsigned int nextIndex = GetNextUnusedParticleIndex();
     if (nextIndex == m_MaxParticles) return false;
-    
-    m_Particles[nextIndex].Position = position;
-    m_Particles[nextIndex].Velocity = velocity;
-    m_Particles[nextIndex].Color = color;
-    m_Particles[nextIndex].Life = life;
 
+    auto& cpuParticle = m_ParticlesCpu[nextIndex];
+    auto& gpuParticle = m_ParticlesGpu[nextIndex];
+
+    gpuParticle.Position = spawnData.Position;
+    cpuParticle.Velocity = spawnData.Velocity;
+    
+    cpuParticle.StartColor = spawnData.StartColor;
+    cpuParticle.EndColor = spawnData.EndColor;
+
+    cpuParticle.StartScale = spawnData.StartScale;
+    cpuParticle.EndScale = spawnData.EndScale;
+
+    if (spawnData.RotationInDegrees)
+    {
+        cpuParticle.StartRotation = glm::radians(spawnData.StartRotation);
+        cpuParticle.EndRotation = glm::radians(spawnData.EndRotation);
+    }
+    else
+    {
+        cpuParticle.StartRotation = spawnData.StartRotation;
+        cpuParticle.EndRotation = spawnData.EndRotation;
+    }
+
+    cpuParticle.TotalDuration = spawnData.Duration;
+    cpuParticle.RemainingDuration = spawnData.Duration;
+    gpuParticle.RemainingDuration = spawnData.Duration;
+    
     return true;
 }
 
 void ParticleSystem::OnUpdate(const float deltaTime)
 {
-    for (auto& particle : m_Particles)
+    // TODO use multi threading (except for updating the m_NextUnusedParticleIndex)
+    for (int i = 0; i < m_MaxParticles; i++)
     {
-        if (particle.Life <= 0.0f) continue;
+        auto& cpuParticle = m_ParticlesCpu[i];
+        auto& gpuParticle = m_ParticlesGpu[i];
+        
+        if (cpuParticle.RemainingDuration <= 0.0f) continue;
 
-        particle.Position += particle.Velocity * deltaTime;
-        particle.Life -= deltaTime;
+        const float interp = 1.0f - (cpuParticle.RemainingDuration / cpuParticle.TotalDuration);
+
+        gpuParticle.Position += cpuParticle.Velocity * deltaTime;
+
+        gpuParticle.Color = glm::mix(cpuParticle.StartColor, cpuParticle.EndColor, interp);
+        gpuParticle.Scale = glm::mix(cpuParticle.StartScale, cpuParticle.EndScale, interp);
+        gpuParticle.Rotation = glm::mix(cpuParticle.StartRotation, cpuParticle.EndRotation, interp);
+
+        cpuParticle.RemainingDuration -= deltaTime;
+        gpuParticle.RemainingDuration = cpuParticle.RemainingDuration;
+
+        if (cpuParticle.RemainingDuration <= 0.0f)
+        {
+            if (i < m_NextUnusedParticleIndex)
+            {
+                m_NextUnusedParticleIndex = i;
+            }
+        }
     }
 
-    UpdateParticleBuffer();
+    glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
 }
 
 void ParticleSystem::Render()
@@ -77,7 +126,8 @@ void ParticleSystem::Render()
 
 void ParticleSystem::Init()
 {
-    m_Particles.resize(m_MaxParticles);
+    m_ParticlesCpu.resize(m_MaxParticles);
+    m_ParticlesGpu.resize(m_MaxParticles);
     
     glGenVertexArrays(1, &m_ParticleVao);
     glBindVertexArray(m_ParticleVao);
@@ -89,27 +139,32 @@ void ParticleSystem::Init()
     
     glGenBuffers(1, &m_ParticleVbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
-    UpdateParticleBuffer(false);
+    glBufferData(GL_ARRAY_BUFFER, m_MaxParticles * sizeof(ParticleGpuData), nullptr, GL_STREAM_DRAW);
 
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, Position));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Position));
     glEnableVertexAttribArray(2);
     glVertexAttribDivisor(2, 1);
 
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, Velocity));
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Color));
     glEnableVertexAttribArray(3);
     glVertexAttribDivisor(3, 1);
 
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, Color));
+    glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Scale));
     glEnableVertexAttribArray(4);
     glVertexAttribDivisor(4, 1);
 
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, Life));
+    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Rotation));
     glEnableVertexAttribArray(5);
     glVertexAttribDivisor(5, 1);
+    
+    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
+    glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, RemainingDuration));
+    glEnableVertexAttribArray(6);
+    glVertexAttribDivisor(6, 1);
 
     glBindVertexArray(0);
 }
@@ -123,23 +178,19 @@ void ParticleSystem::Terminate()
     m_ParticleVao = 0;
 }
 
-void ParticleSystem::UpdateParticleBuffer(const bool bindBuffer) const
+unsigned int ParticleSystem::GetNextUnusedParticleIndex()
 {
-    if (bindBuffer) glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
+    const unsigned int nextIndex = m_NextUnusedParticleIndex;
+    m_NextUnusedParticleIndex = m_MaxParticles;
     
-    glBufferData(GL_ARRAY_BUFFER, m_MaxParticles * sizeof(Particle), m_Particles.data(), GL_STREAM_DRAW);
-}
-
-// TODO optimize this
-unsigned int ParticleSystem::GetNextUnusedParticleIndex() const
-{
-    for (unsigned int i = 0; i < m_MaxParticles; ++i)
+    for (unsigned int i = nextIndex; i < m_MaxParticles; ++i)
     {
-        if (m_Particles[i].Life <= 0.0f)
+        if (m_ParticlesCpu[i].RemainingDuration <= 0.0f)
         {
-            return i;
+            m_NextUnusedParticleIndex = i;
+            break;
         }
     }
 
-    return m_MaxParticles;
+    return nextIndex;
 }

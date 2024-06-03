@@ -1,8 +1,8 @@
-﻿#include <Implementations/Assets/DefaultMaterial.h>
+﻿#include <Implementations/Assets/DefaultSpriteMaterial.h>
 
 using namespace TGL;
 
-DefaultMaterial::DefaultMaterial()
+DefaultSpriteMaterial::DefaultSpriteMaterial()
     : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag")
 {
     Sprite->Value = nullptr;
@@ -10,7 +10,7 @@ DefaultMaterial::DefaultMaterial()
     IsSpriteValid->Value = 0;
 }
 
-void DefaultMaterial::OnRenderSetup() const
+void DefaultSpriteMaterial::OnRenderSetup() const
 {
     IsSpriteValid->Value = Sprite->Value != nullptr ? 1 : 0;
 }

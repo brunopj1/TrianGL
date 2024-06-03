@@ -39,6 +39,11 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 - Create a custom shared pointer class that can be reset even if there are still references to it
 
+## Particles
+
+- Add texture and round options to the default particle material
+- Add custom particle systems with user defined data
+
 ## Audio
 
 - Add a duration method to the Audio class and a seek method to the AudioPlayer class

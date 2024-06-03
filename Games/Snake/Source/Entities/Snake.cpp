@@ -4,7 +4,7 @@
 
 #include "Apple.h"
 #include "Core/InputSystem.h"
-#include "Implementations/Assets/DefaultMaterial.h"
+#include "Implementations/Assets/DefaultSpriteMaterial.h"
 
 using namespace TGL;
 

@@ -4,7 +4,7 @@
 #include <Game/Rendering/Renderable.h>
 #include <Memory/SharedPtr.h>
 
-#include <Implementations/Assets/DefaultMaterial.h>
+#include <Implementations/Assets/DefaultSpriteMaterial.h>
 
 namespace TGL
 {
@@ -28,7 +28,7 @@ namespace TGL
     public:
         SharedPtr<Material> GetMaterial() const;
         void SetMaterial(SharedPtr<Material> material);
-        SharedPtr<DefaultMaterial> UseDefaultMaterial();
+        SharedPtr<DefaultSpriteMaterial> UseDefaultMaterial();
 
         glm::vec2 GetPivot() const;
         void SetPivot(const glm::vec2& pivot);
