@@ -15,6 +15,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Talk about the particle system
 - Explain the new CastTo functions (GameObject, LazyPtr and SharedPtr)
 - Replace the std::shared_ptr with the TGL::SharedPtr in the wiki
 - Mention that the LazyPtr can be accessed using the -> operator but if it needs to be accessed multiple times it is better to store it in a variable
@@ -43,7 +44,9 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 - Separate the materials into SpriteMaterial and ParticleMaterial
 - Add texture and round options to the default particle material
-- Add custom particle systems with user defined data
+- Add custom particle systems with user defined data (and opt-out cpu update)
+- Allow resizing the particle system
+- Add multi threading to the update loop
 
 ## Audio
 

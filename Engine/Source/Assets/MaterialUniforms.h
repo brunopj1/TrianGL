@@ -88,8 +88,6 @@ namespace TGL
     
     // Sprite uniform
 
-    // TODO also use the template class for the SpriteUniform
-    
     class SpriteUniform final : public MaterialUniform
     {
     private:

@@ -7,7 +7,6 @@
 #include <glm/vec4.hpp>
 #include <Memory/SharedPtr.h>
 
-// TODO allow resizing the particle system
 // TODO remove the transform from the particle system
 // TODO add the asserts (is engine initialized, etc)
 

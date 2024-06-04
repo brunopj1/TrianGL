@@ -68,7 +68,6 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 
 void ParticleSystem::OnUpdate(const float deltaTime)
 {
-    // TODO use multi threading (except for updating the m_NextUnusedParticleIndex)
     for (int i = 0; i < m_MaxParticles; i++)
     {
         auto& cpuParticle = m_ParticlesCpu[i];
