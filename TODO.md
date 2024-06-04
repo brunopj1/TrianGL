@@ -41,6 +41,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Particles
 
+- Separate the materials into SpriteMaterial and ParticleMaterial
 - Add texture and round options to the default particle material
 - Add custom particle systems with user defined data
 

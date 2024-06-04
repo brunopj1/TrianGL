@@ -4,6 +4,8 @@
 #include <glm/vec2.hpp>
 #include <unordered_set>
 
+// TODO dont register the input if the user is interacting with ImGui
+
 // Forward declarations
 // ReSharper disable once CppInconsistentNaming
 struct GLFWwindow;
