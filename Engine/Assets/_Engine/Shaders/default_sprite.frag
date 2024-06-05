@@ -3,7 +3,6 @@
 // Uniforms
 
 uniform int uIsSpriteValid;
-
 uniform sampler2D uSprite;
 uniform mat4 uSpriteMatrix;
 uniform uvec2 uSpriteResolution;

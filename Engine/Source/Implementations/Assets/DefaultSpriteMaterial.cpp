@@ -12,5 +12,5 @@ DefaultSpriteMaterial::DefaultSpriteMaterial()
 
 void DefaultSpriteMaterial::OnRenderSetup() const
 {
-    IsSpriteValid->Value = Sprite->Value != nullptr ? 1 : 0;
+    IsSpriteValid->Value = Sprite->HasValue();
 }

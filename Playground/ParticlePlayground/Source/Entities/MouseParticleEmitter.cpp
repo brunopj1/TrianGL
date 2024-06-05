@@ -12,7 +12,14 @@ MouseParticleEmitter::MouseParticleEmitter()
     : Entity(true)
 {
     m_ParticleSystem = AttachComponent<ParticleSystem>(3000);
-    auto material = m_ParticleSystem->UseDefaultMaterial();
+    m_Material = m_ParticleSystem->UseDefaultMaterial();
+
+    TextureParameters params;
+    params.Filter = TextureFilterMode::Nearest;
+    params.MipmapFilter = TextureFilterMode::Nearest;
+    
+    m_Texture = Texture::Load("Assets/Textures/spritesheet.png", params);
+    m_Texture->CreateSliceGrid({15, 15});
 }
 
 void MouseParticleEmitter::OnUpdate(const float deltaTime)
@@ -81,6 +88,8 @@ void MouseParticleEmitter::RenderImGui()
         RenderImGuiRangeColor("Start Color", m_StartColor1, m_StartColor2);
 
         RenderImGuiRangeColor("End Color", m_EndColor1, m_EndColor2);
+
+        RenderImGuiMaterialSettings();
     }
 
     ImGui::End();
@@ -120,4 +129,46 @@ void MouseParticleEmitter::RenderImGuiRangeColor(const char* label, glm::vec3& v
     ImGui::PopID();
 
     ImGui::Separator();
+}
+
+void MouseParticleEmitter::RenderImGuiMaterialSettings()
+{
+    ImGui::Text("Border Radius");
+
+    ImGui::PushID("Border Radius");
+
+    float& value = m_Material->BorderRadius->Value;
+
+    ImGui::SliderFloat("Value", &value, 0.0f, 0.5f);
+
+    ImGui::PopID();
+
+    ImGui::Separator();
+
+    // -----------------------------------------------
+
+    ImGui::Text("Sprite");
+
+    ImGui::PushID("Sprite");
+
+    if (ImGui::RadioButton("None", &m_SelectedTexture, 0))
+    {
+        m_Material->Sprite->Value = nullptr;
+    }
+
+    ImGui::SameLine();
+    
+    if (ImGui::RadioButton("Heart", &m_SelectedTexture, 1))
+    {
+        m_Material->Sprite->Value = m_Texture->GetSlice(0);
+    }
+
+    ImGui::SameLine();
+    
+    if (ImGui::RadioButton("Donut", &m_SelectedTexture, 2))
+    {
+        m_Material->Sprite->Value = m_Texture->GetSlice(1);
+    }
+
+    ImGui::PopID();
 }

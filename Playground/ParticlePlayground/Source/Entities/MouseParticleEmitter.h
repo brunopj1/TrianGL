@@ -8,6 +8,9 @@ class MouseParticleEmitter final : public TGL::Entity
 {
 private:
     TGL::ParticleSystem* m_ParticleSystem;
+    TGL::SharedPtr<TGL::DefaultParticleMaterial> m_Material;
+    TGL::SharedPtr<TGL::Texture> m_Texture;
+    int m_SelectedTexture = 0;
     TGL::RandomNumberGenerator m_Random;
 
 private:
@@ -49,4 +52,5 @@ private:
     void RenderImGui();
     static void RenderImGuiRangeFloat(const char* label, float& value1, float& value2, float min, float max);
     static void RenderImGuiRangeColor(const char* label, glm::vec3& value1, glm::vec3& value2);
+    void RenderImGuiMaterialSettings();
 };

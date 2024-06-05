@@ -114,6 +114,11 @@ SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
       m_Slot(0), Value(nullptr) // The slot is updated by the spawner
 {}
 
+bool SpriteUniform::HasValue() const
+{
+    return Value != nullptr;
+}
+
 bool SpriteUniform::IsValid() const
 {
     return m_Location != -1 || m_MatrixLocation != -1 || m_ResolutionLocation != -1;
