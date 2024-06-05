@@ -3,7 +3,7 @@
 using namespace TGL;
 
 DefaultSpriteMaterial::DefaultSpriteMaterial()
-    : Material("Assets/_Engine/Shaders/default.vert", "Assets/_Engine/Shaders/default.frag")
+    : Material("Assets/_Engine/Shaders/default_sprite.vert", "Assets/_Engine/Shaders/default_sprite.frag")
 {
     Sprite->Value = nullptr;
     Color->Value = {1.0f, 1.0f, 1.0f, 1.0f};
