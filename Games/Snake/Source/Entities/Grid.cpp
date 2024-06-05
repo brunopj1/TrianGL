@@ -70,7 +70,8 @@ std::optional<glm::ivec2> Grid::GetRandomFreeCell()
         return std::nullopt;
     }
 
-    const unsigned randomIndex = freeIndices[m_Random.GetUint(0, freeIndices.size() - 1)];
+    const unsigned freeIndexCount = static_cast<unsigned int>(freeIndices.size());
+    const unsigned randomIndex = freeIndices[m_Random.GetUint(0, freeIndexCount - 1)];
     return glm::ivec2(randomIndex % m_Size.x, randomIndex / m_Size.x);
 }
 

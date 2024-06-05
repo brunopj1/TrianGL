@@ -64,7 +64,7 @@ void Application::Run()
 void Application::Init(const ApplicationConfig& config)
 {
     // Enable the availability flag
-    s_IsAvailable = true;
+    ApplicationStatus::s_IsAvailable = true;
     
     glfwSetErrorCallback(ErrorCallback);
 
@@ -130,7 +130,7 @@ void Application::Terminate()
     Window::Terminate();
     
     // Disable the availability flag
-    s_IsAvailable = false;
+    ApplicationStatus::s_IsAvailable = false;
 }
 
 void Application::NewFrame()

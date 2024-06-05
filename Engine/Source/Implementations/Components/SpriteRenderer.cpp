@@ -13,6 +13,16 @@ SpriteRenderer::SpriteRenderer(SharedPtr<Material> material)
     : Component(false), m_Material(std::move(material))
 {}
 
+Transform& SpriteRenderer::GetTransform()
+{
+    return m_Transform;
+}
+
+const Transform& SpriteRenderer::GetTransform() const
+{
+    return m_Transform;
+}
+
 SharedPtr<Material> SpriteRenderer::GetMaterial() const
 {
     return m_Material;

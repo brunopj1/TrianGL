@@ -31,9 +31,6 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(Component);
 
     private:
-        static inline bool s_CanCreateAndDestroyObjects = false;
-
-    private:
         static inline uint64_t s_NextId = 1;
 
     private:

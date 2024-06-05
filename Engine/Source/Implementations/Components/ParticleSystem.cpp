@@ -11,7 +11,17 @@ using namespace TGL;
 ParticleSystem::ParticleSystem(const unsigned int maxParticles, SharedPtr<Material> material)
     : Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
+    
+    ASSERT_APPLICATION_OBJECT_CREATION();
+
     Init();
+}
+
+ParticleSystem::~ParticleSystem()
+{
+    ASSERT_APPLICATION_OBJECT_DESTRUCTION();
+
+    Terminate();
 }
 
 SharedPtr<Material> ParticleSystem::GetMaterial() const
@@ -68,7 +78,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 
 void ParticleSystem::OnUpdate(const float deltaTime)
 {
-    for (int i = 0; i < m_MaxParticles; i++)
+    for (unsigned int i = 0; i < m_MaxParticles; i++)
     {
         auto& cpuParticle = m_ParticlesCpu[i];
         auto& gpuParticle = m_ParticlesGpu[i];
@@ -103,10 +113,7 @@ void ParticleSystem::Render()
 {
     if (m_Material == nullptr) return;
 
-    const glm::mat4 parentModelMatrix = GetParent()->GetTransform().GetTransformMatrix();
-    const glm::mat4 rendererModelMatrix = GetTransform().GetTransformMatrix();
-
-    glm::mat4 modelMatrix = parentModelMatrix * rendererModelMatrix;
+    glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
 
     if (const int zIndex = GetZIndex(); zIndex != 0)
     {

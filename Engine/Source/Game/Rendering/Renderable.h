@@ -10,7 +10,6 @@ namespace TGL
         friend class EntityManager;
 
     private:
-        Transform m_Transform;
         int m_ZIndex = 0;
 
     protected:
@@ -18,9 +17,6 @@ namespace TGL
         virtual ~Renderable() = default;
 
     public:
-        Transform& GetTransform();
-        const Transform& GetTransform() const;
-
         int GetZIndex() const;
         void SetZIndex(int zIndex);
 

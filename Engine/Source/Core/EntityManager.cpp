@@ -10,13 +10,11 @@ using namespace TGL;
 
 void EntityManager::Init()
 {
-    s_CanCreateAndDestroyObjects = true;
+    
 }
 
 void EntityManager::Terminate()
 {
-    s_CanCreateAndDestroyObjects = false;
-
     while (!s_Entities.empty())
     {
         DestroyEntity(s_Entities.begin()->second);

@@ -47,9 +47,6 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
 
     private:
-        static inline bool s_CanCreateAndDestroyObjects = false;
-
-    private:
         static inline SoLoud::Soloud* s_SoloudEngine = nullptr;
 
     private:

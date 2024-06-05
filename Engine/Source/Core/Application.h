@@ -19,11 +19,7 @@ namespace TGL
     class Application final
     {
     private:
-        friend class Window;
         friend class RandomNumberGenerator;
-        
-    private:
-        static inline bool s_IsAvailable = false;
         
     public:
         Application(const ApplicationConfig& config = {});

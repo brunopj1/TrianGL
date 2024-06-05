@@ -18,8 +18,6 @@ using namespace TGL;
 
 void AssetManager::Init()
 {
-    s_CanCreateAndDestroyObjects = true;
-
     // STBI
     stbi_set_flip_vertically_on_load(true);
 
@@ -39,8 +37,6 @@ void AssetManager::Init()
 
 void AssetManager::Terminate()
 {
-    s_CanCreateAndDestroyObjects = false;
-
     // Quad asset
     Quad::Terminate();
     

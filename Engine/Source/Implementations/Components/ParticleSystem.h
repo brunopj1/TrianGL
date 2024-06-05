@@ -7,9 +7,6 @@
 #include <glm/vec4.hpp>
 #include <Memory/SharedPtr.h>
 
-// TODO remove the transform from the particle system
-// TODO add the asserts (is engine initialized, etc)
-
 namespace TGL
 {
     struct ParticleSpawnData final
@@ -57,7 +54,7 @@ namespace TGL
         
     public:
         ParticleSystem(unsigned int maxParticles = 1000, SharedPtr<Material> material = nullptr);
-        ~ParticleSystem() override = default;
+        ~ParticleSystem() override;
 
     public:
         SharedPtr<Material> GetMaterial() const;
