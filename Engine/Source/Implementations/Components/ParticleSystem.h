@@ -44,6 +44,7 @@ namespace TGL
         std::vector<ParticleGpuData> m_ParticlesGpu;
         unsigned int m_MaxParticles;
         unsigned int m_NextUnusedParticleIndex = 0;
+        unsigned int m_LastUsedParticleIndex = 0;
         
     private:
         SharedPtr<Material> m_Material = nullptr;

@@ -15,15 +15,8 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
-- Talk about the particle system
-- Explain the new CastTo functions (GameObject, LazyPtr and SharedPtr)
-- Replace the std::shared_ptr with the TGL::SharedPtr in the wiki
-- Mention that the LazyPtr can be accessed using the -> operator but if it needs to be accessed multiple times it is better to store it in a variable
-- Talk about casting materials using the SharedPtr::CastTo method
-- Talk about uniform creation
-- Talk about the engine uniforms and the other automatic uniforms (texture matrix, texture resolution, etc...)
+- Add screenshots to the readme file
 - Explain the existing entities and components (Camera, etc...)
-- Explain how to use the callbacks
 - Mention the Util classes (Random only for now)
 
 ## Modern C++

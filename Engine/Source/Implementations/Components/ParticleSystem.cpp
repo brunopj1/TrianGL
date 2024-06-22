@@ -78,7 +78,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 
 void ParticleSystem::OnUpdate(const float deltaTime)
 {
-    for (unsigned int i = 0; i < m_MaxParticles; i++)
+    for (unsigned int i = 0; i <= m_LastUsedParticleIndex; i++)
     {
         auto& cpuParticle = m_ParticlesCpu[i];
         auto& gpuParticle = m_ParticlesGpu[i];
@@ -107,6 +107,11 @@ void ParticleSystem::OnUpdate(const float deltaTime)
 
     glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
+
+    while (m_ParticlesCpu[m_LastUsedParticleIndex].RemainingDuration <= 0.0f && m_LastUsedParticleIndex > 0)
+    {
+        m_LastUsedParticleIndex--;
+    }
 }
 
 void ParticleSystem::Render()
@@ -196,6 +201,11 @@ unsigned int ParticleSystem::GetNextUnusedParticleIndex()
             m_NextUnusedParticleIndex = i;
             break;
         }
+    }
+
+    if (nextIndex > m_LastUsedParticleIndex && nextIndex < m_MaxParticles)
+    {
+        m_LastUsedParticleIndex = nextIndex;
     }
 
     return nextIndex;
