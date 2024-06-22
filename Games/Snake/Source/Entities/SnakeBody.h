@@ -22,10 +22,10 @@ private:
     TGL::SpriteRenderer* m_SpriteRenderer;
 
 private:
-    TGL::SharedPtr<TGL::Texture> m_Texture;
+    TGL::SharedPtr<TGL::Texture> m_SpriteSheet;
 
 public:
-    SnakeBody(Grid* grid, TGL::SharedPtr<TGL::Texture> texture, const glm::ivec2& position, const glm::ivec2& direction);
+    SnakeBody(Grid* grid, TGL::SharedPtr<TGL::Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction);
 
 public:
     glm::ivec2 GetBackDirection() const;

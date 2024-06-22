@@ -3,24 +3,31 @@
 #include "Implementations/Components/SpriteRenderer.h"
 #include "Core/Window.h"
 #include "Implementations/Entities/Camera.h"
-#include "Materials/GridMaterial.h"
+#include "Materials/GrassMaterial.h"
 #include "glm/glm.hpp"
 #include "Util/RandomNumberGenerator.h"
 #include <stdexcept>
 
 using namespace TGL;
 
-Grid::Grid(const glm::uvec2 dimensions)
-    : Entity(false)
+Grid::Grid(SharedPtr<Texture> spriteSheet, const glm::uvec2 dimensions)
+    : Entity(false), m_SpriteSheet(std::move(spriteSheet))
 {
     m_SpriteRenderer = AttachComponent<SpriteRenderer>();
-    m_SpriteRenderer->SetMaterial(Material::CreateInstanceOf<GridMaterial>());
     m_SpriteRenderer->SetPivot({0, 0});
     m_SpriteRenderer->SetZIndex(-1);
 
+    const auto material = Material::CreateInstanceOf<GrassMaterial>();
+    m_SpriteRenderer->SetMaterial(material);
+
+    material->SpriteSheet->Value = m_SpriteSheet;
+    material->SpriteGrassNormal->Value = m_SpriteSheet->GetSlice(0);
+    material->SpriteGrassTall->Value = m_SpriteSheet->GetSlice(1);
+    material->SpriteGrassFlowers->Value = m_SpriteSheet->GetSlice(2);
+    material->SpriteGrassRocks->Value = m_SpriteSheet->GetSlice(3);
+    
     Resize(dimensions);
 }
-
 glm::uvec2 Grid::GetSize() const
 {
     return m_Size;
@@ -79,7 +86,7 @@ void Grid::Resize(const glm::uvec2& size)
 {
     m_Size = size;
 
-    const auto material = CastTo<GridMaterial>(m_SpriteRenderer->GetMaterial());
+    const auto material = CastTo<GrassMaterial>(m_SpriteRenderer->GetMaterial());
     material->GridSize->Value = m_Size;
 
     const unsigned gridSize = m_Size.x * m_Size.y;

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
+#include "Memory/SharedPtr.h"
 #include "Util/RandomNumberGenerator.h"
 #include <optional>
 
@@ -9,13 +10,14 @@ class Grid final : public TGL::Entity
 private:
     glm::uvec2 m_Size;
     std::vector<Entity*> m_Cells;
+    TGL::SharedPtr<TGL::Texture> m_SpriteSheet;
     TGL::RandomNumberGenerator m_Random;
 
 private:
     TGL::SpriteRenderer* m_SpriteRenderer = nullptr;
 
 public:
-    Grid(glm::uvec2 dimensions);
+    Grid(TGL::SharedPtr<TGL::Texture> spriteSheet, glm::uvec2 dimensions);
     ~Grid() override = default;
 
 public:

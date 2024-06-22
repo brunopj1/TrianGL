@@ -7,8 +7,8 @@
 
 using namespace TGL;
 
-SnakeBody::SnakeBody(Grid* grid, SharedPtr<Texture> texture, const glm::ivec2& position, const glm::ivec2& direction)
-    : Entity(false), m_Type(SnakeBodyType::Head), m_BackDirection(direction), m_FrontDirection(direction), m_Texture(std::move(texture))
+SnakeBody::SnakeBody(Grid* grid, SharedPtr<Texture> spriteSheet, const glm::ivec2& position, const glm::ivec2& direction)
+    : Entity(false), m_Type(SnakeBodyType::Head), m_BackDirection(direction), m_FrontDirection(direction), m_SpriteSheet(std::move(spriteSheet))
 {
     m_SpriteRenderer = AttachComponent<SpriteRenderer>();
     m_SpriteRenderer->UseDefaultMaterial();
@@ -54,16 +54,16 @@ void SnakeBody::UpdateTexture()
 
     if (m_Type == SnakeBodyType::Tail)
     {
-        texture = m_Texture->GetSlice(3);
+        texture = m_SpriteSheet->GetSlice(7);
     }
     else
     {
-        int idx = m_Type == SnakeBodyType::Head ? 0 : 4;
+        int idx = m_Type == SnakeBodyType::Head ? 4 : 8;
 
         const int crossMoveDirection = m_BackDirection.x * m_FrontDirection.y - m_BackDirection.y * m_FrontDirection.x;
         idx += crossMoveDirection < 0 ? 1 : crossMoveDirection > 0 ? 2 : 0;
 
-        texture = m_Texture->GetSlice(idx);
+        texture = m_SpriteSheet->GetSlice(idx);
     }
 
     const auto material = CastTo<DefaultSpriteMaterial>(m_SpriteRenderer->GetMaterial());

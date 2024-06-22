@@ -29,7 +29,7 @@ SnakeGameMode::SnakeGameMode()
 
     m_TickRate = m_TickTimer = 0.25f;
 
-    m_Grid = SpawnEntity<Grid>(glm::uvec2(5));
+    m_Grid = SpawnEntity<Grid>(m_SpriteSheet, glm::uvec2(5));
 
     m_Snake = SpawnEntity<Snake>(m_Grid, m_SpriteSheet, glm::ivec2(2, 2), glm::ivec2(0, 1));
 

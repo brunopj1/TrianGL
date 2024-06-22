@@ -12,7 +12,7 @@ Apple::Apple(Grid* grid, SharedPtr<Texture> spriteSheet)
 {
     SpriteRenderer* sr = AttachComponent<SpriteRenderer>();
     const auto material = sr->UseDefaultMaterial();
-    material->Sprite->Value = m_SpriteSheet->GetSlice(7);
+    material->Sprite->Value = m_SpriteSheet->GetSlice(11);
 
     RandomizePosition(grid);
 }
