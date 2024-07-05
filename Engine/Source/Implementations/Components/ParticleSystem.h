@@ -69,7 +69,7 @@ namespace TGL
         void OnUpdate(float deltaTime) override;
 
     protected:
-        void Render() override;
+        void Render() const override;
 
     private:
         void Init();

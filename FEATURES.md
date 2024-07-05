@@ -2,7 +2,7 @@
 
 ## Project
 
-- [ ] Github wiki (WIP)
+- [X] Github wiki
 - [ ] Documentation
 
 ## Engine
@@ -10,6 +10,7 @@
 - [X] Windows support
 - [ ] Linux support
 - [ ] MacOS support
+- [ ] WebGL support
 
 ## General
 
@@ -45,6 +46,7 @@
 - [X] Z indexing with automatic sorting
 - [X] Particle system
 - [ ] Tilemaps
+- [ ] Sprite animations
 - [ ] Text rendering
 - [ ] View Frustum Culling
 - [ ] Multiple viewports

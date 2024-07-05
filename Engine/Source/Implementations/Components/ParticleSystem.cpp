@@ -114,7 +114,7 @@ void ParticleSystem::OnUpdate(const float deltaTime)
     }
 }
 
-void ParticleSystem::Render()
+void ParticleSystem::Render() const
 {
     if (m_Material == nullptr) return;
 

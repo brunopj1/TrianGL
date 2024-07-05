@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <Game/Transform.h>
-
 namespace TGL
 {
     class Renderable
@@ -21,6 +19,6 @@ namespace TGL
         void SetZIndex(int zIndex);
 
     protected:
-        virtual void Render() = 0;
+        virtual void Render() const = 0;
     };
 }

@@ -84,7 +84,7 @@ void Transform::ScaleBy(const float scale)
     m_WasModified = true;
 }
 
-glm::mat4 Transform::GetTransformMatrix()
+glm::mat4 Transform::GetTransformMatrix() const
 {
     if (m_WasModified)
     {

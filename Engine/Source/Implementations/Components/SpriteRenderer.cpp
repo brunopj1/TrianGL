@@ -50,7 +50,7 @@ void SpriteRenderer::SetPivot(const glm::vec2& pivot)
     m_Pivot = pivot;
 }
 
-void SpriteRenderer::Render()
+void SpriteRenderer::Render() const
 {
     if (m_Material == nullptr) return;
 

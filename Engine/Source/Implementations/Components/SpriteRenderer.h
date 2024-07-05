@@ -38,6 +38,6 @@ namespace TGL
         void SetPivot(const glm::vec2& pivot);
 
     private:
-        void Render() override;
+        void Render() const override;
     };
 }

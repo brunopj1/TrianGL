@@ -5,6 +5,8 @@
 #include <Core/EntityManager.h>
 #include <Core/InputSystem.h>
 
+// TODO ensure that all const methods return pointer to const data
+
 namespace TGL
 {
     struct ApplicationConfig
