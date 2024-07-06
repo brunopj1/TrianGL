@@ -59,7 +59,7 @@ SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const 
     return instance;
 }
 
-SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const int index)
+SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index)
 {
     ASSERT_APPLICATION_OBJECT_CREATION();
 

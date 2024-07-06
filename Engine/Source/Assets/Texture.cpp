@@ -1,4 +1,5 @@
-﻿#include <ASsets/Texture.h>
+﻿#include "Core/DataTypes.h"
+#include <ASsets/Texture.h>
 
 #include <glad/glad.h>
 #include <stb_image.h>
@@ -8,7 +9,7 @@
 
 using namespace TGL;
 
-void Sprite::Unbind(const unsigned char slot)
+void Sprite::Unbind(const u8 slot)
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -18,7 +19,7 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
     : Resolution(resolution), Offset(offset), TextureMatrix(textureMatrix)
 {}
 
-TextureSlice::TextureSlice(SharedPtr<Texture> texture, const int index)
+TextureSlice::TextureSlice(SharedPtr<Texture> texture, const u32 index)
     : m_Texture(std::move(texture)), m_Index(index)
 {}
 
@@ -37,7 +38,7 @@ glm::uvec2 TextureSlice::GetResolution() const
     return m_Texture->m_Slices[m_Index].Resolution;
 }
 
-void TextureSlice::Bind(const unsigned char slot) const
+void TextureSlice::Bind(const u8 slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_Texture->m_TextureId);
@@ -81,7 +82,7 @@ size_t Texture::GetSliceCount() const
     return m_Slices.size();
 }
 
-SharedPtr<TextureSlice> Texture::GetSlice(const unsigned int index)
+SharedPtr<TextureSlice> Texture::GetSlice(const u32 index)
 {
     if (index >= m_Slices.size())
     {
@@ -91,7 +92,7 @@ SharedPtr<TextureSlice> Texture::GetSlice(const unsigned int index)
     return AssetManager::CreateTextureSlice(ToSharedPtr(), index);
 }
 
-int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
+u32 Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
     const glm::uvec2 topRight = offset + resolution;
     if (topRight.x > m_Resolution.x || topRight.y > m_Resolution.y)
@@ -101,16 +102,16 @@ int Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 
     CreateSliceInternal(resolution, offset);
 
-    return static_cast<int>(m_Slices.size()) - 1;
+    return static_cast<u32>(m_Slices.size()) - 1;
 }
 
 SharedPtr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
-    const int index = CreateSlice(resolution, offset);
+    const i32 index = CreateSlice(resolution, offset);
     return GetSlice(index);
 }
 
-int Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
 {
     const glm::uvec2 totalPadding = padding * 2u;
     if (totalPadding.x >= m_Resolution.x || totalPadding.y >= m_Resolution.y)
@@ -128,9 +129,9 @@ int Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& pad
 
     const glm::uvec2 sliceCount = contentResolution / effectiveSliceResolution;
 
-    for (unsigned int y = 0; y < sliceCount.y; y++)
+    for (u32 y = 0; y < sliceCount.y; y++)
     {
-        for (unsigned int x = 0; x < sliceCount.x; x++)
+        for (u32 x = 0; x < sliceCount.x; x++)
         {
             const glm::uvec2 offset = padding + effectiveSliceResolution * glm::uvec2(x, y);
             CreateSliceInternal(resolution, offset);
@@ -142,12 +143,12 @@ int Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& pad
 
 std::vector<SharedPtr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
 {
-    const int sliceCount = CreateSliceGrid(resolution, padding, spacing);
+    const u32 sliceCount = CreateSliceGrid(resolution, padding, spacing);
 
     std::vector<SharedPtr<TextureSlice>> slices;
     slices.reserve(sliceCount);
 
-    for (int i = static_cast<int>(m_Slices.size()) - sliceCount; i < m_Slices.size(); i++)
+    for (u32 i = static_cast<u32>(m_Slices.size()) - sliceCount; i < m_Slices.size(); i++)
     {
         slices.push_back(GetSlice(i));
     }
@@ -177,8 +178,8 @@ void Texture::CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2
 
 void Texture::Init(const TextureParameters& parameters)
 {
-    int width, height, channels;
-    unsigned char* data = stbi_load(m_FilePath.c_str(), &width, &height, &channels, 0);
+    i32 width, height, channels;
+    u8* data = stbi_load(m_FilePath.c_str(), &width, &height, &channels, 0);
     if (!data)
     {
         throw FileNotFoundException(m_FilePath);
@@ -189,7 +190,7 @@ void Texture::Init(const TextureParameters& parameters)
     glGenTextures(1, &m_TextureId);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);
 
-    int glWrapParameter = 0;
+    i32 glWrapParameter = 0;
 
     switch (parameters.Wrap)
     {
@@ -210,8 +211,8 @@ void Texture::Init(const TextureParameters& parameters)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrapParameter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrapParameter);
 
-    const int glMagFilterParameter = parameters.Filter == TextureFilterMode::Linear ? GL_LINEAR : GL_NEAREST;
-    int glMinFilterParameter = glMagFilterParameter;
+    const i32 glMagFilterParameter = parameters.Filter == TextureFilterMode::Linear ? GL_LINEAR : GL_NEAREST;
+    i32 glMinFilterParameter = glMagFilterParameter;
 
     if (parameters.GenerateMipmaps)
     {
@@ -244,7 +245,7 @@ void Texture::Free()
     m_TextureId = 0;
 }
 
-void Texture::Bind(const unsigned char slot) const
+void Texture::Bind(const u8 slot) const
 {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_TextureId);

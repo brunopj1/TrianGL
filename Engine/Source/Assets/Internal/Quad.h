@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Core/DataTypes.h"
 
 namespace TGL
 {
@@ -14,9 +15,9 @@ namespace TGL
         ~Quad() = delete;
 
     private:
-        static inline unsigned int s_QuadVao = 0;
-        static inline unsigned int s_QuadVbo = 0;
-        static inline unsigned int s_QuadEbo = 0;
+        static inline u32 s_QuadVao = 0;
+        static inline u32 s_QuadVbo = 0;
+        static inline u32 s_QuadEbo = 0;
 
     private:
         static void Init();

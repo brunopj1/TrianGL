@@ -1,4 +1,5 @@
-﻿#include <Assets/Internal/Shader.h>
+﻿#include "Core/DataTypes.h"
+#include <Assets/Internal/Shader.h>
 
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Exceptions/Common/FileTooBigException.h>
@@ -50,12 +51,12 @@ void Shader::LinkProgram()
 
     glLinkProgram(m_ProgramId);
 
-    int success = 0;
+    i32 success = 0;
     glGetProgramiv(m_ProgramId, GL_LINK_STATUS, &success);
 
     if (success == 0)
     {
-        int logLength = 0;
+        i32 logLength = 0;
         glGetProgramiv(m_ProgramId, GL_INFO_LOG_LENGTH, &logLength);
 
         char* log = new char[logLength + 1];
@@ -68,21 +69,21 @@ void Shader::LinkProgram()
     }
 }
 
-int Shader::CompileShader(const std::string& shaderPath, const int type)
+i32 Shader::CompileShader(const std::string& shaderPath, const i32 type)
 {
     const std::string shaderSource = ReadShaderFile(shaderPath);
     const char* shaderSourcePtr = shaderSource.c_str();
 
-    const int shaderId = glCreateShader(type);
+    const i32 shaderId = glCreateShader(type);
     glShaderSource(shaderId, 1, &shaderSourcePtr, nullptr);
     glCompileShader(shaderId);
 
-    int success = 0;
+    i32 success = 0;
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
 
     if (success == 0)
     {
-        int logLength = 0;
+        i32 logLength = 0;
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
 
         char* log = new char[logLength + 1];
@@ -120,25 +121,25 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
 
 void Shader::LoadUniformLocations()
 {
-    int count = 0;
+    i32 count = 0;
     glGetProgramiv(m_ProgramId, GL_ACTIVE_UNIFORMS, &count);
 
-    GLint size;
-    GLenum type;
+    i32 size;
+    u32 type;
 
     constexpr GLsizei bufSize = 1024;
     // ReSharper disable once CppTooWideScope
-    GLchar name[bufSize];
-    GLsizei length;
+    char name[bufSize];
+    i32 length;
 
-    for (int i = 0; i < count; i++)
+    for (i32 i = 0; i < count; i++)
     {
         glGetActiveUniform(m_ProgramId, i, bufSize, &length, &size, &type, name);
         m_UniformLocations[name] = glGetUniformLocation(m_ProgramId, name);
     }
 }
 
-int Shader::GetUniformLocation(const std::string& name) const
+i32 Shader::GetUniformLocation(const std::string& name) const
 {
     const auto it = m_UniformLocations.find(name);
     return it != m_UniformLocations.end() ? it->second : -1;

@@ -10,10 +10,10 @@ RandomNumberGenerator::RandomNumberGenerator()
 {
     const auto t = std::chrono::steady_clock::now();
     const auto millis = std::chrono::duration_cast<std::chrono::nanoseconds>(t.time_since_epoch()).count();
-    m_Seed = static_cast<uint32_t>(millis);
+    m_Seed = static_cast<u32>(millis);
 }
 
-RandomNumberGenerator::RandomNumberGenerator(const unsigned int seed)
+RandomNumberGenerator::RandomNumberGenerator(const u32 seed)
     : m_Seed(seed)
 { }
 
@@ -23,13 +23,13 @@ bool RandomNumberGenerator::GetBool()
     return m_Seed % 2 == 0;
 }
 
-int RandomNumberGenerator::GetInt()
+i32 RandomNumberGenerator::GetInt()
 {
     UpdateSeed();
-    return static_cast<int>(m_Seed);
+    return static_cast<i32>(m_Seed);
 }
 
-int RandomNumberGenerator::GetInt(const int min, const int max)
+i32 RandomNumberGenerator::GetInt(const i32 min, const i32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
     
@@ -37,13 +37,13 @@ int RandomNumberGenerator::GetInt(const int min, const int max)
     return min + m_Seed % (max - min + 1);
 }
 
-unsigned int RandomNumberGenerator::GetUint()
+u32 RandomNumberGenerator::GetUint()
 {
     UpdateSeed();
     return m_Seed;
 }
 
-unsigned int RandomNumberGenerator::GetUint(const unsigned int min, const unsigned int max)
+u32 RandomNumberGenerator::GetUint(const u32 min, const u32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
     
@@ -84,7 +84,7 @@ glm::ivec2 RandomNumberGenerator::GetInt2()
     return {GetInt(), GetInt()};
 }
 
-glm::ivec2 RandomNumberGenerator::GetInt2(const int min, const int max)
+glm::ivec2 RandomNumberGenerator::GetInt2(const i32 min, const i32 max)
 {
     return {GetInt(min, max), GetInt(min, max)};
 }
@@ -98,7 +98,7 @@ glm::ivec3 RandomNumberGenerator::GetInt3()
     return {GetInt(), GetInt(), GetInt()};
 }
 
-glm::ivec3 RandomNumberGenerator::GetInt3(const int min, const int max)
+glm::ivec3 RandomNumberGenerator::GetInt3(const i32 min, const i32 max)
 {
     return {GetInt(min, max), GetInt(min, max), GetInt(min, max)};
 }
@@ -113,7 +113,7 @@ glm::ivec4 RandomNumberGenerator::GetInt4()
     return {GetInt(), GetInt(), GetInt(), GetInt()};
 }
 
-glm::ivec4 RandomNumberGenerator::GetInt4(const int min, const int max)
+glm::ivec4 RandomNumberGenerator::GetInt4(const i32 min, const i32 max)
 {
     return {GetInt(min, max), GetInt(min, max), GetInt(min, max), GetInt(min, max)};
 }
@@ -128,7 +128,7 @@ glm::uvec2 RandomNumberGenerator::GetUint2()
     return {GetUint(), GetUint()};
 }
 
-glm::uvec2 RandomNumberGenerator::GetUint2(const unsigned int min, const unsigned int max)
+glm::uvec2 RandomNumberGenerator::GetUint2(const u32 min, const u32 max)
 {
     return {GetUint(min, max), GetUint(min, max)};
 }
@@ -143,7 +143,7 @@ glm::uvec3 RandomNumberGenerator::GetUint3()
     return {GetUint(), GetUint(), GetUint()};
 }
 
-glm::uvec3 RandomNumberGenerator::GetUint3(const unsigned int min, const unsigned int max)
+glm::uvec3 RandomNumberGenerator::GetUint3(const u32 min, const u32 max)
 {
     return {GetUint(min, max), GetUint(min, max), GetUint(min, max)};
 }
@@ -158,7 +158,7 @@ glm::uvec4 RandomNumberGenerator::GetUint4()
     return {GetUint(), GetUint(), GetUint(), GetUint()};
 }
 
-glm::uvec4 RandomNumberGenerator::GetUint4(const unsigned int min, const unsigned int max)
+glm::uvec4 RandomNumberGenerator::GetUint4(const u32 min, const u32 max)
 {
     return {GetUint(min, max), GetUint(min, max), GetUint(min, max), GetUint(min, max)};
 }

@@ -2,11 +2,11 @@
 #include <GameMode/SnakeGameMode.h>
 #include "Util/MemoryLeakDetection.h"
 
-int main()
+void main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - Snake";
-    config.Vsync = true;
+    config.Vsync = false;
 
     TGL::Application app{config};
     app.SetGameMode<SnakeGameMode>();
@@ -15,6 +15,4 @@ int main()
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();
-
-    return 0;
 }

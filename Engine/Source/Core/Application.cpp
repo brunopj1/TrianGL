@@ -187,7 +187,7 @@ void Application::PollEvents()
 
 void Application::RenderDebugInfo()
 {
-    const unsigned int framerate = Clock::GetFrameRate();
+    const u32 framerate = Clock::GetFrameRate();
     const float frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
 
     std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
@@ -204,7 +204,7 @@ void Application::RenderDebugInfo()
 
 #endif
 
-void Application::ErrorCallback(const int error, const char* description)
+void Application::ErrorCallback(const i32 error, const char* description)
 {
     throw OpenGlException(error, description);
 }

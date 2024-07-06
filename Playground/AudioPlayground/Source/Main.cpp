@@ -2,7 +2,7 @@
 #include <GameMode/AudioPlaygroundGameMode.h>
 #include "Util/MemoryLeakDetection.h"
 
-int main()
+void main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - AudioPlayground";
@@ -15,6 +15,4 @@ int main()
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();
-
-    return 0;
 }

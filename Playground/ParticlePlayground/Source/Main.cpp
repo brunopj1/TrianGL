@@ -6,7 +6,7 @@
 static_assert(false, "The Playground projects are only available in Debug configurations");
 #endif
 
-int main()
+void main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - ParticlePlayground";
@@ -19,6 +19,4 @@ int main()
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();
-
-    return 0;
 }

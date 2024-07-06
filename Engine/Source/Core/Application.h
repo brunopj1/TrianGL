@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataTypes.h"
 #include <Game/GameMode.h>
 #include <Core/AssetManager.h>
 #include <Core/EntityManager.h>
@@ -47,7 +48,7 @@ namespace TGL
 #endif
 
     private:
-        [[noreturn]] static void ErrorCallback(int error, const char* description);
+        [[noreturn]] static void ErrorCallback(i32 error, const char* description);
 
     public:
         template <SpawnableGameMode T, typename... Args>

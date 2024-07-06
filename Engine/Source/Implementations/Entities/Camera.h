@@ -51,7 +51,7 @@ namespace TGL
 
         float GetAspectRatio() const;
 
-        void SetDepthRange(int min, int max);
+        void SetDepthRange(i32 min, i32 max);
         glm::vec2 GetDepthRange() const;
 
     public:

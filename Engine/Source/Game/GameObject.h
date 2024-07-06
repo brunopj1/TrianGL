@@ -15,7 +15,7 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        uint64_t m_Id = 0;
+        u64 m_Id = 0;
         bool m_ShouldUpdate;
 
     protected:
@@ -23,7 +23,7 @@ namespace TGL
         virtual ~GameObject() = default;
 
     protected:
-        virtual int GetOrderOfExecution() const;
+        virtual i32 GetOrderOfExecution() const;
 
     protected:
         virtual void OnStart();

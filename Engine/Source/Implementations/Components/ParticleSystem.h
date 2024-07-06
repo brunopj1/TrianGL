@@ -42,19 +42,19 @@ namespace TGL
     private:
         std::vector<ParticleCpuData> m_ParticlesCpu;
         std::vector<ParticleGpuData> m_ParticlesGpu;
-        unsigned int m_MaxParticles;
-        unsigned int m_NextUnusedParticleIndex = 0;
-        unsigned int m_LastUsedParticleIndex = 0;
+        u32 m_MaxParticles;
+        u32 m_NextUnusedParticleIndex = 0;
+        u32 m_LastUsedParticleIndex = 0;
         
     private:
         SharedPtr<Material> m_Material = nullptr;
         
     private:
-        unsigned int m_ParticleVao = 0;
-        unsigned int m_ParticleVbo = 0;
+        u32 m_ParticleVao = 0;
+        u32 m_ParticleVbo = 0;
         
     public:
-        ParticleSystem(unsigned int maxParticles = 1000, SharedPtr<Material> material = nullptr);
+        ParticleSystem(u32 maxParticles = 1000, SharedPtr<Material> material = nullptr);
         ~ParticleSystem() override;
 
     public:
@@ -76,6 +76,6 @@ namespace TGL
         void Terminate();
         
     private:
-        unsigned int GetNextUnusedParticleIndex();
+        u32 GetNextUnusedParticleIndex();
     };
 }

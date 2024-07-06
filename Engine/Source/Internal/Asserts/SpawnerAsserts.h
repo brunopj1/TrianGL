@@ -3,7 +3,7 @@
 #include <cassert>
 
 #ifdef DEBUG
-#define DECLARE_SPAWNER_ASSERT_VAR(type) static inline int s_##type##SpawnerUsageDepth = 0
+#define DECLARE_SPAWNER_ASSERT_VAR(type) static inline i32 s_##type##SpawnerUsageDepth = 0
 #else
 #define DECLARE_SPAWNER_ASSERT_VAR(type) static_assert(true, "")
 #endif

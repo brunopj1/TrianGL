@@ -66,7 +66,7 @@ void SpriteRenderer::Render() const
         modelMatrix = translate(modelMatrix, glm::vec3(0.5f - m_Pivot, 0.0f) * sign);
     }
 
-    if (const int zIndex = GetZIndex(); zIndex != 0)
+    if (const i32 zIndex = GetZIndex(); zIndex != 0)
     {
         modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<float>(zIndex)));
     }

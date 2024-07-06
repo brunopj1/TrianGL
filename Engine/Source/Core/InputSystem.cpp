@@ -59,7 +59,7 @@ void InputSystem::SetMousePosition(const glm::ivec2 position)
     s_MousePosition = position;
 }
 
-int InputSystem::GetMouseScroll()
+i32 InputSystem::GetMouseScroll()
 {
     return s_MouseScroll;
 }
@@ -71,7 +71,7 @@ MouseMode InputSystem::GetMouseMode()
 
 void InputSystem::SetMouseMode(MouseMode mode)
 {
-    const int glfwMode = static_cast<int>(mode);
+    const i32 glfwMode = static_cast<i32>(mode);
     glfwSetInputMode(s_WindowPtr, GLFW_CURSOR, glfwMode);
     s_MouseMode = mode;
 }
@@ -82,16 +82,16 @@ void InputSystem::Init(GLFWwindow* windowPtr)
 
     double posX, posY;
     glfwGetCursorPos(s_WindowPtr, &posX, &posY);
-    s_MousePosition = {static_cast<int>(posX), static_cast<int>(posY)};
+    s_MousePosition = {static_cast<i32>(posX), static_cast<i32>(posY)};
 
     // ReSharper disable CppParameterNeverUsed
 
-    glfwSetKeyCallback(windowPtr, [](GLFWwindow* window, const int key, int scancode, const int action, const int mods)
+    glfwSetKeyCallback(windowPtr, [](GLFWwindow* window, const i32 key, i32 scancode, const i32 action, const i32 mods)
     {
         KeyboardCallback(key, action, mods);
     });
 
-    glfwSetMouseButtonCallback(windowPtr, [](GLFWwindow* window, const int button, const int action, const int mods)
+    glfwSetMouseButtonCallback(windowPtr, [](GLFWwindow* window, const i32 button, const i32 action, const i32 mods)
     {
         MouseButtonCallback(button, action, mods);
     });
@@ -135,7 +135,7 @@ void InputSystem::OnEndOfFrame()
     s_MouseScroll = 0;
 }
 
-void InputSystem::KeyboardCallback(const int key, const int action, const int /*mods*/)
+void InputSystem::KeyboardCallback(const i32 key, const i32 action, const i32 /*mods*/)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_KeyCallback(s_WindowPtr, key, 0, action, 0);
@@ -161,7 +161,7 @@ void InputSystem::KeyboardCallback(const int key, const int action, const int /*
     }
 }
 
-void InputSystem::MouseButtonCallback(const int button, const int action, const int mods)
+void InputSystem::MouseButtonCallback(const i32 button, const i32 action, const i32 mods)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_MouseButtonCallback(s_WindowPtr, button, action, mods);
@@ -190,7 +190,7 @@ void InputSystem::MousePositionCallback(const double x, const double y)
     ImGui_ImplGlfw_CursorPosCallback(s_WindowPtr, x, y);
 #endif
 
-    s_MousePosition = {static_cast<int>(x), static_cast<int>(y)};
+    s_MousePosition = {static_cast<i32>(x), static_cast<i32>(y)};
     s_MouseDelta = s_MousePosition - s_LastMousePosition;
 }
 
@@ -201,5 +201,5 @@ void InputSystem::MouseScrollCallback(const double x, const double y)
     ImGui_ImplGlfw_ScrollCallback(s_WindowPtr, x, y);
 #endif
 
-    s_MouseScroll = static_cast<int>(y);
+    s_MouseScroll = static_cast<i32>(y);
 }

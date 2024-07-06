@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <Core/DataTypes.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
 #include <cstddef>
 #include <type_traits>
@@ -15,7 +16,7 @@ namespace TGL
         friend class SharedPtr;
 
     private:
-        unsigned int m_Counter = 1;
+        u32 m_Counter = 1;
     };
 
     // TODO can the spawner var be moved to the AssetManager?

@@ -60,7 +60,7 @@ mainSourceTemplate = f"""
 #include <GameMode/{projectName}GameMode.h>
 #include "Util/MemoryLeakDetection.h"
 {mainSourceStaticAssert if not isGame else ""}
-int main()
+void main()
 {{
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - {projectName}";
@@ -73,8 +73,6 @@ int main()
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();
-
-    return 0;
 }}
 """.strip()
 

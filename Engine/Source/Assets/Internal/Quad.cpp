@@ -22,7 +22,7 @@ void Quad::Init()
          0.5f,  0.5f,    1.0f, 1.0f     // Top Right
     };
 
-    constexpr unsigned int indices[] = {
+    constexpr u32 indices[] = {
         0, 1, 2, // Bottom Left Triangle
         1, 3, 2  // Top Right Triangle
     };

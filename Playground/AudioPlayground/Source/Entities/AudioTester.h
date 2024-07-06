@@ -6,12 +6,12 @@
 class AudioTester final : public TGL::Entity
 {
 private:
-    static inline int s_NextId = 1;
+    static inline i32 s_NextId = 1;
     static inline std::vector<AudioTester*> s_Instances;
 
 private:
     TGL::SharedPtr<TGL::Audio> m_Audio;
-    int m_AudioId;
+    i32 m_AudioId;
 
 private:
     glm::vec2 m_WindowPos;
@@ -24,5 +24,5 @@ protected:
     void OnUpdate(float deltaTime) override;
 
 public:
-    static void RenderAudioSelector(TGL::AudioPlayer* audioPlayer, int& currentAudioId);
+    static void RenderAudioSelector(TGL::AudioPlayer* audioPlayer, i32& currentAudioId);
 };

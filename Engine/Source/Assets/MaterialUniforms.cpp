@@ -1,4 +1,5 @@
-﻿#include <Assets/MaterialUniforms.h>
+﻿#include "Core/DataTypes.h"
+#include <Assets/MaterialUniforms.h>
 
 #include <Assets/Texture.h>
 #include <Core/AssetManager.h>
@@ -32,7 +33,7 @@ void MaterialUniform::Bind() const
 }
 
 template<>
-void MaterialUniformImpl<int>::BindInternal() const
+void MaterialUniformImpl<i32>::BindInternal() const
 {
     glUniform1i(m_Location, Value);
 }
@@ -52,7 +53,7 @@ void MaterialUniformImpl<glm::ivec4>::BindInternal() const
     glUniform4iv(m_Location, 1, &Value[0]);
 }
 
-void MaterialUniformImpl<unsigned int>::BindInternal() const
+void MaterialUniformImpl<u32>::BindInternal() const
 {
     glUniform1ui(m_Location, Value);
 }

@@ -40,8 +40,8 @@ namespace TGL
         virtual ~Sprite() = default;
 
     private:
-        static void Unbind(unsigned char slot);
-        virtual void Bind(unsigned char slot) const = 0;
+        static void Unbind(u8 slot);
+        virtual void Bind(u8 slot) const = 0;
 
         virtual glm::mat4* GetMatrix() const = 0;
         virtual glm::uvec2 GetResolution() const = 0;
@@ -69,10 +69,10 @@ namespace TGL
 
     private:
         SharedPtr<Texture> m_Texture;
-        int m_Index;
+        i32 m_Index;
 
     public:
-        TextureSlice(SharedPtr<Texture> texture, int index);
+        TextureSlice(SharedPtr<Texture> texture, u32 index);
         ~TextureSlice() override;
 
     public:
@@ -80,7 +80,7 @@ namespace TGL
         glm::uvec2 GetResolution() const override; // Also used by Sprite class
 
     private:
-        void Bind(unsigned char slot) const override;
+        void Bind(u8 slot) const override;
         glm::mat4* GetMatrix() const override;
     };
 
@@ -95,7 +95,7 @@ namespace TGL
 
     private:
         std::string m_FilePath;
-        unsigned int m_TextureId = 0;
+        u32 m_TextureId = 0;
         glm::uvec2 m_Resolution = {0, 0};
 
     private:
@@ -114,12 +114,12 @@ namespace TGL
 
     public:
         size_t GetSliceCount() const;
-        SharedPtr<TextureSlice> GetSlice(unsigned int index);
+        SharedPtr<TextureSlice> GetSlice(u32 index);
 
-        int CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset); // Returns the slice index
+        u32 CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset); // Returns the slice index
         SharedPtr<TextureSlice> CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset);
 
-        int CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0}); // Returns the slice index
+        u32 CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0}); // Returns the slice index
         std::vector<SharedPtr<TextureSlice>> CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0});
 
     private:
@@ -130,7 +130,7 @@ namespace TGL
         void Free();
 
     private:
-        void Bind(unsigned char slot) const override;
+        void Bind(u8 slot) const override;
         glm::mat4* GetMatrix() const override;
     };
 }

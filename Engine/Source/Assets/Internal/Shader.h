@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <Core/DataTypes.h>
 #include <string>
 #include <unordered_map>
 
@@ -19,12 +20,12 @@ namespace TGL
         std::string m_VertexShader;
         std::string m_FragmentShader;
 
-        std::unordered_map<std::string, int> m_UniformLocations;
+        std::unordered_map<std::string, i32> m_UniformLocations;
 
     private:
-        int m_ProgramId = 0;
-        int m_VertexShaderId = 0;
-        int m_FragmentShaderId = 0;
+        i32 m_ProgramId = 0;
+        i32 m_VertexShaderId = 0;
+        i32 m_FragmentShaderId = 0;
 
     private:
         Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
@@ -36,12 +37,12 @@ namespace TGL
 
     private:
         void LinkProgram();
-        static int CompileShader(const std::string& shaderPath, int type);
+        static i32 CompileShader(const std::string& shaderPath, i32 type);
         static std::string ReadShaderFile(const std::string& filePath);
 
     private:
         void LoadUniformLocations();
-        int GetUniformLocation(const std::string& name) const;
+        i32 GetUniformLocation(const std::string& name) const;
 
     private:
         void Use() const;

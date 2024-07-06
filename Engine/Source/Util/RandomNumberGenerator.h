@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Core/DataTypes.h"
 #include <glm/glm.hpp>
 
 namespace TGL
@@ -10,21 +11,21 @@ namespace TGL
         friend class Application;
         
     private:
-        unsigned int m_Seed;
+        u32 m_Seed;
         
     public:
         RandomNumberGenerator(); // Will use a random seed
-        RandomNumberGenerator(unsigned int seed);
+        RandomNumberGenerator(u32 seed);
         ~RandomNumberGenerator() = default;
 
     public:
         bool GetBool();
         
-        int GetInt();
-        int GetInt(int min, int max);
+        i32 GetInt();
+        i32 GetInt(i32 min, i32 max);
         
-        unsigned int GetUint();
-        unsigned int GetUint(unsigned int min, unsigned int max);
+        u32 GetUint();
+        u32 GetUint(u32 min, u32 max);
         
         float GetFloat();
         float GetFloat(float min, float max);
@@ -33,27 +34,27 @@ namespace TGL
         double GetDouble(double min, double max);
 
         glm::ivec2 GetInt2();
-        glm::ivec2 GetInt2(int min, int max);
+        glm::ivec2 GetInt2(i32 min, i32 max);
         glm::ivec2 GetInt2(const glm::ivec2& min, const glm::ivec2& max);
 
         glm::ivec3 GetInt3();
-        glm::ivec3 GetInt3(int min, int max);
+        glm::ivec3 GetInt3(i32 min, i32 max);
         glm::ivec3 GetInt3(const glm::ivec3& min, const glm::ivec3& max);
 
         glm::ivec4 GetInt4();
-        glm::ivec4 GetInt4(int min, int max);
+        glm::ivec4 GetInt4(i32 min, i32 max);
         glm::ivec4 GetInt4(const glm::ivec4& min, const glm::ivec4& max);
 
         glm::uvec2 GetUint2();
-        glm::uvec2 GetUint2(unsigned int min, unsigned int max);
+        glm::uvec2 GetUint2(u32 min, u32 max);
         glm::uvec2 GetUint2(const glm::uvec2& min, const glm::uvec2& max);
 
         glm::uvec3 GetUint3();
-        glm::uvec3 GetUint3(unsigned int min, unsigned int max);
+        glm::uvec3 GetUint3(u32 min, u32 max);
         glm::uvec3 GetUint3(const glm::uvec3& min, const glm::uvec3& max);
 
         glm::uvec4 GetUint4();
-        glm::uvec4 GetUint4(unsigned int min, unsigned int max);
+        glm::uvec4 GetUint4(u32 min, u32 max);
         glm::uvec4 GetUint4(const glm::uvec4& min, const glm::uvec4& max);
 
         glm::vec2 GetFloat2();

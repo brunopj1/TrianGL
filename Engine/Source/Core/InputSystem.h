@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "DataTypes.h"
 #include <Core/InputCodes.h>
 #include <glm/vec2.hpp>
 #include <unordered_set>
@@ -34,7 +35,7 @@ namespace TGL
         static inline glm::ivec2 s_LastMousePosition = {0, 0};
 
         static inline glm::ivec2 s_MouseDelta = {0, 0};
-        static inline int s_MouseScroll = 0;
+        static inline i32 s_MouseScroll = 0;
 
         static inline MouseMode s_MouseMode = MouseMode::Normal;
 
@@ -56,7 +57,7 @@ namespace TGL
         static glm::ivec2 GetMouseDelta();
         static void SetMousePosition(glm::ivec2 position);
 
-        static int GetMouseScroll();
+        static i32 GetMouseScroll();
 
         static MouseMode GetMouseMode();
         static void SetMouseMode(MouseMode mode);
@@ -68,8 +69,8 @@ namespace TGL
         static void OnEndOfFrame();
 
     private:
-        static void KeyboardCallback(int key, int action, int mods);
-        static void MouseButtonCallback(int button, int action, int mods);
+        static void KeyboardCallback(i32 key, i32 action, i32 mods);
+        static void MouseButtonCallback(i32 button, i32 action, i32 mods);
         static void MousePositionCallback(double x, double y);
         static void MouseScrollCallback(double x, double y);
     };

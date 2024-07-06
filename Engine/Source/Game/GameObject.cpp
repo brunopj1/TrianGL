@@ -6,7 +6,7 @@ GameObject::GameObject(const bool shouldUpdate)
     : m_ShouldUpdate(shouldUpdate)
 {}
 
-int GameObject::GetOrderOfExecution() const
+i32 GameObject::GetOrderOfExecution() const
 {
     return 0;
 }

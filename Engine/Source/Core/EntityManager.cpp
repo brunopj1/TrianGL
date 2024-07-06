@@ -60,14 +60,14 @@ GameMode* EntityManager::GetGameMode()
     return s_GameMode;
 }
 
-Entity* EntityManager::GetEntity(const uint64_t id)
+Entity* EntityManager::GetEntity(const u64 id)
 {
     const auto it = s_Entities.find(id);
     if (it != s_Entities.end()) return it->second;
     return nullptr;
 }
 
-Component* EntityManager::GetComponent(const uint64_t id)
+Component* EntityManager::GetComponent(const u64 id)
 {
     const auto it = s_Components.find(id);
     if (it != s_Components.end()) return it->second;

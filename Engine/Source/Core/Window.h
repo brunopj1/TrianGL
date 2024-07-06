@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DataTypes.h"
 #include <string>
 #include <glm/vec2.hpp>
 
@@ -62,8 +63,8 @@ namespace TGL
         static void Terminate();
 
     private:
-        static void PositionCallback(int x, int y);
-        static void SizeCallback(int width, int height);
+        static void PositionCallback(i32 x, i32 y);
+        static void SizeCallback(i32 width, i32 height);
 
         static void FullscreenCallback(bool fullscreen);
         static void MaximizeCallback();

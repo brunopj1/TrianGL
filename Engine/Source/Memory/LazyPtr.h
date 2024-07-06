@@ -15,7 +15,7 @@ namespace TGL
         friend class LazyPtr;
 
     private:
-        uint64_t m_Id;
+        u64 m_Id;
 
     public:
         LazyPtr(T* ptr)
@@ -29,7 +29,7 @@ namespace TGL
         ~LazyPtr() = default;
 
     private:
-        LazyPtr(const uint64_t id)
+        LazyPtr(const u64 id)
             : m_Id(id)
         {}
 

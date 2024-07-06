@@ -15,7 +15,7 @@
 using namespace TGL;
 using namespace TGL;
 
-constexpr int minimun_window_resolution = 400;
+constexpr i32 minimun_window_resolution = 400;
 
 bool Window::IsFullscreen()
 {
@@ -163,22 +163,22 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
 
     glfwSetWindowSizeLimits(s_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
-    glfwSetWindowPosCallback(s_WindowPtr, [](GLFWwindow* _, const int x, const int y)
+    glfwSetWindowPosCallback(s_WindowPtr, [](GLFWwindow* _, const i32 x, const i32 y)
     {
         PositionCallback(x, y);
     });
 
-    glfwSetWindowSizeCallback(s_WindowPtr, [](GLFWwindow* _, const int width, const int height)
+    glfwSetWindowSizeCallback(s_WindowPtr, [](GLFWwindow* _, const i32 width, const i32 height)
     {
         SizeCallback(width, height);
     });
 
-    glfwSetWindowMaximizeCallback(s_WindowPtr, [](GLFWwindow* _, const int maximized)
+    glfwSetWindowMaximizeCallback(s_WindowPtr, [](GLFWwindow* _, const i32 maximized)
     {
         maximized ? MaximizeCallback() : RestoreCallback();
     });
 
-    glfwSetWindowIconifyCallback(s_WindowPtr, [](GLFWwindow* _, const int minimized)
+    glfwSetWindowIconifyCallback(s_WindowPtr, [](GLFWwindow* _, const i32 minimized)
     {
         minimized ? MinimizeCallback() : RestoreCallback();
     });
@@ -198,7 +198,7 @@ void Window::Terminate()
     glfwTerminate();
 }
 
-void Window::PositionCallback(int x, int y)
+void Window::PositionCallback(i32 x, i32 y)
 {
     s_Position = {x, y};
 
@@ -208,7 +208,7 @@ void Window::PositionCallback(int x, int y)
     }
 }
 
-void Window::SizeCallback(int width, int height)
+void Window::SizeCallback(i32 width, i32 height)
 {
     s_Resolution = {width, height};
     s_AspectRatio = static_cast<float>(width) / static_cast<float>(height);

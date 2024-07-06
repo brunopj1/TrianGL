@@ -41,7 +41,7 @@ void AudioTester::OnUpdate(float deltaTime)
     ImGui::End();
 }
 
-void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, int& currentAudioId)
+void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, i32& currentAudioId)
 {
     if (ImGui::RadioButton("None", currentAudioId == 0))
     {
@@ -49,9 +49,9 @@ void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, int& currentAudi
         audioPlayer->SetAudio(nullptr);
     }
 
-    for (int i = 0; i < s_Instances.size(); i++)
+    for (i32 i = 0; i < s_Instances.size(); i++)
     {
-        const int audioId = i + 1;
+        const i32 audioId = i + 1;
         if (ImGui::RadioButton(std::format("Audio {}", i + 1).c_str(), currentAudioId == audioId))
         {
             currentAudioId = audioId;

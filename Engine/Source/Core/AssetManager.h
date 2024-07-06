@@ -50,7 +50,7 @@ namespace TGL
         static inline SoLoud::Soloud* s_SoloudEngine = nullptr;
 
     private:
-        static inline std::unordered_map<Shader*, unsigned int, ShaderHash, ShaderEqual> s_Shaders;
+        static inline std::unordered_map<Shader*, u32, ShaderHash, ShaderEqual> s_Shaders;
 
     public:
         AssetManager() = delete;
@@ -63,7 +63,7 @@ namespace TGL
     private:
         static SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
 
-        static SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, int index);
+        static SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
 
         static void UnloadTexture(Texture* texture);
 
@@ -87,7 +87,7 @@ namespace TGL
         }
 
         template <SpawnableMaterialUniform T>
-        static T* CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, unsigned char& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
+        static T* CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
         {
             // No need to assert here since this doesn't interact with OpenGL
 

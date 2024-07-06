@@ -88,7 +88,7 @@ float Camera::GetAspectRatio() const
     return m_AspectRatio;
 }
 
-void Camera::SetDepthRange(int min, int max)
+void Camera::SetDepthRange(i32 min, i32 max)
 {
     if (max <= min)
     {

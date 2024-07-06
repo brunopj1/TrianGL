@@ -22,7 +22,7 @@ namespace TGL
 
     private:
         SharedPtr<Audio> m_Audio;
-        int m_Handle = -1;
+        i32 m_Handle = -1;
 
     private:
         AudioPlayerStatus m_Status = AudioPlayerStatus::Stopped;

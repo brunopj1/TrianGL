@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Core/DataTypes.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Core/AssetManager.h>
@@ -21,7 +22,7 @@ namespace TGL
     private:
         Shader* m_Shader;
         std::vector<MaterialUniform*> m_Uniforms;
-        unsigned char m_NextTextureSlot = 0;
+        u8 m_NextTextureSlot = 0;
 
     private:
         Mat4Uniform* m_PvmMatrix;

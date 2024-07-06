@@ -38,6 +38,8 @@ SnakeGameMode::SnakeGameMode()
     m_AudioManager = SpawnEntity<AudioManager>();
 
     m_Grid->FocusCamera();
+
+    Camera::GetMainCamera()->SetBackgroundColor({0.07, 0.59, 0.85});
 }
 
 void SnakeGameMode::OnEarlyUpdate(const float deltaTime)

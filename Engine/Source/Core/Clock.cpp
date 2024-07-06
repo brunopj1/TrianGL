@@ -40,12 +40,12 @@ float Clock::GetDeltaTime()
     return s_DeltaTime;
 }
 
-unsigned Clock::GetFrameCount()
+u32 Clock::GetFrameCount()
 {
     return s_TotalFrameCount;
 }
 
-unsigned Clock::GetFrameRate()
+u32 Clock::GetFrameRate()
 {
     return s_FrameRate;
 }

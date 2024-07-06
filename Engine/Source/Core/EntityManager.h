@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "DataTypes.h"
 #include <Exceptions/Game/GameModeAlreadySpecifiedException.h>
 #include <vector>
 #include <unordered_map>
@@ -31,13 +32,13 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(Component);
 
     private:
-        static inline uint64_t s_NextId = 1;
+        static inline u64 s_NextId = 1;
 
     private:
         static inline GameMode* s_GameMode = nullptr;
 
-        static inline std::unordered_map<uint64_t, Entity*> s_Entities;
-        static inline std::unordered_map<uint64_t, Component*> s_Components;
+        static inline std::unordered_map<u64, Entity*> s_Entities;
+        static inline std::unordered_map<u64, Component*> s_Components;
 
         static inline std::vector<GameObject*> s_OnUpdateQueue;
         static inline std::vector<GameObject*> s_OnStartQueue;
@@ -58,8 +59,8 @@ namespace TGL
 
     private:
         static GameMode* GetGameMode();
-        static Entity* GetEntity(uint64_t id);
-        static Component* GetComponent(uint64_t id);
+        static Entity* GetEntity(u64 id);
+        static Component* GetComponent(u64 id);
 
         static size_t GetEntityCount();
         static size_t GetComponentCount();

@@ -8,7 +8,7 @@
 
 using namespace TGL;
 
-ParticleSystem::ParticleSystem(const unsigned int maxParticles, SharedPtr<Material> material)
+ParticleSystem::ParticleSystem(const u32 maxParticles, SharedPtr<Material> material)
     : Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
     
@@ -43,7 +43,7 @@ SharedPtr<DefaultParticleMaterial> ParticleSystem::UseDefaultMaterial()
 
 bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 {
-    const unsigned int nextIndex = GetNextUnusedParticleIndex();
+    const u32 nextIndex = GetNextUnusedParticleIndex();
     if (nextIndex == m_MaxParticles) return false;
 
     auto& cpuParticle = m_ParticlesCpu[nextIndex];
@@ -78,7 +78,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 
 void ParticleSystem::OnUpdate(const float deltaTime)
 {
-    for (unsigned int i = 0; i <= m_LastUsedParticleIndex; i++)
+    for (u32 i = 0; i <= m_LastUsedParticleIndex; i++)
     {
         auto& cpuParticle = m_ParticlesCpu[i];
         auto& gpuParticle = m_ParticlesGpu[i];
@@ -120,7 +120,7 @@ void ParticleSystem::Render() const
 
     glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
 
-    if (const int zIndex = GetZIndex(); zIndex != 0)
+    if (const i32 zIndex = GetZIndex(); zIndex != 0)
     {
         modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<float>(zIndex)));
     }
@@ -189,12 +189,12 @@ void ParticleSystem::Terminate()
     m_ParticleVao = 0;
 }
 
-unsigned int ParticleSystem::GetNextUnusedParticleIndex()
+u32 ParticleSystem::GetNextUnusedParticleIndex()
 {
-    const unsigned int nextIndex = m_NextUnusedParticleIndex;
+    const u32 nextIndex = m_NextUnusedParticleIndex;
     m_NextUnusedParticleIndex = m_MaxParticles;
     
-    for (unsigned int i = nextIndex; i < m_MaxParticles; ++i)
+    for (u32 i = nextIndex; i < m_MaxParticles; ++i)
     {
         if (m_ParticlesCpu[i].RemainingDuration <= 0.0f)
         {

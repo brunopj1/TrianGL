@@ -18,7 +18,7 @@ namespace TGL
         friend class Material;
 
     protected:
-        int m_Location;
+        i32 m_Location;
 
     protected:
         MaterialUniform(const Shader* shader, const std::string& name);
@@ -56,7 +56,7 @@ namespace TGL
     
     // Common implementations
 
-    using IntUniform = MaterialUniformImpl<int>;
+    using IntUniform = MaterialUniformImpl<i32>;
     
     using Int2Uniform = MaterialUniformImpl<glm::ivec2>;
     
@@ -64,7 +64,7 @@ namespace TGL
     
     using Int4Uniform = MaterialUniformImpl<glm::ivec4>;
     
-    using UintUniform = MaterialUniformImpl<unsigned int>;
+    using UintUniform = MaterialUniformImpl<u32>;
     
     using Uint2Uniform = MaterialUniformImpl<glm::uvec2>;
     
@@ -72,7 +72,7 @@ namespace TGL
     
     using Uint4Uniform = MaterialUniformImpl<glm::uvec4>;
     
-    using FloatUniform = MaterialUniformImpl<float>;
+    using FloatUniform = MaterialUniformImpl<f32>;
     
     using Float2Uniform = MaterialUniformImpl<glm::vec2>;
     
@@ -94,9 +94,9 @@ namespace TGL
         friend class AssetManager;
 
     private:
-        int m_MatrixLocation;
-        int m_ResolutionLocation;
-        unsigned char m_Slot;
+        i32 m_MatrixLocation;
+        i32 m_ResolutionLocation;
+        u8 m_Slot;
 
     public:
         SharedPtr<Sprite> Value;

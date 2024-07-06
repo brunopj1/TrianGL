@@ -4,12 +4,12 @@
 
 using namespace TGL;
 
-int Renderable::GetZIndex() const
+i32 Renderable::GetZIndex() const
 {
     return m_ZIndex;
 }
 
-void Renderable::SetZIndex(const int zIndex)
+void Renderable::SetZIndex(const i32 zIndex)
 {
     const bool valueChanged = m_ZIndex != zIndex;
 

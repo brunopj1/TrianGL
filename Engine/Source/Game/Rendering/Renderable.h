@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "Core/DataTypes.h"
 
 namespace TGL
 {
@@ -8,15 +9,15 @@ namespace TGL
         friend class EntityManager;
 
     private:
-        int m_ZIndex = 0;
+        i32 m_ZIndex = 0;
 
     protected:
         Renderable() = default;
         virtual ~Renderable() = default;
 
     public:
-        int GetZIndex() const;
-        void SetZIndex(int zIndex);
+        i32 GetZIndex() const;
+        void SetZIndex(i32 zIndex);
 
     protected:
         virtual void Render() const = 0;
