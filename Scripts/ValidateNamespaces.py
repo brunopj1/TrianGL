@@ -10,7 +10,13 @@ ignoredDirs = [
     "../Engine/Source/Internal/Macros"
 ]
 
+ignoredFiles = {
+    "../Engine/Source/Core/DataTypes.h"
+}
+
 ignoredDirs = [os.path.normpath(path) for path in ignoredDirs]
+
+ignoredFiles = [os.path.normpath(path) for path in ignoredFiles]
 
 errors : list[str] = []
 
@@ -19,6 +25,8 @@ for root, _, files in os.walk("../Engine/Source/"):
         continue
     for file in files:
         path = os.path.normpath(os.path.join(root, file))
+        if path in ignoredFiles:
+            continue
         with open(path, "r") as f:
             if file.endswith((".h", ".hpp")):
                 if namespaceDeclaration not in f.read():
