@@ -13,6 +13,7 @@ MouseParticleEmitter::MouseParticleEmitter()
 {
     m_ParticleSystem = AttachComponent<ParticleSystem>(3000);
     m_Material = m_ParticleSystem->UseDefaultMaterial();
+    m_Material->FadeDuration->Value = 1.0f;
 
     TextureParameters params;
     params.Filter = TextureFilterMode::Nearest;
@@ -22,7 +23,7 @@ MouseParticleEmitter::MouseParticleEmitter()
     m_Texture->CreateSliceGrid({15, 15});
 }
 
-void MouseParticleEmitter::OnUpdate(const float deltaTime)
+void MouseParticleEmitter::OnUpdate(const f32 deltaTime)
 {
     RenderImGui();
     
@@ -39,7 +40,7 @@ void MouseParticleEmitter::OnUpdate(const float deltaTime)
     const glm::ivec2 mouseScreenPosition = InputSystem::GetMousePosition();
     const glm::vec2 mouseWorldPosition = camera->ScreenToWorldPosition(mouseScreenPosition);
 
-    for (int i = 0; i < 3; i++)
+    for (i32 i = 0; i < 3; i++)
     {
         ParticleSpawnData spawnData;
 
@@ -47,7 +48,7 @@ void MouseParticleEmitter::OnUpdate(const float deltaTime)
         
         spawnData.Duration = m_Random.GetFloat(m_MinDuration, m_MaxDuration);
 
-        const float angle = m_Random.GetFloat(0.0f, 2.0f * glm::pi<float>());
+        const f32 angle = m_Random.GetFloat(0.0f, 2.0f * glm::pi<f32>());
         spawnData.Velocity = glm::vec2(cos(angle), sin(angle)) * m_Random.GetFloat(m_MinVelocity, m_MaxVelocity);
         
         spawnData.StartScale = m_Random.GetFloat(m_MinStartScale, m_MaxStartScale);
@@ -95,7 +96,7 @@ void MouseParticleEmitter::RenderImGui()
     ImGui::End();
 }
 
-void MouseParticleEmitter::RenderImGuiRangeFloat(const char* label, float& value1, float& value2, const float min, const float max)
+void MouseParticleEmitter::RenderImGuiRangeFloat(const char* label, f32& value1, f32& value2, const f32 min, const f32 max)
 {
     ImGui::Text("%s", label);
 
@@ -137,7 +138,7 @@ void MouseParticleEmitter::RenderImGuiMaterialSettings()
 
     ImGui::PushID("Border Radius");
 
-    float& value = m_Material->BorderRadius->Value;
+    f32& value = m_Material->BorderRadius->Value;
 
     ImGui::SliderFloat("Value", &value, 0.0f, 0.5f);
 

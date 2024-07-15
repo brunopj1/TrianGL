@@ -1,5 +1,6 @@
 #version 430 core
 
+uniform float uFadeDuration;
 uniform float uBorderRadius;
 uniform int uIsSpriteValid;
 uniform sampler2D uSprite;
@@ -25,7 +26,11 @@ void main()
         alpha = 1.0 - step(0.0, d);
     }
     
-    float fade = clamp(remainingDuration, 0.0, 1.0);
+    float fade = 1.0;
+    if (uFadeDuration > 0.0)
+    {
+        fade = clamp(remainingDuration, 0.0, uFadeDuration) / uFadeDuration;
+    }
     
     if (uIsSpriteValid == 0) 
     {

@@ -18,7 +18,7 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
     m_WindowPos.x += (audio_window_size.x + window_padding.x) * (m_AudioId - 1); // Skip the previous audio windows horizontally
 }
 
-void AudioTester::OnUpdate(float deltaTime)
+void AudioTester::OnUpdate(f32 deltaTime)
 {
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_window_size.x, audio_window_size.y), ImGuiCond_Appearing);
@@ -31,7 +31,7 @@ void AudioTester::OnUpdate(float deltaTime)
 
         ImGui::Separator();
 
-        float volume = m_Audio->GetVolume();
+        f32 volume = m_Audio->GetVolume();
         if (ImGui::SliderFloat("Volume", &volume, 0.0f, 5.0f))
         {
             m_Audio->SetVolume(volume);

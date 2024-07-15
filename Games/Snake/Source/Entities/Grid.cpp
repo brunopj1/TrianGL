@@ -2,6 +2,7 @@
 
 #include "Implementations/Components/SpriteRenderer.h"
 #include "Core/Window.h"
+#include "GameMode/RenderingOrder.h"
 #include "Implementations/Entities/Camera.h"
 #include "Materials/GrassMaterial.h"
 #include "glm/glm.hpp"
@@ -15,7 +16,7 @@ Grid::Grid(SharedPtr<Texture> spriteSheet, const glm::uvec2 dimensions)
 {
     m_SpriteRenderer = AttachComponent<SpriteRenderer>();
     m_SpriteRenderer->SetPivot({0, 0});
-    m_SpriteRenderer->SetZIndex(-1);
+    m_SpriteRenderer->SetZIndex(static_cast<i32>(RenderingOrder::Grid));
 
     const auto material = Material::CreateInstanceOf<GrassMaterial>();
     m_SpriteRenderer->SetMaterial(material);
@@ -33,14 +34,14 @@ glm::uvec2 Grid::GetSize() const
     return m_Size;
 }
 
-unsigned Grid::GetCellCount() const
+u32 Grid::GetCellCount() const
 {
     return m_Size.x * m_Size.y;
 }
 
 Entity* Grid::GetCell(const glm::uvec2& position) const
 {
-    const unsigned index = position.y * m_Size.x + position.x;
+    const u32 index = position.y * m_Size.x + position.x;
     return m_Cells.at(index);
 }
 
@@ -51,7 +52,7 @@ void Grid::SetCell(const glm::uvec2& position, Entity* entity)
         throw std::runtime_error("Position out of bounds");
     }
 
-    const unsigned index = position.y * m_Size.x + position.x;
+    const u32 index = position.y * m_Size.x + position.x;
     m_Cells.at(index) = entity;
 
     if (entity != nullptr)
@@ -62,9 +63,9 @@ void Grid::SetCell(const glm::uvec2& position, Entity* entity)
 
 std::optional<glm::ivec2> Grid::GetRandomFreeCell()
 {
-    std::vector<unsigned> freeIndices;
+    std::vector<u32> freeIndices;
 
-    for (unsigned i = 0; i < m_Cells.size(); ++i)
+    for (u32 i = 0; i < m_Cells.size(); ++i)
     {
         if (m_Cells[i] == nullptr)
         {
@@ -77,8 +78,8 @@ std::optional<glm::ivec2> Grid::GetRandomFreeCell()
         return std::nullopt;
     }
 
-    const unsigned freeIndexCount = static_cast<unsigned int>(freeIndices.size());
-    const unsigned randomIndex = freeIndices[m_Random.GetUint(0, freeIndexCount - 1)];
+    const u32 freeIndexCount = static_cast<u32>(freeIndices.size());
+    const u32 randomIndex = freeIndices[m_Random.GetUint(0, freeIndexCount - 1)];
     return glm::ivec2(randomIndex % m_Size.x, randomIndex / m_Size.x);
 }
 
@@ -89,7 +90,7 @@ void Grid::Resize(const glm::uvec2& size)
     const auto material = CastTo<GrassMaterial>(m_SpriteRenderer->GetMaterial());
     material->GridSize->Value = m_Size;
 
-    const unsigned gridSize = m_Size.x * m_Size.y;
+    const u32 gridSize = m_Size.x * m_Size.y;
     m_Cells.clear();
     m_Cells.resize(gridSize, nullptr);
 
@@ -101,7 +102,7 @@ void Grid::Resize(const glm::uvec2& size)
 void Grid::FocusCamera() const
 {
     const auto camera = Camera::GetMainCamera();
-    const float aspectRatio = camera->GetAspectRatio();
+    const f32 aspectRatio = camera->GetAspectRatio();
 
     if (aspectRatio > 1)
     {

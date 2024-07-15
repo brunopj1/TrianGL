@@ -22,7 +22,7 @@ public:
 
 public:
     glm::uvec2 GetSize() const;
-    unsigned int GetCellCount() const;
+    u32 GetCellCount() const;
 
     Entity* GetCell(const glm::uvec2& position) const;
     void SetCell(const glm::uvec2& position, Entity* entity);

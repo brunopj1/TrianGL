@@ -20,7 +20,7 @@ AudioPlayerTester::AudioPlayerTester()
     m_WindowPos.x += (audio_player_window_size.x + window_padding.x) * (m_AudioPlayerId - 1); // Skip the previous audio player windows horizontally
 }
 
-void AudioPlayerTester::OnUpdate(float deltaTime)
+void AudioPlayerTester::OnUpdate(f32 deltaTime)
 {
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_player_window_size.x, audio_player_window_size.y), ImGuiCond_Appearing);
@@ -54,7 +54,7 @@ void AudioPlayerTester::OnUpdate(float deltaTime)
 
         ImGui::Separator();
 
-        float volume = m_AudioPlayer->GetVolume();
+        f32 volume = m_AudioPlayer->GetVolume();
         if (ImGui::SliderFloat("Volume", &volume, 0.0f, 5.0f))
         {
             m_AudioPlayer->SetVolume(volume);

@@ -37,19 +37,21 @@ SnakeGameMode::SnakeGameMode()
 
     m_AudioManager = SpawnEntity<AudioManager>();
 
+    m_ParticleEmitter = SpawnEntity<ParticleEmitter>();
+
     m_Grid->FocusCamera();
 
     Camera::GetMainCamera()->SetBackgroundColor({0.07, 0.59, 0.85});
 }
 
-void SnakeGameMode::OnEarlyUpdate(const float deltaTime)
+void SnakeGameMode::OnEarlyUpdate(const f32 deltaTime)
 {
 #ifdef DEBUG
     RenderImGui();
 #endif
 }
 
-void SnakeGameMode::OnLateUpdate(const float deltaTime)
+void SnakeGameMode::OnLateUpdate(const f32 deltaTime)
 {
     if (m_Victory)
     {
@@ -62,7 +64,7 @@ void SnakeGameMode::OnLateUpdate(const float deltaTime)
     {
         m_TickTimer = m_TickRate;
 
-        m_Snake->Move(m_Grid, m_AudioManager);
+        m_Snake->Move(m_Grid, m_AudioManager, m_ParticleEmitter);
 
         if (!m_Apple.IsValid())
         {

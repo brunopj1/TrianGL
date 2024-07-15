@@ -22,5 +22,5 @@ public:
     ~AudioPlayerTester() override = default;
 
 protected:
-    void OnUpdate(float deltaTime) override;
+    void OnUpdate(f32 deltaTime) override;
 };

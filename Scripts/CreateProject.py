@@ -80,6 +80,7 @@ gamemodeHeaderTemplate = f"""
 #pragma once
 
 #include "Game/GameMode.h"
+#include "Core/DataTypes.h"
 
 class {projectName}GameMode : public TGL::GameMode
 {{
@@ -88,9 +89,9 @@ public:
     ~{projectName}GameMode() override = default;
 
 private:
-    void OnUpdate(float deltaTime) override;
-    void OnEarlyUpdate(float deltaTime) override;
-    void OnLateUpdate(float deltaTime) override;
+    void OnUpdate(f32 deltaTime) override;
+    void OnEarlyUpdate(f32 deltaTime) override;
+    void OnLateUpdate(f32 deltaTime) override;
 }};
 """.strip()
 
@@ -106,17 +107,17 @@ using namespace TGL;
     Camera* camera = SpawnEntity<Camera>(true);
 }}
 
-void {projectName}GameMode::OnUpdate(float deltaTime)
+void {projectName}GameMode::OnUpdate(f32 deltaTime)
 {{
     
 }}
 
-void {projectName}GameMode::OnEarlyUpdate(float deltaTime)
+void {projectName}GameMode::OnEarlyUpdate(f32 deltaTime)
 {{
     
 }}
 
-void {projectName}GameMode::OnLateUpdate(float deltaTime)
+void {projectName}GameMode::OnLateUpdate(f32 deltaTime)
 {{
     
 }}

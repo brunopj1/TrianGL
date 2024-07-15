@@ -5,6 +5,7 @@
 #include "Memory/LazyPtr.h"
 #include "Entities/AudioManager.h"
 #include "Entities/Grid.h"
+#include "Entities/ParticleEmitter.h"
 #include "Events/WindowEvents.h"
 #include "Game/GameMode.h"
 
@@ -15,22 +16,23 @@ private:
 
     Grid* m_Grid;
     AudioManager* m_AudioManager;
+    ParticleEmitter* m_ParticleEmitter;
 
     Snake* m_Snake;
     TGL::LazyPtr<Apple> m_Apple;
 
     bool m_Victory = false;
 
-    float m_TickRate;
-    float m_TickTimer;
+    f32 m_TickRate;
+    f32 m_TickTimer;
 
 public:
     SnakeGameMode();
     ~SnakeGameMode() override = default;
 
 private:
-    void OnEarlyUpdate(float deltaTime) override;
-    void OnLateUpdate(float deltaTime) override;
+    void OnEarlyUpdate(f32 deltaTime) override;
+    void OnLateUpdate(f32 deltaTime) override;
 
 protected:
     void OnWindowResized(glm::uvec2 newResolution) override;

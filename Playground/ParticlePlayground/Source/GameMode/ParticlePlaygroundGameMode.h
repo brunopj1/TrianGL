@@ -14,7 +14,7 @@ public:
     ~ParticlePlaygroundGameMode() override = default;
 
 private:
-    void OnUpdate(float deltaTime) override;
-    void OnEarlyUpdate(float deltaTime) override;
-    void OnLateUpdate(float deltaTime) override;
+    void OnUpdate(f32 deltaTime) override;
+    void OnEarlyUpdate(f32 deltaTime) override;
+    void OnLateUpdate(f32 deltaTime) override;
 };

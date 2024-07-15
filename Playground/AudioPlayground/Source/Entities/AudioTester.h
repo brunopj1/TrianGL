@@ -21,7 +21,7 @@ public:
     ~AudioTester() override = default;
 
 protected:
-    void OnUpdate(float deltaTime) override;
+    void OnUpdate(f32 deltaTime) override;
 
 public:
     static void RenderAudioSelector(TGL::AudioPlayer* audioPlayer, i32& currentAudioId);

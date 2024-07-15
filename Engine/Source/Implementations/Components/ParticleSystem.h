@@ -11,12 +11,21 @@ namespace TGL
 {
     struct ParticleSpawnData final
     {
-        glm::vec2 Position, Velocity;
-        glm::vec4 StartColor, EndColor;
-        float StartScale, EndScale;
-        float StartRotation, EndRotation;
-        bool RotationInDegrees;
-        float Duration;
+        glm::vec2 Position = { 0.0f, 0.0f };
+        glm::vec2 Velocity = { 0.0f, 0.0f };
+        
+        glm::vec4 StartColor = {1.0f, 1.0f, 1.0f, 1.0f };
+        glm::vec4 EndColor = {0.0f, 0.0f, 0.0f, 0.0f };
+        
+        float StartScale = 1.0f;
+        float EndScale = 1.0f;
+        
+        float StartRotation = 0.0f;
+        float EndRotation = 0.0f;
+        
+        bool RotationInDegrees = true;
+        
+        float Duration = 1.0f;
     };
 
     struct ParticleCpuData final

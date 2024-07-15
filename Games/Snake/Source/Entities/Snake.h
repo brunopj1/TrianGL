@@ -2,6 +2,7 @@
 
 #include "AudioManager.h"
 #include "Grid.h"
+#include "ParticleEmitter.h"
 #include "SnakeBody.h"
 #include "Game/Entity.h"
 #include "Assets/Texture.h"
@@ -22,10 +23,10 @@ public:
     ~Snake() override = default;
 
 protected:
-    void OnUpdate(float deltaTime) override;
+    void OnUpdate(f32 deltaTime) override;
 
 public:
-    void Move(Grid* grid, AudioManager* audioManager); // Returns true if the apple was eaten
+    void Move(Grid* grid, AudioManager* audioManager, ParticleEmitter* particleEmitter); // Returns true if the apple was eaten
 
 private:
     void SpawnHead(Grid* grid, const glm::ivec2& position);

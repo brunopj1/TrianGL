@@ -4,6 +4,7 @@
 #include "Implementations/Components/SpriteRenderer.h"
 #include "Implementations/Assets/DefaultSpriteMaterial.h"
 #include "Assets/Texture.h"
+#include "GameMode/RenderingOrder.h"
 
 using namespace TGL;
 
@@ -11,6 +12,8 @@ Apple::Apple(Grid* grid, SharedPtr<Texture> spriteSheet)
     : Entity(false), m_SpriteSheet(std::move(spriteSheet))
 {
     SpriteRenderer* sr = AttachComponent<SpriteRenderer>();
+    sr->SetZIndex(static_cast<i32>(RenderingOrder::Apple));
+    
     const auto material = sr->UseDefaultMaterial();
     material->Sprite->Value = m_SpriteSheet->GetSlice(11);
 

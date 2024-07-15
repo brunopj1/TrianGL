@@ -12,17 +12,17 @@ ParticlePlaygroundGameMode::ParticlePlaygroundGameMode()
     m_ParticleEmitter = SpawnEntity<MouseParticleEmitter>();
 }
 
-void ParticlePlaygroundGameMode::OnUpdate(float deltaTime)
+void ParticlePlaygroundGameMode::OnUpdate(f32 deltaTime)
 {
     
 }
 
-void ParticlePlaygroundGameMode::OnEarlyUpdate(float deltaTime)
+void ParticlePlaygroundGameMode::OnEarlyUpdate(f32 deltaTime)
 {
     
 }
 
-void ParticlePlaygroundGameMode::OnLateUpdate(float deltaTime)
+void ParticlePlaygroundGameMode::OnLateUpdate(f32 deltaTime)
 {
     
 }

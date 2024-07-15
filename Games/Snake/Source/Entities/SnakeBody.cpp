@@ -1,5 +1,6 @@
 ﻿#include "SnakeBody.h"
 
+#include "GameMode/RenderingOrder.h"
 #include <utility>
 
 #include "Implementations/Components/SpriteRenderer.h"
@@ -12,6 +13,7 @@ SnakeBody::SnakeBody(Grid* grid, SharedPtr<Texture> spriteSheet, const glm::ivec
 {
     m_SpriteRenderer = AttachComponent<SpriteRenderer>();
     m_SpriteRenderer->UseDefaultMaterial();
+    m_SpriteRenderer->SetZIndex(static_cast<i32>(RenderingOrder::Snake));
 
     grid->SetCell(position, this);
 
@@ -58,9 +60,9 @@ void SnakeBody::UpdateTexture()
     }
     else
     {
-        int idx = m_Type == SnakeBodyType::Head ? 4 : 8;
+        i32 idx = m_Type == SnakeBodyType::Head ? 4 : 8;
 
-        const int crossMoveDirection = m_BackDirection.x * m_FrontDirection.y - m_BackDirection.y * m_FrontDirection.x;
+        const i32 crossMoveDirection = m_BackDirection.x * m_FrontDirection.y - m_BackDirection.y * m_FrontDirection.x;
         idx += crossMoveDirection < 0 ? 1 : crossMoveDirection > 0 ? 2 : 0;
 
         texture = m_SpriteSheet->GetSlice(idx);
@@ -71,6 +73,6 @@ void SnakeBody::UpdateTexture()
 
     // Rotate the texture
 
-    const float angle = (m_BackDirection.y == -1) * 180.0f - glm::sign(m_BackDirection.x) * 90.0f;
+    const f32 angle = (m_BackDirection.y == -1) * 180.0f - glm::sign(m_BackDirection.x) * 90.0f;
     GetTransform().SetRotationDeg(angle);
 }

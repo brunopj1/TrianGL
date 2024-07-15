@@ -7,6 +7,7 @@ namespace TGL
     class DefaultParticleMaterial final : public Material
     {
     public:
+        FloatUniform* const FadeDuration = AddUniform<FloatUniform>("uFadeDuration");
         FloatUniform* const BorderRadius = AddUniform<FloatUniform>("uBorderRadius");
         SpriteUniform* const Sprite = AddUniform<SpriteUniform>("uSprite");
 

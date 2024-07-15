@@ -36,4 +36,6 @@ void main()
         
         fragColor = texture(uSprite, uv) * uColor;
     }
+    
+    if (fragColor.a < 0.01) discard;
 }

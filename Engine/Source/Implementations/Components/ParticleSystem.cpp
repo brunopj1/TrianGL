@@ -194,7 +194,7 @@ u32 ParticleSystem::GetNextUnusedParticleIndex()
     const u32 nextIndex = m_NextUnusedParticleIndex;
     m_NextUnusedParticleIndex = m_MaxParticles;
     
-    for (u32 i = nextIndex; i < m_MaxParticles; ++i)
+    for (u32 i = nextIndex + 1; i < m_MaxParticles; ++i)
     {
         if (m_ParticlesCpu[i].RemainingDuration <= 0.0f)
         {
