@@ -68,7 +68,7 @@ void SpriteRenderer::Render() const
 
     if (const i32 zIndex = GetZIndex(); zIndex != 0)
     {
-        modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<float>(zIndex)));
+        modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<f32>(zIndex)));
     }
 
     m_Material->Use(modelMatrix);

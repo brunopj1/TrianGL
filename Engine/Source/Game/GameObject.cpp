@@ -14,5 +14,5 @@ i32 GameObject::GetOrderOfExecution() const
 void GameObject::OnStart()
 {}
 
-void GameObject::OnUpdate(const float deltaTime)
+void GameObject::OnUpdate(const f32 deltaTime)
 {}

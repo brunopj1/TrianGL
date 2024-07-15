@@ -17,33 +17,33 @@ namespace TGL
         glm::vec4 StartColor = {1.0f, 1.0f, 1.0f, 1.0f };
         glm::vec4 EndColor = {0.0f, 0.0f, 0.0f, 0.0f };
         
-        float StartScale = 1.0f;
-        float EndScale = 1.0f;
+        f32 StartScale = 1.0f;
+        f32 EndScale = 1.0f;
         
-        float StartRotation = 0.0f;
-        float EndRotation = 0.0f;
+        f32 StartRotation = 0.0f;
+        f32 EndRotation = 0.0f;
         
         bool RotationInDegrees = true;
         
-        float Duration = 1.0f;
+        f32 Duration = 1.0f;
     };
 
     struct ParticleCpuData final
     {
         glm::vec2 Velocity;
         glm::vec4 StartColor, EndColor;
-        float StartScale, EndScale;
-        float StartRotation, EndRotation;
-        float TotalDuration, RemainingDuration;
+        f32 StartScale, EndScale;
+        f32 StartRotation, EndRotation;
+        f32 TotalDuration, RemainingDuration;
     };
 
     struct ParticleGpuData final
     {
         glm::vec2 Position;
         glm::vec4 Color;
-        float Scale;
-        float Rotation;
-        float RemainingDuration;
+        f32 Scale;
+        f32 Rotation;
+        f32 RemainingDuration;
     };
     
     class ParticleSystem final : public Component, public Renderable
@@ -75,7 +75,7 @@ namespace TGL
         bool Emit(const ParticleSpawnData& spawnData);
         
     private:
-        void OnUpdate(float deltaTime) override;
+        void OnUpdate(f32 deltaTime) override;
 
     protected:
         void Render() const override;

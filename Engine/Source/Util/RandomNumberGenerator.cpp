@@ -51,32 +51,32 @@ u32 RandomNumberGenerator::GetUint(const u32 min, const u32 max)
     return min + m_Seed % (max - min + 1);
 }
 
-float RandomNumberGenerator::GetFloat()
+f32 RandomNumberGenerator::GetFloat()
 {
     UpdateSeed();
-    return m_Seed / static_cast<float>(UINT_MAX);
+    return m_Seed / static_cast<f32>(UINT_MAX);
 }
 
-float RandomNumberGenerator::GetFloat(const float min, const float max)
+f32 RandomNumberGenerator::GetFloat(const f32 min, const f32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
     
     UpdateSeed();
-    return min + m_Seed / static_cast<float>(UINT_MAX) * (max - min);
+    return min + m_Seed / static_cast<f32>(UINT_MAX) * (max - min);
 }
 
-double RandomNumberGenerator::GetDouble()
+f64 RandomNumberGenerator::GetDouble()
 { 
     UpdateSeed();
-    return m_Seed / static_cast<double>(UINT_MAX);
+    return m_Seed / static_cast<f64>(UINT_MAX);
 }
 
-double RandomNumberGenerator::GetDouble(const double min, const double max)
+f64 RandomNumberGenerator::GetDouble(const f64 min, const f64 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
     
     UpdateSeed();
-    return min + m_Seed / static_cast<double>(UINT_MAX) * (max - min);
+    return min + m_Seed / static_cast<f64>(UINT_MAX) * (max - min);
 }
 
 glm::ivec2 RandomNumberGenerator::GetInt2()
@@ -173,7 +173,7 @@ glm::vec2 RandomNumberGenerator::GetFloat2()
     return {GetFloat(), GetFloat()};
 }
 
-glm::vec2 RandomNumberGenerator::GetFloat2(const float min, const float max)
+glm::vec2 RandomNumberGenerator::GetFloat2(const f32 min, const f32 max)
 {
     return {GetFloat(min, max), GetFloat(min, max)};
 }
@@ -188,7 +188,7 @@ glm::vec3 RandomNumberGenerator::GetFloat3()
     return {GetFloat(), GetFloat(), GetFloat()};
 }
 
-glm::vec3 RandomNumberGenerator::GetFloat3(const float min, const float max)
+glm::vec3 RandomNumberGenerator::GetFloat3(const f32 min, const f32 max)
 {
     return {GetFloat(min, max), GetFloat(min, max), GetFloat(min, max)};
 }
@@ -203,7 +203,7 @@ glm::vec4 RandomNumberGenerator::GetFloat4()
     return {GetFloat(), GetFloat(), GetFloat(), GetFloat()};
 }
 
-glm::vec4 RandomNumberGenerator::GetFloat4(const float min, const float max)
+glm::vec4 RandomNumberGenerator::GetFloat4(const f32 min, const f32 max)
 {
     return {GetFloat(min, max), GetFloat(min, max), GetFloat(min, max), GetFloat(min, max)};
 }

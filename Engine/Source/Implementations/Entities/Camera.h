@@ -15,9 +15,9 @@ namespace TGL
         static inline Camera* s_MainCamera = nullptr;
 
     private:
-        float m_HorizontalSize = 10.0f;
+        f32 m_HorizontalSize = 10.0f;
         bool m_LockHorizontalSize = true;
-        float m_AspectRatio;
+        f32 m_AspectRatio;
 
         glm::ivec2 m_DepthRange = {-1000, 1000};
 
@@ -40,16 +40,16 @@ namespace TGL
     public:
         glm::vec2 GetSize() const;
 
-        float GetHorizontalSize() const;
-        void SetHorizontalSize(float size, bool lock = false);
+        f32 GetHorizontalSize() const;
+        void SetHorizontalSize(f32 size, bool lock = false);
 
-        float GetVerticalSize() const;
-        void SetVerticalSize(float size, bool lock = false);
+        f32 GetVerticalSize() const;
+        void SetVerticalSize(f32 size, bool lock = false);
 
         void LockSize(bool horizontally);
         bool IsSizeLockedHorizontally() const;
 
-        float GetAspectRatio() const;
+        f32 GetAspectRatio() const;
 
         void SetDepthRange(i32 min, i32 max);
         glm::vec2 GetDepthRange() const;
@@ -64,7 +64,7 @@ namespace TGL
         glm::vec2 WorldToScreenPosition(const glm::vec2& worldPos) const;
 
     private:
-        void SetAspectRatio(float aspectRatio);
+        void SetAspectRatio(f32 aspectRatio);
 
     private:
         void UpdateMatrices();

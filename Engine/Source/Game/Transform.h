@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Core/DataTypes.h"
 #include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -13,7 +14,7 @@ namespace TGL
 
     private:
         glm::vec2 m_Position = {0.0f, 0.0f};
-        float m_Rotation = 0.0f;
+        f32 m_Rotation = 0.0f;
         glm::vec2 m_Scale = {1.0f, 1.0f};
 
         mutable glm::mat4 m_TransformMatrix = glm::mat4(1.0f);
@@ -26,23 +27,23 @@ namespace TGL
 
     public:
         glm::vec2 GetPosition() const;
-        float GetRotationRad() const;
-        float GetRotationDeg() const;
+        f32 GetRotationRad() const;
+        f32 GetRotationDeg() const;
         glm::vec2 GetScale() const;
 
     public:
         void SetPosition(const glm::vec2& newPosition);
-        void SetRotationRad(float newRotation);
-        void SetRotationDeg(float newRotation);
+        void SetRotationRad(f32 newRotation);
+        void SetRotationDeg(f32 newRotation);
         void SetScale(const glm::vec2& newScale);
-        void SetScale(float newScale);
+        void SetScale(f32 newScale);
 
     public:
         void TranslateBy(const glm::vec2& translation);
-        void RotateByRad(float rotation);
-        void RotateByDeg(float rotation);
+        void RotateByRad(f32 rotation);
+        void RotateByDeg(f32 rotation);
         void ScaleBy(const glm::vec2& scale);
-        void ScaleBy(float scale);
+        void ScaleBy(f32 scale);
 
     private:
         glm::mat4 GetTransformMatrix() const;

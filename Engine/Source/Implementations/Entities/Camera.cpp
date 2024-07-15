@@ -41,12 +41,12 @@ glm::vec2 Camera::GetSize() const
     return {m_HorizontalSize, m_HorizontalSize / m_AspectRatio};
 }
 
-float Camera::GetHorizontalSize() const
+f32 Camera::GetHorizontalSize() const
 {
     return m_HorizontalSize;
 }
 
-void Camera::SetHorizontalSize(const float size, const bool lock)
+void Camera::SetHorizontalSize(const f32 size, const bool lock)
 {
     if (size <= 0.0f)
     {
@@ -57,12 +57,12 @@ void Camera::SetHorizontalSize(const float size, const bool lock)
     if (lock) m_LockHorizontalSize = true;
 }
 
-float Camera::GetVerticalSize() const
+f32 Camera::GetVerticalSize() const
 {
     return m_HorizontalSize / m_AspectRatio;
 }
 
-void Camera::SetVerticalSize(const float size, const bool lock)
+void Camera::SetVerticalSize(const f32 size, const bool lock)
 {
     if (size <= 0.0f)
     {
@@ -83,7 +83,7 @@ bool Camera::IsSizeLockedHorizontally() const
     return m_LockHorizontalSize;
 }
 
-float Camera::GetAspectRatio() const
+f32 Camera::GetAspectRatio() const
 {
     return m_AspectRatio;
 }
@@ -145,7 +145,7 @@ glm::vec2 Camera::WorldToScreenPosition(const glm::vec2& worldPos) const
     return screenPos;
 }
 
-void Camera::SetAspectRatio(const float aspectRatio)
+void Camera::SetAspectRatio(const f32 aspectRatio)
 {
     if (aspectRatio <= 0.0f)
     {
@@ -175,9 +175,9 @@ glm::mat4 Camera::ComputeViewMatrix() const
 
 glm::mat4 Camera::ComputeProjectionMatrix() const
 {
-    const float halfSizeH = m_HorizontalSize / 2.0f;
-    const float halfSizeV = halfSizeH / m_AspectRatio;
-    const float farPlane = static_cast<float>(m_DepthRange.y - m_DepthRange.x);
+    const f32 halfSizeH = m_HorizontalSize / 2.0f;
+    const f32 halfSizeV = halfSizeH / m_AspectRatio;
+    const f32 farPlane = static_cast<f32>(m_DepthRange.y - m_DepthRange.x);
 
     return glm::ortho(-halfSizeH, halfSizeH, -halfSizeV, halfSizeV, 0.0f, farPlane);
 }

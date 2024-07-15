@@ -22,7 +22,7 @@ namespace TGL
         static inline std::string s_Title;
         static inline glm::ivec2 s_Position;
         static inline glm::uvec2 s_Resolution;
-        static inline float s_AspectRatio;
+        static inline f32 s_AspectRatio;
         static inline bool s_Fullscreen;
         static inline bool s_Vsync;
 
@@ -51,7 +51,7 @@ namespace TGL
         static glm::uvec2 GetResolution();
         static void SetResolution(glm::uvec2 resolution);
 
-        static float GetAspectRatio();
+        static f32 GetAspectRatio();
 
         static bool IsVsync();
         static void SetVsync(bool vsync);

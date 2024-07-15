@@ -14,7 +14,7 @@ void Quad::Init()
 
     // @formatter:off
 
-    constexpr float vertices[] = {
+    constexpr f32 vertices[] = {
         // Positions     // Tex Coords
         -0.5f, -0.5f,    0.0f, 0.0f,    // Bottom Left
          0.5f, -0.5f,    1.0f, 0.0f,    // Bottom Right
@@ -60,10 +60,10 @@ void Quad::Terminate()
 void Quad::BindAttributes()
 {
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(f32), (void*)0);
     glEnableVertexAttribArray(0);
 
     // ReSharper disable once CppCStyleCast, performance-no-int-to-ptr
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(f32), (void*)(2 * sizeof(f32)));
     glEnableVertexAttribArray(1);
 }

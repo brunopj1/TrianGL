@@ -16,7 +16,7 @@ AudioPlayer::~AudioPlayer()
     Stop();
 }
 
-void AudioPlayer::OnUpdate(float deltaTime)
+void AudioPlayer::OnUpdate(f32 deltaTime)
 {
     if (m_Handle == -1) return;
 
@@ -108,12 +108,12 @@ void AudioPlayer::Stop()
     m_Audio->RemovePlayer(this);
 }
 
-float AudioPlayer::GetVolume() const
+f32 AudioPlayer::GetVolume() const
 {
     return m_Volume;
 }
 
-void AudioPlayer::SetVolume(const float volume)
+void AudioPlayer::SetVolume(const f32 volume)
 {
     m_Volume = volume < 0.0f ? 0.0f : volume;
 
@@ -122,7 +122,7 @@ void AudioPlayer::SetVolume(const float volume)
     UpdateCurrentAudioVolume();
 }
 
-float AudioPlayer::GetFinalVolume() const
+f32 AudioPlayer::GetFinalVolume() const
 {
     return m_Volume * m_Audio->GetVolume();
 }

@@ -27,11 +27,11 @@ namespace TGL
         u32 GetUint();
         u32 GetUint(u32 min, u32 max);
         
-        float GetFloat();
-        float GetFloat(float min, float max);
+        f32 GetFloat();
+        f32 GetFloat(f32 min, f32 max);
         
-        double GetDouble();
-        double GetDouble(double min, double max);
+        f64 GetDouble();
+        f64 GetDouble(f64 min, f64 max);
 
         glm::ivec2 GetInt2();
         glm::ivec2 GetInt2(i32 min, i32 max);
@@ -58,15 +58,15 @@ namespace TGL
         glm::uvec4 GetUint4(const glm::uvec4& min, const glm::uvec4& max);
 
         glm::vec2 GetFloat2();
-        glm::vec2 GetFloat2(float min, float max);
+        glm::vec2 GetFloat2(f32 min, f32 max);
         glm::vec2 GetFloat2(const glm::vec2& min, const glm::vec2& max);
 
         glm::vec3 GetFloat3();
-        glm::vec3 GetFloat3(float min, float max);
+        glm::vec3 GetFloat3(f32 min, f32 max);
         glm::vec3 GetFloat3(const glm::vec3& min, const glm::vec3& max);
 
         glm::vec4 GetFloat4();
-        glm::vec4 GetFloat4(float min, float max);
+        glm::vec4 GetFloat4(f32 min, f32 max);
         glm::vec4 GetFloat4(const glm::vec4& min, const glm::vec4& max);
 
     private:

@@ -23,7 +23,7 @@ void EntityManager::Terminate()
     DestroyGameMode();
 }
 
-void EntityManager::Update(const float deltaTime)
+void EntityManager::Update(const f32 deltaTime)
 {
     for (GameObject* object : s_OnStartQueue)
     {

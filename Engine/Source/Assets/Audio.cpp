@@ -32,13 +32,13 @@ bool Audio::IsStreamed() const
     return m_Streamed;
 }
 
-float Audio::GetVolume() const
+f32 Audio::GetVolume() const
 {
     return m_SoloudAudio->mVolume;
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
-void Audio::SetVolume(const float volume)
+void Audio::SetVolume(const f32 volume)
 {
     m_SoloudAudio->mVolume = volume < 0.0f ? 0.0f : volume;
 

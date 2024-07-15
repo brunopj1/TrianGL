@@ -37,8 +37,8 @@ namespace TGL
         bool IsStreamed() const;
 
     public:
-        float GetVolume() const;
-        void SetVolume(float volume);
+        f32 GetVolume() const;
+        void SetVolume(f32 volume);
 
     private:
         void Init();

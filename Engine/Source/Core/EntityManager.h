@@ -54,7 +54,7 @@ namespace TGL
         static void Terminate();
 
     private:
-        static void Update(float deltaTime);
+        static void Update(f32 deltaTime);
         static void Render();
 
     private:

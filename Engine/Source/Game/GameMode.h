@@ -15,8 +15,8 @@ namespace TGL
         ~GameMode() override;
 
     public:
-        virtual void OnEarlyUpdate(float deltaTime);
-        virtual void OnLateUpdate(float deltaTime);
+        virtual void OnEarlyUpdate(f32 deltaTime);
+        virtual void OnLateUpdate(f32 deltaTime);
 
     public:
         static GameMode* GetInstance();

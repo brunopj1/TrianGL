@@ -120,7 +120,7 @@ void Window::SetResolution(const glm::uvec2 resolution)
     glfwSetWindowSize(s_WindowPtr, resolution.x, resolution.y);
 }
 
-float Window::GetAspectRatio()
+f32 Window::GetAspectRatio()
 {
     return s_AspectRatio;
 }
@@ -150,7 +150,7 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
     s_Title = std::move(title);
     s_Position = position;
     s_Resolution = resolution;
-    s_AspectRatio = static_cast<float>(resolution.x) / static_cast<float>(resolution.y);
+    s_AspectRatio = static_cast<f32>(resolution.x) / static_cast<f32>(resolution.y);
     s_Fullscreen = false; // This is updated later
     s_Vsync = vsync;
 
@@ -211,7 +211,7 @@ void Window::PositionCallback(i32 x, i32 y)
 void Window::SizeCallback(i32 width, i32 height)
 {
     s_Resolution = {width, height};
-    s_AspectRatio = static_cast<float>(width) / static_cast<float>(height);
+    s_AspectRatio = static_cast<f32>(width) / static_cast<f32>(height);
     glViewport(0, 0, width, height);
 
     for (const auto camera : Entity::FindEntitiesGlobally<Camera>())

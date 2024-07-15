@@ -71,7 +71,7 @@ namespace TGL
     private:
         static void KeyboardCallback(i32 key, i32 action, i32 mods);
         static void MouseButtonCallback(i32 button, i32 action, i32 mods);
-        static void MousePositionCallback(double x, double y);
-        static void MouseScrollCallback(double x, double y);
+        static void MousePositionCallback(f64 x, f64 y);
+        static void MouseScrollCallback(f64 x, f64 y);
     };
 }

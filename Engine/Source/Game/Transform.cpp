@@ -9,14 +9,14 @@ glm::vec2 Transform::GetPosition() const
     return m_Position;
 }
 
-float Transform::GetRotationRad() const
+f32 Transform::GetRotationRad() const
 {
     return m_Rotation;
 }
 
-float Transform::GetRotationDeg() const
+f32 Transform::GetRotationDeg() const
 {
-    return m_Rotation * 180.0f / glm::pi<float>();
+    return m_Rotation * 180.0f / glm::pi<f32>();
 }
 
 glm::vec2 Transform::GetScale() const
@@ -30,15 +30,15 @@ void Transform::SetPosition(const glm::vec2& newPosition)
     m_WasModified = true;
 }
 
-void Transform::SetRotationRad(const float newRotation)
+void Transform::SetRotationRad(const f32 newRotation)
 {
     m_Rotation = newRotation;
     m_WasModified = true;
 }
 
-void Transform::SetRotationDeg(const float newRotation)
+void Transform::SetRotationDeg(const f32 newRotation)
 {
-    m_Rotation = newRotation * glm::pi<float>() / 180.0f;
+    m_Rotation = newRotation * glm::pi<f32>() / 180.0f;
     m_WasModified = true;
 }
 
@@ -48,7 +48,7 @@ void Transform::SetScale(const glm::vec2& newScale)
     m_WasModified = true;
 }
 
-void Transform::SetScale(float newScale)
+void Transform::SetScale(f32 newScale)
 {
     m_Scale = {newScale, newScale};
     m_WasModified = true;
@@ -60,15 +60,15 @@ void Transform::TranslateBy(const glm::vec2& translation)
     m_WasModified = true;
 }
 
-void Transform::RotateByRad(const float rotation)
+void Transform::RotateByRad(const f32 rotation)
 {
     m_Rotation += rotation;
     m_WasModified = true;
 }
 
-void Transform::RotateByDeg(const float rotation)
+void Transform::RotateByDeg(const f32 rotation)
 {
-    m_Rotation += rotation * glm::pi<float>() / 180.0f;
+    m_Rotation += rotation * glm::pi<f32>() / 180.0f;
     m_WasModified = true;
 }
 
@@ -78,7 +78,7 @@ void Transform::ScaleBy(const glm::vec2& scale)
     m_WasModified = true;
 }
 
-void Transform::ScaleBy(const float scale)
+void Transform::ScaleBy(const f32 scale)
 {
     m_Scale *= scale;
     m_WasModified = true;

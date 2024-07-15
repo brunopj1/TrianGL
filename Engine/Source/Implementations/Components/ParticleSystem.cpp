@@ -76,7 +76,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
     return true;
 }
 
-void ParticleSystem::OnUpdate(const float deltaTime)
+void ParticleSystem::OnUpdate(const f32 deltaTime)
 {
     for (u32 i = 0; i <= m_LastUsedParticleIndex; i++)
     {
@@ -85,7 +85,7 @@ void ParticleSystem::OnUpdate(const float deltaTime)
         
         if (cpuParticle.RemainingDuration <= 0.0f) continue;
 
-        const float interp = 1.0f - (cpuParticle.RemainingDuration / cpuParticle.TotalDuration);
+        const f32 interp = 1.0f - (cpuParticle.RemainingDuration / cpuParticle.TotalDuration);
 
         gpuParticle.Position += cpuParticle.Velocity * deltaTime;
 
@@ -122,7 +122,7 @@ void ParticleSystem::Render() const
 
     if (const i32 zIndex = GetZIndex(); zIndex != 0)
     {
-        modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<float>(zIndex)));
+        modelMatrix = translate(modelMatrix, glm::vec3(0.0f, 0.0f, static_cast<f32>(zIndex)));
     }
 
     m_Material->Use(modelMatrix);

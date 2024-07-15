@@ -159,14 +159,14 @@ std::vector<SharedPtr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::u
 void Texture::CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
     const glm::vec3 translate = {
-        offset.x / static_cast<float>(m_Resolution.x),
-        (m_Resolution.y - resolution.y - offset.y) / static_cast<float>(m_Resolution.y),
+        offset.x / static_cast<f32>(m_Resolution.x),
+        (m_Resolution.y - resolution.y - offset.y) / static_cast<f32>(m_Resolution.y),
         0.0f
     };
 
     const glm::vec3 scale = {
-        resolution.x / static_cast<float>(m_Resolution.x),
-        resolution.y / static_cast<float>(m_Resolution.y),
+        resolution.x / static_cast<f32>(m_Resolution.x),
+        resolution.y / static_cast<f32>(m_Resolution.y),
         1.0f
     };
 

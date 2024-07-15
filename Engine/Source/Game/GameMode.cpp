@@ -15,9 +15,9 @@ GameMode::~GameMode()
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, GameMode);
 }
 
-void GameMode::OnEarlyUpdate(float deltaTime) {}
+void GameMode::OnEarlyUpdate(f32 deltaTime) {}
 
-void GameMode::OnLateUpdate(float deltaTime) {}
+void GameMode::OnLateUpdate(f32 deltaTime) {}
 
 GameMode* GameMode::GetInstance()
 {

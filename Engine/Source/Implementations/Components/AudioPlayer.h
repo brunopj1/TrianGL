@@ -28,7 +28,7 @@ namespace TGL
         AudioPlayerStatus m_Status = AudioPlayerStatus::Stopped;
 
     private:
-        float m_Volume = 1.0f;
+        f32 m_Volume = 1.0f;
         bool m_Loop = false;
 
     public:
@@ -36,7 +36,7 @@ namespace TGL
         ~AudioPlayer() override;
 
     protected:
-        void OnUpdate(float deltaTime) override;
+        void OnUpdate(f32 deltaTime) override;
 
     public:
         SharedPtr<Audio> GetAudio() const;
@@ -51,10 +51,10 @@ namespace TGL
         void Stop();
 
     public:
-        float GetVolume() const;
-        void SetVolume(float volume);
+        f32 GetVolume() const;
+        void SetVolume(f32 volume);
 
-        float GetFinalVolume() const;
+        f32 GetFinalVolume() const;
 
         bool GetLoop() const;
         void SetLoop(bool loop);

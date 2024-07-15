@@ -73,7 +73,7 @@ void MaterialUniformImpl<glm::uvec4>::BindInternal() const
     glUniform4uiv(m_Location, 1, &Value[0]);
 }
 
-void MaterialUniformImpl<float>::BindInternal() const
+void MaterialUniformImpl<f32>::BindInternal() const
 {
     glUniform1f(m_Location, Value);
 }

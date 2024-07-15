@@ -27,7 +27,7 @@ namespace TGL
 
     protected:
         virtual void OnStart();
-        virtual void OnUpdate(float deltaTime);
+        virtual void OnUpdate(f32 deltaTime);
 
     public:
         template <typename T, typename... Args>

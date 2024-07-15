@@ -4,9 +4,9 @@
 
 using namespace TGL;
 
-float Clock::Update()
+f32 Clock::Update()
 {
-    const float currentTime = static_cast<float>(glfwGetTime());
+    const f32 currentTime = static_cast<f32>(glfwGetTime());
 
     s_DeltaTime = currentTime - s_TotalTime;
     s_TotalTime = currentTime;
@@ -30,12 +30,12 @@ float Clock::Update()
     return s_DeltaTime;
 }
 
-float Clock::GetTotalTime()
+f32 Clock::GetTotalTime()
 {
     return s_TotalTime;
 }
 
-float Clock::GetDeltaTime()
+f32 Clock::GetDeltaTime()
 {
     return s_DeltaTime;
 }

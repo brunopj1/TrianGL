@@ -144,7 +144,7 @@ void Application::NewFrame()
 
     // Update
 
-    const float deltaTime = Clock::Update();
+    const f32 deltaTime = Clock::Update();
     EntityManager::Update(deltaTime);
 
     // Render
@@ -188,7 +188,7 @@ void Application::PollEvents()
 void Application::RenderDebugInfo()
 {
     const u32 framerate = Clock::GetFrameRate();
-    const float frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
+    const f32 frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
 
     std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
     message += std::format("Entities: {0} | Components: {1}", EntityManager::GetEntityCount(), EntityManager::GetComponentCount());
