@@ -6,6 +6,8 @@ It's main goal is to be as easy to use as possible, allowing developers to quick
 This is a small project that I have been working on in my free time, so it may still have missing features.
 If you find any bugs or have any suggestions feel free to open an issue.
 
+![](Misc/preview.gif)
+
 ## Platform Support
 
 Currently, **TrianGL** only supports Windows. Support for other platforms may be added in the future.
