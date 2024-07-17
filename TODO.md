@@ -6,7 +6,6 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 ## Other tasks
 
 - Use github actions to validate the code
-- Check if the imgui-stdlib dependency can be used directly from the imgui submodule
 
 ## Documentation
 

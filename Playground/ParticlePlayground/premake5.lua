@@ -29,7 +29,7 @@ project "ParticlePlayground"
     filter "configurations:Debug"
         includedirs {
             "../../Libs/imgui/imgui/",
-            "../../Libs/imgui_stdlib/imgui/"
+		    "../../Libs/imgui/imgui/misc/cpp/"
         }
         defines {
             "IMGUI_DEFINE_MATH_OPERATORS"

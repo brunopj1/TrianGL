@@ -9,14 +9,17 @@ project "ImGui"
 		"imgui/",
 		"imgui/backends/",
 		"../glag/glad/include/",
-		"../glfw/glfw/include/"
+		"../glfw/glfw/include/",
+		"imgui/misc/cpp/"
 	}
 
 	files {
         "premake5.lua",
 		"imgui/*.cpp",
 		"imgui/backends/imgui_impl_glfw.cpp",
-		"imgui/backends/imgui_impl_opengl3.cpp"
+		"imgui/backends/imgui_impl_opengl3.cpp",
+		"imgui/misc/cpp/imgui_stdlib.cpp",
+		"imgui/misc/cpp/imgui_stdlib.h"
 	}
 
 	defines {

@@ -6,7 +6,7 @@
 static_assert(false, "The Playground projects are only available in Debug configurations");
 #endif
 
-void main()
+i32 main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - ParticlePlayground";

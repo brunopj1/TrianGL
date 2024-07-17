@@ -2,7 +2,7 @@
 #include <GameMode/SnakeGameMode.h>
 #include "Util/MemoryLeakDetection.h"
 
-void main()
+i32 main()
 {
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - Snake";

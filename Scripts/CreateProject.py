@@ -42,7 +42,7 @@ project "{projectName}"
     filter "configurations:Debug"
         includedirs {{
             "../../Libs/imgui/imgui/",
-            "../../Libs/imgui_stdlib/imgui/"
+		    "../../Libs/imgui/imgui/misc/cpp/"
         }}
         defines {{
             "IMGUI_DEFINE_MATH_OPERATORS"
@@ -60,7 +60,7 @@ mainSourceTemplate = f"""
 #include <GameMode/{projectName}GameMode.h>
 #include "Util/MemoryLeakDetection.h"
 {mainSourceStaticAssert if not isGame else ""}
-void main()
+i32 main()
 {{
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - {projectName}";

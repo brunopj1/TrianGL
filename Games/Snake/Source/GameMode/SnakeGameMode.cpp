@@ -10,6 +10,7 @@
 
 #ifdef DEBUG
 #include <imgui.h>
+#include <imgui_stdlib.h>
 #endif
 
 using namespace TGL;
@@ -82,6 +83,8 @@ void SnakeGameMode::OnWindowResized(glm::uvec2 newResolution)
 
 void SnakeGameMode::RenderImGui()
 {
+    static std::string test = "Hello world!";
+    
     ImGui::SetNextWindowPos({10, 10}, ImGuiCond_Appearing);
     ImGui::SetNextWindowSize({250, 200}, ImGuiCond_Appearing);
 
@@ -100,6 +103,8 @@ void SnakeGameMode::RenderImGui()
                 apple->RandomizePosition(m_Grid);
             }
         }
+
+        ImGui::InputText("Test", &test);
     }
 
     ImGui::End();

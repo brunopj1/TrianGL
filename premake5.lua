@@ -37,7 +37,6 @@ group "Dependencies"
     include "Libs/glfw/premake5.lua"
     include "Libs/glm/premake5.lua"
     include "Libs/imgui/premake5.lua"
-    include "Libs/imgui_stdlib/premake5.lua"
     include "Libs/soloud/premake5.lua"
     include "Libs/stb_image/premake5.lua"
 

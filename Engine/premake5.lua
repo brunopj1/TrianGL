@@ -31,13 +31,13 @@ project "Engine"
     
     filter "configurations:Debug"
         links {
-            "ImGui",
-            "ImGui-Stdlib"
+            "ImGui"
         }
+        
         includedirs {
             "../Libs/imgui/imgui/",
             "../Libs/imgui/imgui/backends/",
-            "../Libs/imgui_stdlib/imgui/"
+		    "../Libs/imgui/imgui/misc/cpp/"
         }
     
         defines {
