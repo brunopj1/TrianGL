@@ -8,6 +8,7 @@ Obj/
 
 # Visual Studio files
 **/*.sln
+**/*.sln.DotSettings.user
 **/*.vcxproj
 **/*.vcxproj.user
 **/*.vcxproj.filters
