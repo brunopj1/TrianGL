@@ -32,6 +32,8 @@ workspace "TrianGL"
 
 include "Engine/premake5.lua"
 
+include "Tests/premake5.lua"
+
 group "Dependencies"
     include "Libs//glad/premake5.lua"
     include "Libs/glfw/premake5.lua"
@@ -39,6 +41,7 @@ group "Dependencies"
     include "Libs/imgui/premake5.lua"
     include "Libs/soloud/premake5.lua"
     include "Libs/stb_image/premake5.lua"
+    include "Libs/googletest/premake5.lua"
 
 group "Playground"
     include "Playground/AudioPlayground/premake5.lua"
