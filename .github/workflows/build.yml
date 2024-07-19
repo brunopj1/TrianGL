@@ -1,0 +1,21 @@
+name: Build
+on: push
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Setup Premake
+      - name: Setup Premake
+        uses: abel0b/setup-premake@v2.4
+        with:
+          version: "5.0.0-beta2"
+
+      # Run Premake
+      - name: Run premake
+        run: premake5 vs2022
