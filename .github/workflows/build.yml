@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  SOLUTION_FILE_PATH: .
-  BUILD_CONFIGURATION: Release
-
 permissions:
   contents: read
 
@@ -21,6 +17,8 @@ jobs:
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       # Run Premake
       - name: Run Premake
@@ -37,4 +35,4 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Run MSBuild
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:diag -property:Configuration=Debug
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug
