@@ -34,9 +34,7 @@ jobs:
 
       # Setup MSBuild
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v2
 
       - name: Run MSBuild
-        working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: msbuild /m /p:Configuration=Release .
-        
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:diag -property:Configuration=Release
