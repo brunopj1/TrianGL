@@ -17,7 +17,7 @@ namespace FactorialTests
 
 	TEST(FactorialTest, HandlesNegativeInput)
 	{
-		EXPECT_EQ(Factorial(-1), 10);
+		EXPECT_EQ(Factorial(-1), 1);
 		EXPECT_EQ(Factorial(-2), 1);
 		EXPECT_EQ(Factorial(-3), 1);
 		EXPECT_EQ(Factorial(-8), 1);

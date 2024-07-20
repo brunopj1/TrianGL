@@ -3,10 +3,6 @@
 This is a file I use to keep track of the tasks I need to do in the project.
 For a detailed list of implemented and upcoming features check the [FEATURES.md](FEATURES.md) file.
 
-## Other tasks
-
-- Use github actions to validate the code
-
 ## Documentation
 
 - Use Doxygen to generate the documentation
