@@ -49,6 +49,15 @@ jobs:
           mklink libglapi.dll "x64\libglapi.dll"
         working-directory: Bin\Debug\Win64\Tests\
 
+      # Install Scream
+      - name: Install Scream
+        shell: powershell
+        run: |
+          Invoke-WebRequest https://github.com/duncanthrax/scream/releases/download/3.8/Scream3.8.zip -OutFile Scream3.8.zip
+          Expand-Archive -Path Scream3.8.zip -DestinationPath Scream
+          Import-Certificate -FilePath Scream\Install\driver\x64\Scream.cat -CertStoreLocation Cert:\LocalMachine\TrustedPublisher 
+          Scream\Install\helpers\devcon-x64.exe install Scream\Install\driver\x64\Scream.inf *Scream
+
       # Run Tests
       - name: Run Tests
         run: Bin\Debug\Win64\Tests\Tests.exe
