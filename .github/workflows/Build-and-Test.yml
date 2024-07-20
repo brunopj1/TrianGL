@@ -53,12 +53,9 @@ jobs:
       - name: Start the Audio Service
         run: net start audiosrv
 
-      # Clone and Execute sound-ci-helpers
-      - name: Clone the sound-ci-helpers repository
-        shell: pwsh
-        run: |
-          git clone https://github.com/LABSN/sound-ci-helpers.git
-          ./sound-ci-helpers/windows/setup_sound.ps1
+      # Setup a virtual sound card
+      - name: Setup a virtual sound card
+        uses: LABSN/sound-ci-helpers@v1
 
       # Run Tests
       - name: Run Tests
