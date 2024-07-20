@@ -35,16 +35,16 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      # Run MSBuild
+      - name: Run MSBuild
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
+      
       # Install Mesa
       - name: Install Mesa Windows
         uses: f3d-app/install-mesa-windows-action@v1
         with:
           path: Bin\Debug\Win64\Tests\
 
-      # Run MSBuild
-      - name: Run MSBuild
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
-      
       # Run Tests
       - name: Run Tests
         run: Bin\Debug\Win64\Tests\Tests.exe
