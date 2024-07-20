@@ -50,8 +50,8 @@ jobs:
         working-directory: Bin\Debug\Win64\Tests\
 
       # Start the Audio Service
-      #- name: Start the Audio Service
-      #  run: net start audiosrv
+      - name: Start the Audio Service
+        run: net start audiosrv
 
       # Clone and Execute sound-ci-helpers
       - name: Clone the sound-ci-helpers repository
