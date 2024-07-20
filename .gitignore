@@ -17,3 +17,7 @@ Obj/
 .vs/
 .vscode/
 .idea/
+
+# OpenCppCoverage files
+LastCoverageResults.log
+CoverageReport-*

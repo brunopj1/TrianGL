@@ -14,29 +14,39 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # Checkout the repository to the GitHub Actions runner
+
+      # Setup Premake
+      - name: Run Premake
+        uses: abel0b/setup-premake@v2.4
+        with:
+          version: "5.0.0-beta2"
+
+      # Setup MSBuild
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      # Setup OpenCppCoverage
+      - name: Setup OpenCppCoverage
+        run: choco install OpenCppCoverage -y
+
+      # Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
       # Run Premake
-      - name: Run Premake
-        uses: abel0b/setup-premake@v2.4
-        with:
-          version: "5.0.0-beta2"
-
-      # Run Premake
       - name: Run premake
         run: premake5 vs2022
 
-      # Setup MSBuild
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
+      # Run MSBuild
       - name: Run MSBuild
         run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
         
       # Run Tests
       - name: Run Tests
         run: Bin\Debug\Win64\Tests\Tests.exe
+
+      # Run OpenCppCoverage
+      - name: Run OpenCppCoverage
+        run: OpenCppCoverage --cover_children --sources=Engine\Source Bin\Debug\Win64\Tests\Tests.exe

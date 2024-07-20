@@ -20,6 +20,15 @@ def delete_vs_files_in_parent(directory : str):
         if os.path.isdir(child_path):
             delete_vs_files(child_path)
 
+def delete_coverage_files():
+
+    if os.path.exists("LastCoverageResults.log"):
+        os.remove("LastCoverageResults.log")
+
+    for file in os.listdir():
+        if os.path.isdir(file) and file.startswith("CoverageReport-"):
+            shutil.rmtree(file)
+
 # Modify the working directory to the folder containing the script
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -36,6 +45,9 @@ delete_vs_files_in_parent("Games")
 # Delete the Visual Studio solution
 if os.path.exists("TrianGL.sln"):
     os.remove("TrianGL.sln")
+
+# Delete the coverage files
+delete_coverage_files()
 
 # Build and open the Visual Studio solution
 os.system("Premake\\premake5.exe vs2022")
