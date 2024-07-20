@@ -4,6 +4,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Assets/Internal/Quad.h"
+#include <format>
 #include <stb_image.h>
 
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
@@ -26,7 +27,8 @@ void AssetManager::Init()
     const SoLoud::result result = s_SoloudEngine->init();
     if (result != SoLoud::SO_NO_ERROR)
     {
-        throw FailedToInitializeEngineException("Failed to init SoLoud");
+        int errorCode = static_cast<int>(result);
+        throw FailedToInitializeEngineException(std::format("Failed to init SoLoud (error code: {0})", errorCode));
     }
 
     s_SoloudEngine->setGlobalVolume(0.1f);
