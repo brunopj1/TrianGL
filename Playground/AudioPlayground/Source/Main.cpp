@@ -8,7 +8,7 @@ static_assert(false, "The Playground projects are only available in Debug config
 
 i32 main()
 {
-    TGL::ApplicationConfig config
+    TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - AudioPlayground";
     config.Vsync = true;
 

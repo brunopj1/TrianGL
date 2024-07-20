@@ -1,4 +1,4 @@
-name: Build
+name: Build and Test
 
 on:
   push:
@@ -35,4 +35,8 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Run MSBuild
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
+        
+      # Run Tests
+      - name: Run Tests
+        run: Bin\Debug\Win64\Tests\Tests.exe
