@@ -41,9 +41,9 @@ jobs:
       
       # Install Mesa
       - name: Install Mesa Windows
-        uses: f3d-app/install-mesa-windows-action@v1
-        with:
-          path: ${{github.workspace}}\Bin\Debug\Win64\Tests\
+        uses: ssciwr/setup-mesa-dist-win@v2
+          version: '24.1.4'
+          build-type: 'release-msvc'
 
       # Run Tests
       - name: Run Tests
