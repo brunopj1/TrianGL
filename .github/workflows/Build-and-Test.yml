@@ -53,6 +53,11 @@ jobs:
       - name: Start the Audio Service
         run: net start audiosrv
 
+      # Run the Sound Setup
+      - name: Run the Sound Setup
+        shell: pwsh
+        run: ./sound-ci-helpers/windows/setup_sound.ps1
+
       # Run Tests
       - name: Run Tests
         run: Bin\Debug\Win64\Tests\Tests.exe
