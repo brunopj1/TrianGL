@@ -43,7 +43,7 @@ jobs:
       - name: Install Mesa Windows
         uses: f3d-app/install-mesa-windows-action@v1
         with:
-          path: Bin\Debug\Win64\Tests\
+          path: ${{github.workspace}}\Bin\Debug\Win64\Tests\
 
       # Run Tests
       - name: Run Tests
