@@ -26,7 +26,6 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Move the spawning and lookup methods to global functions (and update the wiki)
 - Execute the callbacks after the ImGui NewFrame (to allow for example opening popups, but first check if it is possible already)
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
-- Create a custom shared pointer class that can be reset even if there are still references to it
 - Fix the warnings in the Google Test project
 
 ## Particles

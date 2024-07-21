@@ -25,17 +25,24 @@ void EntityManager::Terminate()
 
 void EntityManager::Update(const f32 deltaTime)
 {
-    for (GameObject* object : s_OnStartQueue)
+    if (!s_OnStartQueue.empty())
     {
-        object->OnStart();
+        // Copy the queue to avoid issues when instantiating new objects in OnStart methods
+        
+        const auto queue = s_OnStartQueue;
 
-        if (object->m_ShouldUpdate)
+        s_OnStartQueue.clear();
+
+        for (GameObject* object : queue)
         {
-            AddToUpdateQueue(object, s_OnUpdateQueue);
+            object->OnStart();
+
+            if (object->m_ShouldUpdate)
+            {
+                AddToUpdateQueue(object, s_OnUpdateQueue);
+            }
         }
     }
-
-    s_OnStartQueue.clear();
 
     s_GameMode->OnEarlyUpdate(deltaTime);
 

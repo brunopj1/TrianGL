@@ -17,6 +17,11 @@ RandomNumberGenerator::RandomNumberGenerator(const u32 seed)
     : m_Seed(seed)
 { }
 
+u32 RandomNumberGenerator::GetSeed() const
+{
+    return m_Seed;
+}
+
 bool RandomNumberGenerator::GetBool()
 {
     UpdateSeed();

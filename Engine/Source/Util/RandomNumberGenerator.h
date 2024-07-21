@@ -19,6 +19,9 @@ namespace TGL
         ~RandomNumberGenerator() = default;
 
     public:
+        u32 GetSeed() const;
+        
+    public:
         bool GetBool();
         
         i32 GetInt();
