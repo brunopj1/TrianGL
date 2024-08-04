@@ -195,7 +195,6 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
 void Window::Terminate()
 {
     glfwDestroyWindow(s_WindowPtr);
-    glfwTerminate();
 }
 
 void Window::PositionCallback(i32 x, i32 y)

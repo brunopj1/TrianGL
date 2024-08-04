@@ -106,8 +106,9 @@ void Application::Init(const ApplicationConfig& config)
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
 #endif
-
+    
     // Core systems
+    Clock::Init();
     InputSystem::Init(Window::GetGlfwWindow());
     AssetManager::Init();
     EntityManager::Init();
@@ -125,8 +126,10 @@ void Application::Terminate()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 #endif
-
+    
     Window::Terminate();
+
+    glfwTerminate();
     
     // Disable the availability flag
     ApplicationStatus::s_IsAvailable = false;

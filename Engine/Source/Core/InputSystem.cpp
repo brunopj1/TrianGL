@@ -83,6 +83,12 @@ void InputSystem::Init(GLFWwindow* windowPtr)
     f64 posX, posY;
     glfwGetCursorPos(s_WindowPtr, &posX, &posY);
     s_MousePosition = {static_cast<i32>(posX), static_cast<i32>(posY)};
+    s_LastMousePosition = s_MousePosition;
+
+    s_MouseDelta = {0, 0};
+    s_MouseScroll = 0;
+
+    s_MouseMode = MouseMode::Normal;
 
     // ReSharper disable CppParameterNeverUsed
 

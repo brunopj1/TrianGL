@@ -32,7 +32,7 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(Component);
 
     private:
-        static inline u64 s_NextId = 1;
+        static inline u64 s_NextId;
 
     private:
         static inline GameMode* s_GameMode = nullptr;

@@ -5,7 +5,7 @@
 #include <glm/vec2.hpp>
 
 // Forward declarations
-// ReSharper disable once CppInconsistentNaming
+// ReSharper disable once CppInconsistentNaming, IdentifierTypo
 struct GLFWwindow;
 
 namespace TGL

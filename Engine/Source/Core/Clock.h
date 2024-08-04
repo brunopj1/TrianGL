@@ -9,23 +9,20 @@ namespace TGL
         friend class Application;
 
     private:
-        static inline f32 s_TotalTime = 0.0f;
-        static inline f32 s_DeltaTime = 0.0f;
+        static inline f32 s_TotalTime;
+        static inline f32 s_DeltaTime;
 
-        static inline u32 s_TotalFrameCount = 0;
-        static inline u32 s_SecondFrameCount = 0;
-        static inline u32 s_FrameRate = 1;
+        static inline u32 s_TotalFrameCount;
+        static inline u32 s_SecondFrameCount;
+        static inline u32 s_FrameRate;
 
-        static inline f32 s_NextSecond = 1.0f;
-        static inline bool s_IsNewSecond = false;
+        static inline f32 s_NextSecond;
+        static inline bool s_IsNewSecond;
 
     public:
         Clock() = delete;
         ~Clock() = delete;
-
-    private:
-        static f32 Update();
-
+        
     public:
         static f32 GetTotalTime();
         static f32 GetDeltaTime();
@@ -34,5 +31,12 @@ namespace TGL
         static u32 GetFrameRate();
 
         static bool IsNewSecond();
+
+    private:
+        static void Init();
+
+    private:
+        static f32 Update();
+
     };
 }

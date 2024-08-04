@@ -8,7 +8,7 @@
 // TODO dont register the input if the user is interacting with ImGui
 
 // Forward declarations
-// ReSharper disable once CppInconsistentNaming
+// ReSharper disable once CppInconsistentNaming, IdentifierTypo
 struct GLFWwindow;
 
 namespace TGL
@@ -31,13 +31,13 @@ namespace TGL
         static inline std::unordered_set<MouseButton> s_MouseButtonsReleasedThisFrame;
         static inline std::unordered_set<MouseButton> s_MouseButtonsDown;
 
-        static inline glm::ivec2 s_MousePosition = {0, 0};
-        static inline glm::ivec2 s_LastMousePosition = {0, 0};
+        static inline glm::ivec2 s_MousePosition;
+        static inline glm::ivec2 s_LastMousePosition;
 
-        static inline glm::ivec2 s_MouseDelta = {0, 0};
-        static inline i32 s_MouseScroll = 0;
+        static inline glm::ivec2 s_MouseDelta;
+        static inline i32 s_MouseScroll;
 
-        static inline MouseMode s_MouseMode = MouseMode::Normal;
+        static inline MouseMode s_MouseMode;
 
     public:
         InputSystem() = delete;

@@ -10,7 +10,7 @@ using namespace TGL;
 
 void EntityManager::Init()
 {
-    
+    s_NextId  = 1;
 }
 
 void EntityManager::Terminate()
