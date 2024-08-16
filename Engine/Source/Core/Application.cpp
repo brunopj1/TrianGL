@@ -4,6 +4,7 @@
 #include <glad/glad.h>
 
 #define GLFW_INCLUDE_NONE
+#include "Exceptions/Core/CannotRunEngine.h"
 #include <GLFW/glfw3.h>
 
 #include <Core/Window.h>
@@ -38,32 +39,10 @@ Application::~Application()
     Terminate();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void Application::Run()
-{
-    GameMode* gameMode = EntityManager::GetGameMode();
-
-    if (gameMode == nullptr)
-    {
-        throw GameModeMissingException();
-    }
-
-    gameMode->OnStart();
-
-    while (!Window::ShouldClose())
-    {
-        PollEvents();
-
-        NewFrame();
-
-        Cleanup();
-    }
-}
-
 void Application::Init(const ApplicationConfig& config)
 {
-    // Enable the availability flag
-    ApplicationStatus::s_IsAvailable = true;
+    // Update the status
+    ApplicationStatus::SetStatus(ApplicationStatusValue::Initializing);
     
     glfwSetErrorCallback(ErrorCallback);
 
@@ -112,10 +91,30 @@ void Application::Init(const ApplicationConfig& config)
     InputSystem::Init(Window::GetGlfwWindow());
     AssetManager::Init();
     EntityManager::Init();
+
+    // Update the status
+    ApplicationStatus::SetStatus(ApplicationStatusValue::PostInit);
+}
+
+void Application::GameLoop(GameMode* gameMode)
+{
+    gameMode->OnStart();
+
+    while (!Window::ShouldClose())
+    {
+        PollEvents();
+
+        NewFrame();
+
+        Cleanup();
+    }
 }
 
 void Application::Terminate()
 {
+    // Update the status
+    ApplicationStatus::SetStatus(ApplicationStatusValue::Terminating);
+    
     // Core systems
     EntityManager::Terminate();
     AssetManager::Terminate();
@@ -131,8 +130,8 @@ void Application::Terminate()
 
     glfwTerminate();
     
-    // Disable the availability flag
-    ApplicationStatus::s_IsAvailable = false;
+    // Update the status
+    ApplicationStatus::SetStatus(ApplicationStatusValue::Closed);
 }
 
 void Application::NewFrame()

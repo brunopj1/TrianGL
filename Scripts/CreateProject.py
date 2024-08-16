@@ -67,9 +67,8 @@ i32 main()
     config.Vsync = true;
 
     TGL::Application app{{config}};
-    app.SetGameMode<{projectName}GameMode>();
-
-    app.Run();
+    
+    app.Run<{projectName}GameMode>();
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();

@@ -5,6 +5,7 @@
 #include <Core/AssetManager.h>
 #include <Core/EntityManager.h>
 #include <Core/InputSystem.h>
+#include "Exceptions/Core/CannotRunEngine.h"
 
 // TODO ensure that all const methods return pointer to const data
 
@@ -21,20 +22,46 @@ namespace TGL
 
     class Application final
     {
-    private:
-        friend class RandomNumberGenerator;
         
     public:
         Application(const ApplicationConfig& config = {});
         ~Application();
 
     public:
-        void Run();
+        Application(const Application&) = delete;
+        Application(Application&&) = delete;
+        Application& operator=(const Application&) = delete;
+        Application& operator=(Application&&) = delete;
+
+    public:
+        template <SpawnableGameMode T, typename... Args>
+        void Run(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+        {
+            // Check and update the status
+            const auto appStatus = ApplicationStatus::GetStatus();
+    
+            if (appStatus != ApplicationStatusValue::PostInit)
+            {
+                throw CannotRunEngine();
+            }
+
+            ApplicationStatus::SetStatus(ApplicationStatusValue::Running);
+
+            // Create the GameMode
+            GameMode* gameMode = EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
+
+            // Run the game loop
+            GameLoop(gameMode);
+
+            // Update the status
+            ApplicationStatus::SetStatus(ApplicationStatusValue::PostRun);
+        }
 
     private:
         static void Init(const ApplicationConfig& config);
+        static void GameLoop(GameMode* gameMode);
         static void Terminate();
-
+         
     private:
         static void NewFrame();
         static void Cleanup();
@@ -49,12 +76,5 @@ namespace TGL
 
     private:
         [[noreturn]] static void ErrorCallback(i32 error, const char* description);
-
-    public:
-        template <SpawnableGameMode T, typename... Args>
-        void SetGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
-        {
-            EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
-        }
-    };
+    };    
 }

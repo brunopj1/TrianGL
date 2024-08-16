@@ -9,9 +9,8 @@ i32 main()
     config.Vsync = false;
 
     TGL::Application app{config};
-    app.SetGameMode<SnakeGameMode>();
 
-    app.Run();
+    app.Run<SnakeGameMode>();
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();

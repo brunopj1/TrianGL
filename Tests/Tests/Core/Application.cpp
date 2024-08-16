@@ -34,18 +34,6 @@ TEST(Application, Run)
     config.Vsync = false;
 
     TGL::Application app{config};
-    app.SetGameMode<TestGameMode>();
 
-    app.Run();
-}
-
-TEST(Application, NoGameMode)
-{
-    TGL::ApplicationConfig config;
-    config.WindowTitle = "Test";
-    config.Vsync = false;
-
-    TGL::Application app{config};
-
-    ASSERT_THROW(app.Run(), TGL::GameModeMissingException);
+    app.Run<TestGameMode>();
 }

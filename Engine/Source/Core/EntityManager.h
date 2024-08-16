@@ -83,7 +83,7 @@ namespace TGL
     private:
         template <typename T, typename... Args>
             requires SpawnableGameMode<T, Args...>
-        static void CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
+        static T* CreateGameMode(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
         {
             ASSERT_APPLICATION_OBJECT_CREATION();
 
@@ -98,6 +98,8 @@ namespace TGL
             s_GameMode = instance;
 
             StoreObjectCallbacks(instance);
+
+            return instance;
         }
 
         static void DestroyGameMode();
