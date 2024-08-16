@@ -41,7 +41,7 @@ void AssetManager::Terminate()
 {
     // Quad asset
     Quad::Terminate();
-    
+
     // SoLoud
     s_SoloudEngine->deinit();
     delete s_SoloudEngine;
@@ -80,7 +80,7 @@ void AssetManager::UnloadTexture(Texture* texture)
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
     ASSERT_APPLICATION_OBJECT_CREATION();
-    
+
     PREPARE_SPAWNER_ASSERT(Audio);
 
     Audio* instance = new Audio(filePath, stream);

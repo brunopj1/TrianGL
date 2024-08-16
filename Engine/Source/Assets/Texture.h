@@ -29,7 +29,7 @@ namespace TGL
         TextureFilterMode Filter = TextureFilterMode::Linear;
         TextureFilterMode MipmapFilter = TextureFilterMode::Linear;
     };
-    
+
     class Sprite
     {
     private:

@@ -9,7 +9,7 @@ namespace TGL
         friend class AssetManager;
         friend class SpriteRenderer;
         friend class ParticleSystem;
-        
+
     public:
         Quad() = delete;
         ~Quad() = delete;

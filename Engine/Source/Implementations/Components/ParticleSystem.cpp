@@ -11,7 +11,6 @@ using namespace TGL;
 ParticleSystem::ParticleSystem(const u32 maxParticles, SharedPtr<Material> material)
     : Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
-    
     ASSERT_APPLICATION_OBJECT_CREATION();
 
     Init();
@@ -51,7 +50,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
 
     gpuParticle.Position = spawnData.Position;
     cpuParticle.Velocity = spawnData.Velocity;
-    
+
     cpuParticle.StartColor = spawnData.StartColor;
     cpuParticle.EndColor = spawnData.EndColor;
 
@@ -72,7 +71,7 @@ bool ParticleSystem::Emit(const ParticleSpawnData& spawnData)
     cpuParticle.TotalDuration = spawnData.Duration;
     cpuParticle.RemainingDuration = spawnData.Duration;
     gpuParticle.RemainingDuration = spawnData.Duration;
-    
+
     return true;
 }
 
@@ -82,7 +81,7 @@ void ParticleSystem::OnUpdate(const f32 deltaTime)
     {
         auto& cpuParticle = m_ParticlesCpu[i];
         auto& gpuParticle = m_ParticlesGpu[i];
-        
+
         if (cpuParticle.RemainingDuration <= 0.0f) continue;
 
         const f32 interp = 1.0f - (cpuParticle.RemainingDuration / cpuParticle.TotalDuration);
@@ -139,7 +138,7 @@ void ParticleSystem::Init()
 {
     m_ParticlesCpu.resize(m_MaxParticles);
     m_ParticlesGpu.resize(m_MaxParticles);
-    
+
     glGenVertexArrays(1, &m_ParticleVao);
     glBindVertexArray(m_ParticleVao);
 
@@ -147,7 +146,7 @@ void ParticleSystem::Init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad::s_QuadEbo);
     glBindBuffer(GL_ARRAY_BUFFER, Quad::s_QuadVbo);
     Quad::BindAttributes();
-    
+
     glGenBuffers(1, &m_ParticleVbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
     glBufferData(GL_ARRAY_BUFFER, m_MaxParticles * sizeof(ParticleGpuData), nullptr, GL_STREAM_DRAW);
@@ -171,7 +170,7 @@ void ParticleSystem::Init()
     glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Rotation));
     glEnableVertexAttribArray(5);
     glVertexAttribDivisor(5, 1);
-    
+
     // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
     glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, RemainingDuration));
     glEnableVertexAttribArray(6);
@@ -193,7 +192,7 @@ u32 ParticleSystem::GetNextUnusedParticleIndex()
 {
     const u32 nextIndex = m_NextUnusedParticleIndex;
     m_NextUnusedParticleIndex = m_MaxParticles;
-    
+
     for (u32 i = nextIndex + 1; i < m_MaxParticles; ++i)
     {
         if (m_ParticlesCpu[i].RemainingDuration <= 0.0f)

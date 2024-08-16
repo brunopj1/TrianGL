@@ -32,7 +32,7 @@ void MaterialUniform::Bind() const
     }
 }
 
-template<>
+template <>
 void MaterialUniformImpl<i32>::BindInternal() const
 {
     glUniform1i(m_Location, Value);

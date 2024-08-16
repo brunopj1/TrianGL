@@ -11,20 +11,20 @@ namespace TGL
 {
     struct ParticleSpawnData final
     {
-        glm::vec2 Position = { 0.0f, 0.0f };
-        glm::vec2 Velocity = { 0.0f, 0.0f };
-        
-        glm::vec4 StartColor = {1.0f, 1.0f, 1.0f, 1.0f };
-        glm::vec4 EndColor = {0.0f, 0.0f, 0.0f, 0.0f };
-        
+        glm::vec2 Position = {0.0f, 0.0f};
+        glm::vec2 Velocity = {0.0f, 0.0f};
+
+        glm::vec4 StartColor = {1.0f, 1.0f, 1.0f, 1.0f};
+        glm::vec4 EndColor = {0.0f, 0.0f, 0.0f, 0.0f};
+
         f32 StartScale = 1.0f;
         f32 EndScale = 1.0f;
-        
+
         f32 StartRotation = 0.0f;
         f32 EndRotation = 0.0f;
-        
+
         bool RotationInDegrees = true;
-        
+
         f32 Duration = 1.0f;
     };
 
@@ -45,7 +45,7 @@ namespace TGL
         f32 Rotation;
         f32 RemainingDuration;
     };
-    
+
     class ParticleSystem final : public Component, public Renderable
     {
     private:
@@ -54,14 +54,14 @@ namespace TGL
         u32 m_MaxParticles;
         u32 m_NextUnusedParticleIndex = 0;
         u32 m_LastUsedParticleIndex = 0;
-        
+
     private:
         SharedPtr<Material> m_Material = nullptr;
-        
+
     private:
         u32 m_ParticleVao = 0;
         u32 m_ParticleVbo = 0;
-        
+
     public:
         ParticleSystem(u32 maxParticles = 1000, SharedPtr<Material> material = nullptr);
         ~ParticleSystem() override;
@@ -73,7 +73,7 @@ namespace TGL
 
     public:
         bool Emit(const ParticleSpawnData& spawnData);
-        
+
     private:
         void OnUpdate(f32 deltaTime) override;
 
@@ -83,7 +83,7 @@ namespace TGL
     private:
         void Init();
         void Terminate();
-        
+
     private:
         u32 GetNextUnusedParticleIndex();
     };

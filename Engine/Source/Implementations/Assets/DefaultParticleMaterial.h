@@ -13,7 +13,7 @@ namespace TGL
 
     private:
         IntUniform* const IsSpriteValid = AddUniform<IntUniform>("uIsSpriteValid");
-        
+
     public:
         DefaultParticleMaterial();
         ~DefaultParticleMaterial() override = default;

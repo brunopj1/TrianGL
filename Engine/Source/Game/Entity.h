@@ -43,20 +43,22 @@ namespace TGL
     };
 
     // Template definitions
-    
-    template <typename T, typename ... Args> requires SpawnableComponent<T, Args...>
+
+    template <typename T, typename... Args> requires SpawnableComponent<T, Args...>
     T* Entity::AttachComponent(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         return EntityManager::CreateComponent<T>(this, std::forward<Args>(args)...);
     }
 
     template <SearchableComponent T>
-    T* Entity::FindComponent() {
+    T* Entity::FindComponent()
+    {
         return EntityManager::FindComponentInEntity<T>(m_Components);
     }
 
     template <SearchableComponent T>
-    std::vector<T*> Entity::FindComponents() {
+    std::vector<T*> Entity::FindComponents()
+    {
         return EntityManager::FindComponentsInEntity<T>(m_Components);
     }
 }

@@ -28,7 +28,7 @@ void Quad::Init()
     };
 
     // @formatter:on
-    
+
     glGenVertexArrays(1, &s_QuadVao);
     glBindVertexArray(s_QuadVao);
 

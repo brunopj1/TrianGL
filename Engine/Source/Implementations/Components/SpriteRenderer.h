@@ -15,7 +15,7 @@ namespace TGL
     {
     private:
         friend class Application;
-        
+
     private:
         Transform m_Transform;
         SharedPtr<Material> m_Material = nullptr;
@@ -29,7 +29,7 @@ namespace TGL
     public:
         Transform& GetTransform();
         const Transform& GetTransform() const;
-        
+
         SharedPtr<Material> GetMaterial() const;
         void SetMaterial(SharedPtr<Material> material);
         SharedPtr<DefaultSpriteMaterial> UseDefaultMaterial();

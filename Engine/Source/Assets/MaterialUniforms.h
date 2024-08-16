@@ -38,7 +38,7 @@ namespace TGL
 
     // Template class
 
-    template<typename T>
+    template <typename T>
     class MaterialUniformImpl final : public MaterialUniform
     {
     public:
@@ -47,45 +47,45 @@ namespace TGL
     public:
         MaterialUniformImpl(const Shader* shader, const std::string& name)
             : MaterialUniform(shader, name), Value() {}
-        
+
         ~MaterialUniformImpl() override = default;
 
     private:
         void BindInternal() const override;
     };
-    
+
     // Common implementations
 
     using IntUniform = MaterialUniformImpl<i32>;
-    
+
     using Int2Uniform = MaterialUniformImpl<glm::ivec2>;
-    
+
     using Int3Uniform = MaterialUniformImpl<glm::ivec3>;
-    
+
     using Int4Uniform = MaterialUniformImpl<glm::ivec4>;
-    
+
     using UintUniform = MaterialUniformImpl<u32>;
-    
+
     using Uint2Uniform = MaterialUniformImpl<glm::uvec2>;
-    
+
     using Uint3Uniform = MaterialUniformImpl<glm::uvec3>;
-    
+
     using Uint4Uniform = MaterialUniformImpl<glm::uvec4>;
-    
+
     using FloatUniform = MaterialUniformImpl<f32>;
-    
+
     using Float2Uniform = MaterialUniformImpl<glm::vec2>;
-    
+
     using Float3Uniform = MaterialUniformImpl<glm::vec3>;
-    
+
     using Float4Uniform = MaterialUniformImpl<glm::vec4>;
-    
+
     using Mat2Uniform = MaterialUniformImpl<glm::mat2>;
-    
+
     using Mat3Uniform = MaterialUniformImpl<glm::mat3>;
-    
+
     using Mat4Uniform = MaterialUniformImpl<glm::mat4>;
-    
+
     // Sprite uniform
 
     class SpriteUniform final : public MaterialUniform

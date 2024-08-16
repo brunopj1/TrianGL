@@ -117,8 +117,8 @@ namespace TGL
     };
 
     // Template definitions
-    
-    template <typename T, typename ... Args> requires SpawnableGameMode<T, Args...>
+
+    template <typename T, typename... Args> requires SpawnableGameMode<T, Args...>
     T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         ASSERT_APPLICATION_OBJECT_CREATION();
@@ -138,7 +138,7 @@ namespace TGL
         return instance;
     }
 
-    template <typename T, typename ... Args> requires SpawnableEntity<T, Args...>
+    template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
     T* EntityManager::CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward) 
     {
         ASSERT_APPLICATION_OBJECT_CREATION();
@@ -156,7 +156,7 @@ namespace TGL
         return instance;
     }
 
-    template <typename T, typename ... Args> requires SpawnableComponent<T, Args...>
+    template <typename T, typename... Args> requires SpawnableComponent<T, Args...>
     T* EntityManager::CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         ASSERT_APPLICATION_OBJECT_CREATION();
@@ -177,7 +177,8 @@ namespace TGL
     }
 
     template <SearchableEntity T>
-    T* EntityManager::FindEntityGlobally() {
+    T* EntityManager::FindEntityGlobally()
+    {
         for (auto entity : s_Entities)
         {
             if (T* casted = dynamic_cast<T*>(entity))
@@ -190,7 +191,8 @@ namespace TGL
     }
 
     template <SearchableEntity T>
-    std::vector<T*> EntityManager::FindEntitiesGlobally() {
+    std::vector<T*> EntityManager::FindEntitiesGlobally()
+    {
         std::vector<T*> entities;
 
         for (auto entity : s_Entities | std::views::values)
@@ -205,7 +207,8 @@ namespace TGL
     }
 
     template <SearchableComponent T>
-    T* EntityManager::FindComponentGlobally() {
+    T* EntityManager::FindComponentGlobally()
+    {
         for (auto component : s_Components | std::views::values)
         {
             if (T* casted = dynamic_cast<T*>(component))
@@ -218,7 +221,8 @@ namespace TGL
     }
 
     template <SearchableComponent T>
-    std::vector<T*> EntityManager::FindComponentsGlobally() {
+    std::vector<T*> EntityManager::FindComponentsGlobally()
+    {
         std::vector<T*> components;
 
         for (auto component : s_Components)
@@ -233,7 +237,8 @@ namespace TGL
     }
 
     template <SearchableComponent T>
-    T* EntityManager::FindComponentInEntity(const std::vector<Component*>& entityComponents) {
+    T* EntityManager::FindComponentInEntity(const std::vector<Component*>& entityComponents)
+    {
         for (auto component : entityComponents)
         {
             if (T* casted = dynamic_cast<T*>(component))
@@ -246,7 +251,8 @@ namespace TGL
     }
 
     template <SearchableComponent T>
-    std::vector<T*> EntityManager::FindComponentsInEntity(const std::vector<Component*>& entityComponents) {
+    std::vector<T*> EntityManager::FindComponentsInEntity(const std::vector<Component*>& entityComponents)
+    {
         std::vector<T*> components;
 
         for (auto component : entityComponents)

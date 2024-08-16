@@ -213,7 +213,7 @@ namespace TGL
     LazyPtr<To> CastTo(const LazyPtr<From>& object)
     {
         if (object == nullptr) return nullptr;
-            
+
         if constexpr (std::is_base_of_v<To, From>)
         {
             return LazyPtr(static_cast<To*>(object.Get()));

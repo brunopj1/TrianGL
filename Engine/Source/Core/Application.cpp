@@ -43,7 +43,7 @@ void Application::Init(const ApplicationConfig& config)
 {
     // Update the status
     ApplicationStatus::SetStatus(ApplicationStatusValue::Initializing);
-    
+
     glfwSetErrorCallback(ErrorCallback);
 
     if (!glfwInit())
@@ -85,7 +85,7 @@ void Application::Init(const ApplicationConfig& config)
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
 #endif
-    
+
     // Core systems
     Clock::Init();
     InputSystem::Init(Window::GetGlfwWindow());
@@ -114,7 +114,7 @@ void Application::Terminate()
 {
     // Update the status
     ApplicationStatus::SetStatus(ApplicationStatusValue::Terminating);
-    
+
     // Core systems
     EntityManager::Terminate();
     AssetManager::Terminate();
@@ -125,11 +125,11 @@ void Application::Terminate()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 #endif
-    
+
     Window::Terminate();
 
     glfwTerminate();
-    
+
     // Update the status
     ApplicationStatus::SetStatus(ApplicationStatusValue::Closed);
 }

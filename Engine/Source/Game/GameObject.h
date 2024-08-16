@@ -52,30 +52,34 @@ namespace TGL
     To* CastTo(From* object);
 
     // Template definitions
-    
-    template <typename T, typename ... Args> requires SpawnableEntity<T, Args...>
+
+    template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
     T* GameObject::SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);
     }
 
     template <SearchableEntity T>
-    T* GameObject::FindEntityGlobally() {
+    T* GameObject::FindEntityGlobally()
+    {
         return EntityManager::FindEntityGlobally<T>();
     }
 
     template <SearchableEntity T>
-    std::vector<T*> GameObject::FindEntitiesGlobally() {
+    std::vector<T*> GameObject::FindEntitiesGlobally()
+    {
         return EntityManager::FindEntitiesGlobally<T>();
     }
 
     template <SearchableComponent T>
-    T* GameObject::FindComponentGlobally() {
+    T* GameObject::FindComponentGlobally()
+    {
         return EntityManager::FindComponentGlobally<T>();
     }
 
     template <SearchableComponent T>
-    std::vector<T*> GameObject::FindComponentsGlobally() {
+    std::vector<T*> GameObject::FindComponentsGlobally()
+    {
         return EntityManager::FindComponentsGlobally<T>();
     }
 
@@ -83,7 +87,7 @@ namespace TGL
     To* CastTo(From* object)
     {
         if (object == nullptr) return nullptr;
-        
+
         if constexpr (std::is_base_of_v<To, From>)
         {
             return static_cast<To*>(object);

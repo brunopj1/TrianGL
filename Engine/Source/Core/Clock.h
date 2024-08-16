@@ -22,7 +22,7 @@ namespace TGL
     public:
         Clock() = delete;
         ~Clock() = delete;
-        
+
     public:
         static f32 GetTotalTime();
         static f32 GetDeltaTime();
@@ -37,6 +37,5 @@ namespace TGL
 
     private:
         static f32 Update();
-
     };
 }

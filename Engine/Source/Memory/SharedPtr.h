@@ -246,7 +246,7 @@ namespace TGL
     SharedPtr<To> CastTo(const SharedPtr<From>& object)
     {
         if (object == nullptr) return nullptr;
-            
+
         if constexpr (std::is_base_of_v<To, From>)
         {
             return SharedPtr(static_cast<To*>(object.Get()), object.m_ReferenceCounter);

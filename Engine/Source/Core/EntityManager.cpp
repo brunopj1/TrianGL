@@ -10,7 +10,7 @@ using namespace TGL;
 
 void EntityManager::Init()
 {
-    s_NextId  = 1;
+    s_NextId = 1;
 }
 
 void EntityManager::Terminate()
@@ -28,7 +28,7 @@ void EntityManager::Update(const f32 deltaTime)
     if (!s_OnStartQueue.empty())
     {
         // Copy the queue to avoid issues when instantiating new objects in OnStart methods
-        
+
         const auto queue = s_OnStartQueue;
 
         s_OnStartQueue.clear();

@@ -84,8 +84,8 @@ namespace TGL
     };
 
     // Template definitions
-    
-    template <typename T, typename ... Args> requires SpawnableMaterial<T, Args...>
+
+    template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
     SharedPtr<T> AssetManager::LoadMaterial(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         ASSERT_APPLICATION_OBJECT_CREATION();
