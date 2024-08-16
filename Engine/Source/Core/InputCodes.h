@@ -10,7 +10,7 @@ namespace TGL
     enum class KeyCode
     {
         /* Error key */
-        Unkown             = -1, // GLFW_KEY_UNKNOWN
+        Unknown            = -1, // GLFW_KEY_UNKNOWN
 
         /* Printable keys */
         Space              = 32, // GLFW_KEY_SPACE
