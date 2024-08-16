@@ -30,40 +30,55 @@ namespace TGL
         virtual void OnUpdate(f32 deltaTime);
 
     public:
-        template <typename T, typename... Args>
-            requires SpawnableEntity<T, Args...>
-        static T* SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
-        {
-            return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);
-        }
+        template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
+        static T* SpawnEntity(Args&&... args);
 
     public:
         template <SearchableEntity T>
-        static T* FindEntityGlobally()
-        {
-            return EntityManager::FindEntityGlobally<T>();
-        }
+        static T* FindEntityGlobally();
 
         template <SearchableEntity T>
-        static std::vector<T*> FindEntitiesGlobally()
-        {
-            return EntityManager::FindEntitiesGlobally<T>();
-        }
+        static std::vector<T*> FindEntitiesGlobally();
 
 
         template <SearchableComponent T>
-        static T* FindComponentGlobally()
-        {
-            return EntityManager::FindComponentGlobally<T>();
-        }
+        static T* FindComponentGlobally();
 
         template <SearchableComponent T>
-        static std::vector<T*> FindComponentsGlobally()
-        {
-            return EntityManager::FindComponentsGlobally<T>();
-        }
+        static std::vector<T*> FindComponentsGlobally();
     };
+
+    template <CastableGameObject To, CastableGameObject From>
+    To* CastTo(From* object);
+
+    // Template definitions
     
+    template <typename T, typename ... Args> requires SpawnableEntity<T, Args...>
+    T* GameObject::SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+    {
+        return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);
+    }
+
+    template <SearchableEntity T>
+    T* GameObject::FindEntityGlobally() {
+        return EntityManager::FindEntityGlobally<T>();
+    }
+
+    template <SearchableEntity T>
+    std::vector<T*> GameObject::FindEntitiesGlobally() {
+        return EntityManager::FindEntitiesGlobally<T>();
+    }
+
+    template <SearchableComponent T>
+    T* GameObject::FindComponentGlobally() {
+        return EntityManager::FindComponentGlobally<T>();
+    }
+
+    template <SearchableComponent T>
+    std::vector<T*> GameObject::FindComponentsGlobally() {
+        return EntityManager::FindComponentsGlobally<T>();
+    }
+
     template <CastableGameObject To, CastableGameObject From>
     To* CastTo(From* object)
     {

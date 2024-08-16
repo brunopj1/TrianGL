@@ -42,21 +42,14 @@ namespace TGL
 
     protected:
         virtual void OnRenderSetup() const;
-        
+
     public:
-        template <typename T, typename... Args>
-            requires SpawnableMaterial<T, Args...>
-        static SharedPtr<T> CreateInstanceOf(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
-        {
-            return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
-        }
+        template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
+        static SharedPtr<T> CreateInstanceOf(Args&&... args);
 
     protected:
         template <SpawnableMaterialUniform T>
-        T* AddUniform(const std::string& name, const bool createIfInvalid = true)
-        {
-            return AssetManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
-        }
+        T* AddUniform(const std::string& name, bool createIfInvalid = true);
 
     private:
         void Use(const glm::mat4& modelMatrix) const;
@@ -64,4 +57,18 @@ namespace TGL
         void CreateEngineUniforms();
         void UpdateEngineUniforms(const glm::mat4& modelMatrix) const;
     };
+
+    // Template definitions
+
+    template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
+    SharedPtr<T> Material::CreateInstanceOf(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+    {
+        return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
+    }
+
+    template <SpawnableMaterialUniform T>
+    T* Material::AddUniform(const std::string& name, const bool createIfInvalid)
+    {
+        return AssetManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
+    }
 }

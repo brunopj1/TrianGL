@@ -15,7 +15,7 @@ RandomNumberGenerator::RandomNumberGenerator()
 
 RandomNumberGenerator::RandomNumberGenerator(const u32 seed)
     : m_Seed(seed)
-{ }
+{}
 
 u32 RandomNumberGenerator::GetSeed() const
 {
@@ -37,7 +37,7 @@ i32 RandomNumberGenerator::GetInt()
 i32 RandomNumberGenerator::GetInt(const i32 min, const i32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
-    
+
     UpdateSeed();
     return min + m_Seed % (max - min + 1);
 }
@@ -51,7 +51,7 @@ u32 RandomNumberGenerator::GetUint()
 u32 RandomNumberGenerator::GetUint(const u32 min, const u32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
-    
+
     UpdateSeed();
     return min + m_Seed % (max - min + 1);
 }
@@ -65,13 +65,13 @@ f32 RandomNumberGenerator::GetFloat()
 f32 RandomNumberGenerator::GetFloat(const f32 min, const f32 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
-    
+
     UpdateSeed();
     return min + m_Seed / static_cast<f32>(UINT_MAX) * (max - min);
 }
 
 f64 RandomNumberGenerator::GetDouble()
-{ 
+{
     UpdateSeed();
     return m_Seed / static_cast<f64>(UINT_MAX);
 }
@@ -79,7 +79,7 @@ f64 RandomNumberGenerator::GetDouble()
 f64 RandomNumberGenerator::GetDouble(const f64 min, const f64 max)
 {
     assert(min <= max && "The minimum value cannot be greater than the maximum value");
-    
+
     UpdateSeed();
     return min + m_Seed / static_cast<f64>(UINT_MAX) * (max - min);
 }
@@ -98,6 +98,7 @@ glm::ivec2 RandomNumberGenerator::GetInt2(const glm::ivec2& min, const glm::ivec
 {
     return {GetInt(min.x, max.x), GetInt(min.y, max.y)};
 }
+
 glm::ivec3 RandomNumberGenerator::GetInt3()
 {
     return {GetInt(), GetInt(), GetInt()};

@@ -9,10 +9,10 @@ namespace TGL
     {
     private:
         friend class Application;
-        
+
     private:
         u32 m_Seed;
-        
+
     public:
         RandomNumberGenerator(); // Will use a random seed
         RandomNumberGenerator(u32 seed);
@@ -20,19 +20,19 @@ namespace TGL
 
     public:
         u32 GetSeed() const;
-        
+
     public:
         bool GetBool();
-        
+
         i32 GetInt();
         i32 GetInt(i32 min, i32 max);
-        
+
         u32 GetUint();
         u32 GetUint(u32 min, u32 max);
-        
+
         f32 GetFloat();
         f32 GetFloat(f32 min, f32 max);
-        
+
         f64 GetDouble();
         f64 GetDouble(f64 min, f64 max);
 
@@ -76,5 +76,3 @@ namespace TGL
         void UpdateSeed();
     };
 }
-
-

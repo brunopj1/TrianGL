@@ -22,7 +22,6 @@ namespace TGL
 
     class Application final
     {
-        
     public:
         Application(const ApplicationConfig& config = {});
         ~Application();
@@ -35,33 +34,13 @@ namespace TGL
 
     public:
         template <SpawnableGameMode T, typename... Args>
-        void Run(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
-        {
-            // Check and update the status
-            const auto appStatus = ApplicationStatus::GetStatus();
-    
-            if (appStatus != ApplicationStatusValue::PostInit)
-            {
-                throw CannotRunEngine();
-            }
-
-            ApplicationStatus::SetStatus(ApplicationStatusValue::Running);
-
-            // Create the GameMode
-            GameMode* gameMode = EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
-
-            // Run the game loop
-            GameLoop(gameMode);
-
-            // Update the status
-            ApplicationStatus::SetStatus(ApplicationStatusValue::PostRun);
-        }
+        void Run(Args&&... args);
 
     private:
         static void Init(const ApplicationConfig& config);
         static void GameLoop(GameMode* gameMode);
         static void Terminate();
-         
+
     private:
         static void NewFrame();
         static void Cleanup();
@@ -76,5 +55,30 @@ namespace TGL
 
     private:
         [[noreturn]] static void ErrorCallback(i32 error, const char* description);
-    };    
+    };
+
+    // Template definitions
+
+    template <SpawnableGameMode T, typename... Args>
+    void Application::Run(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+    {
+        // Check and update the status
+        const auto appStatus = ApplicationStatus::GetStatus();
+
+        if (appStatus != ApplicationStatusValue::PostInit)
+        {
+            throw CannotRunEngine();
+        }
+
+        ApplicationStatus::SetStatus(ApplicationStatusValue::Running);
+
+        // Create the GameMode
+        GameMode* gameMode = EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
+
+        // Run the game loop
+        GameLoop(gameMode);
+
+        // Update the status
+        ApplicationStatus::SetStatus(ApplicationStatusValue::PostRun);
+    }
 }

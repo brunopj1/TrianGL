@@ -29,26 +29,34 @@ namespace TGL
         void Destroy();
 
     public:
-        template <typename T, typename... Args>
-            requires SpawnableComponent<T, Args...>
-        T* AttachComponent(Args&&... args)  // NOLINT(cppcoreguidelines-missing-std-forward)
-        {
-            return EntityManager::CreateComponent<T>(this, std::forward<Args>(args)...);
-        }
+        template <typename T, typename... Args> requires SpawnableComponent<T, Args...>
+        T* AttachComponent(Args&&... args);
 
         void DetachAllComponents() const;
 
     public:
         template <SearchableComponent T>
-        T* FindComponent()
-        {
-            return EntityManager::FindComponentInEntity<T>(m_Components);
-        }
+        T* FindComponent();
 
         template <SearchableComponent T>
-        std::vector<T*> FindComponents()
-        {
-            return EntityManager::FindComponentsInEntity<T>(m_Components);
-        }
+        std::vector<T*> FindComponents();
     };
+
+    // Template definitions
+    
+    template <typename T, typename ... Args> requires SpawnableComponent<T, Args...>
+    T* Entity::AttachComponent(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+    {
+        return EntityManager::CreateComponent<T>(this, std::forward<Args>(args)...);
+    }
+
+    template <SearchableComponent T>
+    T* Entity::FindComponent() {
+        return EntityManager::FindComponentInEntity<T>(m_Components);
+    }
+
+    template <SearchableComponent T>
+    std::vector<T*> Entity::FindComponents() {
+        return EntityManager::FindComponentsInEntity<T>(m_Components);
+    }
 }
