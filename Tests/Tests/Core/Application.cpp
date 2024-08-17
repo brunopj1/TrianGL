@@ -1,6 +1,5 @@
 ﻿#include "Core/Application.h"
 #include "Core/Window.h"
-#include "Exceptions/Game/MissingGameModeException.h"
 #include "Game/GameMode.h"
 
 #include "gtest/gtest.h"

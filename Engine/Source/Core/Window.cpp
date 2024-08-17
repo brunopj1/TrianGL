@@ -2,20 +2,19 @@
 
 #include <Core/Application.h>
 #include <Events/WindowEvents.h>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "Internal/RenderLayer.h"
+#include <format>
 
 #include <Implementations/Entities/Camera.h>
 
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
-#include <format>
 #include <stdexcept>
 #include <utility>
 
 using namespace TGL;
 using namespace TGL;
 
-constexpr i32 minimun_window_resolution = 400;
+constexpr glm::uvec2 minimum_window_resolution = {400, 400};
 
 bool Window::IsFullscreen()
 {
@@ -30,14 +29,9 @@ void Window::SetFullscreen(const bool fullscreen)
 
     s_Fullscreen = fullscreen;
 
-    glfwSetWindowMonitor(
-        s_WindowPtr,
-        fullscreen ? glfwGetPrimaryMonitor() : nullptr,
-        s_Position.x, s_Position.y,
-        s_Resolution.x, s_Resolution.y,
-        GLFW_DONT_CARE
-    );
+    RenderLayer::SetFullscreen(s_WindowPtr, fullscreen, s_Position, s_Resolution);
 
+    // There is no glfw callback for fullscreen, so we need to call the event manually
     FullscreenCallback(fullscreen);
 }
 
@@ -45,35 +39,35 @@ bool Window::IsMaximized()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    return glfwGetWindowAttrib(s_WindowPtr, GLFW_MAXIMIZED);
+    return RenderLayer::IsMaximized(s_WindowPtr);
 }
 
 void Window::Maximize()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    glfwMaximizeWindow(s_WindowPtr);
+    RenderLayer::MaximizeWindow(s_WindowPtr);
 }
 
 bool Window::IsMinimized()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    return glfwGetWindowAttrib(s_WindowPtr, GLFW_ICONIFIED);
+    return RenderLayer::IsMinimized(s_WindowPtr);
 }
 
 void Window::Minimize()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    glfwIconifyWindow(s_WindowPtr);
+    RenderLayer::MinimizeWindow(s_WindowPtr);
 }
 
 void Window::Restore()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    glfwRestoreWindow(s_WindowPtr);
+    RenderLayer::RestoreWindow(s_WindowPtr);
 }
 
 std::string Window::GetTitle()
@@ -86,7 +80,8 @@ void Window::SetTitle(const std::string& title)
     ASSERT_APPLICATION_AVAILABILITY();
 
     s_Title = title;
-    glfwSetWindowTitle(s_WindowPtr, s_Title.c_str());
+
+    RenderLayer::SetWindowTitle(s_WindowPtr, s_Title);
 }
 
 glm::ivec2 Window::GetPosition()
@@ -99,7 +94,7 @@ void Window::SetPosition(const glm::ivec2 position)
     ASSERT_APPLICATION_AVAILABILITY();
 
     // s_Position is updated in the callback
-    glfwSetWindowPos(s_WindowPtr, position.x, position.y);
+    RenderLayer::SetWindowPosition(s_WindowPtr, position);
 }
 
 glm::uvec2 Window::GetResolution()
@@ -111,13 +106,13 @@ void Window::SetResolution(const glm::uvec2 resolution)
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    if (resolution.x == minimun_window_resolution || resolution.y == minimun_window_resolution)
+    if (resolution.x < minimum_window_resolution.x || resolution.y < minimum_window_resolution.y)
     {
-        throw std::invalid_argument(std::format("The resolution must be greater than {}", minimun_window_resolution));
+        throw std::invalid_argument(std::format("The resolution must be greater than {{{}, {}}}", minimum_window_resolution.x, minimum_window_resolution.y));
     }
 
     // s_Resolution is updated in the callback
-    glfwSetWindowSize(s_WindowPtr, resolution.x, resolution.y);
+    RenderLayer::SetWindowResolution(s_WindowPtr, resolution);
 }
 
 f32 Window::GetAspectRatio()
@@ -135,17 +130,18 @@ void Window::SetVsync(const bool vsync)
     ASSERT_APPLICATION_AVAILABILITY();
 
     s_Vsync = vsync;
-    glfwSwapInterval(vsync);
+
+    RenderLayer::SetSwapInterval(s_Vsync);
 }
 
 void Window::Close()
 {
     ASSERT_APPLICATION_AVAILABILITY();
 
-    glfwSetWindowShouldClose(s_WindowPtr, GLFW_TRUE);
+    RenderLayer::CloseWindow(s_WindowPtr);
 }
 
-void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
+GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
 {
     s_Title = std::move(title);
     s_Position = position;
@@ -153,51 +149,35 @@ void Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2
     s_AspectRatio = static_cast<f32>(resolution.x) / static_cast<f32>(resolution.y);
     s_Fullscreen = false; // This is updated later
     s_Vsync = vsync;
+    
 
-    s_WindowPtr = glfwCreateWindow(s_Resolution.x, s_Resolution.y, s_Title.c_str(), nullptr, nullptr);
+    s_WindowPtr = RenderLayer::CreateWindow(s_Title, s_Resolution, minimum_window_resolution);
 
     if (s_WindowPtr == nullptr)
     {
         throw FailedToInitializeEngineException("Failed to create GLFW window");
     }
 
-    glfwSetWindowSizeLimits(s_WindowPtr, minimun_window_resolution, minimun_window_resolution, GLFW_DONT_CARE, GLFW_DONT_CARE);
-
-    glfwSetWindowPosCallback(s_WindowPtr, [](GLFWwindow* _, const i32 x, const i32 y)
-    {
-        PositionCallback(x, y);
-    });
-
-    glfwSetWindowSizeCallback(s_WindowPtr, [](GLFWwindow* _, const i32 width, const i32 height)
-    {
-        SizeCallback(width, height);
-    });
-
-    glfwSetWindowMaximizeCallback(s_WindowPtr, [](GLFWwindow* _, const i32 maximized)
-    {
-        maximized ? MaximizeCallback() : RestoreCallback();
-    });
-
-    glfwSetWindowIconifyCallback(s_WindowPtr, [](GLFWwindow* _, const i32 minimized)
-    {
-        minimized ? MinimizeCallback() : RestoreCallback();
-    });
-
-    glfwMakeContextCurrent(s_WindowPtr);
+    RenderLayer::SetWindowPositionCallback(s_WindowPtr, PositionCallback);
+    RenderLayer::SetWindowSizeCallback(s_WindowPtr, SizeCallback);
+    RenderLayer::SetWindowMaximizeCallback(s_WindowPtr, MaximizeCallback);
+    RenderLayer::SetWindowMinimizeCallback(s_WindowPtr, MinimizeCallback);
 
     SetPosition(s_Position);
 
     if (fullscreen) SetFullscreen(true);
 
     SetVsync(s_Vsync);
+
+    return s_WindowPtr;
 }
 
 void Window::Terminate()
 {
-    glfwDestroyWindow(s_WindowPtr);
+    RenderLayer::DestroyWindow(s_WindowPtr);
 }
 
-void Window::PositionCallback(i32 x, i32 y)
+void Window::PositionCallback(GLFWwindow* /* windowPtr */, i32 x, i32 y)
 {
     s_Position = {x, y};
 
@@ -207,11 +187,12 @@ void Window::PositionCallback(i32 x, i32 y)
     }
 }
 
-void Window::SizeCallback(i32 width, i32 height)
+void Window::SizeCallback(GLFWwindow* /* windowPtr */, i32 width, i32 height)
 {
     s_Resolution = {width, height};
     s_AspectRatio = static_cast<f32>(width) / static_cast<f32>(height);
-    glViewport(0, 0, width, height);
+
+    RenderLayer::SetupOpenGlVersion();
 
     for (const auto camera : Entity::FindEntitiesGlobally<Camera>())
     {
@@ -234,45 +215,45 @@ void Window::FullscreenCallback(const bool fullscreen)
     }
 }
 
-void Window::MaximizeCallback()
+void Window::MaximizeCallback(GLFWwindow* /* windowPtr */, const i32 maximized)
 {
-    for (const auto listener : WindowMaximizedEvent::s_Listeners)
+    if (maximized)
     {
-        listener->OnWindowMaximized();
+        for (const auto listener : WindowMaximizedEvent::s_Listeners)
+        {
+            listener->OnWindowMaximized();
+        }
+    }
+    else // Restored
+    {
+        for (const auto listener : WindowRestoredEvent::s_Listeners)
+        {
+            listener->OnWindowRestored();
+        }
     }
 }
 
-void Window::MinimizeCallback()
+void Window::MinimizeCallback(GLFWwindow* /* windowPtr */, const i32 minimized)
 {
-    for (const auto listener : WindowMinimizedEvent::s_Listeners)
+    if (minimized)
     {
-        listener->OnWindowMinimized();
+        for (const auto listener : WindowMinimizedEvent::s_Listeners)
+        {
+            listener->OnWindowMinimized();
+        }
     }
-}
-
-void Window::RestoreCallback()
-{
-    for (const auto listener : WindowRestoredEvent::s_Listeners)
+    else // Restored
     {
-        listener->OnWindowRestored();
+        for (const auto listener : WindowRestoredEvent::s_Listeners)
+        {
+            listener->OnWindowRestored();
+        }
     }
-}
-
-void Window::SwapBuffers()
-{
-    glfwSwapBuffers(s_WindowPtr);
-}
-
-// ReSharper disable once CppMemberFunctionMayBeStatic
-
-void Window::PollEvents()
-{
-    glfwPollEvents();
 }
 
 bool Window::ShouldClose()
 {
-    return glfwWindowShouldClose(s_WindowPtr);
+    return RenderLayer::ShouldCloseWindow(s_WindowPtr);
 }
 
 GLFWwindow* Window::GetGlfwWindow()

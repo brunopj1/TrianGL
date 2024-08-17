@@ -27,6 +27,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Execute the callbacks after the ImGui NewFrame (to allow for example opening popups, but first check if it is possible already)
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 - Fix the warnings in the Google Test project
+- Run python validation scripts in the CI
 
 ## Particles
 

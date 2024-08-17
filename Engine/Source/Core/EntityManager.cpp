@@ -81,14 +81,14 @@ Component* EntityManager::GetComponent(const u64 id)
     return nullptr;
 }
 
-size_t EntityManager::GetEntityCount()
+u32 EntityManager::GetEntityCount()
 {
-    return s_Entities.size();
+    return static_cast<u32>(s_Entities.size());
 }
 
-size_t EntityManager::GetComponentCount()
+u32 EntityManager::GetComponentCount()
 {
-    return s_Components.size();
+    return static_cast<u32>(s_Components.size());
 }
 
 void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)

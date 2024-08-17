@@ -44,14 +44,6 @@ namespace TGL
     private:
         static void NewFrame();
         static void Cleanup();
-        static void PollEvents();
-
-#ifdef DEBUG
-
-    private:
-        static void RenderDebugInfo();
-
-#endif
 
     private:
         [[noreturn]] static void ErrorCallback(i32 error, const char* description);

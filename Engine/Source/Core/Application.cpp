@@ -1,31 +1,13 @@
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include <Core/Application.h>
-
-#define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
-#include <glad/glad.h>
-
-#define GLFW_INCLUDE_NONE
-#include "Exceptions/Core/CannotRunEngine.h"
-#include <GLFW/glfw3.h>
-
 #include <Core/Window.h>
 #include <Core/Clock.h>
+#include "Internal/RenderLayer.h"
+
 #include <Implementations/Components/SpriteRenderer.h>
-
 #include <Implementations/Entities/Camera.h>
-#include <Exceptions/Core/FailedToInitializeEngineException.h>
 
-#include <Exceptions/Game/MissingGameModeException.h>
 #include <Exceptions/OpenGL/OpenGlException.h>
-
-#ifdef DEBUG
-#include <iostream>
-#endif
-
-#ifdef DEBUG
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#endif
 
 using namespace TGL;
 
@@ -44,51 +26,33 @@ void Application::Init(const ApplicationConfig& config)
     // Update the status
     ApplicationStatus::SetStatus(ApplicationStatusValue::Initializing);
 
-    glfwSetErrorCallback(ErrorCallback);
-
-    if (!glfwInit())
+    // Init GLFW, GLAD, IMGUI    
+    RenderLayer::SetErrorCallback(ErrorCallback);
+    
+    if (!RenderLayer::InitGlfw())
     {
         throw FailedToInitializeEngineException("Failed to init GLFW");
     }
+    
+    RenderLayer::SetupOpenGlVersion();
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    Window::Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
-
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) // NOLINT(clang-diagnostic-cast-function-type-strict)
+    const auto windowPtr = Window::Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
+    
+    if (!RenderLayer::InitGlad())
     {
-        throw FailedToInitializeEngineException("Failed to init GLAD");
+        throw FailedToInitializeEngineException("Failed to init Glad");
     }
 
-#ifdef DEBUG
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui::GetIO().IniFilename = nullptr;
-
-    ImGui::StyleColorsDark();
-
-    if (!ImGui_ImplGlfw_InitForOpenGL(Window::GetGlfwWindow(), true))
+    if (!RenderLayer::InitImgui(windowPtr))
     {
-        throw FailedToInitializeEngineException("Failed to init ImGui for GLFW");
+        throw FailedToInitializeEngineException("Failed to init Imgui");
     }
 
-    if (!ImGui_ImplOpenGL3_Init("#version 430"))
-    {
-        throw FailedToInitializeEngineException("Failed to init ImGui for OpenGL 3");
-    }
-#endif
-
-#ifdef DEBUG
-    std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
-    std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
-#endif
+    RenderLayer::DebugVersions();
 
     // Core systems
     Clock::Init();
-    InputSystem::Init(Window::GetGlfwWindow());
+    InputSystem::Init(windowPtr);
     AssetManager::Init();
     EntityManager::Init();
 
@@ -102,7 +66,7 @@ void Application::GameLoop(GameMode* gameMode)
 
     while (!Window::ShouldClose())
     {
-        PollEvents();
+        RenderLayer::PollEvents();
 
         NewFrame();
 
@@ -120,15 +84,11 @@ void Application::Terminate()
     AssetManager::Terminate();
     InputSystem::Terminate();
 
-#ifdef DEBUG
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-#endif
+    RenderLayer::TerminateImgui();
 
     Window::Terminate();
 
-    glfwTerminate();
+    RenderLayer::TerminateGlfw();
 
     // Update the status
     ApplicationStatus::SetStatus(ApplicationStatusValue::Closed);
@@ -136,13 +96,7 @@ void Application::Terminate()
 
 void Application::NewFrame()
 {
-    // Prepare the ImGui frame
-
-#ifdef DEBUG
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-#endif
+    RenderLayer::PrepareImguiFrame();
 
     // Update
 
@@ -155,8 +109,7 @@ void Application::NewFrame()
     if (camera != nullptr) camera->UpdateMatrices();
 
     const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0f);
+    RenderLayer::ClearBuffers(backgroundColor);
 
     if (camera != nullptr)
     {
@@ -164,47 +117,21 @@ void Application::NewFrame()
     }
 
 #ifdef DEBUG
-    RenderDebugInfo();
+    const u32 framerate = Clock::GetFrameRate();
+    const u32 entityCount = EntityManager::GetEntityCount();
+    const u32 componentCount = EntityManager::GetComponentCount();
+    RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
 #endif
 
-#ifdef DEBUG
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-#endif
+    RenderLayer::RenderImguiFrame();
 
-    Window::SwapBuffers();
+    RenderLayer::SwapBuffers(Window::GetGlfwWindow());
 }
 
 void Application::Cleanup()
 {
     InputSystem::OnEndOfFrame();
 }
-
-void Application::PollEvents()
-{
-    Window::PollEvents();
-}
-
-#ifdef DEBUG
-
-void Application::RenderDebugInfo()
-{
-    const u32 framerate = Clock::GetFrameRate();
-    const f32 frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
-
-    std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
-    message += std::format("Entities: {0} | Components: {1}", EntityManager::GetEntityCount(), EntityManager::GetComponentCount());
-
-    const char* cMessage = message.c_str();
-
-    const ImGuiViewport* viewport = ImGui::GetMainViewport();
-    const ImVec2 windowPos = viewport->WorkPos + ImVec2(10, viewport->WorkSize.y - ImGui::CalcTextSize(cMessage).y - 10);
-
-    ImDrawList* drawList = ImGui::GetForegroundDrawList();
-    drawList->AddText(windowPos, IM_COL32(255, 255, 255, 255), cMessage);
-}
-
-#endif
 
 void Application::ErrorCallback(const i32 error, const char* description)
 {

@@ -59,21 +59,18 @@ namespace TGL
         static void Close();
 
     private:
-        static void Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
+        static GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
         static void Terminate();
 
     private:
-        static void PositionCallback(i32 x, i32 y);
-        static void SizeCallback(i32 width, i32 height);
+        static void PositionCallback(GLFWwindow* windowPtr, i32 x, i32 y);
+        static void SizeCallback(GLFWwindow* windowPtr, i32 width, i32 height);
 
         static void FullscreenCallback(bool fullscreen);
-        static void MaximizeCallback();
-        static void MinimizeCallback();
-        static void RestoreCallback();
+        static void MaximizeCallback(GLFWwindow* windowPtr, i32 maximized);
+        static void MinimizeCallback(GLFWwindow* windowPtr, i32 minimized);
 
     private:
-        static void SwapBuffers();
-        static void PollEvents();
         static bool ShouldClose();
 
     private:

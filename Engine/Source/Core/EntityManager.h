@@ -17,6 +17,7 @@ namespace TGL
     {
     private:
         friend class Application;
+        friend class RenderLayer;
         friend class GameObject;
         friend class GameMode;
         friend class Entity;
@@ -62,8 +63,8 @@ namespace TGL
         static Entity* GetEntity(u64 id);
         static Component* GetComponent(u64 id);
 
-        static size_t GetEntityCount();
-        static size_t GetComponentCount();
+        static u32 GetEntityCount();
+        static u32 GetComponentCount();
 
     private:
         static void AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue);
