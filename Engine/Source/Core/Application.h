@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Clock.h"
 #include "DataTypes.h"
 #include <Game/GameMode.h>
 #include <Core/AssetManager.h>
@@ -63,6 +64,9 @@ namespace TGL
         }
 
         ApplicationStatus::SetStatus(ApplicationStatusValue::Running);
+
+        // Start the clock
+        Clock::Start();
 
         // Create the GameMode
         GameMode* gameMode = EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);

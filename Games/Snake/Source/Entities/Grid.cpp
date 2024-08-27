@@ -113,5 +113,5 @@ void Grid::FocusCamera() const
         camera->SetHorizontalSize(m_Size.x + 0.5f);
     }
 
-    camera->GetTransform().SetPosition(glm::vec3(m_Size, 0) * 0.5f);
+    camera->GetTransform().SetPosition(glm::vec2(m_Size) * 0.5f);
 }

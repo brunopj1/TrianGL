@@ -1,7 +1,7 @@
 ﻿#include "Core/DataTypes.h"
+#include "Core/Internal/RenderLayer.h"
 #include <ASsets/Texture.h>
 
-#include <glad/glad.h>
 #include <stb_image.h>
 #include <Core/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
@@ -11,8 +11,7 @@ using namespace TGL;
 
 void Sprite::Unbind(const u8 slot)
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    RenderLayer::UnbindTexture(slot);
 }
 
 TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix)
@@ -40,8 +39,7 @@ glm::uvec2 TextureSlice::GetResolution() const
 
 void TextureSlice::Bind(const u8 slot) const
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_Texture->m_TextureId);
+    RenderLayer::BindTexture(m_Texture->m_TextureId, slot);
 }
 
 glm::mat4* TextureSlice::GetMatrix() const
@@ -187,53 +185,16 @@ void Texture::Init(const TextureParameters& parameters)
 
     m_Resolution = {width, height};
 
-    glGenTextures(1, &m_TextureId);
-    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    RenderLayer::GenerateTexture(m_TextureId);
 
-    i32 glWrapParameter = 0;
+    RenderLayer::SetTextureWrapMode(parameters.Wrap);
+    RenderLayer::SetTextureFilterMode(parameters.Filter, parameters.MipmapFilter, parameters.GenerateMipmaps);
 
-    switch (parameters.Wrap)
-    {
-        case TextureWrapMode::Repeat:
-            glWrapParameter = GL_REPEAT;
-            break;
-        case TextureWrapMode::MirroredRepeat:
-            glWrapParameter = GL_MIRRORED_REPEAT;
-            break;
-        case TextureWrapMode::ClampToEdge:
-            glWrapParameter = GL_CLAMP_TO_EDGE;
-            break;
-        case TextureWrapMode::ClampToBorder:
-            glWrapParameter = GL_CLAMP_TO_BORDER;
-            break;
-    }
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrapParameter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrapParameter);
-
-    const i32 glMagFilterParameter = parameters.Filter == TextureFilterMode::Linear ? GL_LINEAR : GL_NEAREST;
-    i32 glMinFilterParameter = glMagFilterParameter;
+    RenderLayer::SetTextureData(m_Resolution, data);
 
     if (parameters.GenerateMipmaps)
     {
-        if (parameters.Filter == TextureFilterMode::Linear)
-        {
-            glMinFilterParameter = parameters.MipmapFilter == TextureFilterMode::Linear ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR_MIPMAP_NEAREST;
-        }
-        else // (parameters.Filter == TextureFilterMode::Nearest)
-        {
-            glMinFilterParameter = parameters.MipmapFilter == TextureFilterMode::Linear ? GL_NEAREST_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST;
-        }
-    }
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, glMinFilterParameter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, glMagFilterParameter);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-    if (parameters.GenerateMipmaps)
-    {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        RenderLayer::GenerateTextureMipmaps();
     }
 
     stbi_image_free(data);
@@ -241,14 +202,13 @@ void Texture::Init(const TextureParameters& parameters)
 
 void Texture::Free()
 {
-    glDeleteTextures(1, &m_TextureId);
+    RenderLayer::DeleteTexture(m_TextureId);
     m_TextureId = 0;
 }
 
 void Texture::Bind(const u8 slot) const
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, m_TextureId);
+    RenderLayer::BindTexture(m_TextureId, slot);
 }
 
 glm::mat4* Texture::GetMatrix() const

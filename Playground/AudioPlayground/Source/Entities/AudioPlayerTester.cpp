@@ -2,8 +2,11 @@
 
 #include "AudioTester.h"
 #include "WindowConstants.h"
-#include <format>
+
+#ifdef DEBUG
 #include <imgui.h>
+#include <format>
+#endif
 
 using namespace TGL;
 
@@ -22,6 +25,7 @@ AudioPlayerTester::AudioPlayerTester()
 
 void AudioPlayerTester::OnUpdate(f32 deltaTime)
 {
+#ifdef DEBUG
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_player_window_size.x, audio_player_window_size.y), ImGuiCond_Appearing);
 
@@ -68,4 +72,5 @@ void AudioPlayerTester::OnUpdate(f32 deltaTime)
     }
 
     ImGui::End();
+#endif
 }

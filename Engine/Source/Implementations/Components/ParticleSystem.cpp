@@ -1,9 +1,9 @@
-﻿#include "Assets/Material.h"
+﻿#include <Implementations/Components/ParticleSystem.h>
+
+#include "Assets/Material.h"
 #include "Assets/Internal/Quad.h"
+#include "Core/Internal/RenderLayer.h"
 
-#include <Implementations/Components/ParticleSystem.h>
-
-#include <glad/glad.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;
@@ -104,8 +104,7 @@ void ParticleSystem::OnUpdate(const f32 deltaTime)
         }
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
+    RenderLayer::UpdateBufferData(m_ParticleVbo, BufferType::ArrayBuffer, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
 
     while (m_ParticlesCpu[m_LastUsedParticleIndex].RemainingDuration <= 0.0f && m_LastUsedParticleIndex > 0)
     {
@@ -126,12 +125,7 @@ void ParticleSystem::Render() const
 
     m_Material->Use(modelMatrix);
 
-    glBindVertexArray(m_ParticleVao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad::s_QuadEbo);
-
-    glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr, m_MaxParticles);
-
-    glBindVertexArray(0);
+    RenderLayer::DrawElementsInstanced(m_ParticleVao, Quad::s_QuadEbo, 6, m_LastUsedParticleIndex + 1);
 }
 
 void ParticleSystem::Init()
@@ -139,52 +133,31 @@ void ParticleSystem::Init()
     m_ParticlesCpu.resize(m_MaxParticles);
     m_ParticlesGpu.resize(m_MaxParticles);
 
-    glGenVertexArrays(1, &m_ParticleVao);
-    glBindVertexArray(m_ParticleVao);
-
+    RenderLayer::GenerateVertexArray(m_ParticleVao);
+    
     // Bind the quad EBO and VBO and setup the attributes
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad::s_QuadEbo);
-    glBindBuffer(GL_ARRAY_BUFFER, Quad::s_QuadVbo);
-    Quad::BindAttributes();
+    RenderLayer::BindBuffer(Quad::s_QuadEbo, BufferType::ElementArrayBuffer);
+    RenderLayer::BindBuffer(Quad::s_QuadVbo, BufferType::ArrayBuffer);
+    Quad::SetupVertexAttributes();
 
-    glGenBuffers(1, &m_ParticleVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, m_ParticleVbo);
-    glBufferData(GL_ARRAY_BUFFER, m_MaxParticles * sizeof(ParticleGpuData), nullptr, GL_STREAM_DRAW);
+    RenderLayer::GenerateBuffer(m_ParticleVbo, BufferType::ArrayBuffer);
+    RenderLayer::SetBufferData(m_ParticleVbo, BufferType::ArrayBuffer, BufferDrawType::StreamDraw, m_MaxParticles * sizeof(ParticleGpuData), nullptr);
 
-    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Position));
-    glEnableVertexAttribArray(2);
-    glVertexAttribDivisor(2, 1);
+    RenderLayer::SetVertexAttributePointerForInstancing(2, 2, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Position));
+    RenderLayer::SetVertexAttributePointerForInstancing(3, 4, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Color));
+    RenderLayer::SetVertexAttributePointerForInstancing(4, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Scale));
+    RenderLayer::SetVertexAttributePointerForInstancing(5, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Rotation));
+    RenderLayer::SetVertexAttributePointerForInstancing(6, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, RemainingDuration));
 
-    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Color));
-    glEnableVertexAttribArray(3);
-    glVertexAttribDivisor(3, 1);
-
-    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Scale));
-    glEnableVertexAttribArray(4);
-    glVertexAttribDivisor(4, 1);
-
-    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, Rotation));
-    glEnableVertexAttribArray(5);
-    glVertexAttribDivisor(5, 1);
-
-    // ReSharper disable once CppCStyleCast, CppZeroConstantCanBeReplacedWithNullptr, performance-no-int-to-ptr
-    glVertexAttribPointer(6, 1, GL_FLOAT, GL_FALSE, sizeof(ParticleGpuData), (void*)offsetof(ParticleGpuData, RemainingDuration));
-    glEnableVertexAttribArray(6);
-    glVertexAttribDivisor(6, 1);
-
-    glBindVertexArray(0);
+    RenderLayer::UnbindVertexArray();
 }
 
 void ParticleSystem::Terminate()
 {
-    glDeleteBuffers(1, &m_ParticleVbo);
+    RenderLayer::DeleteBuffer(m_ParticleVbo);
     m_ParticleVbo = 0;
 
-    glDeleteVertexArrays(1, &m_ParticleVao);
+    RenderLayer::DeleteVertexArray(m_ParticleVao);
     m_ParticleVao = 0;
 }
 

@@ -14,6 +14,7 @@ namespace TGL
     {
     private:
         friend class Application;
+        friend class RenderLayer;
 
     private:
         static inline GLFWwindow* s_WindowPtr = nullptr;

@@ -1,29 +1,30 @@
 ﻿#include "Core/DataTypes.h"
+#include "Core/Internal/RenderLayer.h"
 #include <Assets/Internal/Shader.h>
 
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Exceptions/Common/FileTooBigException.h>
 #include <Exceptions/OpenGL/ShaderCompilationException.h>
-#include <glad/glad.h>
-#include <Internal/Asserts/ApplicationAsserts.h>
-#include <codecvt>
+
 #include <fstream>
 #include <sstream>
 
 using namespace TGL;
 
+// TODO create a constructor for a fake Shader which sets the program id to -1 (init and Free in the constructor and destructor should check if the program id is -1)
+
 Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
     : m_VertexShader(std::move(vertexShaderPath)), m_FragmentShader(std::move(fragmentShaderPath))
 {
     // Init() and Free() cannot be called in the constructor and destructor
-    // because sometimes we create fake Shader objects to acess the unordered_map
+    // because sometimes we create fake Shader objects to access the unordered_map
     // These methods are called by the TGL::AssetManager
 }
 
 void Shader::Init()
 {
-    m_VertexShaderId = CompileShader(m_VertexShader, GL_VERTEX_SHADER);
-    m_FragmentShaderId = CompileShader(m_FragmentShader, GL_FRAGMENT_SHADER);
+    m_VertexShaderId = CompileShader(m_VertexShader, ShaderType::Vertex);
+    m_FragmentShaderId = CompileShader(m_FragmentShader, ShaderType::Fragment);
 
     LinkProgram();
 
@@ -32,67 +33,44 @@ void Shader::Init()
 
 void Shader::Free()
 {
-    glDeleteShader(m_VertexShaderId);
+    RenderLayer::DeleteShader(m_VertexShaderId);
     m_VertexShaderId = 0;
 
-    glDeleteShader(m_FragmentShaderId);
+    RenderLayer::DeleteShader(m_FragmentShaderId);
     m_FragmentShaderId = 0;
 
-    glDeleteProgram(m_ProgramId);
+    RenderLayer::DeleteProgram(m_ProgramId);
     m_ProgramId = 0;
 }
 
 void Shader::LinkProgram()
 {
-    m_ProgramId = glCreateProgram();
+    m_ProgramId = RenderLayer::CreateProgram();
 
-    glAttachShader(m_ProgramId, m_VertexShaderId);
-    glAttachShader(m_ProgramId, m_FragmentShaderId);
+    RenderLayer::AttachShader(m_ProgramId, m_VertexShaderId);
+    RenderLayer::AttachShader(m_ProgramId, m_FragmentShaderId);
+    
+    std::string errorLog;
+    const bool success = RenderLayer::LinkProgram(m_ProgramId, errorLog);
 
-    glLinkProgram(m_ProgramId);
-
-    i32 success = 0;
-    glGetProgramiv(m_ProgramId, GL_LINK_STATUS, &success);
-
-    if (success == 0)
+    if (!success)
     {
-        i32 logLength = 0;
-        glGetProgramiv(m_ProgramId, GL_INFO_LOG_LENGTH, &logLength);
-
-        char* log = new char[logLength + 1];
-        glGetProgramInfoLog(m_ProgramId, logLength, nullptr, log);
-
-        const std::string logStr = log;
-        delete[] log;
-
-        throw ShaderCompilationException(logStr);
+        throw ShaderCompilationException(errorLog);
     }
 }
 
-i32 Shader::CompileShader(const std::string& shaderPath, const i32 type)
+i32 Shader::CompileShader(const std::string& shaderPath, const ShaderType type)
 {
     const std::string shaderSource = ReadShaderFile(shaderPath);
-    const char* shaderSourcePtr = shaderSource.c_str();
 
-    const i32 shaderId = glCreateShader(type);
-    glShaderSource(shaderId, 1, &shaderSourcePtr, nullptr);
-    glCompileShader(shaderId);
+    const i32 shaderId = RenderLayer::CreateShader(type);
 
-    i32 success = 0;
-    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
+    std::string errorLog;
+    const bool success = RenderLayer::CompileShader(shaderId, shaderSource, errorLog);
 
-    if (success == 0)
+    if (!success)
     {
-        i32 logLength = 0;
-        glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logLength);
-
-        char* log = new char[logLength + 1];
-        glGetShaderInfoLog(shaderId, logLength, nullptr, log);
-
-        const std::string logStr = log;
-        delete[] log;
-
-        throw ShaderCompilationException(type, logStr);
+        throw ShaderCompilationException(type == ShaderType::Vertex, errorLog);
     }
 
     return shaderId;
@@ -101,7 +79,7 @@ i32 Shader::CompileShader(const std::string& shaderPath, const i32 type)
 std::string Shader::ReadShaderFile(const std::string& filePath)
 {
     const std::ifstream file(filePath);
-
+    
     if (!file || !file.is_open())
     {
         throw FileNotFoundException(filePath);
@@ -113,29 +91,19 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
         throw FileTooBigException(filePath, "64KiB");
     }
 
-    std::stringstream sstr;
-    sstr << file.rdbuf();
+    std::stringstream stringStream;
+    stringStream << file.rdbuf();
 
-    return sstr.str();
+    return stringStream.str();
 }
 
 void Shader::LoadUniformLocations()
 {
-    i32 count = 0;
-    glGetProgramiv(m_ProgramId, GL_ACTIVE_UNIFORMS, &count);
+    const auto uniforms = RenderLayer::GetShaderUniforms(m_ProgramId);
 
-    i32 size;
-    u32 type;
-
-    constexpr GLsizei bufSize = 1024;
-    // ReSharper disable once CppTooWideScope
-    char name[bufSize];
-    i32 length;
-
-    for (i32 i = 0; i < count; i++)
+    for (const auto& uniform : uniforms)
     {
-        glGetActiveUniform(m_ProgramId, i, bufSize, &length, &size, &type, name);
-        m_UniformLocations[name] = glGetUniformLocation(m_ProgramId, name);
+        m_UniformLocations[uniform.Name] = uniform.Location;
     }
 }
 
@@ -147,7 +115,7 @@ i32 Shader::GetUniformLocation(const std::string& name) const
 
 void Shader::Use() const
 {
-    glUseProgram(m_ProgramId);
+    RenderLayer::UseProgram(m_ProgramId);
 }
 
 std::size_t ShaderHash::operator()(const Shader* shader) const

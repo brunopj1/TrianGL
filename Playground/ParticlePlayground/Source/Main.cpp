@@ -2,10 +2,6 @@
 #include <GameMode/ParticlePlaygroundGameMode.h>
 #include "Util/MemoryLeakDetection.h"
 
-#ifndef DEBUG
-static_assert(false, "The Playground projects are only available in Debug configurations");
-#endif
-
 i32 main()
 {
     TGL::ApplicationConfig config;

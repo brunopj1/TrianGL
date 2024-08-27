@@ -4,6 +4,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Assets/Internal/Quad.h"
+#include "Internal/RenderLayer.h"
 #include <format>
 #include <stb_image.h>
 

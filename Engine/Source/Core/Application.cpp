@@ -34,7 +34,7 @@ void Application::Init(const ApplicationConfig& config)
         throw FailedToInitializeEngineException("Failed to init GLFW");
     }
     
-    RenderLayer::SetupOpenGlVersion();
+    RenderLayer::SetupOpenGlVersion(4, 3, true);
 
     const auto windowPtr = Window::Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
     
@@ -50,6 +50,9 @@ void Application::Init(const ApplicationConfig& config)
 
     RenderLayer::DebugVersions();
 
+    // OpenGL settings
+    RenderLayer::SetupOpenGlSettings();
+    
     // Core systems
     Clock::Init();
     InputSystem::Init(windowPtr);

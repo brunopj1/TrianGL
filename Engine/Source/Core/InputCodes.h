@@ -156,6 +156,13 @@ namespace TGL
         Locked             = 0x00034003, // GLFW_CURSOR_DISABLED
         Confined           = 0x00034004  // GLFW_CURSOR_CAPTURED
     };
+
+    enum class InputAction
+    {
+        Release            = 0, // GLFW_RELEASE
+        Press              = 1, // GLFW_PRESS
+        Repeat             = 2  // GLFW_REPEAT
+    };
 }
 
 // @formatter:on

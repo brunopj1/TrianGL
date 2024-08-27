@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 // TODO dont register the input if the user is interacting with ImGui
+// TODO add methods to simulate input in the unit tests
 
 // Forward declarations
 // ReSharper disable once CppInconsistentNaming, IdentifierTypo
@@ -19,7 +20,7 @@ namespace TGL
         friend class Application;
 
     private:
-        static inline GLFWwindow* s_WindowPtr = nullptr;
+        static inline GLFWwindow *s_WindowPtr = nullptr;
 
     private:
         static inline std::unordered_set<KeyCode> s_KeysPressedThisFrame;
@@ -63,15 +64,15 @@ namespace TGL
         static void SetMouseMode(MouseMode mode);
 
     private:
-        static void Init(GLFWwindow* windowPtr);
+        static void Init(GLFWwindow *windowPtr);
         static void Terminate();
 
         static void OnEndOfFrame();
 
     private:
-        static void KeyboardCallback(i32 key, i32 action, i32 mods);
-        static void MouseButtonCallback(i32 button, i32 action, i32 mods);
-        static void MousePositionCallback(f64 x, f64 y);
-        static void MouseScrollCallback(f64 x, f64 y);
+        static void KeyboardCallback(GLFWwindow *windowPtr, i32 key, i32 scancode, i32 action, i32 mods);
+        static void MouseButtonCallback(GLFWwindow *windowPtr, i32 button, i32 action, i32 mods);
+        static void MousePositionCallback(GLFWwindow *windowPtr, f64 x, f64 y);
+        static void MouseScrollCallback(GLFWwindow *windowPtr, f64 x, f64 y);
     };
 }

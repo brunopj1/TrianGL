@@ -6,8 +6,6 @@ project "Engine"
     objdir("../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
     
     includedirs {
-        "../Libs/glad/glad/include/",
-        "../Libs/glfw/glfw/include/",
         "../Libs/glm/glm/",
         "../Libs/soloud/soloud/include/",
         "../Libs/stb_image/stb_image/",
@@ -22,12 +20,21 @@ project "Engine"
     }
     
     links {
-        "GLAD",
-        "GLFW",
         "GLM",
         "SoLoud",
         "STB-Image"
     }
+
+    filter "configurations:not Testing"
+        links {
+            "GLAD",
+            "GLFW",
+        }
+
+        includedirs {
+            "../Libs/glad/glad/include/",
+            "../Libs/glfw/glfw/include/"
+        }
     
     filter "configurations:Debug"
         links {

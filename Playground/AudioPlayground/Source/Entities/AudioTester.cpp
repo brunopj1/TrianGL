@@ -1,9 +1,12 @@
 ﻿#include "AudioTester.h"
 
-#include <format>
 #include "WindowConstants.h"
 #include "Implementations/Components/AudioPlayer.h"
+
+#ifdef DEBUG
 #include <imgui.h>
+#include <format>
+#endif
 
 using namespace TGL;
 
@@ -20,6 +23,7 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
 
 void AudioTester::OnUpdate(f32 deltaTime)
 {
+#ifdef DEBUG
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_window_size.x, audio_window_size.y), ImGuiCond_Appearing);
 
@@ -39,10 +43,12 @@ void AudioTester::OnUpdate(f32 deltaTime)
     }
 
     ImGui::End();
+#endif
 }
 
 void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, i32& currentAudioId)
 {
+#ifdef DEBUG
     if (ImGui::RadioButton("None", currentAudioId == 0))
     {
         currentAudioId = 0;
@@ -58,4 +64,5 @@ void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, i32& currentAudi
             audioPlayer->SetAudio(s_Instances[i]->m_Audio);
         }
     }
+#endif
 }

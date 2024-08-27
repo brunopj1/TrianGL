@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "DataTypes.h"
+#include <chrono>
 
 namespace TGL
 {
@@ -19,6 +20,10 @@ namespace TGL
         static inline f32 s_NextSecond;
         static inline bool s_IsNewSecond;
 
+    private:
+        static inline std::chrono::steady_clock::time_point s_StartTime;
+        static inline std::chrono::steady_clock::time_point s_FrameTime;
+
     public:
         Clock() = delete;
         ~Clock() = delete;
@@ -34,6 +39,7 @@ namespace TGL
 
     private:
         static void Init();
+        static void Start();
 
     private:
         static f32 Update();

@@ -24,6 +24,6 @@ namespace TGL
         static void Terminate();
 
     private:
-        static void BindAttributes();
+        static void SetupVertexAttributes();
     };
 }

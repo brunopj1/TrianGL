@@ -32,8 +32,8 @@ void AssertVectorRange(const glm::vec<Size, T>& vec, const T min, const T max)
 
 TEST(RandomNumberGenerator, Constructors)
 {
-    TGL::RandomNumberGenerator rng1{}; // NOLINT
-    TGL::RandomNumberGenerator rng2{12345}; // NOLINT
+    TGL::RandomNumberGenerator rng1{};
+    TGL::RandomNumberGenerator rng2{12345};
 }
 
 TEST(RandomNumberGenerator, SeedModified)
@@ -66,7 +66,7 @@ TEST(RandomNumberGenerator, GetInt)
     ASSERT_GE(v2, 0);
     ASSERT_LE(v2, 10);
 
-    ASSERT_DEATH(g_Rng.GetInt(10, 0), "");
+    ASSERT_THROW(g_Rng.GetInt(10, 0), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetUint)
@@ -81,7 +81,7 @@ TEST(RandomNumberGenerator, GetUint)
     ASSERT_GE(v2, 0);
     ASSERT_LE(v2, 10);
 
-    ASSERT_DEATH(g_Rng.GetUint(10, 0), "");
+    ASSERT_THROW(g_Rng.GetUint(10, 0), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetFloat)
@@ -96,22 +96,24 @@ TEST(RandomNumberGenerator, GetFloat)
     ASSERT_GE(v2, 0.0f);
     ASSERT_LE(v2, 10.0f);
 
-    ASSERT_DEATH(g_Rng.GetFloat(10.0f, 0.0f), "");
+    ASSERT_THROW(g_Rng.GetFloat(10.0f, 0.0f), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetDouble)
 {
-    const auto v1 = g_Rng.GetDouble();
+    TGL::RandomNumberGenerator rng;
+    
+    const auto v1 = rng.GetDouble();
 
     ASSERT_GE(v1, 0.0);
     ASSERT_LE(v1, 1.0);
 
-    const auto v2 = g_Rng.GetDouble(0.0, 10.0);
+    const auto v2 = rng.GetDouble(0.0, 10.0);
 
     ASSERT_GE(v2, 0.0);
     ASSERT_LE(v2, 10.0);
 
-    ASSERT_DEATH(g_Rng.GetDouble(10.0, 0.0), "");
+    ASSERT_THROW(rng.GetDouble(10.0, 0.0), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetInt2)
@@ -125,8 +127,8 @@ TEST(RandomNumberGenerator, GetInt2)
     const auto v3 = g_Rng.GetInt2({0, 0}, {10, 10});
     AssertVectorRange(v3, 0, 10);
 
-    ASSERT_DEATH(g_Rng.GetInt2(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetInt2({10, 10}, {0, 0}), "");
+    ASSERT_THROW(g_Rng.GetInt2(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetInt2({10, 10}, {0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetInt3)
@@ -140,8 +142,8 @@ TEST(RandomNumberGenerator, GetInt3)
     const auto v3 = g_Rng.GetInt3({0, 0, 0}, {10, 10, 10});
     AssertVectorRange(v3, 0, 10);
 
-    ASSERT_DEATH(g_Rng.GetInt3(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetInt3({10, 10, 10}, {0, 0, 0}), "");
+    ASSERT_THROW(g_Rng.GetInt3(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetInt3({10, 10, 10}, {0, 0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetInt4)
@@ -155,8 +157,8 @@ TEST(RandomNumberGenerator, GetInt4)
     const auto v3 = g_Rng.GetInt4({0, 0, 0, 0}, {10, 10, 10, 10});
     AssertVectorRange(v3, 0, 10);
 
-    ASSERT_DEATH(g_Rng.GetInt4(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetInt4({10, 10, 10, 10}, {0, 0, 0, 0}), "");
+    ASSERT_THROW(g_Rng.GetInt4(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetInt4({10, 10, 10, 10}, {0, 0, 0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetUint2)
@@ -170,8 +172,8 @@ TEST(RandomNumberGenerator, GetUint2)
     const auto v3 = g_Rng.GetUint2({0, 0}, {10, 10});
     AssertVectorRange(v3, 0u, 10u);
 
-    ASSERT_DEATH(g_Rng.GetUint2(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetUint2({10, 10}, {0, 0}), "");
+    ASSERT_THROW(g_Rng.GetUint2(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetUint2({10, 10}, {0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetUint3)
@@ -185,8 +187,8 @@ TEST(RandomNumberGenerator, GetUint3)
     const auto v3 = g_Rng.GetUint3({0, 0, 0}, {10, 10, 10});
     AssertVectorRange(v3, 0u, 10u);
 
-    ASSERT_DEATH(g_Rng.GetUint3(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetUint3({10, 10, 10}, {0, 0, 0}), "");
+    ASSERT_THROW(g_Rng.GetUint3(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetUint3({10, 10, 10}, {0, 0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetUint4)
@@ -200,8 +202,8 @@ TEST(RandomNumberGenerator, GetUint4)
     const auto v3 = g_Rng.GetUint4({0, 0, 0, 0}, {10, 10, 10, 10});
     AssertVectorRange(v3, 0u, 10u);
 
-    ASSERT_DEATH(g_Rng.GetUint4(10, 0), "");
-    ASSERT_DEATH(g_Rng.GetUint4({10, 10, 10, 10}, {0, 0, 0, 0}), "");
+    ASSERT_THROW(g_Rng.GetUint4(10, 0), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetUint4({10, 10, 10, 10}, {0, 0, 0, 0}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetFloat2)
@@ -215,8 +217,8 @@ TEST(RandomNumberGenerator, GetFloat2)
     const auto v3 = g_Rng.GetFloat2({0.0f, 0.0f}, {10.0f, 10.0f});
     AssertVectorRange(v3, 0.0f, 10.0f);
 
-    ASSERT_DEATH(g_Rng.GetFloat2(10.0f, 0.0f), "");
-    ASSERT_DEATH(g_Rng.GetFloat2({10.0f, 10.0f}, {0.0f, 0.0f}), "");
+    ASSERT_THROW(g_Rng.GetFloat2(10.0f, 0.0f), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetFloat2({10.0f, 10.0f}, {0.0f, 0.0f}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetFloat3)
@@ -230,8 +232,8 @@ TEST(RandomNumberGenerator, GetFloat3)
     const auto v3 = g_Rng.GetFloat3({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
     AssertVectorRange(v3, 0.0f, 10.0f);
 
-    ASSERT_DEATH(g_Rng.GetFloat3(10.0f, 0.0f), "");
-    ASSERT_DEATH(g_Rng.GetFloat3({10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f}), "");
+    ASSERT_THROW(g_Rng.GetFloat3(10.0f, 0.0f), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetFloat3({10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f}), std::invalid_argument);
 }
 
 TEST(RandomNumberGenerator, GetFloat4)
@@ -245,6 +247,6 @@ TEST(RandomNumberGenerator, GetFloat4)
     const auto v3 = g_Rng.GetFloat4({0.0f, 0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f, 10.0f});
     AssertVectorRange(v3, 0.0f, 10.0f);
 
-    ASSERT_DEATH(g_Rng.GetFloat4(10.0f, 0.0f), "");
-    ASSERT_DEATH(g_Rng.GetFloat4({10.0f, 10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f, 0.0f}), "");
+    ASSERT_THROW(g_Rng.GetFloat4(10.0f, 0.0f), std::invalid_argument);
+    ASSERT_THROW(g_Rng.GetFloat4({10.0f, 10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f, 0.0f}), std::invalid_argument);
 }

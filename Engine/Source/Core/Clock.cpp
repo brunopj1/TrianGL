@@ -1,7 +1,5 @@
 ﻿#include <Core/Clock.h>
 
-#include <GLFW/glfw3.h>
-
 using namespace TGL;
 
 f32 Clock::GetTotalTime()
@@ -31,8 +29,6 @@ bool Clock::IsNewSecond()
 
 void Clock::Init()
 {
-    glfwSetTime(0.0f);
-
     s_TotalTime = 0.0f;
     s_DeltaTime = 0.0f;
 
@@ -44,12 +40,19 @@ void Clock::Init()
     s_IsNewSecond = false;
 }
 
+void Clock::Start()
+{
+    s_StartTime = s_FrameTime = std::chrono::steady_clock::now();
+}
+
 f32 Clock::Update()
 {
-    const f32 currentTime = static_cast<f32>(glfwGetTime());
+    const auto currentTime = std::chrono::steady_clock::now();
 
-    s_DeltaTime = currentTime - s_TotalTime;
-    s_TotalTime = currentTime;
+    s_DeltaTime = std::chrono::duration<f32>(currentTime - s_FrameTime).count();
+    s_TotalTime = std::chrono::duration<f32>(currentTime - s_StartTime).count();
+
+    s_FrameTime = currentTime;
 
     s_TotalFrameCount++;
     s_SecondFrameCount++;

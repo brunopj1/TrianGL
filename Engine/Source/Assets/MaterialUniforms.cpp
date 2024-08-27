@@ -1,9 +1,9 @@
 ﻿#include "Core/DataTypes.h"
+#include "Core/Internal/RenderLayer.h"
 #include <Assets/MaterialUniforms.h>
 
 #include <Assets/Texture.h>
 #include <Core/AssetManager.h>
-#include <glad/glad.h>
 #include <Assets/Internal/Shader.h>
 
 using namespace TGL;
@@ -35,77 +35,77 @@ void MaterialUniform::Bind() const
 template <>
 void MaterialUniformImpl<i32>::BindInternal() const
 {
-    glUniform1i(m_Location, Value);
+    RenderLayer::SetUniform1i(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::ivec2>::BindInternal() const
 {
-    glUniform2iv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform2iv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::ivec3>::BindInternal() const
 {
-    glUniform3iv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform3iv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::ivec4>::BindInternal() const
 {
-    glUniform4iv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform4iv(m_Location, Value);
 }
 
 void MaterialUniformImpl<u32>::BindInternal() const
 {
-    glUniform1ui(m_Location, Value);
+    RenderLayer::SetUniform1ui(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::uvec2>::BindInternal() const
 {
-    glUniform2uiv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform2uiv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::uvec3>::BindInternal() const
 {
-    glUniform3uiv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform3uiv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::uvec4>::BindInternal() const
 {
-    glUniform4uiv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform4uiv(m_Location, Value);
 }
 
 void MaterialUniformImpl<f32>::BindInternal() const
 {
-    glUniform1f(m_Location, Value);
+    RenderLayer::SetUniform1f(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::vec2>::BindInternal() const
 {
-    glUniform2fv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform2fv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::vec3>::BindInternal() const
 {
-    glUniform3fv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform3fv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::vec4>::BindInternal() const
 {
-    glUniform4fv(m_Location, 1, &Value[0]);
+    RenderLayer::SetUniform4fv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::mat2>::BindInternal() const
 {
-    glUniformMatrix2fv(m_Location, 1, GL_FALSE, &Value[0][0]);
+    RenderLayer::SetUniformMatrix2fv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::mat3>::BindInternal() const
 {
-    glUniformMatrix3fv(m_Location, 1, GL_FALSE, &Value[0][0]);
+    RenderLayer::SetUniformMatrix3fv(m_Location, Value);
 }
 
 void MaterialUniformImpl<glm::mat4>::BindInternal() const
 {
-    glUniformMatrix4fv(m_Location, 1, GL_FALSE, &Value[0][0]);
+    RenderLayer::SetUniformMatrix4fv(m_Location, Value);
 }
 
 SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
@@ -136,7 +136,7 @@ void SpriteUniform::BindInternal() const
     if (m_Location != -1)
     {
         Value->Bind(m_Slot);
-        glUniform1i(m_Location, m_Slot);
+        RenderLayer::SetUniform1i(m_Location, m_Slot);
     }
 
     if (m_MatrixLocation != -1)
@@ -145,16 +145,16 @@ void SpriteUniform::BindInternal() const
 
         if (matrix != nullptr)
         {
-            glUniformMatrix4fv(m_MatrixLocation, 1, GL_FALSE, &(*matrix)[0][0]);
+            RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, *matrix);
         }
         else
         {
-            glUniformMatrix4fv(m_MatrixLocation, 1, GL_FALSE, &glm::mat4(1.0f)[0][0]);
+            RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, glm::mat4(1.0f));
         }
     }
 
     if (m_ResolutionLocation != -1)
     {
-        glUniform2uiv(m_ResolutionLocation, 1, &Value->GetResolution()[0]);
+        RenderLayer::SetUniform2uiv(m_ResolutionLocation, Value->GetResolution());
     }
 }

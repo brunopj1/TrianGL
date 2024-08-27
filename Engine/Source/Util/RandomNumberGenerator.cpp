@@ -1,7 +1,6 @@
 ﻿#include <Util/RandomNumberGenerator.h>
 
 #include <Core/Application.h>
-#include <cassert>
 #include <chrono>
 
 using namespace TGL;
@@ -36,7 +35,10 @@ i32 RandomNumberGenerator::GetInt()
 
 i32 RandomNumberGenerator::GetInt(const i32 min, const i32 max)
 {
-    assert(min <= max && "The minimum value cannot be greater than the maximum value");
+    if (max < min)
+    {
+        throw std::invalid_argument("The minimum value cannot be greater than the maximum value");
+    }
 
     UpdateSeed();
     return min + m_Seed % (max - min + 1);
@@ -50,7 +52,10 @@ u32 RandomNumberGenerator::GetUint()
 
 u32 RandomNumberGenerator::GetUint(const u32 min, const u32 max)
 {
-    assert(min <= max && "The minimum value cannot be greater than the maximum value");
+    if (max < min)
+    {
+        throw std::invalid_argument("The minimum value cannot be greater than the maximum value");
+    }
 
     UpdateSeed();
     return min + m_Seed % (max - min + 1);
@@ -64,7 +69,10 @@ f32 RandomNumberGenerator::GetFloat()
 
 f32 RandomNumberGenerator::GetFloat(const f32 min, const f32 max)
 {
-    assert(min <= max && "The minimum value cannot be greater than the maximum value");
+    if (max < min)
+    {
+        throw std::invalid_argument("The minimum value cannot be greater than the maximum value");
+    }
 
     UpdateSeed();
     return min + m_Seed / static_cast<f32>(UINT_MAX) * (max - min);
@@ -78,7 +86,10 @@ f64 RandomNumberGenerator::GetDouble()
 
 f64 RandomNumberGenerator::GetDouble(const f64 min, const f64 max)
 {
-    assert(min <= max && "The minimum value cannot be greater than the maximum value");
+    if (max < min)
+    {
+        throw std::invalid_argument("The minimum value cannot be greater than the maximum value");
+    }
 
     UpdateSeed();
     return min + m_Seed / static_cast<f64>(UINT_MAX) * (max - min);

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <Core/DataTypes.h>
+#include <Core/Internal/RenderLayer.h>
 #include <string>
 #include <unordered_map>
 
@@ -37,7 +38,7 @@ namespace TGL
 
     private:
         void LinkProgram();
-        static i32 CompileShader(const std::string& shaderPath, i32 type);
+        static i32 CompileShader(const std::string& shaderPath, ShaderType type);
         static std::string ReadShaderFile(const std::string& filePath);
 
     private:

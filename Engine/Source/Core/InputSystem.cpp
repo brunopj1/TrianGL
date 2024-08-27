@@ -1,6 +1,5 @@
-﻿#include <Core/InputSystem.h>
-
-#include <GLFW/glfw3.h>
+﻿#include "Internal/InputLayer.h"
+#include <Core/InputSystem.h>
 
 #ifdef DEBUG
 #include <imgui_impl_glfw.h>
@@ -55,7 +54,7 @@ glm::ivec2 InputSystem::GetMouseDelta()
 
 void InputSystem::SetMousePosition(const glm::ivec2 position)
 {
-    glfwSetCursorPos(s_WindowPtr, position.x, position.y);
+    InputLayer::SetMousePosition(s_WindowPtr, position);
     s_MousePosition = position;
 }
 
@@ -69,10 +68,9 @@ MouseMode InputSystem::GetMouseMode()
     return s_MouseMode;
 }
 
-void InputSystem::SetMouseMode(MouseMode mode)
+void InputSystem::SetMouseMode(const MouseMode mode)
 {
-    const i32 glfwMode = static_cast<i32>(mode);
-    glfwSetInputMode(s_WindowPtr, GLFW_CURSOR, glfwMode);
+    InputLayer::SetMouseInputMode(s_WindowPtr, mode);
     s_MouseMode = mode;
 }
 
@@ -80,9 +78,7 @@ void InputSystem::Init(GLFWwindow* windowPtr)
 {
     s_WindowPtr = windowPtr;
 
-    f64 posX, posY;
-    glfwGetCursorPos(s_WindowPtr, &posX, &posY);
-    s_MousePosition = {static_cast<i32>(posX), static_cast<i32>(posY)};
+    s_MousePosition = InputLayer::GetMousePosition(s_WindowPtr);
     s_LastMousePosition = s_MousePosition;
 
     s_MouseDelta = {0, 0};
@@ -90,29 +86,10 @@ void InputSystem::Init(GLFWwindow* windowPtr)
 
     s_MouseMode = MouseMode::Normal;
 
-    // ReSharper disable CppParameterNeverUsed
-
-    glfwSetKeyCallback(windowPtr, [](GLFWwindow* window, const i32 key, i32 scancode, const i32 action, const i32 mods)
-    {
-        KeyboardCallback(key, action, mods);
-    });
-
-    glfwSetMouseButtonCallback(windowPtr, [](GLFWwindow* window, const i32 button, const i32 action, const i32 mods)
-    {
-        MouseButtonCallback(button, action, mods);
-    });
-
-    glfwSetCursorPosCallback(windowPtr, [](GLFWwindow* window, const f64 x, const f64 y)
-    {
-        MousePositionCallback(x, y);
-    });
-
-    glfwSetScrollCallback(windowPtr, [](GLFWwindow* window, const f64 x, const f64 y)
-    {
-        MouseScrollCallback(x, y);
-    });
-
-    // ReSharper restore CppParameterNeverUsed
+    InputLayer::BindKeyboardCallback(windowPtr, KeyboardCallback);
+    InputLayer::BindMouseButtonCallback(windowPtr, MouseButtonCallback);
+    InputLayer::BindMousePositionCallback(windowPtr, MousePositionCallback);
+    InputLayer::BindMouseScrollCallback(windowPtr, MouseScrollCallback);
 }
 
 void InputSystem::Terminate()
@@ -141,56 +118,56 @@ void InputSystem::OnEndOfFrame()
     s_MouseScroll = 0;
 }
 
-void InputSystem::KeyboardCallback(const i32 key, const i32 action, const i32 /*mods*/)
+void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, const i32 /*scancode*/, const i32 action, const i32 /*mods*/)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_KeyCallback(s_WindowPtr, key, 0, action, 0);
 #endif
 
     const KeyCode keyCode = static_cast<KeyCode>(key);
-
-    switch (action)
+    const InputAction actionCode = static_cast<InputAction>(action);
+    
+    switch (actionCode)
     {
-        case GLFW_PRESS:
+        case InputAction::Press:
             s_KeysPressedThisFrame.insert(keyCode);
             s_KeysDown.insert(keyCode);
             break;
-        case GLFW_REPEAT:
+        case InputAction::Repeat:
             s_KeysRepeatedThisFrame.insert(keyCode);
             break;
-        case GLFW_RELEASE:
+        case InputAction::Release:
             s_KeysReleasedThisFrame.insert(keyCode);
             s_KeysDown.erase(keyCode);
-            break;
-        default:
             break;
     }
 }
 
-void InputSystem::MouseButtonCallback(const i32 button, const i32 action, const i32 mods)
+void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_MouseButtonCallback(s_WindowPtr, button, action, mods);
 #endif
 
     const MouseButton mouseButton = static_cast<MouseButton>(button);
+    const InputAction actionCode = static_cast<InputAction>(action);
 
-    switch (action)
+    switch (actionCode)
     {
-        case GLFW_PRESS:
+        case InputAction::Press:
             s_MouseButtonsPressedThisFrame.insert(mouseButton);
             s_MouseButtonsDown.insert(mouseButton);
             break;
-        case GLFW_RELEASE:
+        case InputAction::Repeat:
+            break;
+        case InputAction::Release:
             s_MouseButtonsReleasedThisFrame.insert(mouseButton);
             s_MouseButtonsDown.erase(mouseButton);
-            break;
-        default:
             break;
     }
 }
 
-void InputSystem::MousePositionCallback(const f64 x, const f64 y)
+void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_CursorPosCallback(s_WindowPtr, x, y);
@@ -201,7 +178,7 @@ void InputSystem::MousePositionCallback(const f64 x, const f64 y)
 }
 
 // ReSharper disable once CppParameterNeverUsed
-void InputSystem::MouseScrollCallback(const f64 x, const f64 y)
+void InputSystem::MouseScrollCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
 #ifdef DEBUG
     ImGui_ImplGlfw_ScrollCallback(s_WindowPtr, x, y);

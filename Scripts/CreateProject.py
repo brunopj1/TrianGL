@@ -49,17 +49,11 @@ project "{projectName}"
         }}
 """.strip()
 
-mainSourceStaticAssert = f"""
-#ifndef DEBUG
-static_assert(false, "The Playground projects are only available in Debug configurations");
-#endif
-"""
-
 mainSourceTemplate = f"""
 #include "Core/Application.h"
 #include <GameMode/{projectName}GameMode.h>
 #include "Util/MemoryLeakDetection.h"
-{mainSourceStaticAssert if not isGame else ""}
+
 i32 main()
 {{
     TGL::ApplicationConfig config;

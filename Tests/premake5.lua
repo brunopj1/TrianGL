@@ -7,11 +7,7 @@ project "Tests"
     
     includedirs {
         "../Engine/Source/",
-        "../Libs/glad/glad/include/",
-        "../Libs/glfw/glfw/include/",
         "../Libs/glm/glm/",
-        "../Libs/soloud/soloud/include/",
-        "../Libs/stb_image/stb_image/",
         "../Libs/googletest/googletest/googletest/include/"
     }
     
@@ -24,3 +20,5 @@ project "Tests"
         "Engine",
         "Google-Test"
     }
+
+    debugdir "../Bin/%{cfg.buildcfg}/%{cfg.platform}/"

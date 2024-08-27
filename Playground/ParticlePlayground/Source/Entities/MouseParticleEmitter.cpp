@@ -4,7 +4,10 @@
 #include "Core/InputSystem.h"
 #include "glm/ext/scalar_constants.hpp"
 #include "Implementations/Entities/Camera.h"
+
+#ifdef DEBUG
 #include <imgui.h>
+#endif
 
 using namespace TGL;
 
@@ -69,6 +72,7 @@ void MouseParticleEmitter::OnUpdate(const f32 deltaTime)
 
 void MouseParticleEmitter::RenderImGui()
 {
+#ifdef DEBUG
     ImGui::SetNextWindowPos({30, 30}, ImGuiCond_Appearing);
     ImGui::SetNextWindowSize({300, 300}, ImGuiCond_Appearing);
     
@@ -94,10 +98,12 @@ void MouseParticleEmitter::RenderImGui()
     }
 
     ImGui::End();
+#endif
 }
 
 void MouseParticleEmitter::RenderImGuiRangeFloat(const char* label, f32& value1, f32& value2, const f32 min, const f32 max)
 {
+#ifdef DEBUG
     ImGui::Text("%s", label);
 
     ImGui::PushID(label);
@@ -115,10 +121,12 @@ void MouseParticleEmitter::RenderImGuiRangeFloat(const char* label, f32& value1,
     ImGui::PopID();
     
     ImGui::Separator();
+#endif
 }
 
 void MouseParticleEmitter::RenderImGuiRangeColor(const char* label, glm::vec3& value1, glm::vec3& value2)
 {
+#ifdef DEBUG
     ImGui::Text("%s", label);
 
     ImGui::PushID(label);
@@ -130,10 +138,12 @@ void MouseParticleEmitter::RenderImGuiRangeColor(const char* label, glm::vec3& v
     ImGui::PopID();
 
     ImGui::Separator();
+#endif
 }
 
 void MouseParticleEmitter::RenderImGuiMaterialSettings()
 {
+#ifdef DEBUG
     ImGui::Text("Border Radius");
 
     ImGui::PushID("Border Radius");
@@ -172,4 +182,5 @@ void MouseParticleEmitter::RenderImGuiMaterialSettings()
     }
 
     ImGui::PopID();
+#endif
 }

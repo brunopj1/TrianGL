@@ -8,19 +8,23 @@
 
 namespace TGL
 {
+    // @formatter:off
+    
     enum class TextureWrapMode
     {
-        Repeat,
-        MirroredRepeat,
-        ClampToEdge,
-        ClampToBorder
+        Repeat         = 0x2901, // GL_REPEAT
+        MirroredRepeat = 0x8370, // GL_MIRRORED_REPEAT
+        ClampToEdge    = 0x812F, // GL_CLAMP_TO_EDGE
+        ClampToBorder  = 0x812D  // GL_CLAMP_TO_BORDER
     };
 
     enum class TextureFilterMode
     {
-        Nearest,
-        Linear
+        Nearest = 0x2600, // GL_NEAREST
+        Linear  = 0x2601  // GL_LINEAR
     };
+
+    // @formatter:on
 
     struct TextureParameters
     {

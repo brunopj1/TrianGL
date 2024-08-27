@@ -1,8 +1,8 @@
 ﻿#include "Assets/Internal/Quad.h"
+#include "Core/Internal/RenderLayer.h"
 #include <Implementations/Components/SpriteRenderer.h>
 
 #include <Game/Entity.h>
-#include <glad/glad.h>
 #include <Assets/Material.h>
 #include <Implementations/Assets/DefaultSpriteMaterial.h>
 #include <glm/gtc/matrix_transform.hpp>
@@ -73,10 +73,5 @@ void SpriteRenderer::Render() const
 
     m_Material->Use(modelMatrix);
 
-    glBindVertexArray(Quad::s_QuadVao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad::s_QuadEbo);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-    glBindVertexArray(0);
+    RenderLayer::DrawElements(Quad::s_QuadVao, Quad::s_QuadEbo, 6);
 }

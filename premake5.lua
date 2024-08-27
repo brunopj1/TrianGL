@@ -3,7 +3,7 @@ workspace "TrianGL"
     
     cppdialect "C++20"
 
-    configurations { "Debug", "Release"}
+    configurations { "Debug", "Release", "Testing" }
     platforms { "Win32", "Win64" }
 
     systemversion "latest"
@@ -21,6 +21,11 @@ workspace "TrianGL"
         optimize "Speed"
         defines { "NDEBUG" }
         flags { "LinkTimeOptimization" }
+
+    filter "configurations:Testing"
+        runtime "Debug" -- Debugging does not work in release mode
+        symbols "On"
+        defines { "DEBUG", "TESTING" }
 
     filter "platforms:Win32"
         system "Windows"

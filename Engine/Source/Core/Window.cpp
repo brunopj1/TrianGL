@@ -151,7 +151,7 @@ GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm
     s_Vsync = vsync;
     
 
-    s_WindowPtr = RenderLayer::CreateWindow(s_Title, s_Resolution, minimum_window_resolution);
+    s_WindowPtr = RenderLayer::CreateGlfwWindow(s_Title, s_Resolution, minimum_window_resolution);
 
     if (s_WindowPtr == nullptr)
     {
@@ -174,10 +174,10 @@ GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm
 
 void Window::Terminate()
 {
-    RenderLayer::DestroyWindow(s_WindowPtr);
+    RenderLayer::DestroyGlfwWindow(s_WindowPtr);
 }
 
-void Window::PositionCallback(GLFWwindow* /* windowPtr */, i32 x, i32 y)
+void Window::PositionCallback(GLFWwindow* /*windowPtr*/, i32 x, i32 y)
 {
     s_Position = {x, y};
 
@@ -187,13 +187,13 @@ void Window::PositionCallback(GLFWwindow* /* windowPtr */, i32 x, i32 y)
     }
 }
 
-void Window::SizeCallback(GLFWwindow* /* windowPtr */, i32 width, i32 height)
+void Window::SizeCallback(GLFWwindow* /*windowPtr*/, i32 width, i32 height)
 {
     s_Resolution = {width, height};
     s_AspectRatio = static_cast<f32>(width) / static_cast<f32>(height);
 
-    RenderLayer::SetupOpenGlVersion();
-
+    RenderLayer::SetViewport(s_Resolution);
+    
     for (const auto camera : Entity::FindEntitiesGlobally<Camera>())
     {
         camera->SetAspectRatio(s_AspectRatio);
@@ -215,7 +215,7 @@ void Window::FullscreenCallback(const bool fullscreen)
     }
 }
 
-void Window::MaximizeCallback(GLFWwindow* /* windowPtr */, const i32 maximized)
+void Window::MaximizeCallback(GLFWwindow* /*windowPtr*/, const i32 maximized)
 {
     if (maximized)
     {
@@ -233,7 +233,7 @@ void Window::MaximizeCallback(GLFWwindow* /* windowPtr */, const i32 maximized)
     }
 }
 
-void Window::MinimizeCallback(GLFWwindow* /* windowPtr */, const i32 minimized)
+void Window::MinimizeCallback(GLFWwindow* /*windowPtr*/, const i32 minimized)
 {
     if (minimized)
     {
