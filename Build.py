@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 
 def delete_vs_files(directory : str):
 
@@ -48,6 +49,9 @@ if os.path.exists("TrianGL.sln"):
 
 # Delete the coverage files
 delete_coverage_files()
+
+# Init the git submodules
+subprocess.run(["git", "submodule", "update", "--init", "--recursive"], check=True)
 
 # Build and open the Visual Studio solution
 os.system("Premake\\premake5.exe vs2022")
