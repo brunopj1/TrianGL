@@ -36,15 +36,15 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       # Run MSBuild (Debug)
-      - name: Run MSBuild
+      - name: Run MSBuild [Debug]
         run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
 
       # Run MSBuild (Release)
-      - name: Run MSBuild
+      - name: Run MSBuild [Release]
         run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=Win64
 
       # Run MSBuild (Testing)
-      - name: Run MSBuild
+      - name: Run MSBuild [Testing]
         run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Testing -property:Platform=Win64
 
       # Run Tests
