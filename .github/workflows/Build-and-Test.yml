@@ -35,31 +35,21 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      # Run MSBuild
+      # Run MSBuild (Debug)
       - name: Run MSBuild
         run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
-      
-      # Install Mesa
-      - name: Install Mesa
-        shell: cmd
-        run: |
-          curl.exe -L --output mesa.7z --url https://github.com/pal1000/mesa-dist-win/releases/download/20.3.2/mesa3d-20.3.2-release-msvc.7z
-          "C:\Program Files\7-Zip\7z.exe" x mesa.7z
-          mklink opengl32.dll "x64\opengl32.dll"
-          mklink libglapi.dll "x64\libglapi.dll"
-        working-directory: Bin\Debug\Win64\Tests\
 
-      # Start the Audio Service
-      - name: Start the Audio Service
-        run: net start audiosrv
+      # Run MSBuild (Release)
+      - name: Run MSBuild
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=Win64
 
-      # Setup a virtual sound card
-      - name: Setup a virtual sound card
-        uses: LABSN/sound-ci-helpers@v1
+      # Run MSBuild (Testing)
+      - name: Run MSBuild
+        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Testing -property:Platform=Win64
 
       # Run Tests
       - name: Run Tests
-        run: Bin\Debug\Win64\Tests\Tests.exe
+        run: Bin\Testing\Win64\Tests\Tests.exe
 
       # Setup OpenCppCoverage
       - name: Setup OpenCppCoverage

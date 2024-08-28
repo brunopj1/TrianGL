@@ -4,4 +4,4 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Execute the coverage report script
-os.system("OpenCppCoverage --cover_children --sources=Engine\\Source Bin\\Debug\\Win64\\Tests\\Tests.exe")
+os.system("OpenCppCoverage --cover_children --sources=Engine\\Source Bin\\Testing\\Win64\\Tests\\Tests.exe")
