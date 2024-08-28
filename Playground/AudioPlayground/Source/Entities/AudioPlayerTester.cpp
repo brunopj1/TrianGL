@@ -3,7 +3,7 @@
 #include "AudioTester.h"
 #include "WindowConstants.h"
 
-#ifdef DEBUG
+#ifdef IMGUI
 #include <imgui.h>
 #include <format>
 #endif
@@ -25,7 +25,7 @@ AudioPlayerTester::AudioPlayerTester()
 
 void AudioPlayerTester::OnUpdate(f32 deltaTime)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_player_window_size.x, audio_player_window_size.y), ImGuiCond_Appearing);
 

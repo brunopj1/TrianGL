@@ -120,10 +120,12 @@ void Application::NewFrame()
     }
 
 #ifdef DEBUG
+#ifdef IMGUI
     const u32 framerate = Clock::GetFrameRate();
     const u32 entityCount = EntityManager::GetEntityCount();
     const u32 componentCount = EntityManager::GetComponentCount();
     RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
+#endif
 #endif
 
     RenderLayer::RenderImguiFrame();

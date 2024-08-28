@@ -11,8 +11,6 @@
 
 using namespace TGL;
 
-// TODO create a constructor for a fake Shader which sets the program id to -1 (init and Free in the constructor and destructor should check if the program id is -1)
-
 Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
     : m_VertexShader(std::move(vertexShaderPath)), m_FragmentShader(std::move(fragmentShaderPath))
 {

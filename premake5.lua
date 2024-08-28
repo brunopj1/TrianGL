@@ -14,7 +14,7 @@ workspace "TrianGL"
     filter "configurations:Debug"
         runtime "Debug"
         symbols "On"
-        defines { "DEBUG" }
+        defines { "DEBUG", "IMGUI" }
 
     filter "configurations:Release"
         runtime "Release"

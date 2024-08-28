@@ -1,12 +1,10 @@
 ﻿#include <Core/AssetManager.h>
 
-#include <soloud.h>
-
 #define STB_IMAGE_IMPLEMENTATION
-#include "Assets/Internal/Quad.h"
-#include "Internal/RenderLayer.h"
-#include <format>
 #include <stb_image.h>
+
+#include "Assets/Internal/Quad.h"
+#include "Internal/AudioLayer.h"
 
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
 #include <Assets/Material.h>
@@ -15,6 +13,7 @@
 #include <Internal/Asserts/ApplicationAsserts.h>
 #include <ranges>
 #include <thread>
+#include <format>
 
 using namespace TGL;
 
@@ -24,15 +23,15 @@ void AssetManager::Init()
     stbi_set_flip_vertically_on_load(true);
 
     // SoLoud
-    s_SoloudEngine = new SoLoud::Soloud();
-    const SoLoud::result result = s_SoloudEngine->init();
-    if (result != SoLoud::SO_NO_ERROR)
+    int errorCode = 0;
+    s_SoloudEngine = AudioLayer::InitSoloud(errorCode);
+    
+    if (s_SoloudEngine == nullptr)
     {
-        int errorCode = static_cast<int>(result);
         throw FailedToInitializeEngineException(std::format("Failed to init SoLoud (error code: {0})", errorCode));
     }
 
-    s_SoloudEngine->setGlobalVolume(0.1f);
+    AudioLayer::SetupSoloudSettings(s_SoloudEngine);
 
     // Quad asset
     Quad::Init();
@@ -44,8 +43,7 @@ void AssetManager::Terminate()
     Quad::Terminate();
 
     // SoLoud
-    s_SoloudEngine->deinit();
-    delete s_SoloudEngine;
+    AudioLayer::TerminateSoloud(s_SoloudEngine);
     s_SoloudEngine = nullptr;
 }
 

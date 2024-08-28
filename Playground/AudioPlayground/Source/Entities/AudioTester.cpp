@@ -3,7 +3,7 @@
 #include "WindowConstants.h"
 #include "Implementations/Components/AudioPlayer.h"
 
-#ifdef DEBUG
+#ifdef IMGUI
 #include <imgui.h>
 #include <format>
 #endif
@@ -23,7 +23,7 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
 
 void AudioTester::OnUpdate(f32 deltaTime)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(ImVec2(audio_window_size.x, audio_window_size.y), ImGuiCond_Appearing);
 
@@ -48,7 +48,7 @@ void AudioTester::OnUpdate(f32 deltaTime)
 
 void AudioTester::RenderAudioSelector(AudioPlayer* audioPlayer, i32& currentAudioId)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     if (ImGui::RadioButton("None", currentAudioId == 0))
     {
         currentAudioId = 0;

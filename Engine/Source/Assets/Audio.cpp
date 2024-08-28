@@ -1,7 +1,6 @@
-﻿#include <Assets/Audio.h>
+﻿#include "Core/Internal/AudioLayer.h"
+#include <Assets/Audio.h>
 
-#include <soloud_wav.h>
-#include <soloud_wavstream.h>
 #include <Core/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Implementations/Components/AudioPlayer.h>
@@ -34,13 +33,15 @@ bool Audio::IsStreamed() const
 
 f32 Audio::GetVolume() const
 {
-    return m_SoloudAudio->mVolume;
+    return AudioLayer::GetAudioVolume(m_SoloudAudio);
 }
 
 // ReSharper disable once CppMemberFunctionMayBeConst
 void Audio::SetVolume(const f32 volume)
 {
-    m_SoloudAudio->mVolume = volume < 0.0f ? 0.0f : volume;
+    const f32 clampedVolume = volume < 0.0f ? 0.0f : volume;
+
+    AudioLayer::SetAudioVolume(m_SoloudAudio, clampedVolume);
 
     for (const AudioPlayer* player : m_CurrentPlayers)
     {
@@ -50,33 +51,17 @@ void Audio::SetVolume(const f32 volume)
 
 void Audio::Init()
 {
-    SoLoud::result result;
+    m_SoloudAudio = AudioLayer::LoadAudio(m_FilePath, m_Streamed);
 
-    if (m_Streamed)
+    if (m_SoloudAudio == nullptr)
     {
-        SoLoud::WavStream* soloudAudio = new SoLoud::WavStream();
-        result = soloudAudio->load(m_FilePath.c_str());
-        m_SoloudAudio = soloudAudio;
-    }
-    else
-    {
-        SoLoud::Wav* soloudAudio = new SoLoud::Wav();
-        result = soloudAudio->load(m_FilePath.c_str());
-        m_SoloudAudio = soloudAudio;
-    }
-
-    if (result != SoLoud::SO_NO_ERROR)
-    {
-        delete m_SoloudAudio;
-        m_SoloudAudio = nullptr;
-
         throw FileNotFoundException(m_FilePath);
     }
 }
 
 void Audio::Free()
 {
-    delete m_SoloudAudio;
+    AudioLayer::UnloadAudio(m_SoloudAudio);
     m_SoloudAudio = nullptr;
 }
 

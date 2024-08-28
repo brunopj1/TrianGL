@@ -8,7 +8,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
-#ifdef DEBUG
+#ifdef IMGUI
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -58,7 +58,7 @@ bool RenderLayer::InitGlad()
 
 bool RenderLayer::InitImgui(GLFWwindow* windowPtr)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::GetIO().IniFilename = nullptr;
@@ -91,7 +91,9 @@ void RenderLayer::DebugVersions()
 #ifdef DEBUG
     std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << '\n';
+#ifdef IMGUI
     std::cout << "Dear ImGui version: " << ImGui::GetVersion() << '\n';
+#endif
 #endif
 }
 
@@ -111,7 +113,7 @@ void RenderLayer::TerminateGlfw()
 
 void RenderLayer::TerminateImgui()
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -155,7 +157,7 @@ void RenderLayer::PollEvents()
 
 void RenderLayer::PrepareImguiFrame()
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -164,7 +166,7 @@ void RenderLayer::PrepareImguiFrame()
 
 void RenderLayer::RenderImguiFrame()
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 #endif
@@ -173,6 +175,7 @@ void RenderLayer::RenderImguiFrame()
 void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCount, const u32 componentCount)
 {
 #ifdef DEBUG
+#ifdef IMGUI
     const f32 frameTime = 1000.0f / (framerate != 0 ? framerate : 1);
 
     std::string message = std::format("Framerate: {0} ({1:.3f} ms)\n", framerate, frameTime);
@@ -185,6 +188,7 @@ void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCoun
 
     ImDrawList* drawList = ImGui::GetForegroundDrawList();
     drawList->AddText(windowPos, IM_COL32(255, 255, 255, 255), cMessage);
+#endif
 #endif
 }
 
@@ -305,14 +309,14 @@ void RenderLayer::DeleteVertexArray(const u32 vao)
 void RenderLayer::SetVertexAttributePointer(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
 {
     const i32 glDataType = static_cast<i32>(dataType);
-    glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(offset));  // NOLINT(performance-no-int-to-ptr)
+    glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(static_cast<uintptr_t>(offset)));  // NOLINT(performance-no-int-to-ptr)
     glEnableVertexAttribArray(index);
 }
 
 void RenderLayer::SetVertexAttributePointerForInstancing(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
 {
     const i32 glDataType = static_cast<i32>(dataType);
-    glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(offset));  // NOLINT(performance-no-int-to-ptr)
+    glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(static_cast<uintptr_t>(offset)));  // NOLINT(performance-no-int-to-ptr)
     glEnableVertexAttribArray(index);
     glVertexAttribDivisor(index, 1);
 }

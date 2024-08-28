@@ -1,7 +1,7 @@
 ﻿#include "Internal/InputLayer.h"
 #include <Core/InputSystem.h>
 
-#ifdef DEBUG
+#ifdef IMGUI
 #include <imgui_impl_glfw.h>
 #endif
 
@@ -120,7 +120,7 @@ void InputSystem::OnEndOfFrame()
 
 void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, const i32 /*scancode*/, const i32 action, const i32 /*mods*/)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplGlfw_KeyCallback(s_WindowPtr, key, 0, action, 0);
 #endif
 
@@ -145,7 +145,7 @@ void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, con
 
 void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplGlfw_MouseButtonCallback(s_WindowPtr, button, action, mods);
 #endif
 
@@ -169,7 +169,7 @@ void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 butto
 
 void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplGlfw_CursorPosCallback(s_WindowPtr, x, y);
 #endif
 
@@ -180,7 +180,7 @@ void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, 
 // ReSharper disable once CppParameterNeverUsed
 void InputSystem::MouseScrollCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     ImGui_ImplGlfw_ScrollCallback(s_WindowPtr, x, y);
 #endif
 

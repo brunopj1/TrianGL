@@ -8,7 +8,7 @@
 #include "Core/Window.h"
 #include "Assets/Material.h"
 
-#ifdef DEBUG
+#ifdef IMGUI
 #include <imgui.h>
 #include <imgui_stdlib.h>
 #endif
@@ -47,7 +47,7 @@ SnakeGameMode::SnakeGameMode()
 
 void SnakeGameMode::OnEarlyUpdate(const f32 deltaTime)
 {
-#ifdef DEBUG
+#ifdef IMGUI
     RenderImGui();
 #endif
 }
@@ -79,10 +79,9 @@ void SnakeGameMode::OnWindowResized(glm::uvec2 newResolution)
     m_Grid->FocusCamera();
 }
 
-#ifdef DEBUG
-
 void SnakeGameMode::RenderImGui()
 {
+#ifdef IMGUI
     static std::string test = "Hello world!";
     
     ImGui::SetNextWindowPos({10, 10}, ImGuiCond_Appearing);
@@ -108,6 +107,5 @@ void SnakeGameMode::RenderImGui()
     }
 
     ImGui::End();
-}
-
 #endif
+}

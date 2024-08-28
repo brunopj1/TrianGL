@@ -52,7 +52,7 @@ void RenderLayer::TerminateImgui() {}
 
 GLFWwindow* RenderLayer::CreateGlfwWindow(const std::string& title, const glm::uvec2& resolution, const glm::uvec2& minResolution)
 {
-    return (GLFWwindow*) 1; // NOLINT(CppCStyleCast)
+    return (GLFWwindow*) 0x1; // NOLINT(CppCStyleCast)
 }
 
 void RenderLayer::DestroyGlfwWindow(GLFWwindow* windowPtr) {}

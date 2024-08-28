@@ -1,6 +1,6 @@
-﻿#include <Implementations/Components/AudioPlayer.h>
+﻿#include "Core/Internal/AudioLayer.h"
+#include <Implementations/Components/AudioPlayer.h>
 
-#include <soloud.h>
 #include <Core/AssetManager.h>
 #include <Assets/Audio.h>
 #include <utility>
@@ -24,7 +24,7 @@ void AudioPlayer::OnUpdate(f32 deltaTime)
 
     if (soloudEngine == nullptr) return;
 
-    if (!soloudEngine->isValidVoiceHandle(m_Handle))
+    if (!AudioLayer::IsValidAudioHandle(soloudEngine, m_Handle))
     {
         m_Status = AudioPlayerStatus::Stopped;
 
@@ -63,7 +63,7 @@ void AudioPlayer::Play()
 
     if (m_Status == AudioPlayerStatus::Stopped)
     {
-        m_Handle = soloudEngine->play(*m_Audio->m_SoloudAudio);
+        m_Handle = AudioLayer::PlayAudio(soloudEngine, m_Audio->m_SoloudAudio);
 
         m_Audio->AddPlayer(this);
 
@@ -72,7 +72,7 @@ void AudioPlayer::Play()
     }
     else if (m_Status == AudioPlayerStatus::Paused)
     {
-        soloudEngine->setPause(m_Handle, false);
+        AudioLayer::ResumeAudio(soloudEngine, m_Handle);
     }
 
     m_Status = AudioPlayerStatus::Playing;
@@ -86,7 +86,7 @@ void AudioPlayer::Pause()
 
     if (soloudEngine == nullptr) return;
 
-    soloudEngine->setPause(m_Handle, true);
+    AudioLayer::PauseAudio(soloudEngine, m_Handle);
 
     m_Status = AudioPlayerStatus::Paused;
 }
@@ -99,7 +99,7 @@ void AudioPlayer::Stop()
 
     if (soloudEngine == nullptr) return;
 
-    soloudEngine->stop(m_Handle);
+    AudioLayer::StopAudio(soloudEngine, m_Handle);
 
     m_Status = AudioPlayerStatus::Stopped;
 
@@ -147,7 +147,7 @@ void AudioPlayer::UpdateCurrentAudioVolume() const
 
     if (soloudEngine == nullptr) return;
 
-    soloudEngine->setVolume(m_Handle, GetFinalVolume());
+    AudioLayer::SetAudioVolume(soloudEngine, m_Handle, GetFinalVolume());
 }
 
 void AudioPlayer::UpdateCurrentAudioLoop() const
@@ -156,5 +156,5 @@ void AudioPlayer::UpdateCurrentAudioLoop() const
 
     if (soloudEngine == nullptr) return;
 
-    soloudEngine->setLooping(m_Handle, m_Loop);
+    AudioLayer::SetAudioLoop(soloudEngine, m_Handle, m_Loop);
 }

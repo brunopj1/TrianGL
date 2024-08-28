@@ -37,10 +37,6 @@ private:
 protected:
     void OnWindowResized(glm::uvec2 newResolution) override;
 
-#ifdef DEBUG
-
 private:
     void RenderImGui();
-
-#endif
 };

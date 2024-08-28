@@ -7,7 +7,6 @@ project "Engine"
     
     includedirs {
         "../Libs/glm/glm/",
-        "../Libs/soloud/soloud/include/",
         "../Libs/stb_image/stb_image/",
         "Source/"
     }
@@ -21,7 +20,6 @@ project "Engine"
     
     links {
         "GLM",
-        "SoLoud",
         "STB-Image"
     }
 
@@ -29,11 +27,13 @@ project "Engine"
         links {
             "GLAD",
             "GLFW",
+            "SoLoud"
         }
 
         includedirs {
             "../Libs/glad/glad/include/",
-            "../Libs/glfw/glfw/include/"
+            "../Libs/glfw/glfw/include/",
+            "../Libs/soloud/soloud/include/"
         }
     
     filter "configurations:Debug"
