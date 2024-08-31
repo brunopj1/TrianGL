@@ -28,6 +28,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Add the remaining window functionalities (is focused, can resize, etc...) (check glfw docs)
 - Fix the warnings in the Google Test project
 - Run python validation scripts in the CI
+- Add glad as a submodule and build it in the build script
 
 ## Particles
 

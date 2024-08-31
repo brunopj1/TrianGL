@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "DataTypes.h"
-#include <Exceptions/Game/GameModeAlreadySpecifiedException.h>
 #include <vector>
 #include <unordered_map>
 
@@ -123,8 +122,6 @@ namespace TGL
     T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
         ASSERT_APPLICATION_OBJECT_CREATION();
-
-        if (s_GameMode != nullptr) throw GameModeAlreadySpecifiedException();
 
         PREPARE_SPAWNER_ASSERT(GameMode);
 
