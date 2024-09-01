@@ -22,3 +22,6 @@ project "Tests"
     }
 
     debugdir "../Bin/%{cfg.buildcfg}/%{cfg.platform}/"
+
+    filter "configurations:not Testing"
+        kind "None"

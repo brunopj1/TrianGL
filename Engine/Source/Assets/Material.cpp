@@ -11,7 +11,8 @@ Material::Material(const std::string& vertexShaderPath, const std::string& fragm
 {
     ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Material);
 
-    m_Shader = AssetManager::LoadShader(vertexShaderPath, fragmentShaderPath);
+    AssetManager& assetManager = AssetManager::Get();
+    m_Shader = assetManager.LoadShader(vertexShaderPath, fragmentShaderPath);
 
     CreateEngineUniforms();
 }
@@ -20,9 +21,9 @@ Material::~Material()
 {
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
-    AssetManager::UnloadMaterialUniforms(this);
-
-    AssetManager::UnloadShader(m_Shader);
+    AssetManager& assetManager = AssetManager::Get();
+    assetManager.UnloadMaterialUniforms(this);
+    assetManager.UnloadShader(m_Shader);
 }
 
 void Material::OnRenderSetup() const

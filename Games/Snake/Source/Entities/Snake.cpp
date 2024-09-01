@@ -19,12 +19,14 @@ Snake::Snake(Grid* grid, SharedPtr<Texture> spriteSheet, const glm::ivec2& posit
 
 void Snake::OnUpdate(const f32 deltaTime)
 {
+    const InputSystem& inputSystem = InputSystem::Get();
+    
     glm::ivec2 direction = {0, 0};
 
-    if (InputSystem::IsKeyDown(KeyCode::W)) direction = {0, 1};
-    if (InputSystem::IsKeyDown(KeyCode::S)) direction = {0, -1};
-    if (InputSystem::IsKeyDown(KeyCode::A)) direction = {-1, 0};
-    if (InputSystem::IsKeyDown(KeyCode::D)) direction = {1, 0};
+    if (inputSystem.IsKeyDown(KeyCode::W)) direction = {0, 1};
+    if (inputSystem.IsKeyDown(KeyCode::S)) direction = {0, -1};
+    if (inputSystem.IsKeyDown(KeyCode::A)) direction = {-1, 0};
+    if (inputSystem.IsKeyDown(KeyCode::D)) direction = {1, 0};
 
     if (direction != glm::ivec2(0) && direction != m_MoveDirection && direction != -m_BodyDirection)
     {

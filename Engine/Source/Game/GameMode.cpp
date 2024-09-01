@@ -21,5 +21,6 @@ void GameMode::OnLateUpdate(f32 deltaTime) {}
 
 GameMode* GameMode::GetInstance()
 {
-    return EntityManager::GetGameMode();
+    const EntityManager& entityManager = EntityManager::Get();
+    return entityManager.GetGameMode();
 }

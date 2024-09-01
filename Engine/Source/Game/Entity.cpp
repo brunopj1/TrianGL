@@ -28,7 +28,8 @@ const Transform& Entity::GetTransform() const
 
 void Entity::Destroy()
 {
-    EntityManager::DestroyEntity(this);
+    EntityManager& entityManager = EntityManager::Get();
+    entityManager.DestroyEntity(this);
 }
 
 void Entity::DetachAllComponents() const

@@ -32,7 +32,7 @@ SharedPtr<Texture> TextureSlice::GetTexture() const
     return m_Texture;
 }
 
-glm::uvec2 TextureSlice::GetResolution() const
+const glm::uvec2& TextureSlice::GetResolution() const
 {
     return m_Texture->m_Slices[m_Index].Resolution;
 }
@@ -42,9 +42,9 @@ void TextureSlice::Bind(const u8 slot) const
     RenderLayer::BindTexture(m_Texture->m_TextureId, slot);
 }
 
-glm::mat4* TextureSlice::GetMatrix() const
+const glm::mat4& TextureSlice::GetMatrix() const
 {
-    return &m_Texture->m_Slices[m_Index].TextureMatrix;
+    return m_Texture->m_Slices[m_Index].TextureMatrix;
 }
 
 Texture::Texture(std::string filePath)
@@ -57,12 +57,14 @@ Texture::~Texture()
 {
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
-    AssetManager::UnloadTexture(this);
+    AssetManager& assetManager = AssetManager::Get();
+    assetManager.UnloadTexture(this);
 }
 
 SharedPtr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
 {
-    return AssetManager::LoadTexture(filePath, parameters);
+    AssetManager& assetManager = AssetManager::Get();
+    return assetManager.LoadTexture(filePath, parameters);
 }
 
 std::string Texture::GetFilePath() const
@@ -70,7 +72,7 @@ std::string Texture::GetFilePath() const
     return m_FilePath;
 }
 
-glm::uvec2 Texture::GetResolution() const
+const glm::uvec2& Texture::GetResolution() const
 {
     return m_Resolution;
 }
@@ -87,7 +89,8 @@ SharedPtr<TextureSlice> Texture::GetSlice(const u32 index)
         throw std::runtime_error("Invalid slice index");
     }
 
-    return AssetManager::CreateTextureSlice(ToSharedPtr(), index);
+    AssetManager& assetManager = AssetManager::Get();
+    return assetManager.CreateTextureSlice(ToSharedPtr(), index);
 }
 
 u32 Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
@@ -211,7 +214,7 @@ void Texture::Bind(const u8 slot) const
     RenderLayer::BindTexture(m_TextureId, slot);
 }
 
-glm::mat4* Texture::GetMatrix() const
+const glm::mat4& Texture::GetMatrix() const
 {
-    return nullptr;
+    return s_Matrix;
 }

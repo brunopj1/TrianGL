@@ -1,47 +1,48 @@
 ﻿#pragma once
+
 #include "DataTypes.h"
+#include "Service.h"
 #include <chrono>
 
 namespace TGL
 {
-    class Clock final
+    class Clock : public Service<Clock>
     {
     private:
         friend class Application;
+        
+    private:
+        f32 m_TotalTime = 0.0f;
+        f32 m_DeltaTime = 0.0f;
+
+        u32 m_TotalFrameCount = 0;
+        u32 m_SecondFrameCount = 0;
+        u32 m_FrameRate = 1;
+
+        f32 m_NextSecond = 1.0f;
+        bool m_IsNewSecond = false;
 
     private:
-        static inline f32 s_TotalTime;
-        static inline f32 s_DeltaTime;
-
-        static inline u32 s_TotalFrameCount;
-        static inline u32 s_SecondFrameCount;
-        static inline u32 s_FrameRate;
-
-        static inline f32 s_NextSecond;
-        static inline bool s_IsNewSecond;
+        std::chrono::steady_clock::time_point m_StartTime;
+        std::chrono::steady_clock::time_point m_FrameTime;
 
     private:
-        static inline std::chrono::steady_clock::time_point s_StartTime;
-        static inline std::chrono::steady_clock::time_point s_FrameTime;
+        Clock() = default;
+        ~Clock() = default;
 
     public:
-        Clock() = delete;
-        ~Clock() = delete;
+        f32 GetTotalTime() const;
+        f32 GetDeltaTime() const;
 
-    public:
-        static f32 GetTotalTime();
-        static f32 GetDeltaTime();
+        u32 GetFrameCount() const;
+        u32 GetFrameRate() const;
 
-        static u32 GetFrameCount();
-        static u32 GetFrameRate();
-
-        static bool IsNewSecond();
+        bool IsNewSecond() const;
 
     private:
-        static void Init();
-        static void Start();
+        void Start();
 
     private:
-        static f32 Update();
+        f32 Update();
     };
 }

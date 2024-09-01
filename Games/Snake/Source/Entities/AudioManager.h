@@ -23,6 +23,6 @@ public:
 
 public:
     void PlayMoveAudio();
-    void PlayHurtAudio() const;
-    void PlayAppleAudio() const;
+    void PlayHurtAudio();
+    void PlayAppleAudio();
 };

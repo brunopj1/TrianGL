@@ -1,5 +1,5 @@
-#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include <Core/Application.h>
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include <Core/Window.h>
 #include <Core/Clock.h>
 #include "Internal/RenderLayer.h"
@@ -13,19 +13,20 @@ using namespace TGL;
 
 Application::Application(const ApplicationConfig& config)
 {
+    s_Running = true;
+    
     Init(config);
 }
 
 Application::~Application()
 {
     Terminate();
+
+    s_Running = false;
 }
 
 void Application::Init(const ApplicationConfig& config)
 {
-    // Update the status
-    ApplicationStatus::SetStatus(ApplicationStatusValue::Initializing);
-
     // Init GLFW, GLAD, IMGUI    
     RenderLayer::SetErrorCallback(ErrorCallback);
     
@@ -36,7 +37,7 @@ void Application::Init(const ApplicationConfig& config)
     
     RenderLayer::SetupOpenGlVersion(4, 3, true);
 
-    const auto windowPtr = Window::Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
+    const auto windowPtr = m_Window.Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
     
     if (!RenderLayer::InitGlad())
     {
@@ -53,21 +54,24 @@ void Application::Init(const ApplicationConfig& config)
     // OpenGL settings
     RenderLayer::SetupOpenGlSettings();
     
-    // Core systems
-    Clock::Init();
-    InputSystem::Init(windowPtr);
-    AssetManager::Init();
-    EntityManager::Init();
+    // Public services
+    m_InputSystem.Init(windowPtr);
 
-    // Update the status
-    ApplicationStatus::SetStatus(ApplicationStatusValue::PostInit);
+    // Private services
+    m_AssetManager.Init();
+    m_EntityManager.Init();
 }
 
 void Application::GameLoop(GameMode* gameMode)
 {
+    // Start the clock
+    m_Clock.Start();
+
+    // Start the game mode
     gameMode->OnStart();
 
-    while (!Window::ShouldClose())
+    // Run the game loop
+    while (!m_Window.ShouldClose())
     {
         RenderLayer::PollEvents();
 
@@ -79,22 +83,15 @@ void Application::GameLoop(GameMode* gameMode)
 
 void Application::Terminate()
 {
-    // Update the status
-    ApplicationStatus::SetStatus(ApplicationStatusValue::Terminating);
-
-    // Core systems
-    EntityManager::Terminate();
-    AssetManager::Terminate();
-    InputSystem::Terminate();
+    // Private services
+    m_EntityManager.Terminate();
+    m_AssetManager.Terminate();
 
     RenderLayer::TerminateImgui();
 
-    Window::Terminate();
+    m_Window.Terminate();
 
     RenderLayer::TerminateGlfw();
-
-    // Update the status
-    ApplicationStatus::SetStatus(ApplicationStatusValue::Closed);
 }
 
 void Application::NewFrame()
@@ -102,9 +99,9 @@ void Application::NewFrame()
     RenderLayer::PrepareImguiFrame();
 
     // Update
-
-    const f32 deltaTime = Clock::Update();
-    EntityManager::Update(deltaTime);
+    
+    const f32 deltaTime = m_Clock.Update();
+    m_EntityManager.Update(deltaTime);
 
     // Render
 
@@ -116,26 +113,26 @@ void Application::NewFrame()
 
     if (camera != nullptr)
     {
-        EntityManager::Render();
+        m_EntityManager.Render();
     }
 
 #ifdef DEBUG
 #ifdef IMGUI
-    const u32 framerate = Clock::GetFrameRate();
-    const u32 entityCount = EntityManager::GetEntityCount();
-    const u32 componentCount = EntityManager::GetComponentCount();
+    const u32 framerate = m_Clock.GetFrameRate();
+    const u32 entityCount = m_EntityManager.GetEntityCount();
+    const u32 componentCount = m_EntityManager.GetComponentCount();
     RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
 #endif
 #endif
 
     RenderLayer::RenderImguiFrame();
 
-    RenderLayer::SwapBuffers(Window::GetGlfwWindow());
+    RenderLayer::SwapBuffers(m_Window.GetGlfwWindow());
 }
 
 void Application::Cleanup()
 {
-    InputSystem::OnEndOfFrame();
+    m_InputSystem.OnEndOfFrame();
 }
 
 void Application::ErrorCallback(const i32 error, const char* description)

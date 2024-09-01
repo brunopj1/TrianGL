@@ -24,3 +24,6 @@ project "GLAD"
 			"_GLAD_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
+
+	filter "configurations:Testing"
+		kind "None"

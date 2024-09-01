@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "DataTypes.h"
+#include "Service.h"
 #include <Core/InputCodes.h>
 #include <glm/vec2.hpp>
 #include <unordered_set>
@@ -14,60 +15,60 @@ struct GLFWwindow;
 
 namespace TGL
 {
-    class InputSystem final
+    class InputSystem : public Service<InputSystem>
     {
     private:
         friend class Application;
 
     private:
-        static inline GLFWwindow *s_WindowPtr = nullptr;
+        GLFWwindow* m_WindowPtr = nullptr;
 
     private:
-        static inline std::unordered_set<KeyCode> s_KeysPressedThisFrame;
-        static inline std::unordered_set<KeyCode> s_KeysRepeatedThisFrame;
-        static inline std::unordered_set<KeyCode> s_KeysReleasedThisFrame;
-        static inline std::unordered_set<KeyCode> s_KeysDown;
+        std::unordered_set<KeyCode> m_KeysPressedThisFrame;
+        std::unordered_set<KeyCode> m_KeysRepeatedThisFrame;
+        std::unordered_set<KeyCode> m_KeysReleasedThisFrame;
+        std::unordered_set<KeyCode> m_KeysDown;
 
-        static inline std::unordered_set<MouseButton> s_MouseButtonsPressedThisFrame;
-        static inline std::unordered_set<MouseButton> s_MouseButtonsReleasedThisFrame;
-        static inline std::unordered_set<MouseButton> s_MouseButtonsDown;
+        std::unordered_set<MouseButton> m_MouseButtonsPressedThisFrame;
+        std::unordered_set<MouseButton> m_MouseButtonsReleasedThisFrame;
+        std::unordered_set<MouseButton> m_MouseButtonsDown;
 
-        static inline glm::ivec2 s_MousePosition;
-        static inline glm::ivec2 s_LastMousePosition;
+        glm::ivec2 m_MousePosition = { 0, 0 };
+        glm::ivec2 m_LastMousePosition = { 0, 0 };
 
-        static inline glm::ivec2 s_MouseDelta;
-        static inline i32 s_MouseScroll;
+        glm::ivec2 m_MouseDelta = { 0, 0 };
+        i32 m_MouseScroll = 0;
 
-        static inline MouseMode s_MouseMode;
-
-    public:
-        InputSystem() = delete;
-        ~InputSystem() = delete;
-
-    public:
-        static bool IsKeyDown(KeyCode key);
-        static bool WasKeyPressed(KeyCode key);
-        static bool WasKeyRepeated(KeyCode key);
-        static bool WasKeyReleased(KeyCode key);
-
-        static bool IsMouseButtonDown(MouseButton button);
-        static bool WasMouseButtonPressed(MouseButton button);
-        static bool WasMouseButtonReleased(MouseButton button);
-
-        static glm::ivec2 GetMousePosition();
-        static glm::ivec2 GetMouseDelta();
-        static void SetMousePosition(glm::ivec2 position);
-
-        static i32 GetMouseScroll();
-
-        static MouseMode GetMouseMode();
-        static void SetMouseMode(MouseMode mode);
+        MouseMode m_MouseMode = MouseMode::Normal;
 
     private:
-        static void Init(GLFWwindow *windowPtr);
-        static void Terminate();
+        InputSystem() = default;
+        ~InputSystem() = default;
 
-        static void OnEndOfFrame();
+    public:
+        bool IsKeyDown(KeyCode key) const;
+        bool WasKeyPressed(KeyCode key) const;
+        bool WasKeyRepeated(KeyCode key) const;
+        bool WasKeyReleased(KeyCode key) const;
+
+        bool IsMouseButtonDown(MouseButton button) const;
+        bool WasMouseButtonPressed(MouseButton button) const;
+        bool WasMouseButtonReleased(MouseButton button) const;
+
+        glm::ivec2 GetMousePosition() const;
+        glm::ivec2 GetMouseDelta() const;
+        void SetMousePosition(glm::ivec2 position);
+
+        i32 GetMouseScroll() const;
+
+        MouseMode GetMouseMode() const;
+        void SetMouseMode(MouseMode mode);
+
+    private:
+        void Init(GLFWwindow *windowPtr);
+
+    private:
+        void OnEndOfFrame();
 
     private:
         static void KeyboardCallback(GLFWwindow *windowPtr, i32 key, i32 scancode, i32 action, i32 mods);

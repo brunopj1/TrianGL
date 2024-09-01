@@ -24,3 +24,6 @@ project "SoLoud"
 		defines { 
 			"_CRT_SECURE_NO_WARNINGS"
 		}
+		
+	filter "configurations:Testing"
+		kind "None"

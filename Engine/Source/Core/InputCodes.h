@@ -7,7 +7,7 @@
 namespace TGL
 {
 
-    enum class KeyCode
+    enum class KeyCode : i16
     {
         /* Error key */
         Unknown            = -1, // GLFW_KEY_UNKNOWN
@@ -137,7 +137,7 @@ namespace TGL
         Menu               = 348  // GLFW_KEY_MENU
     };
 
-    enum class MouseButton
+    enum class MouseButton : u8
     {
         Left               = 0, // GLFW_MOUSE_BUTTON_LEFT
         Right              = 1, // GLFW_MOUSE_BUTTON_RIGHT
@@ -149,7 +149,7 @@ namespace TGL
         Button8            = 7  // GLFW_MOUSE_BUTTON_8
     };
 
-    enum class MouseMode
+    enum class MouseMode : u32
     {
         Normal             = 0x00034001, // GLFW_CURSOR_NORMAL
         Hidden             = 0x00034002, // GLFW_CURSOR_HIDDEN
@@ -157,7 +157,7 @@ namespace TGL
         Confined           = 0x00034004  // GLFW_CURSOR_CAPTURED
     };
 
-    enum class InputAction
+    enum class InputAction : u8
     {
         Release            = 0, // GLFW_RELEASE
         Press              = 1, // GLFW_PRESS

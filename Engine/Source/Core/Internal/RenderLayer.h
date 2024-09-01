@@ -19,20 +19,20 @@ namespace TGL
 {
     // @formatter:off
     
-    enum class BufferType
+    enum class BufferType : u16
     {
         ArrayBuffer        = 0x8892, // GL_ARRAY_BUFFER
         ElementArrayBuffer = 0x8893  // GL_ELEMENT_ARRAY_BUFFER
     };
 
-    enum class BufferDrawType
+    enum class BufferDrawType : u16
     {
         StaticDraw  = 0x88E4, // GL_STATIC_DRAW
         DynamicDraw = 0x88E8, // GL_DYNAMIC_DRAW
         StreamDraw  = 0x88E0  // GL_STREAM_DRAW
     };
 
-    enum class VertexAttributeDataType
+    enum class VertexAttributeDataType : u16
     {
         I8  = 0x1400, // GL_BYTE
         U8  = 0x1401, // GL_UNSIGNED_BYTE
@@ -44,7 +44,7 @@ namespace TGL
         F64 = 0x140A  // GL_DOUBLE
     };
 
-    enum class ShaderType
+    enum class ShaderType : u16
     {
         Vertex   = 0x8B31, // GL_VERTEX_SHADER
         TessCtrl = 0x8E88, // GL_TESS_CONTROL_SHADER
@@ -68,12 +68,12 @@ namespace TGL
     {
     private:
         friend class Application;
+        friend class AssetManager;
         friend class Window;
         friend class Texture;
         friend class Sprite;
         friend class TextureSlice;
         friend class SpriteUniform;
-        friend class Quad;
         friend class Shader;
         friend class SpriteRenderer;
         friend class ParticleSystem;

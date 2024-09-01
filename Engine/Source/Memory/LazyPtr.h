@@ -157,14 +157,16 @@ namespace TGL
 
             if constexpr (std::is_base_of_v<Entity, T>)
             {
-                Entity* entityPtr = EntityManager::GetEntity(m_Id);
+                const EntityManager& entityManager = EntityManager::Get();
+                Entity* entityPtr = entityManager.GetEntity(m_Id);
                 T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
                 if (ptr == nullptr) m_Id = 0;
                 return ptr;
             }
             else if constexpr (std::is_base_of_v<Component, T>)
             {
-                Component* componentPtr = EntityManager::GetComponent(m_Id);
+                const EntityManager& entityManager = EntityManager::Get();
+                Component* componentPtr = entityManager.GetComponent(m_Id);
                 T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
                 if (ptr == nullptr) m_Id = 0;
                 return ptr;
@@ -182,13 +184,15 @@ namespace TGL
 
             if constexpr (std::is_base_of_v<Entity, T>)
             {
-                Entity* entityPtr = EntityManager::GetEntity(m_Id);
+                const EntityManager& entityManager = EntityManager::Get();
+                Entity* entityPtr = entityManager.GetEntity(m_Id);
                 T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
                 return ptr;
             }
             else if constexpr (std::is_base_of_v<Component, T>)
             {
-                Component* componentPtr = EntityManager::GetComponent(m_Id);
+                const EntityManager& entityManager = EntityManager::Get();
+                Component* componentPtr = entityManager.GetComponent(m_Id);
                 T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
                 return ptr;
             }

@@ -56,31 +56,36 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
     T* GameObject::SpawnEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        return EntityManager::CreateEntity<T>(std::forward<Args>(args)...);
+        EntityManager& entityManager = EntityManager::Get();
+        return entityManager.CreateEntity<T>(std::forward<Args>(args)...);
     }
 
     template <SearchableEntity T>
     T* GameObject::FindEntityGlobally()
     {
-        return EntityManager::FindEntityGlobally<T>();
+        EntityManager& entityManager = EntityManager::Get();
+        return entityManager.FindEntityGlobally<T>();
     }
 
     template <SearchableEntity T>
     std::vector<T*> GameObject::FindEntitiesGlobally()
     {
-        return EntityManager::FindEntitiesGlobally<T>();
+        EntityManager& entityManager = EntityManager::Get();
+        return entityManager.FindEntitiesGlobally<T>();
     }
 
     template <SearchableComponent T>
     T* GameObject::FindComponentGlobally()
     {
-        return EntityManager::FindComponentGlobally<T>();
+        EntityManager& entityManager = EntityManager::Get();
+        return entityManager.FindComponentGlobally<T>();
     }
 
     template <SearchableComponent T>
     std::vector<T*> GameObject::FindComponentsGlobally()
     {
-        return EntityManager::FindComponentsGlobally<T>();
+        EntityManager& entityManager = EntityManager::Get();
+        return entityManager.FindComponentsGlobally<T>();
     }
 
     template <CastableGameObject To, CastableGameObject From>

@@ -19,8 +19,9 @@ AudioPlayer::~AudioPlayer()
 void AudioPlayer::OnUpdate(f32 deltaTime)
 {
     if (m_Handle == -1) return;
-
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
@@ -56,8 +57,9 @@ void AudioPlayer::Play()
     if (m_Status == AudioPlayerStatus::Playing) return;
 
     if (m_Audio == nullptr) return;
-
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
@@ -82,7 +84,8 @@ void AudioPlayer::Pause()
 {
     if (m_Status != AudioPlayerStatus::Playing) return;
 
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
@@ -95,7 +98,8 @@ void AudioPlayer::Stop()
 {
     if (m_Status == AudioPlayerStatus::Stopped) return;
 
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
@@ -143,7 +147,8 @@ void AudioPlayer::SetLoop(const bool loop)
 
 void AudioPlayer::UpdateCurrentAudioVolume() const
 {
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 
@@ -152,7 +157,8 @@ void AudioPlayer::UpdateCurrentAudioVolume() const
 
 void AudioPlayer::UpdateCurrentAudioLoop() const
 {
-    SoLoud::Soloud* soloudEngine = AssetManager::s_SoloudEngine;
+    const AssetManager& assetManager = AssetManager::Get();
+    SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
     if (soloudEngine == nullptr) return;
 

@@ -5,7 +5,7 @@
 
 namespace TGL
 {
-    enum class AudioPlayerStatus
+    enum class AudioPlayerStatus : u8
     {
         Playing,
         Paused,

@@ -141,16 +141,7 @@ void SpriteUniform::BindInternal() const
 
     if (m_MatrixLocation != -1)
     {
-        glm::mat4* matrix = Value->GetMatrix();
-
-        if (matrix != nullptr)
-        {
-            RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, *matrix);
-        }
-        else
-        {
-            RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, glm::mat4(1.0f));
-        }
+        RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, Value->GetMatrix());
     }
 
     if (m_ResolutionLocation != -1)

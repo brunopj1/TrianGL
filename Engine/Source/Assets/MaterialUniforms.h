@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Internal/Macros/ClassMacros.h"
 #include <Assets/Texture.h> // Required for SharedPtr<Sprite>
 #include <glm/glm.hpp>
 #include <Memory/SharedPtr.h>
@@ -25,10 +26,7 @@ namespace TGL
         virtual ~MaterialUniform();
 
     public:
-        MaterialUniform(const MaterialUniform&) = delete;
-        MaterialUniform& operator=(const MaterialUniform&) = delete;
-        MaterialUniform(MaterialUniform&&) = delete;
-        MaterialUniform& operator=(MaterialUniform&&) = delete;
+        DELETE_COPY_AND_MOVE_CONSTRUCTORS(MaterialUniform);
 
     private:
         virtual bool IsValid() const;

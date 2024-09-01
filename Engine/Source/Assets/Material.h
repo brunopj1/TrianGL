@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Core/DataTypes.h"
+#include "Internal/Macros/ClassMacros.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Core/AssetManager.h>
@@ -35,10 +36,7 @@ namespace TGL
         virtual ~Material();
 
     public:
-        Material(const Material&) = delete;
-        Material& operator=(const Material&) = delete;
-        Material(Material&&) = delete;
-        Material& operator=(Material&&) = delete;
+        DELETE_COPY_AND_MOVE_CONSTRUCTORS(Material);
 
     protected:
         virtual void OnRenderSetup() const;
@@ -63,12 +61,14 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
     SharedPtr<T> Material::CreateInstanceOf(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        return AssetManager::LoadMaterial<T>(std::forward<Args>(args)...);
+        AssetManager& assetManager = AssetManager::Get();
+        return assetManager.LoadMaterial<T>(std::forward<Args>(args)...);
     }
 
     template <SpawnableMaterialUniform T>
     T* Material::AddUniform(const std::string& name, const bool createIfInvalid)
     {
-        return AssetManager::CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
+        AssetManager& assetManager = AssetManager::Get();
+        return assetManager.CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
     }
 }

@@ -5,7 +5,9 @@
 
 #include "gtest/gtest.h"
 
-class TestGameMode final : public TGL::GameMode
+using namespace TGL;
+
+class TestGameMode final : public GameMode
 {
 private:
 	int m_Count = 5;
@@ -17,22 +19,20 @@ public:
 public:
 	void OnStart() override
 	{
-		SpawnEntity<TGL::Camera>(true);
+		SpawnEntity<Camera>(true);
 	}
 
 	void OnUpdate(f32 deltaTime) override
 	{
-		if (m_Count-- == 0) TGL::Window::Close();
+		if (m_Count-- == 0) Window::Get().Close();
 	}
 };
 
 TEST(Application, Run)
 {
-	TGL::ApplicationConfig config;
+	ApplicationConfig config;
 	config.WindowTitle = "Test";
 	config.Vsync = false;
 
-	TGL::Application app { config };
-
-	app.Run<TestGameMode>();
+	Application::Run<TestGameMode>(config);
 }

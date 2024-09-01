@@ -10,7 +10,7 @@ using namespace TGL;
 Camera::Camera(const bool setAsMainCamera)
     : Entity(false)
 {
-    m_AspectRatio = Window::GetAspectRatio();
+    m_AspectRatio = Window::Get().GetAspectRatio();
 
     if (setAsMainCamera)
     {
@@ -115,7 +115,7 @@ void Camera::SetBackgroundColor(const glm::vec3& color)
 
 glm::vec2 Camera::ScreenToWorldPosition(const glm::vec2& screenPos) const
 {
-    const glm::uvec2 screenResolution = Window::GetResolution();
+    const glm::uvec2 screenResolution = Window::Get().GetResolution();
 
     const glm::vec4 clipPos = {
         screenPos.x / screenResolution.x * 2.0f - 1.0f,
@@ -137,9 +137,11 @@ glm::vec2 Camera::WorldToScreenPosition(const glm::vec2& worldPos) const
 
     const glm::vec4 clipPos = projectionViewMatrix * glm::vec4(worldPos, 0.0f, 1.0f);
 
+    const Window& window = Window::Get();
+    
     const glm::vec2 screenPos = {
-        (clipPos.x + 1.0f) / 2.0f * Window::GetResolution().x,
-        (1.0f - clipPos.y) / 2.0f * Window::GetResolution().y
+        (clipPos.x + 1.0f) / 2.0f * window.GetResolution().x,
+        (1.0f - clipPos.y) / 2.0f * window.GetResolution().y
     };
 
     return screenPos;

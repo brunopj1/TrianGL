@@ -7,84 +7,79 @@
 
 using namespace TGL;
 
-bool InputSystem::IsKeyDown(const KeyCode key)
+bool InputSystem::IsKeyDown(const KeyCode key) const
 {
-    return s_KeysDown.contains(key);
+    return m_KeysDown.contains(key);
 }
 
-bool InputSystem::WasKeyPressed(const KeyCode key)
+bool InputSystem::WasKeyPressed(const KeyCode key) const
 {
-    return s_KeysPressedThisFrame.contains(key);
+    return m_KeysPressedThisFrame.contains(key);
 }
 
-bool InputSystem::WasKeyRepeated(const KeyCode key)
+bool InputSystem::WasKeyRepeated(const KeyCode key) const
 {
-    return s_KeysRepeatedThisFrame.contains(key);
+    return m_KeysRepeatedThisFrame.contains(key);
 }
 
-bool InputSystem::WasKeyReleased(const KeyCode key)
+bool InputSystem::WasKeyReleased(const KeyCode key) const
 {
-    return s_KeysReleasedThisFrame.contains(key);
+    return m_KeysReleasedThisFrame.contains(key);
 }
 
-bool InputSystem::IsMouseButtonDown(const MouseButton button)
+bool InputSystem::IsMouseButtonDown(const MouseButton button) const
 {
-    return s_MouseButtonsDown.contains(button);
+    return m_MouseButtonsDown.contains(button);
 }
 
-bool InputSystem::WasMouseButtonPressed(const MouseButton button)
+bool InputSystem::WasMouseButtonPressed(const MouseButton button) const
 {
-    return s_MouseButtonsPressedThisFrame.contains(button);
+    return m_MouseButtonsPressedThisFrame.contains(button);
 }
 
-bool InputSystem::WasMouseButtonReleased(const MouseButton button)
+bool InputSystem::WasMouseButtonReleased(const MouseButton button) const
 {
-    return s_MouseButtonsReleasedThisFrame.contains(button);
+    return m_MouseButtonsReleasedThisFrame.contains(button);
 }
 
-glm::ivec2 InputSystem::GetMousePosition()
+glm::ivec2 InputSystem::GetMousePosition() const
 {
-    return s_MousePosition;
+    return m_MousePosition;
 }
 
-glm::ivec2 InputSystem::GetMouseDelta()
+glm::ivec2 InputSystem::GetMouseDelta() const
 {
-    return s_MouseDelta;
+    return m_MouseDelta;
 }
 
 void InputSystem::SetMousePosition(const glm::ivec2 position)
 {
-    InputLayer::SetMousePosition(s_WindowPtr, position);
-    s_MousePosition = position;
+    InputLayer::SetMousePosition(m_WindowPtr, position);
+    m_MousePosition = position;
 }
 
-i32 InputSystem::GetMouseScroll()
+i32 InputSystem::GetMouseScroll() const
 {
-    return s_MouseScroll;
+    return m_MouseScroll;
 }
 
-MouseMode InputSystem::GetMouseMode()
+MouseMode InputSystem::GetMouseMode() const
 {
-    return s_MouseMode;
+    return m_MouseMode;
 }
 
 void InputSystem::SetMouseMode(const MouseMode mode)
 {
-    InputLayer::SetMouseInputMode(s_WindowPtr, mode);
-    s_MouseMode = mode;
+    InputLayer::SetMouseInputMode(m_WindowPtr, mode);
+    m_MouseMode = mode;
 }
 
 void InputSystem::Init(GLFWwindow* windowPtr)
 {
-    s_WindowPtr = windowPtr;
+    m_WindowPtr = windowPtr;
 
-    s_MousePosition = InputLayer::GetMousePosition(s_WindowPtr);
-    s_LastMousePosition = s_MousePosition;
-
-    s_MouseDelta = {0, 0};
-    s_MouseScroll = 0;
-
-    s_MouseMode = MouseMode::Normal;
+    m_MousePosition = InputLayer::GetMousePosition(m_WindowPtr);
+    m_LastMousePosition = m_MousePosition;
 
     InputLayer::BindKeyboardCallback(windowPtr, KeyboardCallback);
     InputLayer::BindMouseButtonCallback(windowPtr, MouseButtonCallback);
@@ -92,36 +87,26 @@ void InputSystem::Init(GLFWwindow* windowPtr)
     InputLayer::BindMouseScrollCallback(windowPtr, MouseScrollCallback);
 }
 
-void InputSystem::Terminate()
-{
-    s_KeysPressedThisFrame.clear();
-    s_KeysRepeatedThisFrame.clear();
-    s_KeysReleasedThisFrame.clear();
-    s_KeysDown.clear();
-
-    s_MouseButtonsPressedThisFrame.clear();
-    s_MouseButtonsReleasedThisFrame.clear();
-    s_MouseButtonsDown.clear();
-}
-
 void InputSystem::OnEndOfFrame()
 {
-    s_KeysPressedThisFrame.clear();
-    s_KeysRepeatedThisFrame.clear();
-    s_KeysReleasedThisFrame.clear();
+    m_KeysPressedThisFrame.clear();
+    m_KeysRepeatedThisFrame.clear();
+    m_KeysReleasedThisFrame.clear();
 
-    s_MouseButtonsPressedThisFrame.clear();
-    s_MouseButtonsReleasedThisFrame.clear();
+    m_MouseButtonsPressedThisFrame.clear();
+    m_MouseButtonsReleasedThisFrame.clear();
 
-    s_LastMousePosition = s_MousePosition;
-    s_MouseDelta = {0, 0};
-    s_MouseScroll = 0;
+    m_LastMousePosition = m_MousePosition;
+    m_MouseDelta = {0, 0};
+    m_MouseScroll = 0;
 }
 
 void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, const i32 /*scancode*/, const i32 action, const i32 /*mods*/)
 {
+    InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
+    
 #ifdef IMGUI
-    ImGui_ImplGlfw_KeyCallback(s_WindowPtr, key, 0, action, 0);
+    ImGui_ImplGlfw_KeyCallback(inputSystem.m_WindowPtr, key, 0, action, 0);
 #endif
 
     const KeyCode keyCode = static_cast<KeyCode>(key);
@@ -130,23 +115,26 @@ void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, con
     switch (actionCode)
     {
         case InputAction::Press:
-            s_KeysPressedThisFrame.insert(keyCode);
-            s_KeysDown.insert(keyCode);
+            inputSystem.m_KeysPressedThisFrame.insert(keyCode);
+            inputSystem.m_KeysDown.insert(keyCode);
             break;
         case InputAction::Repeat:
-            s_KeysRepeatedThisFrame.insert(keyCode);
+            inputSystem.m_KeysRepeatedThisFrame.insert(keyCode);
             break;
         case InputAction::Release:
-            s_KeysReleasedThisFrame.insert(keyCode);
-            s_KeysDown.erase(keyCode);
+            inputSystem.m_KeysReleasedThisFrame.insert(keyCode);
+            inputSystem.m_KeysDown.erase(keyCode);
             break;
     }
 }
 
-void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods)
+// ReSharper disable once CppParameterNeverUsed
+void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods) 
 {
+    InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
+    
 #ifdef IMGUI
-    ImGui_ImplGlfw_MouseButtonCallback(s_WindowPtr, button, action, mods);
+    ImGui_ImplGlfw_MouseButtonCallback(inputSystem.m_WindowPtr, button, action, mods);
 #endif
 
     const MouseButton mouseButton = static_cast<MouseButton>(button);
@@ -155,34 +143,38 @@ void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 butto
     switch (actionCode)
     {
         case InputAction::Press:
-            s_MouseButtonsPressedThisFrame.insert(mouseButton);
-            s_MouseButtonsDown.insert(mouseButton);
+            inputSystem.m_MouseButtonsPressedThisFrame.insert(mouseButton);
+            inputSystem.m_MouseButtonsDown.insert(mouseButton);
             break;
         case InputAction::Repeat:
             break;
         case InputAction::Release:
-            s_MouseButtonsReleasedThisFrame.insert(mouseButton);
-            s_MouseButtonsDown.erase(mouseButton);
+            inputSystem.m_MouseButtonsReleasedThisFrame.insert(mouseButton);
+            inputSystem.m_MouseButtonsDown.erase(mouseButton);
             break;
     }
 }
 
 void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
+    InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
+    
 #ifdef IMGUI
-    ImGui_ImplGlfw_CursorPosCallback(s_WindowPtr, x, y);
+    ImGui_ImplGlfw_CursorPosCallback(inputSystem.m_WindowPtr, x, y);
 #endif
 
-    s_MousePosition = {static_cast<i32>(x), static_cast<i32>(y)};
-    s_MouseDelta = s_MousePosition - s_LastMousePosition;
+    inputSystem.m_MousePosition = {static_cast<i32>(x), static_cast<i32>(y)};
+    inputSystem.m_MouseDelta = inputSystem.m_MousePosition - inputSystem.m_LastMousePosition;
 }
 
 // ReSharper disable once CppParameterNeverUsed
 void InputSystem::MouseScrollCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
+    InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
+    
 #ifdef IMGUI
-    ImGui_ImplGlfw_ScrollCallback(s_WindowPtr, x, y);
+    ImGui_ImplGlfw_ScrollCallback(inputSystem.m_WindowPtr, x, y);
 #endif
 
-    s_MouseScroll = static_cast<i32>(y);
+    inputSystem.m_MouseScroll = static_cast<i32>(y);
 }

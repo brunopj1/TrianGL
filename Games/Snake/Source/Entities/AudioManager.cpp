@@ -21,14 +21,18 @@ void AudioManager::PlayMoveAudio()
     m_NextMove = !m_NextMove;
 }
 
-void AudioManager::PlayHurtAudio() const
+void AudioManager::PlayHurtAudio()
 {
     m_AudioPlayer->SetAudio(m_HurtAudio);
     m_AudioPlayer->Play();
+
+    m_NextMove = !m_NextMove;
 }
 
-void AudioManager::PlayAppleAudio() const
+void AudioManager::PlayAppleAudio()
 {
     m_AudioPlayer->SetAudio(m_AppleAudio);
     m_AudioPlayer->Play();
+
+    m_NextMove = !m_NextMove;
 }

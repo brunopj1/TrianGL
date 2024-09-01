@@ -60,9 +60,7 @@ i32 main()
     config.WindowTitle = "TrianGL - {projectName}";
     config.Vsync = true;
 
-    TGL::Application app{{config}};
-    
-    app.Run<{projectName}GameMode>();
+    TGL::Application::Run<{projectName}GameMode>(config);
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();

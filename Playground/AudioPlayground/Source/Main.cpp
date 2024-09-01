@@ -8,9 +8,7 @@ i32 main()
 	config.WindowTitle = "TrianGL - AudioPlayground";
 	config.Vsync = true;
 
-	TGL::Application app { config };
-
-	app.Run<AudioPlaygroundGameMode>();
+	TGL::Application::Run<AudioPlaygroundGameMode>(config);
 
 	// Detect memory leaks (Will only run in Debug configurations)
 	TGL::DetectMemoryLeaks();

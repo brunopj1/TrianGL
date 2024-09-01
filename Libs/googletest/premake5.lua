@@ -15,3 +15,6 @@ project "Google-Test"
 		"googletest/googletest/include/**.h",
 		"googletest/googletest/src/*.cc"
 	}
+
+	filter "configurations:not Testing"
+        kind "None"

@@ -56,6 +56,7 @@ bool RenderLayer::InitGlad()
     return gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); // NOLINT(clang-diagnostic-cast-function-type-strict)
 }
 
+// ReSharper disable once CppParameterNeverUsed
 bool RenderLayer::InitImgui(GLFWwindow* windowPtr)
 {
 #ifdef IMGUI
@@ -172,7 +173,7 @@ void RenderLayer::RenderImguiFrame()
 #endif
 }
 
-void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCount, const u32 componentCount)
+void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCount, const u32 componentCount) // NOLINT(CppParameterNeverUsed)
 {
 #ifdef DEBUG
 #ifdef IMGUI

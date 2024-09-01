@@ -2,11 +2,12 @@
 
 #include "Clock.h"
 #include "DataTypes.h"
+#include "Window.h"
+#include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include <Game/GameMode.h>
 #include <Core/AssetManager.h>
 #include <Core/EntityManager.h>
 #include <Core/InputSystem.h>
-#include "Exceptions/Core/CannotRunEngine.h"
 
 // TODO ensure that all const methods return pointer to const data
 
@@ -21,30 +22,41 @@ namespace TGL
         bool Vsync = true;
     };
 
-    class Application final
+    class Application
     {
-    public:
-        Application(const ApplicationConfig& config = {});
+    private:
+        static inline bool s_Running = false;
+        
+    private:
+        EntityManager m_EntityManager;
+        AssetManager m_AssetManager;
+
+    private:
+        Clock m_Clock;
+        Window m_Window;
+        InputSystem m_InputSystem;
+        
+    private:
+        Application(const ApplicationConfig& config);
         ~Application();
 
     public:
-        Application(const Application&) = delete;
-        Application(Application&&) = delete;
-        Application& operator=(const Application&) = delete;
-        Application& operator=(Application&&) = delete;
+        DELETE_COPY_AND_MOVE_CONSTRUCTORS(Application);
 
     public:
         template <SpawnableGameMode T, typename... Args>
-        void Run(Args&&... args);
+        static void Run(const ApplicationConfig& config, Args&&... args);
 
     private:
-        static void Init(const ApplicationConfig& config);
-        static void GameLoop(GameMode* gameMode);
-        static void Terminate();
+        void Init(const ApplicationConfig& config);
+        void Terminate();
 
     private:
-        static void NewFrame();
-        static void Cleanup();
+        void GameLoop(GameMode* gameMode);
+
+    private:
+        void NewFrame();
+        void Cleanup();
 
     private:
         [[noreturn]] static void ErrorCallback(i32 error, const char* description);
@@ -53,28 +65,21 @@ namespace TGL
     // Template definitions
 
     template <SpawnableGameMode T, typename... Args>
-    void Application::Run(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+    void Application::Run(const ApplicationConfig& config, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        // Check and update the status
-        const auto appStatus = ApplicationStatus::GetStatus();
-
-        if (appStatus != ApplicationStatusValue::PostInit)
+        // Check if the game is already running
+        if (s_Running)
         {
-            throw CannotRunEngine();
+            throw FailedToInitializeEngineException("Cannot run multiple instances of the engine at the same time");
         }
-
-        ApplicationStatus::SetStatus(ApplicationStatusValue::Running);
-
-        // Start the clock
-        Clock::Start();
-
+        
+        // Create the application
+        Application application(config);
+        
         // Create the GameMode
-        GameMode* gameMode = EntityManager::CreateGameMode<T>(std::forward<Args>(args)...);
+        GameMode* gameMode = application.m_EntityManager.CreateGameMode<T>(std::forward<Args>(args)...);
 
         // Run the game loop
-        GameLoop(gameMode);
-
-        // Update the status
-        ApplicationStatus::SetStatus(ApplicationStatusValue::PostRun);
+        application.GameLoop(gameMode);
     }
 }

@@ -51,7 +51,7 @@ jobs:
 
       # Run MSBuild (Testing)
       - name: Run MSBuild [Testing]
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Testing -property:Platform=Win64
+        run: msbuild TrianGL.sln -t:Tests -verbosity:n -property:Configuration=Testing -property:Platform=Win64
 
       # Run the tests
       - name: Run tests

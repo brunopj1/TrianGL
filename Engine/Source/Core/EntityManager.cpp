@@ -4,20 +4,19 @@
 #include <Game/GameMode.h>
 #include <Game/Entity.h>
 #include <Game/Component.h>
-#include <Internal/Asserts/ApplicationAsserts.h>
 
 using namespace TGL;
 
 void EntityManager::Init()
 {
-    s_NextId = 1;
+    m_NextId = 1;
 }
 
 void EntityManager::Terminate()
 {
-    while (!s_Entities.empty())
+    while (!m_Entities.empty())
     {
-        DestroyEntity(s_Entities.begin()->second);
+        DestroyEntity(m_Entities.begin()->second);
     }
 
     DestroyGameMode();
@@ -25,13 +24,13 @@ void EntityManager::Terminate()
 
 void EntityManager::Update(const f32 deltaTime)
 {
-    if (!s_OnStartQueue.empty())
+    if (!m_OnStartQueue.empty())
     {
         // Copy the queue to avoid issues when instantiating new objects in OnStart methods
 
-        const auto queue = s_OnStartQueue;
+        const auto queue = m_OnStartQueue;
 
-        s_OnStartQueue.clear();
+        m_OnStartQueue.clear();
 
         for (GameObject* object : queue)
         {
@@ -39,56 +38,86 @@ void EntityManager::Update(const f32 deltaTime)
 
             if (object->m_ShouldUpdate)
             {
-                AddToUpdateQueue(object, s_OnUpdateQueue);
+                AddToUpdateQueue(object, m_OnUpdateQueue);
             }
         }
     }
 
-    s_GameMode->OnEarlyUpdate(deltaTime);
+    m_GameMode->OnEarlyUpdate(deltaTime);
 
-    for (GameObject* object : s_OnUpdateQueue)
+    for (GameObject* object : m_OnUpdateQueue)
     {
         object->OnUpdate(deltaTime);
     }
 
-    s_GameMode->OnLateUpdate(deltaTime);
+    m_GameMode->OnLateUpdate(deltaTime);
 }
 
-void EntityManager::Render()
+void EntityManager::Render() const
 {
-    for (const auto& renderable : s_RenderQueue)
+    for (const auto& renderable : m_RenderQueue)
     {
         renderable->Render();
     }
 }
 
-GameMode* EntityManager::GetGameMode()
+GameMode* EntityManager::GetGameMode() const
 {
-    return s_GameMode;
+    return m_GameMode;
 }
 
-Entity* EntityManager::GetEntity(const u64 id)
+Entity* EntityManager::GetEntity(const u64 id) const
 {
-    const auto it = s_Entities.find(id);
-    if (it != s_Entities.end()) return it->second;
+    const auto it = m_Entities.find(id);
+    if (it != m_Entities.end()) return it->second;
     return nullptr;
 }
 
-Component* EntityManager::GetComponent(const u64 id)
+Component* EntityManager::GetComponent(const u64 id) const
 {
-    const auto it = s_Components.find(id);
-    if (it != s_Components.end()) return it->second;
+    const auto it = m_Components.find(id);
+    if (it != m_Components.end()) return it->second;
     return nullptr;
 }
 
-u32 EntityManager::GetEntityCount()
+u32 EntityManager::GetEntityCount() const
 {
-    return static_cast<u32>(s_Entities.size());
+    return static_cast<u32>(m_Entities.size());
 }
 
-u32 EntityManager::GetComponentCount()
+u32 EntityManager::GetComponentCount() const
 {
-    return static_cast<u32>(s_Components.size());
+    return static_cast<u32>(m_Components.size());
+}
+
+void EntityManager::StoreObjectCallbacks(GameObject* object)
+{
+    // Updatable
+
+    AddToUpdateQueue(object, m_OnStartQueue);
+    // The object will be added to the update queue when it leaves the start queue
+
+    // Renderable
+
+    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
+    {
+        AddToRenderQueue(renderable, m_RenderQueue);
+    }
+}
+
+void EntityManager::RemoveObjectCallbacks(GameObject* object)
+{
+    // Updatable
+
+    std::erase(m_OnStartQueue, object);
+    std::erase(m_OnUpdateQueue, object);
+
+    // Renderable
+
+    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
+    {
+        std::erase(m_RenderQueue, renderable);
+    }
 }
 
 void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)
@@ -123,41 +152,11 @@ void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Rendera
     queue.push_back(renderable);
 }
 
-void EntityManager::StoreObjectCallbacks(GameObject* object)
-{
-    // Updatable
-
-    AddToUpdateQueue(object, s_OnStartQueue);
-    // The object will be added to the update queue when it leaves the start queue
-
-    // Renderable
-
-    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
-    {
-        AddToRenderQueue(renderable, s_RenderQueue);
-    }
-}
-
-void EntityManager::RemoveObjectCallbacks(GameObject* object)
-{
-    // Updatable
-
-    std::erase(s_OnStartQueue, object);
-    std::erase(s_OnUpdateQueue, object);
-
-    // Renderable
-
-    if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
-    {
-        std::erase(s_RenderQueue, renderable);
-    }
-}
-
 void EntityManager::UpdateRenderableOrder(Renderable* renderable)
 {
-    std::erase(s_RenderQueue, renderable);
+    std::erase(m_RenderQueue, renderable);
 
-    AddToRenderQueue(renderable, s_RenderQueue);
+    AddToRenderQueue(renderable, m_RenderQueue);
 }
 
 void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component)
@@ -168,20 +167,20 @@ void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* 
 
 void EntityManager::DestroyGameMode()
 {
-    if (s_GameMode == nullptr) return;
+    if (m_GameMode == nullptr) return;
 
-    RemoveObjectCallbacks(s_GameMode);
+    RemoveObjectCallbacks(m_GameMode);
 
     PREPARE_SPAWNER_ASSERT(GameMode);
 
-    delete s_GameMode;
+    delete m_GameMode;
 
-    s_GameMode = nullptr;
+    m_GameMode = nullptr;
 }
 
 void EntityManager::DestroyEntity(Entity* entity)
 {
-    if (const size_t num = s_Entities.erase(entity->m_Id); num == 0) return;
+    if (const size_t num = m_Entities.erase(entity->m_Id); num == 0) return;
 
     RemoveObjectCallbacks(entity);
 
@@ -194,7 +193,7 @@ void EntityManager::DestroyEntity(Entity* entity)
 
 void EntityManager::DestroyComponent(Component* component)
 {
-    if (const size_t num = s_Components.erase(component->m_Id); num == 0) return;
+    if (const size_t num = m_Components.erase(component->m_Id); num == 0) return;
 
     RemoveObjectCallbacks(component);
 

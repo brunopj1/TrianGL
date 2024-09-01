@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataTypes.h"
+#include "Service.h"
 #include <string>
 #include <glm/vec2.hpp>
 
@@ -10,58 +11,61 @@ struct GLFWwindow;
 
 namespace TGL
 {
-    class Window
+    class Window : public Service<Window>
     {
     private:
         friend class Application;
         friend class RenderLayer;
 
     private:
-        static inline GLFWwindow* s_WindowPtr = nullptr;
+        GLFWwindow* m_WindowPtr = nullptr;
 
     private:
-        static inline std::string s_Title;
-        static inline glm::ivec2 s_Position;
-        static inline glm::uvec2 s_Resolution;
-        static inline f32 s_AspectRatio;
-        static inline bool s_Fullscreen;
-        static inline bool s_Vsync;
-
-    public:
-        Window() = delete;
-        ~Window() = delete;
-
-    public:
-        static bool IsFullscreen();
-        static void SetFullscreen(bool fullscreen);
-
-        static bool IsMaximized();
-        static void Maximize();
-
-        static bool IsMinimized();
-        static void Minimize();
-
-        static void Restore();
-
-        static std::string GetTitle();
-        static void SetTitle(const std::string& title);
-
-        static glm::ivec2 GetPosition();
-        static void SetPosition(glm::ivec2 position);
-
-        static glm::uvec2 GetResolution();
-        static void SetResolution(glm::uvec2 resolution);
-
-        static f32 GetAspectRatio();
-
-        static bool IsVsync();
-        static void SetVsync(bool vsync);
-
-        static void Close();
+        std::string m_Title;
+        glm::ivec2 m_Position;
+        glm::uvec2 m_Resolution;
+        f32 m_AspectRatio;
+        bool m_Fullscreen;
+        bool m_Vsync;
 
     private:
-        static GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
-        static void Terminate();
+        Window() = default;
+        ~Window() = default;
+
+    public:
+        bool IsFullscreen() const;
+        void SetFullscreen(bool fullscreen);
+
+        bool IsMaximized() const;
+        void Maximize();
+
+        bool IsMinimized() const;
+        void Minimize();
+
+        void Restore();
+
+        std::string GetTitle();
+        void SetTitle(const std::string& title);
+
+        glm::ivec2 GetPosition() const;
+        void SetPosition(glm::ivec2 position);
+
+        glm::uvec2 GetResolution() const;
+        void SetResolution(glm::uvec2 resolution);
+
+        f32 GetAspectRatio() const;
+
+        bool IsVsync() const;
+        void SetVsync(bool vsync);
+
+        void Close();
+
+    private:
+        bool ShouldClose() const;
+
+    private:
+        GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
+        void Terminate() const;
 
     private:
         static void PositionCallback(GLFWwindow* windowPtr, i32 x, i32 y);
@@ -72,9 +76,6 @@ namespace TGL
         static void MinimizeCallback(GLFWwindow* windowPtr, i32 minimized);
 
     private:
-        static bool ShouldClose();
-
-    private:
-        static GLFWwindow* GetGlfwWindow();
+        GLFWwindow* GetGlfwWindow() const;
     };
 }

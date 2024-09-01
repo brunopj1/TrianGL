@@ -2,73 +2,60 @@
 
 using namespace TGL;
 
-f32 Clock::GetTotalTime()
+f32 Clock::GetTotalTime() const
 {
-    return s_TotalTime;
+    return m_TotalTime;
 }
 
-f32 Clock::GetDeltaTime()
+f32 Clock::GetDeltaTime() const
 {
-    return s_DeltaTime;
+    return m_DeltaTime;
 }
 
-u32 Clock::GetFrameCount()
+u32 Clock::GetFrameCount() const
 {
-    return s_TotalFrameCount;
+    return m_TotalFrameCount;
 }
 
-u32 Clock::GetFrameRate()
+u32 Clock::GetFrameRate() const
 {
-    return s_FrameRate;
+    return m_FrameRate;
 }
 
-bool Clock::IsNewSecond()
+bool Clock::IsNewSecond() const
 {
-    return s_IsNewSecond;
-}
-
-void Clock::Init()
-{
-    s_TotalTime = 0.0f;
-    s_DeltaTime = 0.0f;
-
-    s_TotalFrameCount = 0;
-    s_SecondFrameCount = 0;
-    s_FrameRate = 1;
-
-    s_NextSecond = 1.0f;
-    s_IsNewSecond = false;
+    return m_IsNewSecond;
 }
 
 void Clock::Start()
 {
-    s_StartTime = s_FrameTime = std::chrono::steady_clock::now();
+    m_StartTime = m_FrameTime = std::chrono::steady_clock::now();
 }
 
 f32 Clock::Update()
 {
     const auto currentTime = std::chrono::steady_clock::now();
 
-    s_DeltaTime = std::chrono::duration<f32>(currentTime - s_FrameTime).count();
-    s_TotalTime = std::chrono::duration<f32>(currentTime - s_StartTime).count();
+    m_DeltaTime = std::chrono::duration<f32>(currentTime - m_FrameTime).count();
+    m_TotalTime = std::chrono::duration<f32>(currentTime - m_StartTime).count();
 
-    s_FrameTime = currentTime;
+    m_FrameTime = currentTime;
 
-    s_TotalFrameCount++;
-    s_SecondFrameCount++;
+    m_TotalFrameCount++;
+    m_SecondFrameCount++;
 
-    if (s_TotalTime >= s_NextSecond)
+    if (m_TotalTime >= m_NextSecond)
     {
-        s_IsNewSecond = true;
-        s_NextSecond += 1.0f;
+        m_IsNewSecond = true;
+        m_NextSecond += 1.0f;
 
-        s_FrameRate = s_SecondFrameCount;
-        s_SecondFrameCount = 0;
+        m_FrameRate = m_SecondFrameCount;
+        m_SecondFrameCount = 0;
     }
     else
     {
-        s_IsNewSecond = false;
+        m_IsNewSecond = false;
     }
 
-    return s_DeltaTime;
+    return m_DeltaTime;
 }

@@ -35,12 +35,14 @@ void MouseParticleEmitter::OnUpdate(const f32 deltaTime)
         m_Timer -= deltaTime;
         return;
     }
+
+    const InputSystem& inputSystem = InputSystem::Get();
     
-    if (!InputSystem::IsMouseButtonDown(MouseButton::Left)) return;
+    if (!inputSystem.IsMouseButtonDown(MouseButton::Left)) return;
 
     const Camera* camera = Camera::GetMainCamera();
 
-    const glm::ivec2 mouseScreenPosition = InputSystem::GetMousePosition();
+    const glm::ivec2 mouseScreenPosition = inputSystem.GetMousePosition();
     const glm::vec2 mouseWorldPosition = camera->ScreenToWorldPosition(mouseScreenPosition);
 
     for (i32 i = 0; i < 3; i++)

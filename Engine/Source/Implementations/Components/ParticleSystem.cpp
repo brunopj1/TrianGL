@@ -1,7 +1,6 @@
 ﻿#include <Implementations/Components/ParticleSystem.h>
 
 #include "Assets/Material.h"
-#include "Assets/Internal/Quad.h"
 #include "Core/Internal/RenderLayer.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,15 +10,11 @@ using namespace TGL;
 ParticleSystem::ParticleSystem(const u32 maxParticles, SharedPtr<Material> material)
     : Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
-    ASSERT_APPLICATION_OBJECT_CREATION();
-
     Init();
 }
 
 ParticleSystem::~ParticleSystem()
 {
-    ASSERT_APPLICATION_OBJECT_DESTRUCTION();
-
     Terminate();
 }
 
@@ -84,11 +79,11 @@ void ParticleSystem::OnUpdate(const f32 deltaTime)
 
         if (cpuParticle.RemainingDuration <= 0.0f) continue;
 
-        const f32 interp = 1.0f - (cpuParticle.RemainingDuration / cpuParticle.TotalDuration);
+        const f32 interp = 1.0f - cpuParticle.RemainingDuration / cpuParticle.TotalDuration;
 
         gpuParticle.Position += cpuParticle.Velocity * deltaTime;
 
-        gpuParticle.Color = glm::mix(cpuParticle.StartColor, cpuParticle.EndColor, interp);
+        gpuParticle.Color = glm::mix(cpuParticle.StartColor, cpuParticle.EndColor, interp); // NOLINT(CppRedundantQualifier)
         gpuParticle.Scale = glm::mix(cpuParticle.StartScale, cpuParticle.EndScale, interp);
         gpuParticle.Rotation = glm::mix(cpuParticle.StartRotation, cpuParticle.EndRotation, interp);
 
@@ -125,7 +120,8 @@ void ParticleSystem::Render() const
 
     m_Material->Use(modelMatrix);
 
-    RenderLayer::DrawElementsInstanced(m_ParticleVao, Quad::s_QuadEbo, 6, m_LastUsedParticleIndex + 1);
+    const AssetManager& assetManager = AssetManager::Get();
+    RenderLayer::DrawElementsInstanced(m_ParticleVao, assetManager.GetQuadEbo(), 6, m_LastUsedParticleIndex + 1);
 }
 
 void ParticleSystem::Init()
@@ -134,11 +130,13 @@ void ParticleSystem::Init()
     m_ParticlesGpu.resize(m_MaxParticles);
 
     RenderLayer::GenerateVertexArray(m_ParticleVao);
+
+    const AssetManager& assetManager = AssetManager::Get();
     
     // Bind the quad EBO and VBO and setup the attributes
-    RenderLayer::BindBuffer(Quad::s_QuadEbo, BufferType::ElementArrayBuffer);
-    RenderLayer::BindBuffer(Quad::s_QuadVbo, BufferType::ArrayBuffer);
-    Quad::SetupVertexAttributes();
+    RenderLayer::BindBuffer(assetManager.GetQuadEbo(), BufferType::ElementArrayBuffer);
+    RenderLayer::BindBuffer(assetManager.GetQuadVbo(), BufferType::ArrayBuffer);
+    assetManager.SetupQuadVertexAttributes();
 
     RenderLayer::GenerateBuffer(m_ParticleVbo, BufferType::ArrayBuffer);
     RenderLayer::SetBufferData(m_ParticleVbo, BufferType::ArrayBuffer, BufferDrawType::StreamDraw, m_MaxParticles * sizeof(ParticleGpuData), nullptr);

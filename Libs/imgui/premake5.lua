@@ -37,3 +37,6 @@ project "ImGui"
 			"_IMGUI_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
+
+	filter "configurations:not Debug"
+		kind "None"

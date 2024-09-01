@@ -22,5 +22,6 @@ Entity* Component::GetParent() const
 
 void Component::Detach()
 {
-    EntityManager::DestroyComponent(this);
+    EntityManager& entityManager = EntityManager::Get();
+    entityManager.DestroyComponent(this);
 }

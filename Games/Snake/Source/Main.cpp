@@ -8,9 +8,7 @@ i32 main()
     config.WindowTitle = "TrianGL - Snake";
     config.Vsync = false;
 
-    TGL::Application app{config};
-
-    app.Run<SnakeGameMode>();
+    TGL::Application::Run<SnakeGameMode>(config);
 
     // Detect memory leaks (Will only run in Debug configurations)
     TGL::DetectMemoryLeaks();

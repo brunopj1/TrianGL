@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include "Service.h"
 #include <Assets/Internal/Shader.h>
 #include <Internal/Concepts/MaterialConcepts.h>
-#include <Internal/Asserts/ApplicationAsserts.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
 #include <Memory/SharedPtr.h>
 
@@ -21,7 +21,7 @@ namespace TGL
     // Forward declarations
     struct TextureParameters;
 
-    class AssetManager
+    class AssetManager : public Service<AssetManager>
     {
     private:
         friend class Application;
@@ -32,8 +32,10 @@ namespace TGL
         friend class Material;
         friend class MaterialUniform;
 
+        friend class SpriteRenderer;
+        friend class ParticleSystem;
         friend class AudioPlayer;
-
+        
         friend class ReferenceCounter;
 
         template <typename T>
@@ -47,40 +49,52 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
 
     private:
-        static inline SoLoud::Soloud* s_SoloudEngine = nullptr;
+        u32 m_QuadVao = 0;
+        u32 m_QuadVbo = 0;
+        u32 m_QuadEbo = 0;
+        
+        std::unordered_map<Shader*, u32, ShaderHash, ShaderEqual> m_Shaders;
+        
+        SoLoud::Soloud* m_SoloudEngine = nullptr;
 
     private:
-        static inline std::unordered_map<Shader*, u32, ShaderHash, ShaderEqual> s_Shaders;
-
-    public:
-        AssetManager() = delete;
-        ~AssetManager() = delete;
+        AssetManager() = default;
+        ~AssetManager() = default;
 
     private:
-        static void Init();
-        static void Terminate();
+        void Init();
+        void Terminate();
 
     private:
-        static SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
-        static SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
-        static void UnloadTexture(Texture* texture);
+        void InitQuad();
+        void SetupQuadVertexAttributes() const;
+        void TerminateQuad();
+
+        u32 GetQuadVao() const;
+        u32 GetQuadVbo() const;
+        u32 GetQuadEbo() const;
 
     private:
-        static SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
-        static void UnloadAudio(Audio* audio);
+        SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
+        SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
+        void UnloadTexture(Texture* texture);
+
+    private:
+        SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
+        void UnloadAudio(Audio* audio);
 
     private:
         template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
-        static SharedPtr<T> LoadMaterial(Args&&... args);
+        SharedPtr<T> LoadMaterial(Args&&... args);
 
         template <SpawnableMaterialUniform T>
-        static T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector);
+        T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector);
 
-        static void UnloadMaterialUniforms(const Material* material);
+        void UnloadMaterialUniforms(const Material* material);
 
     private:
-        static Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-        static void UnloadShader(Shader* shader);
+        Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+        void UnloadShader(Shader* shader);
     };
 
     // Template definitions
@@ -88,8 +102,6 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableMaterial<T, Args...>
     SharedPtr<T> AssetManager::LoadMaterial(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        ASSERT_APPLICATION_OBJECT_CREATION();
-
         PREPARE_SPAWNER_ASSERT(Material);
 
         T* instance = new T(std::forward<Args>(args)...);

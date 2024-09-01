@@ -17,6 +17,7 @@ void Renderable::SetZIndex(const i32 zIndex)
 
     if (valueChanged)
     {
-        EntityManager::UpdateRenderableOrder(this);
+        EntityManager& entityManager = EntityManager::Get();
+        entityManager.UpdateRenderableOrder(this);
     }
 }

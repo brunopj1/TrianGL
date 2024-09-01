@@ -1,5 +1,4 @@
-﻿#include "Assets/Internal/Quad.h"
-#include "Core/Internal/RenderLayer.h"
+﻿#include "Core/Internal/RenderLayer.h"
 #include <Implementations/Components/SpriteRenderer.h>
 
 #include <Game/Entity.h>
@@ -73,5 +72,6 @@ void SpriteRenderer::Render() const
 
     m_Material->Use(modelMatrix);
 
-    RenderLayer::DrawElements(Quad::s_QuadVao, Quad::s_QuadEbo, 6);
+    const AssetManager& assetManager = AssetManager::Get();
+    RenderLayer::DrawElements(assetManager.GetQuadVao(), assetManager.GetQuadEbo(), 6);
 }

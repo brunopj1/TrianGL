@@ -10,7 +10,7 @@ namespace TGL
 {
     // @formatter:off
     
-    enum class TextureWrapMode
+    enum class TextureWrapMode : u16
     {
         Repeat         = 0x2901, // GL_REPEAT
         MirroredRepeat = 0x8370, // GL_MIRRORED_REPEAT
@@ -18,7 +18,7 @@ namespace TGL
         ClampToBorder  = 0x812D  // GL_CLAMP_TO_BORDER
     };
 
-    enum class TextureFilterMode
+    enum class TextureFilterMode : u16
     {
         Nearest = 0x2600, // GL_NEAREST
         Linear  = 0x2601  // GL_LINEAR
@@ -47,8 +47,8 @@ namespace TGL
         static void Unbind(u8 slot);
         virtual void Bind(u8 slot) const = 0;
 
-        virtual glm::mat4* GetMatrix() const = 0;
-        virtual glm::uvec2 GetResolution() const = 0;
+        virtual const glm::mat4& GetMatrix() const = 0;
+        virtual const glm::uvec2& GetResolution() const = 0;
     };
 
     struct TextureSliceInfo
@@ -81,11 +81,11 @@ namespace TGL
 
     public:
         SharedPtr<Texture> GetTexture() const;
-        glm::uvec2 GetResolution() const override; // Also used by Sprite class
+        const glm::uvec2& GetResolution() const override; // Also used by Sprite class
 
     private:
         void Bind(u8 slot) const override;
-        glm::mat4* GetMatrix() const override;
+        const glm::mat4& GetMatrix() const override;
     };
 
     // Main class-
@@ -96,6 +96,9 @@ namespace TGL
         friend class AssetManager;
         friend class TextureSlice;
         friend class SpriteUniform;
+
+    private:
+        static inline glm::mat4 s_Matrix = glm::mat4(1.0f);
 
     private:
         std::string m_FilePath;
@@ -114,7 +117,7 @@ namespace TGL
 
     public:
         std::string GetFilePath() const;
-        glm::uvec2 GetResolution() const override; // Also used by Sprite class
+        const glm::uvec2& GetResolution() const override; // Also used by Sprite class
 
     public:
         size_t GetSliceCount() const;
@@ -135,6 +138,6 @@ namespace TGL
 
     private:
         void Bind(u8 slot) const override;
-        glm::mat4* GetMatrix() const override;
+        const glm::mat4& GetMatrix() const override;
     };
 }

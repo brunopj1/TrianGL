@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Internal/Macros/ClassMacros.h"
 #include <Core/DataTypes.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
 #include <cstddef>
@@ -39,10 +40,7 @@ namespace TGL
         ~SharedPtrSpawnerUtil() = delete;
 
     public:
-        SharedPtrSpawnerUtil(const SharedPtrSpawnerUtil&) = delete;
-        SharedPtrSpawnerUtil& operator=(const SharedPtrSpawnerUtil&) = delete;
-        SharedPtrSpawnerUtil(SharedPtrSpawnerUtil&&) = delete;
-        SharedPtrSpawnerUtil& operator=(SharedPtrSpawnerUtil&&) = delete;
+        DELETE_COPY_AND_MOVE_CONSTRUCTORS(SharedPtrSpawnerUtil);
     };
 
     template <typename T>

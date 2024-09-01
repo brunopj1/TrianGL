@@ -18,12 +18,14 @@ Audio::~Audio()
 {
     ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
-    AssetManager::UnloadAudio(this);
+    AssetManager& assetManager = AssetManager::Get();
+    assetManager.UnloadAudio(this);
 }
 
 SharedPtr<Audio> Audio::Load(const std::string& filePath, const bool stream)
 {
-    return AssetManager::LoadAudio(filePath, stream);
+    AssetManager& assetManager = AssetManager::Get();
+    return assetManager.LoadAudio(filePath, stream);
 }
 
 bool Audio::IsStreamed() const

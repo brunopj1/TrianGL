@@ -1,18 +1,18 @@
 ﻿#pragma once
 
 #include "DataTypes.h"
+#include "Service.h"
 #include <vector>
 #include <unordered_map>
 
 #include <Internal/Concepts/SmartPointerConcepts.h>
 #include <Internal/Concepts/EntitySystemConcepts.h>
-#include <Internal/Asserts/ApplicationAsserts.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
 #include <ranges>
 
 namespace TGL
 {
-    class EntityManager final
+    class EntityManager : public Service<EntityManager>
     {
     private:
         friend class Application;
@@ -32,49 +32,49 @@ namespace TGL
         DECLARE_SPAWNER_ASSERT_VAR(Component);
 
     private:
-        static inline u64 s_NextId;
+        u64 m_NextId;
 
     private:
-        static inline GameMode* s_GameMode = nullptr;
+        GameMode* m_GameMode = nullptr;
 
-        static inline std::unordered_map<u64, Entity*> s_Entities;
-        static inline std::unordered_map<u64, Component*> s_Components;
+        std::unordered_map<u64, Entity*> m_Entities;
+        std::unordered_map<u64, Component*> m_Components;
 
-        static inline std::vector<GameObject*> s_OnUpdateQueue;
-        static inline std::vector<GameObject*> s_OnStartQueue;
+        std::vector<GameObject*> m_OnUpdateQueue;
+        std::vector<GameObject*> m_OnStartQueue;
 
-        static inline std::vector<Renderable*> s_RenderQueue;
-
-    public:
-        EntityManager() = delete;
-        ~EntityManager() = delete;
+        std::vector<Renderable*> m_RenderQueue;
 
     private:
-        static void Init();
-        static void Terminate();
+        EntityManager() = default;
+        ~EntityManager() = default;
 
     private:
-        static void Update(f32 deltaTime);
-        static void Render();
+        void Init();
+        void Terminate();
 
     private:
-        static GameMode* GetGameMode();
-        static Entity* GetEntity(u64 id);
-        static Component* GetComponent(u64 id);
+        void Update(f32 deltaTime);
+        void Render() const;
 
-        static u32 GetEntityCount();
-        static u32 GetComponentCount();
+    private:
+        GameMode* GetGameMode() const;
+        Entity* GetEntity(u64 id) const;
+        Component* GetComponent(u64 id) const;
+
+        u32 GetEntityCount() const;
+        u32 GetComponentCount() const;
+
+    private:
+        void StoreObjectCallbacks(GameObject* object);
+        void RemoveObjectCallbacks(GameObject* object);
 
     private:
         static void AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue);
         static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
     private:
-        static void StoreObjectCallbacks(GameObject* object);
-        static void RemoveObjectCallbacks(GameObject* object);
-
-    private:
-        static void UpdateRenderableOrder(Renderable* renderable);
+        void UpdateRenderableOrder(Renderable* renderable);
 
     private:
         // This cannot be executed directly because of circular dependencies
@@ -82,38 +82,38 @@ namespace TGL
 
     private:
         template <typename T, typename... Args> requires SpawnableGameMode<T, Args...>
-        static T* CreateGameMode(Args&&... args);
+        T* CreateGameMode(Args&&... args);
 
-        static void DestroyGameMode();
+        void DestroyGameMode();
 
         template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
-        static T* CreateEntity(Args&&... args);
+        T* CreateEntity(Args&&... args);
 
-        static void DestroyEntity(Entity* entity);
+        void DestroyEntity(Entity* entity);
 
         template <typename T, typename... Args> requires SpawnableComponent<T, Args...>
-        static T* CreateComponent(Entity* parent, Args&&... args);
+        T* CreateComponent(Entity* parent, Args&&... args);
 
-        static void DestroyComponent(Component* component);
+        void DestroyComponent(Component* component);
 
     private:
         template <SearchableEntity T>
-        static T* FindEntityGlobally();
+        T* FindEntityGlobally();
 
         template <SearchableEntity T>
-        static std::vector<T*> FindEntitiesGlobally();
+        std::vector<T*> FindEntitiesGlobally();
 
         template <SearchableComponent T>
-        static T* FindComponentGlobally();
+        T* FindComponentGlobally();
 
         template <SearchableComponent T>
-        static std::vector<T*> FindComponentsGlobally();
+        std::vector<T*> FindComponentsGlobally();
 
         template <SearchableComponent T>
-        static T* FindComponentInEntity(const std::vector<Component*>& entityComponents);
+        T* FindComponentInEntity(const std::vector<Component*>& entityComponents);
 
         template <SearchableComponent T>
-        static std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents);
+        std::vector<T*> FindComponentsInEntity(const std::vector<Component*>& entityComponents);
     };
 
     // Template definitions
@@ -121,15 +121,13 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableGameMode<T, Args...>
     T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        ASSERT_APPLICATION_OBJECT_CREATION();
-
         PREPARE_SPAWNER_ASSERT(GameMode);
 
         T* instance = new T(std::forward<Args>(args)...);
 
-        instance->m_Id = s_NextId++;
+        instance->m_Id = m_NextId++;
 
-        s_GameMode = instance;
+        m_GameMode = instance;
 
         StoreObjectCallbacks(instance);
 
@@ -139,15 +137,13 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableEntity<T, Args...>
     T* EntityManager::CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward) 
     {
-        ASSERT_APPLICATION_OBJECT_CREATION();
-
         PREPARE_SPAWNER_ASSERT(Entity);
 
         T* instance = new T(std::forward<Args>(args)...);
 
-        instance->m_Id = s_NextId++;
+        instance->m_Id = m_NextId++;
 
-        s_Entities.emplace(instance->m_Id, instance);
+        m_Entities.emplace(instance->m_Id, instance);
 
         StoreObjectCallbacks(instance);
 
@@ -157,15 +153,13 @@ namespace TGL
     template <typename T, typename... Args> requires SpawnableComponent<T, Args...>
     T* EntityManager::CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
     {
-        ASSERT_APPLICATION_OBJECT_CREATION();
-
         PREPARE_SPAWNER_ASSERT(Component);
 
         T* instance = new T(std::forward<Args>(args)...);
 
-        instance->m_Id = s_NextId++;
+        instance->m_Id = m_NextId++;
 
-        s_Components.emplace(instance->m_Id, instance);
+        m_Components.emplace(instance->m_Id, instance);
 
         StoreObjectCallbacks(instance);
 
@@ -177,7 +171,7 @@ namespace TGL
     template <SearchableEntity T>
     T* EntityManager::FindEntityGlobally()
     {
-        for (auto entity : s_Entities)
+        for (auto entity : m_Entities)
         {
             if (T* casted = dynamic_cast<T*>(entity))
             {
@@ -193,7 +187,7 @@ namespace TGL
     {
         std::vector<T*> entities;
 
-        for (auto entity : s_Entities | std::views::values)
+        for (auto entity : m_Entities | std::views::values)
         {
             if (T* casted = dynamic_cast<T*>(entity))
             {
@@ -207,7 +201,7 @@ namespace TGL
     template <SearchableComponent T>
     T* EntityManager::FindComponentGlobally()
     {
-        for (auto component : s_Components | std::views::values)
+        for (auto component : m_Components | std::views::values)
         {
             if (T* casted = dynamic_cast<T*>(component))
             {
@@ -223,7 +217,7 @@ namespace TGL
     {
         std::vector<T*> components;
 
-        for (auto component : s_Components)
+        for (auto component : m_Components)
         {
             if (T* casted = dynamic_cast<T*>(component))
             {
