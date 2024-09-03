@@ -15,7 +15,7 @@
 #endif
 
 #ifdef DEBUG
-#define PREPARE_SPAWNER_ASSERT_EXT(class, type) class::s_##type##SpawnerUsageDepth += 1
+#define PREPARE_SPAWNER_ASSERT_EXT(class, type) class ::s_##type##SpawnerUsageDepth += 1
 #else
 #define PREPARE_SPAWNER_ASSERT_EXT(class, type) static_assert(true, "")
 #endif

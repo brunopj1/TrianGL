@@ -70,7 +70,7 @@ void SnakeBody::UpdateTexture()
 		{
 			idx += 2;
 		}
-		
+
 		texture = m_SpriteSheet->GetSlice(idx);
 	}
 
