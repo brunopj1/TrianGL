@@ -29,7 +29,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Fix the warnings in the Google Test project
 - Run python validation scripts in the CI
 - Add glad as a submodule and build it in the build script
-- Add clang-format and clang-tidy files to the project (run clang-tidy in the CI)
+- Add clang-tidy files to the project (run it on the CI)
 
 ## Particles
 

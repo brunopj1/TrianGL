@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-// @formatter:off
+// clang-format off
 
 // TODO why are there some keys missing? (Plus key)
 
@@ -165,4 +165,4 @@ namespace TGL
     };
 }
 
-// @formatter:on
+// clang-format on

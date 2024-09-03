@@ -1,144 +1,141 @@
-#include <Core/Application.h>
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include <Core/Services/Window.h>
-#include <Core/Services/Clock.h>
 #include "Internal/RenderLayer.h"
+#include <Core/Application.h>
+#include <Core/Services/Clock.h>
+#include <Core/Services/Window.h>
+#include <Exceptions/OpenGL/OpenGlException.h>
 #include <Game/GameMode.h>
-
 #include <Implementations/Components/SpriteRenderer.h>
 #include <Implementations/Entities/Camera.h>
 
-#include <Exceptions/OpenGL/OpenGlException.h>
-
 using namespace TGL;
 
-Application::Application(const ServiceCollection& serviceCollection) 
-    : m_Clock(serviceCollection.Clock),
-      m_Window(serviceCollection.Window),
-      m_InputSystem(serviceCollection.InputSystem),
-      m_EntityManager(serviceCollection.EntityManager),
-      m_AssetManager(serviceCollection.AssetManager)
+Application::Application(const ServiceCollection& serviceCollection)
+	: m_Clock(serviceCollection.Clock), m_Window(serviceCollection.Window), m_InputSystem(serviceCollection.InputSystem), m_EntityManager(serviceCollection.EntityManager), m_AssetManager(serviceCollection.AssetManager)
 {
-    s_Running = true;
+	s_Running = true;
 }
 
 Application::~Application()
 {
-    s_Running = false;
+	s_Running = false;
 }
 
 void Application::Init(const ApplicationConfig& config) // NOLINT(CppMemberFunctionMayBeConst)
 {
-    // Init GLFW, GLAD, IMGUI    
-    RenderLayer::SetErrorCallback(ErrorCallback);
+	// Init GLFW, GLAD, IMGUI
+	RenderLayer::SetErrorCallback(ErrorCallback);
 
-    if (!RenderLayer::InitGlfw())
-    {
-        throw FailedToInitializeEngineException("Failed to init GLFW");
-    }
+	if (!RenderLayer::InitGlfw())
+	{
+		throw FailedToInitializeEngineException("Failed to init GLFW");
+	}
 
-    RenderLayer::SetupOpenGlVersion(4, 3, true);
+	RenderLayer::SetupOpenGlVersion(4, 3, true);
 
-    const auto windowPtr = m_Window->Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
+	const auto windowPtr = m_Window->Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
 
-    if (!RenderLayer::InitGlad())
-    {
-        throw FailedToInitializeEngineException("Failed to init Glad");
-    }
+	if (!RenderLayer::InitGlad())
+	{
+		throw FailedToInitializeEngineException("Failed to init Glad");
+	}
 
-    if (!RenderLayer::InitImgui(windowPtr))
-    {
-        throw FailedToInitializeEngineException("Failed to init Imgui");
-    }
+	if (!RenderLayer::InitImgui(windowPtr))
+	{
+		throw FailedToInitializeEngineException("Failed to init Imgui");
+	}
 
-    RenderLayer::DebugVersions();
+	RenderLayer::DebugVersions();
 
-    // OpenGL settings
-    RenderLayer::SetupOpenGlSettings();
+	// OpenGL settings
+	RenderLayer::SetupOpenGlSettings();
 
-    // Public services
-    m_InputSystem->Init(windowPtr);
+	// Public services
+	m_InputSystem->Init(windowPtr);
 
-    // Private services
-    m_AssetManager->Init();
-    m_EntityManager->Init();
+	// Private services
+	m_AssetManager->Init();
+	m_EntityManager->Init();
 }
 
 void Application::GameLoop(GameMode* gameMode)
 {
-    // Start the clock
-    m_Clock->Start();
+	// Start the clock
+	m_Clock->Start();
 
-    // Start the game mode
-    gameMode->OnStart();
+	// Start the game mode
+	gameMode->OnStart();
 
-    // Run the game loop
-    while (!m_Window->ShouldClose())
-    {
-        m_InputSystem->PollEvents();
+	// Run the game loop
+	while (!m_Window->ShouldClose())
+	{
+		m_InputSystem->PollEvents();
 
-        NewFrame();
+		NewFrame();
 
-        Cleanup();
-    }
+		Cleanup();
+	}
 }
 
 void Application::Terminate() // NOLINT(CppMemberFunctionMayBeConst)
 {
-    // Private services
-    m_EntityManager->Terminate();
-    m_AssetManager->Terminate();
+	// Private services
+	m_EntityManager->Terminate();
+	m_AssetManager->Terminate();
 
-    RenderLayer::TerminateImgui();
+	RenderLayer::TerminateImgui();
 
-    m_Window->Terminate();
+	m_Window->Terminate();
 
-    RenderLayer::TerminateGlfw();
+	RenderLayer::TerminateGlfw();
 }
 
 void Application::NewFrame() // NOLINT(CppMemberFunctionMayBeConst)
 {
-    RenderLayer::PrepareImguiFrame();
+	RenderLayer::PrepareImguiFrame();
 
-    // Update
+	// Update
 
-    m_Clock->Update();
-    const f32 deltaTime = m_Clock->GetDeltaTime();
-    m_EntityManager->Update(deltaTime);
+	m_Clock->Update();
+	const f32 deltaTime = m_Clock->GetDeltaTime();
+	m_EntityManager->Update(deltaTime);
 
-    // Render
+	// Render
 
-    Camera* camera = Camera::GetMainCamera();
-    if (camera != nullptr) camera->UpdateMatrices();
+	Camera* camera = Camera::GetMainCamera();
+	if (camera != nullptr)
+	{
+		camera->UpdateMatrices();
+	}
 
-    const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
-    RenderLayer::ClearBuffers(backgroundColor);
+	const glm::vec3 backgroundColor = camera != nullptr ? camera->GetBackgroundColor() : glm::vec3(0.0f);
+	RenderLayer::ClearBuffers(backgroundColor);
 
-    if (camera != nullptr)
-    {
-        m_EntityManager->Render();
-    }
+	if (camera != nullptr)
+	{
+		m_EntityManager->Render();
+	}
 
 #ifdef DEBUG
 #ifdef IMGUI
-    const u32 framerate = m_Clock->GetFrameRate();
-    const u32 entityCount = m_EntityManager->GetEntityCount();
-    const u32 componentCount = m_EntityManager->GetComponentCount();
-    RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
+	const u32 framerate = m_Clock->GetFrameRate();
+	const u32 entityCount = m_EntityManager->GetEntityCount();
+	const u32 componentCount = m_EntityManager->GetComponentCount();
+	RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
 #endif
 #endif
 
-    RenderLayer::RenderImguiFrame();
+	RenderLayer::RenderImguiFrame();
 
-    RenderLayer::SwapBuffers(m_Window->GetGlfwWindow());
+	RenderLayer::SwapBuffers(m_Window->GetGlfwWindow());
 }
 
 void Application::Cleanup() // NOLINT(CppMemberFunctionMayBeConst)
 {
-    m_InputSystem->OnEndOfFrame();
+	m_InputSystem->OnEndOfFrame();
 }
 
 void Application::ErrorCallback(const i32 error, const char* description)
 {
-    throw OpenGlException(error, description);
+	throw OpenGlException(error, description);
 }

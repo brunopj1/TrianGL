@@ -2,40 +2,52 @@
 
 #include <vector>
 
-//NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
+// NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
 
 #define DECLARE_EVENT_NO_ARGS(callerClass, className, methodName) \
-    class className                                               \
-    {                                                             \
-    private:                                                      \
-        friend class callerClass;                                 \
+	class className                                               \
+	{                                                             \
+	private:                                                      \
+		friend class callerClass;                                 \
                                                                   \
-    private:                                                      \
-        static inline std::vector<className*> s_Listeners;        \
+	private:                                                      \
+		static inline std::vector<className*> s_Listeners;        \
                                                                   \
-    public:                                                       \
-        className() { s_Listeners.push_back(this); }              \
-        virtual ~className() { std::erase(s_Listeners, this); }   \
+	public:                                                       \
+		className()                                               \
+		{                                                         \
+			s_Listeners.push_back(this);                          \
+		}                                                         \
+		virtual ~className()                                      \
+		{                                                         \
+			std::erase(s_Listeners, this);                        \
+		}                                                         \
                                                                   \
-    protected:                                                    \
-        virtual void methodName() = 0;                            \
-    }
+	protected:                                                    \
+		virtual void methodName() = 0;                            \
+	}
 
 #define DECLARE_EVENT_WITH_ARG(callerClass, className, methodName, argType, argName) \
-    class className                                                                  \
-    {                                                                                \
-    private:                                                                         \
-        friend class callerClass;                                                    \
+	class className                                                                  \
+	{                                                                                \
+	private:                                                                         \
+		friend class callerClass;                                                    \
                                                                                      \
-    private:                                                                         \
-        static inline std::vector<className*> s_Listeners;                           \
+	private:                                                                         \
+		static inline std::vector<className*> s_Listeners;                           \
                                                                                      \
-    public:                                                                          \
-        className() { s_Listeners.push_back(this); }                                 \
-        virtual ~className() { std::erase(s_Listeners, this); }                      \
+	public:                                                                          \
+		className()                                                                  \
+		{                                                                            \
+			s_Listeners.push_back(this);                                             \
+		}                                                                            \
+		virtual ~className()                                                         \
+		{                                                                            \
+			std::erase(s_Listeners, this);                                           \
+		}                                                                            \
                                                                                      \
-    protected:                                                                       \
-        virtual void methodName(argType argName) = 0;                                \
-    }
+	protected:                                                                       \
+		virtual void methodName(argType argName) = 0;                                \
+	}
 
-//NOLINTEND(CppClangTidyBugproneMacroParentheses)
+// NOLINTEND(CppClangTidyBugproneMacroParentheses)

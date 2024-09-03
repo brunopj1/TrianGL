@@ -4,23 +4,23 @@
 
 namespace TGL
 {
-    class Component : public GameObject
-    {
-    private:
-        friend class EntityManager;
-        friend class Entity;
+	class Component : public GameObject
+	{
+	private:
+		friend class EntityManager;
+		friend class Entity;
 
-    private:
-        Entity* m_Parent = nullptr;
+	private:
+		Entity* m_Parent = nullptr;
 
-    protected:
-        Component(bool shouldUpdate);
-        ~Component() override;
+	protected:
+		Component(bool shouldUpdate);
+		~Component() override;
 
-    public:
-        Entity* GetParent() const;
+	public:
+		Entity* GetParent() const;
 
-    public:
-        void Detach();
-    };
+	public:
+		void Detach();
+	};
 }

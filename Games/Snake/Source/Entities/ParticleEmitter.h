@@ -5,20 +5,20 @@
 
 enum class ParticleType
 {
-    Grow,
-    Damage
+	Grow,
+	Damage
 };
 
 class ParticleEmitter final : public TGL::Entity
 {
 public:
-    TGL::ParticleSystem* m_ParticleSystem;
-    TGL::RandomNumberGenerator m_Random;
+	TGL::ParticleSystem* m_ParticleSystem;
+	TGL::RandomNumberGenerator m_Random;
 
 public:
-    ParticleEmitter();
-    ~ParticleEmitter() override = default;
+	ParticleEmitter();
+	~ParticleEmitter() override = default;
 
 public:
-    void Emit(const glm::ivec2& cellPosition, ParticleType type);
+	void Emit(const glm::ivec2& cellPosition, ParticleType type);
 };

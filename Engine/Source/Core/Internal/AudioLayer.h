@@ -6,50 +6,49 @@
 // Forward declarations
 namespace SoLoud
 {
-    class Soloud;
-    class AudioSource;
+	class Soloud;
+	class AudioSource;
 }
 
 namespace TGL
 {
-    class AudioLayer final
-    {
-    private:
-        friend class AssetManager;
-        friend class AudioPlayer;
-        friend class Audio;
-        
-    public:
-        AudioLayer() = delete;
-        ~AudioLayer() = delete;
+	class AudioLayer final
+	{
+	private:
+		friend class AssetManager;
+		friend class AudioPlayer;
+		friend class Audio;
 
-    private:
-        static SoLoud::Soloud* InitSoloud(int& errorCode);
-        static void TerminateSoloud(const SoLoud::Soloud* soloudEngine);
+	public:
+		AudioLayer() = delete;
+		~AudioLayer() = delete;
 
-        static void SetupSoloudSettings(SoLoud::Soloud* soloudEngine);
+	private:
+		static SoLoud::Soloud* InitSoloud(int& errorCode);
+		static void TerminateSoloud(const SoLoud::Soloud* soloudEngine);
 
-    private:
-        static SoLoud::AudioSource* LoadAudio(const std::string& filePath, bool stream);
-        static void UnloadAudio(const SoLoud::AudioSource* audioSource);
+		static void SetupSoloudSettings(SoLoud::Soloud* soloudEngine);
 
-    private:
-        static i32 PlayAudio(SoLoud::Soloud* soloudEngine, SoLoud::AudioSource* audioSource);
-        
-        static void ResumeAudio(SoLoud::Soloud* soloudEngine, i32 handle);
-        static void PauseAudio(SoLoud::Soloud* soloudEngine, i32 handle);
-        static void StopAudio(SoLoud::Soloud* soloudEngine, i32 handle);
+	private:
+		static SoLoud::AudioSource* LoadAudio(const std::string& filePath, bool stream);
+		static void UnloadAudio(const SoLoud::AudioSource* audioSource);
 
-        static bool IsValidAudioHandle(SoLoud::Soloud* soloudEngine, i32 handle);
-        
-    private:
-        static void SetAudioVolume(SoLoud::AudioSource* audioSource, f32 volume);
-        static f32 GetAudioVolume(const SoLoud::AudioSource* audioSource);
+	private:
+		static i32 PlayAudio(SoLoud::Soloud* soloudEngine, SoLoud::AudioSource* audioSource);
 
-    private:
-        static void SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 volume);
-        static void SetAudioLoop(SoLoud::Soloud* soloudEngine, i32 handle, bool loop);
-    };
+		static void ResumeAudio(SoLoud::Soloud* soloudEngine, i32 handle);
+		static void PauseAudio(SoLoud::Soloud* soloudEngine, i32 handle);
+		static void StopAudio(SoLoud::Soloud* soloudEngine, i32 handle);
+
+		static bool IsValidAudioHandle(SoLoud::Soloud* soloudEngine, i32 handle);
+
+	private:
+		static void SetAudioVolume(SoLoud::AudioSource* audioSource, f32 volume);
+		static f32 GetAudioVolume(const SoLoud::AudioSource* audioSource);
+
+	private:
+		static void SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 volume);
+		static void SetAudioLoop(SoLoud::Soloud* soloudEngine, i32 handle, bool loop);
+	};
 
 }
-

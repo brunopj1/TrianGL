@@ -9,30 +9,28 @@ struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
-    class InputLayer final
-    {
-    private:
-        friend class InputSystem;
-        
-    public:
-        InputLayer() = delete;
-        ~InputLayer() = delete;
+	class InputLayer final
+	{
+	private:
+		friend class InputSystem;
 
-    private:
-        static void BindKeyboardCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32, i32, i32, i32));
-        static void BindMouseButtonCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32, i32, i32));
-        static void BindMousePositionCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, f64, f64));
-        static void BindMouseScrollCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, f64, f64));
-        
-    private:
-        static void SetMouseInputMode(GLFWwindow* windowPtr, MouseMode mode);
-        
-        static void SetMousePosition(GLFWwindow* windowPtr, const glm::ivec2& position);
-        static glm::ivec2 GetMousePosition(GLFWwindow* windowPtr);
+	public:
+		InputLayer() = delete;
+		~InputLayer() = delete;
 
-    private:
-        static void PollEvents();
-    };
+	private:
+		static void BindKeyboardCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32, i32, i32));
+		static void BindMouseButtonCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32, i32));
+		static void BindMousePositionCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, f64, f64));
+		static void BindMouseScrollCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, f64, f64));
+
+	private:
+		static void SetMouseInputMode(GLFWwindow* windowPtr, MouseMode mode);
+
+		static void SetMousePosition(GLFWwindow* windowPtr, const glm::ivec2& position);
+		static glm::ivec2 GetMousePosition(GLFWwindow* windowPtr);
+
+	private:
+		static void PollEvents();
+	};
 }
-
-

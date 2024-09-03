@@ -3,10 +3,11 @@
 #include "Core/Application.h"
 #include "Core/Services/Window.h"
 #include "Game/GameMode.h"
-
 #include "Util/TestMacros.h"
 
 using namespace TGL;
+
+// TODO fix clang-format for the TEST_GAME macro
 
 TEST_GAME(Clock, TimeProgression,
 {
@@ -43,7 +44,7 @@ TEST_GAME(Clock, TimeProgression,
         ASSERT_EQ(isNewSecond, currentTime >= 1.0f);
 
         if (isNewSecond) Window::Get().Close();
-    }
+	}
 })
 
 TEST_GAME(Clock, FrameRate,
@@ -57,8 +58,9 @@ TEST_GAME(Clock, FrameRate,
 
         if (clock.IsNewSecond())
         {
-            ASSERT_EQ(clock.GetFrameRate(), frameCount);
-            Window::Get().Close();
+			ASSERT_EQ(clock.GetFrameRate(), frameCount);
+			Window::Get().Close();
+			
         }
-    }
+	}
 })

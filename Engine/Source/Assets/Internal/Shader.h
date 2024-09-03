@@ -7,55 +7,55 @@
 
 namespace TGL
 {
-    class Shader final
-    {
-    private:
-        friend class AssetManager;
-        friend class Material;
-        friend class MaterialUniform;
-        friend class SpriteUniform;
-        friend struct ShaderHash;
-        friend struct ShaderEqual;
+	class Shader final
+	{
+	private:
+		friend class AssetManager;
+		friend class Material;
+		friend class MaterialUniform;
+		friend class SpriteUniform;
+		friend struct ShaderHash;
+		friend struct ShaderEqual;
 
-    private:
-        std::string m_VertexShader;
-        std::string m_FragmentShader;
+	private:
+		std::string m_VertexShader;
+		std::string m_FragmentShader;
 
-        std::unordered_map<std::string, i32> m_UniformLocations;
+		std::unordered_map<std::string, i32> m_UniformLocations;
 
-    private:
-        i32 m_ProgramId = 0;
-        i32 m_VertexShaderId = 0;
-        i32 m_FragmentShaderId = 0;
+	private:
+		i32 m_ProgramId = 0;
+		i32 m_VertexShaderId = 0;
+		i32 m_FragmentShaderId = 0;
 
-    private:
-        Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
-        ~Shader() = default;
+	private:
+		Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+		~Shader() = default;
 
-    private:
-        void Init();
-        void Free();
+	private:
+		void Init();
+		void Free();
 
-    private:
-        void LinkProgram();
-        static i32 CompileShader(const std::string& shaderPath, ShaderType type);
-        static std::string ReadShaderFile(const std::string& filePath);
+	private:
+		void LinkProgram();
+		static i32 CompileShader(const std::string& shaderPath, ShaderType type);
+		static std::string ReadShaderFile(const std::string& filePath);
 
-    private:
-        void LoadUniformLocations();
-        i32 GetUniformLocation(const std::string& name) const;
+	private:
+		void LoadUniformLocations();
+		i32 GetUniformLocation(const std::string& name) const;
 
-    private:
-        void Use() const;
-    };
+	private:
+		void Use() const;
+	};
 
-    struct ShaderHash
-    {
-        std::size_t operator()(const Shader* shader) const;
-    };
+	struct ShaderHash
+	{
+		std::size_t operator()(const Shader* shader) const;
+	};
 
-    struct ShaderEqual
-    {
-        bool operator()(const Shader* shader1, const Shader* shader2) const;
-    };
+	struct ShaderEqual
+	{
+		bool operator()(const Shader* shader1, const Shader* shader2) const;
+	};
 }

@@ -2,112 +2,112 @@
 
 #include "Internal/Macros/ClassMacros.h"
 #include <Assets/Texture.h> // Required for SharedPtr<Sprite>
-#include <glm/glm.hpp>
 #include <Memory/SharedPtr.h>
+#include <glm/glm.hpp>
 #include <string>
 
 namespace TGL
 {
-    // Forward declaration
-    class Shader;
+	// Forward declaration
+	class Shader;
 
-    // Base class
-    class MaterialUniform
-    {
-    private:
-        friend class AssetManager;
-        friend class Material;
+	// Base class
+	class MaterialUniform
+	{
+	private:
+		friend class AssetManager;
+		friend class Material;
 
-    protected:
-        i32 m_Location;
+	protected:
+		i32 m_Location;
 
-    protected:
-        MaterialUniform(const Shader* shader, const std::string& name);
-        virtual ~MaterialUniform();
+	protected:
+		MaterialUniform(const Shader* shader, const std::string& name);
+		virtual ~MaterialUniform();
 
-    public:
-        DELETE_COPY_AND_MOVE_CONSTRUCTORS(MaterialUniform);
+	public:
+		DELETE_COPY_AND_MOVE_CONSTRUCTORS(MaterialUniform);
 
-    private:
-        virtual bool IsValid() const;
-        void Bind() const;
-        virtual void BindInternal() const = 0;
-    };
+	private:
+		virtual bool IsValid() const;
+		void Bind() const;
+		virtual void BindInternal() const = 0;
+	};
 
-    // Template class
+	// Template class
 
-    template <typename T>
-    class MaterialUniformImpl final : public MaterialUniform
-    {
-    public:
-        T Value;
+	template <typename T>
+	class MaterialUniformImpl final : public MaterialUniform
+	{
+	public:
+		T Value;
 
-    public:
-        MaterialUniformImpl(const Shader* shader, const std::string& name)
-            : MaterialUniform(shader, name), Value() {}
+	public:
+		MaterialUniformImpl(const Shader* shader, const std::string& name)
+			: MaterialUniform(shader, name), Value() {}
 
-        ~MaterialUniformImpl() override = default;
+		~MaterialUniformImpl() override = default;
 
-    private:
-        void BindInternal() const override;
-    };
+	private:
+		void BindInternal() const override;
+	};
 
-    // Common implementations
+	// Common implementations
 
-    using IntUniform = MaterialUniformImpl<i32>;
+	using IntUniform = MaterialUniformImpl<i32>;
 
-    using Int2Uniform = MaterialUniformImpl<glm::ivec2>;
+	using Int2Uniform = MaterialUniformImpl<glm::ivec2>;
 
-    using Int3Uniform = MaterialUniformImpl<glm::ivec3>;
+	using Int3Uniform = MaterialUniformImpl<glm::ivec3>;
 
-    using Int4Uniform = MaterialUniformImpl<glm::ivec4>;
+	using Int4Uniform = MaterialUniformImpl<glm::ivec4>;
 
-    using UintUniform = MaterialUniformImpl<u32>;
+	using UintUniform = MaterialUniformImpl<u32>;
 
-    using Uint2Uniform = MaterialUniformImpl<glm::uvec2>;
+	using Uint2Uniform = MaterialUniformImpl<glm::uvec2>;
 
-    using Uint3Uniform = MaterialUniformImpl<glm::uvec3>;
+	using Uint3Uniform = MaterialUniformImpl<glm::uvec3>;
 
-    using Uint4Uniform = MaterialUniformImpl<glm::uvec4>;
+	using Uint4Uniform = MaterialUniformImpl<glm::uvec4>;
 
-    using FloatUniform = MaterialUniformImpl<f32>;
+	using FloatUniform = MaterialUniformImpl<f32>;
 
-    using Float2Uniform = MaterialUniformImpl<glm::vec2>;
+	using Float2Uniform = MaterialUniformImpl<glm::vec2>;
 
-    using Float3Uniform = MaterialUniformImpl<glm::vec3>;
+	using Float3Uniform = MaterialUniformImpl<glm::vec3>;
 
-    using Float4Uniform = MaterialUniformImpl<glm::vec4>;
+	using Float4Uniform = MaterialUniformImpl<glm::vec4>;
 
-    using Mat2Uniform = MaterialUniformImpl<glm::mat2>;
+	using Mat2Uniform = MaterialUniformImpl<glm::mat2>;
 
-    using Mat3Uniform = MaterialUniformImpl<glm::mat3>;
+	using Mat3Uniform = MaterialUniformImpl<glm::mat3>;
 
-    using Mat4Uniform = MaterialUniformImpl<glm::mat4>;
+	using Mat4Uniform = MaterialUniformImpl<glm::mat4>;
 
-    // Sprite uniform
+	// Sprite uniform
 
-    class SpriteUniform final : public MaterialUniform
-    {
-    private:
-        friend class AssetManager;
+	class SpriteUniform final : public MaterialUniform
+	{
+	private:
+		friend class AssetManager;
 
-    private:
-        i32 m_MatrixLocation;
-        i32 m_ResolutionLocation;
-        u8 m_Slot;
+	private:
+		i32 m_MatrixLocation;
+		i32 m_ResolutionLocation;
+		u8 m_Slot;
 
-    public:
-        SharedPtr<Sprite> Value;
+	public:
+		SharedPtr<Sprite> Value;
 
-    public:
-        SpriteUniform(const Shader* shader, const std::string& name);
-        ~SpriteUniform() override = default;
+	public:
+		SpriteUniform(const Shader* shader, const std::string& name);
+		~SpriteUniform() override = default;
 
-    public:
-        bool HasValue() const;
+	public:
+		bool HasValue() const;
 
-    private:
-        bool IsValid() const override;
-        void BindInternal() const override;
-    };
+	private:
+		bool IsValid() const override;
+		void BindInternal() const override;
+	};
 }

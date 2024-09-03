@@ -6,11 +6,10 @@
 
 namespace TGL
 {
-    class FileTooBigException final : public std::runtime_error
-    {
-    public:
-        FileTooBigException(const std::string& filePath, const std::string& maximumSize)
-            : std::runtime_error(std::format("The file '{}' exceeds the maximum size of {}", filePath, maximumSize))
-        {}
-    };
+	class FileTooBigException final : public std::runtime_error
+	{
+	public:
+		FileTooBigException(const std::string& filePath, const std::string& maximumSize)
+			: std::runtime_error(std::format("The file '{}' exceeds the maximum size of {}", filePath, maximumSize)) {}
+	};
 }

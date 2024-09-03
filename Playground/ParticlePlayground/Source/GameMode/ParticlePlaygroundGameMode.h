@@ -7,14 +7,14 @@
 class ParticlePlaygroundGameMode : public TGL::GameMode
 {
 private:
-    MouseParticleEmitter* m_ParticleEmitter;
-    
+	MouseParticleEmitter* m_ParticleEmitter;
+
 public:
-    ParticlePlaygroundGameMode();
-    ~ParticlePlaygroundGameMode() override = default;
+	ParticlePlaygroundGameMode();
+	~ParticlePlaygroundGameMode() override = default;
 
 private:
-    void OnUpdate(f32 deltaTime) override;
-    void OnEarlyUpdate(f32 deltaTime) override;
-    void OnLateUpdate(f32 deltaTime) override;
+	void OnUpdate(f32 deltaTime) override;
+	void OnEarlyUpdate(f32 deltaTime) override;
+	void OnLateUpdate(f32 deltaTime) override;
 };

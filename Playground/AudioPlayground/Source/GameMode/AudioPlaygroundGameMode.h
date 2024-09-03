@@ -5,6 +5,6 @@
 class AudioPlaygroundGameMode final : public TGL::GameMode
 {
 public:
-    AudioPlaygroundGameMode();
-    ~AudioPlaygroundGameMode() override = default;
+	AudioPlaygroundGameMode();
+	~AudioPlaygroundGameMode() override = default;
 };

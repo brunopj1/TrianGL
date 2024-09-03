@@ -7,6 +7,8 @@
 - [ ] Unit tests coverage
 - [X] Github wiki
 - [ ] Documentation
+- [X] Clang Format
+- [ ] Clang Tidy
 
 ## Engine
 

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-//NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
+// NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
 
 #ifdef TESTING
 #define SERVICE_DESTRUCTOR virtual
@@ -14,4 +14,4 @@
 #define SERVICE_API
 #endif
 
-//NOLINTEND(CppClangTidyBugproneMacroParentheses)
+// NOLINTEND(CppClangTidyBugproneMacroParentheses)

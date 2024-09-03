@@ -2,13 +2,12 @@
 
 #include "Assets/Texture.h"
 #include "Core/DataTypes.h"
-
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
 #include "glm/mat2x2.hpp"
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 #include <string>
 
 // Forward declarations
@@ -16,7 +15,7 @@ struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
-    // @formatter:off
+	// clang-format off
     
     enum class BufferType : u16
     {
@@ -53,157 +52,156 @@ namespace TGL
         Compute  = 0x91B9  // GL_COMPUTE_SHADER
     };
 
-    // @formatter:on
+	// clang-format on
 
-    struct ShaderUniformInfo final
-    {
-        std::string Name;
-        i32 Size;
-        u32 DataType;
-        i32 Location;
-    };
-    
-    class RenderLayer final
-    {
-    private:
-        friend class Application;
-        friend class AssetManager;
-        friend class Window;
-        friend class Texture;
-        friend class Sprite;
-        friend class TextureSlice;
-        friend class SpriteUniform;
-        friend class Shader;
-        friend class SpriteRenderer;
-        friend class ParticleSystem;
-        
-        template <typename T>
-        friend class MaterialUniformImpl;
-        
-    public:
-        RenderLayer() = delete;
-        ~RenderLayer() = delete;
+	struct ShaderUniformInfo final
+	{
+		std::string Name;
+		i32 Size;
+		u32 DataType;
+		i32 Location;
+	};
 
-    private:
-        static void SetErrorCallback(void(*func)(i32, const char*));
+	class RenderLayer final
+	{
+	private:
+		friend class Application;
+		friend class AssetManager;
+		friend class Window;
+		friend class Texture;
+		friend class Sprite;
+		friend class TextureSlice;
+		friend class SpriteUniform;
+		friend class Shader;
+		friend class SpriteRenderer;
+		friend class ParticleSystem;
 
-        static void SetWindowPositionCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32, i32));
-        static void SetWindowSizeCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32, i32));
-        static void SetWindowMaximizeCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32));
-        static void SetWindowMinimizeCallback(GLFWwindow* windowPtr, void(*func)(GLFWwindow*, i32));
-        
-    private:
-        static bool InitGlfw();
-        static bool InitGlad();
-        static bool InitImgui(GLFWwindow* windowPtr);
-        
-        static void SetupOpenGlVersion(i32 majorVersion, i32 minorVersion, bool coreProfile);
-        static void DebugVersions();
+		template <typename T>
+		friend class MaterialUniformImpl;
 
-        static void SetupOpenGlSettings();
+	public:
+		RenderLayer() = delete;
+		~RenderLayer() = delete;
 
-        static void TerminateGlfw();
-        static void TerminateImgui();
-        
-        static GLFWwindow* CreateGlfwWindow(const std::string& title, const glm::uvec2& resolution, const glm::uvec2& minResolution);
-        static void DestroyGlfwWindow(GLFWwindow* windowPtr);
+	private:
+		static void SetErrorCallback(void (*func)(i32, const char*));
 
-    private:
-        static void ClearBuffers(const glm::vec3& color);
-        static void SwapBuffers(GLFWwindow* windowPtr);
+		static void SetWindowPositionCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32));
+		static void SetWindowSizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32));
+		static void SetWindowMaximizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32));
+		static void SetWindowMinimizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32));
 
-    private:
-        static void PrepareImguiFrame();
-        static void RenderImguiFrame();
-        static void RenderImGuiDebugInfo(u32 framerate, u32 entityCount, u32 componentCount);
+	private:
+		static bool InitGlfw();
+		static bool InitGlad();
+		static bool InitImgui(GLFWwindow* windowPtr);
 
-    private:
-        static void CloseWindow(GLFWwindow* windowPtr);
-        static bool ShouldCloseWindow(GLFWwindow* windowPtr);
-        
-    private:
-        static void SetWindowTitle(GLFWwindow* windowPtr, const std::string& title);
-        static void SetWindowPosition(GLFWwindow* windowPtr, const glm::ivec2& position);
-        static void SetWindowResolution(GLFWwindow* windowPtr, const glm::uvec2& resolution);
-        
-    private:
-        static void SetFullscreen(GLFWwindow* windowPtr, bool fullscreen, const glm::uvec2& position, const glm::uvec2& resolution);
-        static void MaximizeWindow(GLFWwindow* windowPtr);
-        static void MinimizeWindow(GLFWwindow* windowPtr);
-        static void RestoreWindow(GLFWwindow* windowPtr);
+		static void SetupOpenGlVersion(i32 majorVersion, i32 minorVersion, bool coreProfile);
+		static void DebugVersions();
 
-        static bool IsMaximized(GLFWwindow* windowPtr);
-        static bool IsMinimized(GLFWwindow* windowPtr);
+		static void SetupOpenGlSettings();
 
-    private:
-        static void SetSwapInterval(bool vsync);
-        static void SetViewport(const glm::uvec2& resolution);
+		static void TerminateGlfw();
+		static void TerminateImgui();
 
-    private:
-        static void DrawElements(u32 vao, u32 ebo, u32 vertexCount);
-        static void DrawElementsInstanced(u32 vao, u32 ebo, u32 vertexCount, u32 instanceCount);
+		static GLFWwindow* CreateGlfwWindow(const std::string& title, const glm::uvec2& resolution, const glm::uvec2& minResolution);
+		static void DestroyGlfwWindow(GLFWwindow* windowPtr);
 
-    private:
-        static void GenerateBuffer(u32& buffer, BufferType bufferType);
-        static void GenerateVertexArray(u32& vao);
-        
-        static void DeleteBuffer(u32 buffer);
-        static void DeleteVertexArray(u32 vao);
+	private:
+		static void ClearBuffers(const glm::vec3& color);
+		static void SwapBuffers(GLFWwindow* windowPtr);
 
-        static void SetVertexAttributePointer(u32 index, i32 count, VertexAttributeDataType dataType, bool normalized, u32 stride, u32 offset);
-        static void SetVertexAttributePointerForInstancing(u32 index, i32 count, VertexAttributeDataType dataType, bool normalized, u32 stride, u32 offset);
-        
-        static void SetBufferData(u32 buffer, BufferType bufferType, BufferDrawType drawType, u32 byteSize, const void* data);
-        static void UpdateBufferData(u32 buffer, BufferType bufferType, u32 byteOffset, u32 byteSize, const void* data);
+	private:
+		static void PrepareImguiFrame();
+		static void RenderImguiFrame();
+		static void RenderImGuiDebugInfo(u32 framerate, u32 entityCount, u32 componentCount);
 
-        static void BindBuffer(u32 buffer, BufferType bufferType);
-        static void UnbindVertexArray();
-        
-    private:
-        static void GenerateTexture(u32& textureId);
-        static void DeleteTexture(u32 textureId);
+	private:
+		static void CloseWindow(GLFWwindow* windowPtr);
+		static bool ShouldCloseWindow(GLFWwindow* windowPtr);
 
-        static void SetTextureWrapMode(TextureWrapMode wrapMode);
-        static void SetTextureFilterMode(TextureFilterMode filterMode, TextureFilterMode mipmapFilterMode, bool usingMipmaps);
-        static void SetTextureData(const glm::uvec2& resolution, const u8* data);
-        static void GenerateTextureMipmaps();
+	private:
+		static void SetWindowTitle(GLFWwindow* windowPtr, const std::string& title);
+		static void SetWindowPosition(GLFWwindow* windowPtr, const glm::ivec2& position);
+		static void SetWindowResolution(GLFWwindow* windowPtr, const glm::uvec2& resolution);
 
-        static void BindTexture(u32 textureId, u32 slot);
-        static void UnbindTexture(u32 slot);
+	private:
+		static void SetFullscreen(GLFWwindow* windowPtr, bool fullscreen, const glm::uvec2& position, const glm::uvec2& resolution);
+		static void MaximizeWindow(GLFWwindow* windowPtr);
+		static void MinimizeWindow(GLFWwindow* windowPtr);
+		static void RestoreWindow(GLFWwindow* windowPtr);
 
-    private:
-        static u32 CreateProgram();
-        static u32 CreateShader(ShaderType shaderType);
-        
-        static void DeleteProgram(u32 programId);
-        static void DeleteShader(u32 shaderId);
+		static bool IsMaximized(GLFWwindow* windowPtr);
+		static bool IsMinimized(GLFWwindow* windowPtr);
 
-        static bool CompileShader(u32 shaderId, const std::string& shaderSource, std::string& errorLog);
-        static void AttachShader(u32 programId, u32 shaderId);
-        static bool LinkProgram(u32 programId, std::string& errorLog);
-        
-        static std::vector<ShaderUniformInfo> GetShaderUniforms(u32 programId);
+	private:
+		static void SetSwapInterval(bool vsync);
+		static void SetViewport(const glm::uvec2& resolution);
 
-        static void UseProgram(u32 programId);
-        
-    private:
-        // NOLINTBEGIN(CppInconsistentNaming)
-        static void SetUniform1i(i32 location, i32 value);
-        static void SetUniform2iv(i32 location, const glm::ivec2& value);
-        static void SetUniform3iv(i32 location, const glm::ivec3& value);
-        static void SetUniform4iv(i32 location, const glm::ivec4& value);
-        static void SetUniform1ui(i32 location, u32 value);
-        static void SetUniform2uiv(i32 location, const glm::uvec2& value);
-        static void SetUniform3uiv(i32 location, const glm::uvec3& value);
-        static void SetUniform4uiv(i32 location, const glm::uvec4& value);
-        static void SetUniform1f(i32 location, f32 value);
-        static void SetUniform2fv(i32 location, const glm::vec2& value);
-        static void SetUniform3fv(i32 location, const glm::vec3& value);
-        static void SetUniform4fv(i32 location, const glm::vec4& value);
-        static void SetUniformMatrix2fv(i32 location, const glm::mat2& value);
-        static void SetUniformMatrix3fv(i32 location, const glm::mat3& value);
-        static void SetUniformMatrix4fv(i32 location, const glm::mat4& value);
-        // NOLINTEND(CppInconsistentNaming)
-    };
+	private:
+		static void DrawElements(u32 vao, u32 ebo, u32 vertexCount);
+		static void DrawElementsInstanced(u32 vao, u32 ebo, u32 vertexCount, u32 instanceCount);
+
+	private:
+		static void GenerateBuffer(u32& buffer, BufferType bufferType);
+		static void GenerateVertexArray(u32& vao);
+
+		static void DeleteBuffer(u32 buffer);
+		static void DeleteVertexArray(u32 vao);
+
+		static void SetVertexAttributePointer(u32 index, i32 count, VertexAttributeDataType dataType, bool normalized, u32 stride, u32 offset);
+		static void SetVertexAttributePointerForInstancing(u32 index, i32 count, VertexAttributeDataType dataType, bool normalized, u32 stride, u32 offset);
+
+		static void SetBufferData(u32 buffer, BufferType bufferType, BufferDrawType drawType, u32 byteSize, const void* data);
+		static void UpdateBufferData(u32 buffer, BufferType bufferType, u32 byteOffset, u32 byteSize, const void* data);
+
+		static void BindBuffer(u32 buffer, BufferType bufferType);
+		static void UnbindVertexArray();
+
+	private:
+		static void GenerateTexture(u32& textureId);
+		static void DeleteTexture(u32 textureId);
+
+		static void SetTextureWrapMode(TextureWrapMode wrapMode);
+		static void SetTextureFilterMode(TextureFilterMode filterMode, TextureFilterMode mipmapFilterMode, bool usingMipmaps);
+		static void SetTextureData(const glm::uvec2& resolution, const u8* data);
+		static void GenerateTextureMipmaps();
+
+		static void BindTexture(u32 textureId, u32 slot);
+		static void UnbindTexture(u32 slot);
+
+	private:
+		static u32 CreateProgram();
+		static u32 CreateShader(ShaderType shaderType);
+
+		static void DeleteProgram(u32 programId);
+		static void DeleteShader(u32 shaderId);
+
+		static bool CompileShader(u32 shaderId, const std::string& shaderSource, std::string& errorLog);
+		static void AttachShader(u32 programId, u32 shaderId);
+		static bool LinkProgram(u32 programId, std::string& errorLog);
+
+		static std::vector<ShaderUniformInfo> GetShaderUniforms(u32 programId);
+
+		static void UseProgram(u32 programId);
+
+	private:
+		// NOLINTBEGIN(CppInconsistentNaming)
+		static void SetUniform1i(i32 location, i32 value);
+		static void SetUniform2iv(i32 location, const glm::ivec2& value);
+		static void SetUniform3iv(i32 location, const glm::ivec3& value);
+		static void SetUniform4iv(i32 location, const glm::ivec4& value);
+		static void SetUniform1ui(i32 location, u32 value);
+		static void SetUniform2uiv(i32 location, const glm::uvec2& value);
+		static void SetUniform3uiv(i32 location, const glm::uvec3& value);
+		static void SetUniform4uiv(i32 location, const glm::uvec4& value);
+		static void SetUniform1f(i32 location, f32 value);
+		static void SetUniform2fv(i32 location, const glm::vec2& value);
+		static void SetUniform3fv(i32 location, const glm::vec3& value);
+		static void SetUniform4fv(i32 location, const glm::vec4& value);
+		static void SetUniformMatrix2fv(i32 location, const glm::mat2& value);
+		static void SetUniformMatrix3fv(i32 location, const glm::mat3& value);
+		static void SetUniformMatrix4fv(i32 location, const glm::mat4& value);
+		// NOLINTEND(CppInconsistentNaming)
+	};
 }
-
