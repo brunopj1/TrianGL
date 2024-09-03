@@ -1,5 +1,6 @@
-﻿#include "Internal/InputLayer.h"
-#include <Core/InputSystem.h>
+﻿#include "Core/Internal/InputLayer.h"
+#include "Core/Internal/RenderLayer.h"
+#include <Core/Services/InputSystem.h>
 
 #ifdef IMGUI
 #include <imgui_impl_glfw.h>
@@ -101,6 +102,11 @@ void InputSystem::OnEndOfFrame()
     m_MouseScroll = 0;
 }
 
+void InputSystem::PollEvents() // NOLINT(CppMemberFunctionMayBeStatic)
+{
+    InputLayer::PollEvents();
+}
+
 void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, const i32 /*scancode*/, const i32 action, const i32 /*mods*/)
 {
     InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
@@ -128,8 +134,7 @@ void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, con
     }
 }
 
-// ReSharper disable once CppParameterNeverUsed
-void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods) 
+void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 button, const i32 action, const i32 mods) // NOLINT(CppParameterNeverUsed)
 {
     InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
     
@@ -158,7 +163,7 @@ void InputSystem::MouseButtonCallback(GLFWwindow* /*windowPtr*/, const i32 butto
 void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
 {
     InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
-    
+
 #ifdef IMGUI
     ImGui_ImplGlfw_CursorPosCallback(inputSystem.m_WindowPtr, x, y);
 #endif
@@ -167,8 +172,7 @@ void InputSystem::MousePositionCallback(GLFWwindow* /*windowPtr*/, const f64 x, 
     inputSystem.m_MouseDelta = inputSystem.m_MousePosition - inputSystem.m_LastMousePosition;
 }
 
-// ReSharper disable once CppParameterNeverUsed
-void InputSystem::MouseScrollCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y)
+void InputSystem::MouseScrollCallback(GLFWwindow* /*windowPtr*/, const f64 x, const f64 y) // NOLINT(CppParameterNeverUsed)
 {
     InputSystem& inputSystem = InputSystem::Get(); // NOLINT(CppRedundantQualifier)
     

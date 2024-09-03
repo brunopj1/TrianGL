@@ -1,29 +1,28 @@
 ﻿#pragma once
 
-#include "DataTypes.h"
-#include "Service.h"
+#include "Internal/Macros/ServiceMacros.h"
+#include <Core/DataTypes.h>
+#include <Core/Service.h>
 #include <Core/InputCodes.h>
 #include <glm/vec2.hpp>
 #include <unordered_set>
 
 // TODO dont register the input if the user is interacting with ImGui
-// TODO add methods to simulate input in the unit tests
 
 // Forward declarations
-// ReSharper disable once CppInconsistentNaming, IdentifierTypo
-struct GLFWwindow;
+struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
-    class InputSystem : public Service<InputSystem>
+    class InputSystem : public Service<InputSystem> // NOLINT(CppClassCanBeFinal)
     {
     private:
         friend class Application;
 
-    private:
+    protected:
         GLFWwindow* m_WindowPtr = nullptr;
 
-    private:
+    protected:
         std::unordered_set<KeyCode> m_KeysPressedThisFrame;
         std::unordered_set<KeyCode> m_KeysRepeatedThisFrame;
         std::unordered_set<KeyCode> m_KeysReleasedThisFrame;
@@ -41,36 +40,37 @@ namespace TGL
 
         MouseMode m_MouseMode = MouseMode::Normal;
 
-    private:
+    protected:
         InputSystem() = default;
-        ~InputSystem() = default;
+        SERVICE_DESTRUCTOR ~InputSystem() = default;
 
     public:
-        bool IsKeyDown(KeyCode key) const;
-        bool WasKeyPressed(KeyCode key) const;
-        bool WasKeyRepeated(KeyCode key) const;
-        bool WasKeyReleased(KeyCode key) const;
+        SERVICE_API bool IsKeyDown(KeyCode key) const;
+        SERVICE_API bool WasKeyPressed(KeyCode key) const;
+        SERVICE_API bool WasKeyRepeated(KeyCode key) const;
+        SERVICE_API bool WasKeyReleased(KeyCode key) const;
 
-        bool IsMouseButtonDown(MouseButton button) const;
-        bool WasMouseButtonPressed(MouseButton button) const;
-        bool WasMouseButtonReleased(MouseButton button) const;
+        SERVICE_API bool IsMouseButtonDown(MouseButton button) const;
+        SERVICE_API bool WasMouseButtonPressed(MouseButton button) const;
+        SERVICE_API bool WasMouseButtonReleased(MouseButton button) const;
 
-        glm::ivec2 GetMousePosition() const;
-        glm::ivec2 GetMouseDelta() const;
-        void SetMousePosition(glm::ivec2 position);
+        SERVICE_API glm::ivec2 GetMousePosition() const;
+        SERVICE_API glm::ivec2 GetMouseDelta() const;
+        SERVICE_API void SetMousePosition(glm::ivec2 position);
 
-        i32 GetMouseScroll() const;
+        SERVICE_API i32 GetMouseScroll() const;
 
-        MouseMode GetMouseMode() const;
-        void SetMouseMode(MouseMode mode);
+        SERVICE_API MouseMode GetMouseMode() const;
+        SERVICE_API void SetMouseMode(MouseMode mode);
 
-    private:
-        void Init(GLFWwindow *windowPtr);
+    protected:
+        SERVICE_API void Init(GLFWwindow *windowPtr);
 
-    private:
-        void OnEndOfFrame();
+    protected:
+        SERVICE_API void OnEndOfFrame();
+        SERVICE_API void PollEvents();
 
-    private:
+    protected:
         static void KeyboardCallback(GLFWwindow *windowPtr, i32 key, i32 scancode, i32 action, i32 mods);
         static void MouseButtonCallback(GLFWwindow *windowPtr, i32 button, i32 action, i32 mods);
         static void MousePositionCallback(GLFWwindow *windowPtr, f64 x, f64 y);

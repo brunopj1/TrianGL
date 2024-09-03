@@ -2,7 +2,7 @@
 
 #include "RenderLayer.h"
 
-#include "Core/Window.h"
+#include "Core/Services/Window.h"
 
 using namespace TGL;
 
@@ -13,7 +13,7 @@ bool g_ShouldClose = false;
 bool g_IsMaximized = false;
 bool g_IsMinimized = false;
 
-// ReSharper disable CppParameterNeverUsed
+// NOLINTBEGIN(CppParameterNeverUsed)
 
 void RenderLayer::SetErrorCallback(void(* func)(i32, const char*)) {}
 
@@ -60,8 +60,6 @@ void RenderLayer::DestroyGlfwWindow(GLFWwindow* windowPtr) {}
 void RenderLayer::ClearBuffers(const glm::vec3& color) {}
 
 void RenderLayer::SwapBuffers(GLFWwindow* windowPtr) {}
-
-void RenderLayer::PollEvents() {}
 
 void RenderLayer::PrepareImguiFrame() {}
 
@@ -214,7 +212,7 @@ std::vector<ShaderUniformInfo> RenderLayer::GetShaderUniforms(u32 programId)
 
 void RenderLayer::UseProgram(u32 programId) {}
 
-// ReSharper disable CppInconsistentNaming
+// NOLINTBEGIN(CppInconsistentNaming)
 
 void RenderLayer::SetUniform1i(int location, int value) {}
 
@@ -246,6 +244,7 @@ void RenderLayer::SetUniformMatrix3fv(int location, const glm::mat3& value) {}
 
 void RenderLayer::SetUniformMatrix4fv(int location, const glm::mat4& value) {}
 
-// ReSharper restore CppInconsistentNaming
+// NOLINTEND(CppInconsistentNaming)
+// NOLINTEND(CppParameterNeverUsed)
 
 #endif

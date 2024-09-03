@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Service.h"
+#include <Core/Service.h>
 #include <Assets/Internal/Shader.h>
 #include <Internal/Concepts/MaterialConcepts.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
@@ -21,7 +21,7 @@ namespace TGL
     // Forward declarations
     struct TextureParameters;
 
-    class AssetManager : public Service<AssetManager>
+    class AssetManager final : public Service<AssetManager>
     {
     private:
         friend class Application;

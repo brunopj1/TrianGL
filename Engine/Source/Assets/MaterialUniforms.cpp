@@ -3,7 +3,7 @@
 #include <Assets/MaterialUniforms.h>
 
 #include <Assets/Texture.h>
-#include <Core/AssetManager.h>
+#include <Core/Services/Internal/AssetManager.h>
 #include <Assets/Internal/Shader.h>
 
 using namespace TGL;

@@ -53,6 +53,9 @@ delete_coverage_files()
 # Init the git submodules
 subprocess.run(["git", "submodule", "update", "--init", "--recursive"], check=True)
 
+# Checkout the Wiki to the main branch
+subprocess.run(["git", "-C", "Wiki", "checkout", "master"], check=True)
+
 # Build and open the Visual Studio solution
 os.system("Premake\\premake5.exe vs2022")
 os.startfile("TrianGL.sln")

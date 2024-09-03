@@ -1,8 +1,7 @@
 ﻿#pragma once
 
-#include <Core/EntityManager.h>
+#include <Core/Services/Internal/EntityManager.h>
 #include <Internal/Concepts/EntitySystemConcepts.h>
-#include <cstdint>
 
 namespace TGL
 {

@@ -1,7 +1,7 @@
 ﻿#include "Core/Internal/AudioLayer.h"
 #include <Assets/Audio.h>
 
-#include <Core/AssetManager.h>
+#include <Core/Services/Internal/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Implementations/Components/AudioPlayer.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
@@ -38,8 +38,7 @@ f32 Audio::GetVolume() const
     return AudioLayer::GetAudioVolume(m_SoloudAudio);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Audio::SetVolume(const f32 volume)
+void Audio::SetVolume(const f32 volume) // NOLINT(CppMemberFunctionMayBeConst)
 {
     const f32 clampedVolume = volume < 0.0f ? 0.0f : volume;
 

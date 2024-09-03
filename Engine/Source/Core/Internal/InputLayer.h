@@ -5,8 +5,7 @@
 #include "glm/vec2.hpp"
 
 // Forward declarations
-// ReSharper disable once CppInconsistentNaming, IdentifierTypo
-struct GLFWwindow;
+struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
@@ -30,6 +29,9 @@ namespace TGL
         
         static void SetMousePosition(GLFWwindow* windowPtr, const glm::ivec2& position);
         static glm::ivec2 GetMousePosition(GLFWwindow* windowPtr);
+
+    private:
+        static void PollEvents();
     };
 }
 

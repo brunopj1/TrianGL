@@ -1,8 +1,9 @@
 #include <Core/Application.h>
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
-#include <Core/Window.h>
-#include <Core/Clock.h>
+#include <Core/Services/Window.h>
+#include <Core/Services/Clock.h>
 #include "Internal/RenderLayer.h"
+#include <Game/GameMode.h>
 
 #include <Implementations/Components/SpriteRenderer.h>
 #include <Implementations/Entities/Camera.h>
@@ -11,34 +12,35 @@
 
 using namespace TGL;
 
-Application::Application(const ApplicationConfig& config)
+Application::Application(const ServiceCollection& serviceCollection) 
+    : m_Clock(serviceCollection.Clock),
+      m_Window(serviceCollection.Window),
+      m_InputSystem(serviceCollection.InputSystem),
+      m_EntityManager(serviceCollection.EntityManager),
+      m_AssetManager(serviceCollection.AssetManager)
 {
     s_Running = true;
-    
-    Init(config);
 }
 
 Application::~Application()
 {
-    Terminate();
-
     s_Running = false;
 }
 
-void Application::Init(const ApplicationConfig& config)
+void Application::Init(const ApplicationConfig& config) // NOLINT(CppMemberFunctionMayBeConst)
 {
     // Init GLFW, GLAD, IMGUI    
     RenderLayer::SetErrorCallback(ErrorCallback);
-    
+
     if (!RenderLayer::InitGlfw())
     {
         throw FailedToInitializeEngineException("Failed to init GLFW");
     }
-    
+
     RenderLayer::SetupOpenGlVersion(4, 3, true);
 
-    const auto windowPtr = m_Window.Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
-    
+    const auto windowPtr = m_Window->Init(config.WindowTitle, config.WindowPosition, config.WindowResolution, config.Fullscreen, config.Vsync);
+
     if (!RenderLayer::InitGlad())
     {
         throw FailedToInitializeEngineException("Failed to init Glad");
@@ -53,27 +55,27 @@ void Application::Init(const ApplicationConfig& config)
 
     // OpenGL settings
     RenderLayer::SetupOpenGlSettings();
-    
+
     // Public services
-    m_InputSystem.Init(windowPtr);
+    m_InputSystem->Init(windowPtr);
 
     // Private services
-    m_AssetManager.Init();
-    m_EntityManager.Init();
+    m_AssetManager->Init();
+    m_EntityManager->Init();
 }
 
 void Application::GameLoop(GameMode* gameMode)
 {
     // Start the clock
-    m_Clock.Start();
+    m_Clock->Start();
 
     // Start the game mode
     gameMode->OnStart();
 
     // Run the game loop
-    while (!m_Window.ShouldClose())
+    while (!m_Window->ShouldClose())
     {
-        RenderLayer::PollEvents();
+        m_InputSystem->PollEvents();
 
         NewFrame();
 
@@ -81,27 +83,28 @@ void Application::GameLoop(GameMode* gameMode)
     }
 }
 
-void Application::Terminate()
+void Application::Terminate() // NOLINT(CppMemberFunctionMayBeConst)
 {
     // Private services
-    m_EntityManager.Terminate();
-    m_AssetManager.Terminate();
+    m_EntityManager->Terminate();
+    m_AssetManager->Terminate();
 
     RenderLayer::TerminateImgui();
 
-    m_Window.Terminate();
+    m_Window->Terminate();
 
     RenderLayer::TerminateGlfw();
 }
 
-void Application::NewFrame()
+void Application::NewFrame() // NOLINT(CppMemberFunctionMayBeConst)
 {
     RenderLayer::PrepareImguiFrame();
 
     // Update
-    
-    const f32 deltaTime = m_Clock.Update();
-    m_EntityManager.Update(deltaTime);
+
+    m_Clock->Update();
+    const f32 deltaTime = m_Clock->GetDeltaTime();
+    m_EntityManager->Update(deltaTime);
 
     // Render
 
@@ -113,26 +116,26 @@ void Application::NewFrame()
 
     if (camera != nullptr)
     {
-        m_EntityManager.Render();
+        m_EntityManager->Render();
     }
 
 #ifdef DEBUG
 #ifdef IMGUI
-    const u32 framerate = m_Clock.GetFrameRate();
-    const u32 entityCount = m_EntityManager.GetEntityCount();
-    const u32 componentCount = m_EntityManager.GetComponentCount();
+    const u32 framerate = m_Clock->GetFrameRate();
+    const u32 entityCount = m_EntityManager->GetEntityCount();
+    const u32 componentCount = m_EntityManager->GetComponentCount();
     RenderLayer::RenderImGuiDebugInfo(framerate, entityCount, componentCount);
 #endif
 #endif
 
     RenderLayer::RenderImguiFrame();
 
-    RenderLayer::SwapBuffers(m_Window.GetGlfwWindow());
+    RenderLayer::SwapBuffers(m_Window->GetGlfwWindow());
 }
 
-void Application::Cleanup()
+void Application::Cleanup() // NOLINT(CppMemberFunctionMayBeConst)
 {
-    m_InputSystem.OnEndOfFrame();
+    m_InputSystem->OnEndOfFrame();
 }
 
 void Application::ErrorCallback(const i32 error, const char* description)

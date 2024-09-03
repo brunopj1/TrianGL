@@ -1,4 +1,4 @@
-﻿#include <Core/Clock.h>
+﻿#include <Core/Services/Clock.h>
 
 using namespace TGL;
 
@@ -32,7 +32,7 @@ void Clock::Start()
     m_StartTime = m_FrameTime = std::chrono::steady_clock::now();
 }
 
-f32 Clock::Update()
+void Clock::Update()
 {
     const auto currentTime = std::chrono::steady_clock::now();
 
@@ -56,6 +56,4 @@ f32 Clock::Update()
     {
         m_IsNewSecond = false;
     }
-
-    return m_DeltaTime;
 }

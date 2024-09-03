@@ -1,7 +1,7 @@
 ﻿#include "MouseParticleEmitter.h"
 
 #include "Assets/Material.h"
-#include "Core/InputSystem.h"
+#include "Core/Services/InputSystem.h"
 #include "glm/ext/scalar_constants.hpp"
 #include "Implementations/Entities/Camera.h"
 

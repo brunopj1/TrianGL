@@ -1,9 +1,9 @@
-﻿#include <Core/AssetManager.h>
+﻿#include <Core/Services/Internal/AssetManager.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-#include "Internal/AudioLayer.h"
+#include "Core/Internal/AudioLayer.h"
 
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
 #include <Assets/Material.h>
@@ -77,8 +77,7 @@ void AssetManager::InitQuad()
     RenderLayer::UnbindVertexArray();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void AssetManager::SetupQuadVertexAttributes() const
+void AssetManager::SetupQuadVertexAttributes() const // NOLINT(CppMemberFunctionMayBeStatic)
 {
     RenderLayer::SetVertexAttributePointer(0, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 0);
     RenderLayer::SetVertexAttributePointer(1, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 2 * sizeof(f32));
@@ -111,8 +110,7 @@ u32 AssetManager::GetQuadEbo() const
     return m_QuadEbo;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
+SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters) // NOLINT(CppMemberFunctionMayBeStatic)
 {
     PREPARE_SPAWNER_ASSERT(Texture);
 
@@ -123,22 +121,19 @@ SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const 
     return instance;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index)
+SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index) // NOLINT(CppMemberFunctionMayBeStatic)
 {
     PREPARE_SPAWNER_ASSERT(TextureSlice);
 
     return new TextureSlice(std::move(texture), index);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void AssetManager::UnloadTexture(Texture* texture)
+void AssetManager::UnloadTexture(Texture* texture) // NOLINT(CppMemberFunctionMayBeStatic)
 {
     texture->Free();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
+SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)  // NOLINT(CppMemberFunctionMayBeStatic)
 {
     PREPARE_SPAWNER_ASSERT(Audio);
 
@@ -149,14 +144,12 @@ SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool
     return instance;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void AssetManager::UnloadAudio(Audio* audio)
+void AssetManager::UnloadAudio(Audio* audio) // NOLINT(CppMemberFunctionMayBeStatic)
 {
     audio->Free();
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void AssetManager::UnloadMaterialUniforms(const Material* material)
+void AssetManager::UnloadMaterialUniforms(const Material* material) // NOLINT(CppMemberFunctionMayBeStatic)
 {
     // No need to assert here since this doesn't interact with OpenGL
 

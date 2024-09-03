@@ -56,8 +56,7 @@ bool RenderLayer::InitGlad()
     return gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); // NOLINT(clang-diagnostic-cast-function-type-strict)
 }
 
-// ReSharper disable once CppParameterNeverUsed
-bool RenderLayer::InitImgui(GLFWwindow* windowPtr)
+bool RenderLayer::InitImgui(GLFWwindow* windowPtr) // NOLINT(CppParameterNeverUsed)
 {
 #ifdef IMGUI
     IMGUI_CHECKVERSION();
@@ -149,11 +148,6 @@ void RenderLayer::ClearBuffers(const glm::vec3& color)
 void RenderLayer::SwapBuffers(GLFWwindow* windowPtr)
 {
     glfwSwapBuffers(windowPtr);
-}
-
-void RenderLayer::PollEvents()
-{
-    glfwPollEvents();
 }
 
 void RenderLayer::PrepareImguiFrame()
@@ -513,7 +507,7 @@ void RenderLayer::UseProgram(const u32 programId)
     glUseProgram(programId);
 }
 
-// ReSharper disable CppInconsistentNaming
+// NOLINTBEGIN(CppInconsistentNaming)
 
 void RenderLayer::SetUniform1i(const i32 location, const i32 value)
 {
@@ -590,6 +584,6 @@ void RenderLayer::SetUniformMatrix4fv(const i32 location, const glm::mat4& value
     glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-// ReSharper restore CppInconsistentNaming
+// NOLINTEND(CppInconsistentNaming)
 
 #endif

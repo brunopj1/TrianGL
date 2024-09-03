@@ -3,7 +3,7 @@
 #include <ASsets/Texture.h>
 
 #include <stb_image.h>
-#include <Core/AssetManager.h>
+#include <Core/Services/Internal/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <glm/gtc/matrix_transform.hpp>
 

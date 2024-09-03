@@ -2,7 +2,7 @@
 
 #include <vector>
 
-// ReSharper disable CppClangTidyBugproneMacroParentheses
+//NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
 
 #define DECLARE_EVENT_NO_ARGS(callerClass, className, methodName) \
     class className                                               \
@@ -37,3 +37,5 @@
     protected:                                                                       \
         virtual void methodName(argType argName) = 0;                                \
     }
+
+//NOLINTEND(CppClangTidyBugproneMacroParentheses)

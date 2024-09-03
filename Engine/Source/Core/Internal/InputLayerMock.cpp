@@ -10,7 +10,7 @@ MouseMode g_MouseMode = MouseMode::Normal;
 
 glm::ivec2 g_MousePosition = { 0, 0 };
 
-// ReSharper disable CppParameterNeverUsed
+// NOLINTBEGIN(CppParameterNeverUsed)
 
 void InputLayer::BindKeyboardCallback(GLFWwindow* windowPtr, void(* func)(GLFWwindow*, i32, i32, i32, i32)) {}
 
@@ -34,5 +34,9 @@ glm::ivec2 InputLayer::GetMousePosition(GLFWwindow* windowPtr)
 {
     return g_MousePosition;
 }
+
+void InputLayer::PollEvents() {}
+
+// NOLINTEND(CppParameterNeverUsed)
 
 #endif

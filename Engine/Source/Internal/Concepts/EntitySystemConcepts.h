@@ -6,6 +6,7 @@ namespace TGL
 {
     // Forward declarations
     class GameObject;
+    class TestGameMode;
     class GameMode;
     class Entity;
     class Component;

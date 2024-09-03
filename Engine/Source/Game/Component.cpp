@@ -1,6 +1,6 @@
 ﻿#include <Game/Component.h>
 
-#include <Core/EntityManager.h>
+#include <Core/Services/Internal/EntityManager.h>
 
 using namespace TGL;
 

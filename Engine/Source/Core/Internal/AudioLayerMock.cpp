@@ -4,7 +4,7 @@
 
 using namespace TGL;
 
-// ReSharper disable CppParameterNeverUsed
+// NOLINTBEGIN(CppParameterNeverUsed)
 
 SoLoud::Soloud* AudioLayer::InitSoloud(int& errorCode)
 {
@@ -49,5 +49,6 @@ void AudioLayer::SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 vo
 
 void AudioLayer::SetAudioLoop(SoLoud::Soloud* soloudEngine, i32 handle, bool loop) {}
 
+// NOLINTEND(CppParameterNeverUsed)
 
 #endif

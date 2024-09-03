@@ -45,4 +45,9 @@ glm::ivec2 InputLayer::GetMousePosition(GLFWwindow* windowPtr)
     return { static_cast<i32>(x), static_cast<i32>(y) };
 }
 
+void InputLayer::PollEvents()
+{
+    glfwPollEvents();
+}
+
 #endif

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-// ReSharper disable CppInconsistentNaming
+// NOLINTBEGIN(CppInconsistentNaming)
 
 using i8 = int8_t;
 using i16 = int16_t;
@@ -16,3 +16,5 @@ using u64 = uint64_t;
 
 using f32 = float;
 using f64 = double;
+
+// NOLINTEND(CppInconsistentNaming)

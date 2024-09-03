@@ -2,7 +2,7 @@
 
 #include <Game/GameObject.h>
 #include <Game/Transform.h>
-#include <Core/EntityManager.h>
+#include <Core/Services/Internal/EntityManager.h>
 #include <vector>
 
 namespace TGL

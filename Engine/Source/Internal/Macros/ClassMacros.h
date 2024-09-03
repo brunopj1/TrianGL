@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-// ReSharper disable CppClangTidyBugproneMacroParentheses
+//NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
 
 #define DELETE_COPY_AND_MOVE_CONSTRUCTORS(class_name)  \
 public:                                                \
@@ -8,3 +8,5 @@ public:                                                \
     class_name(class_name&&) = delete;                 \
     class_name& operator=(const class_name&) = delete; \
     class_name& operator=(class_name&&) = delete
+
+//NOLINTEND(CppClangTidyBugproneMacroParentheses)

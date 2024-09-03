@@ -12,8 +12,7 @@
 #include <string>
 
 // Forward declarations
-// ReSharper disable once CppInconsistentNaming, IdentifierTypo
-struct GLFWwindow;
+struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
@@ -112,7 +111,6 @@ namespace TGL
     private:
         static void ClearBuffers(const glm::vec3& color);
         static void SwapBuffers(GLFWwindow* windowPtr);
-        static void PollEvents();
 
     private:
         static void PrepareImguiFrame();
@@ -189,7 +187,7 @@ namespace TGL
         static void UseProgram(u32 programId);
         
     private:
-        // ReSharper disable CppInconsistentNaming
+        // NOLINTBEGIN(CppInconsistentNaming)
         static void SetUniform1i(i32 location, i32 value);
         static void SetUniform2iv(i32 location, const glm::ivec2& value);
         static void SetUniform3iv(i32 location, const glm::ivec3& value);
@@ -205,7 +203,7 @@ namespace TGL
         static void SetUniformMatrix2fv(i32 location, const glm::mat2& value);
         static void SetUniformMatrix3fv(i32 location, const glm::mat3& value);
         static void SetUniformMatrix4fv(i32 location, const glm::mat4& value);
-        // ReSharper restore CppInconsistentNaming
+        // NOLINTEND(CppInconsistentNaming)
     };
 }
 

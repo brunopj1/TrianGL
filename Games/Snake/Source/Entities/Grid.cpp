@@ -1,7 +1,7 @@
 ﻿#include "Grid.h"
 
 #include "Implementations/Components/SpriteRenderer.h"
-#include "Core/Window.h"
+#include "Core/Services/Window.h"
 #include "GameMode/RenderingOrder.h"
 #include "Implementations/Entities/Camera.h"
 #include "Materials/GrassMaterial.h"

@@ -2,7 +2,7 @@
 
 #include <Assets/MaterialUniforms.h>
 #include <Assets/Internal/Shader.h>
-#include <Core/AssetManager.h>
+#include <Core/Services/Internal/AssetManager.h>
 #include <Implementations/Entities/Camera.h>
 
 using namespace TGL;

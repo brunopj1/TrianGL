@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "DataTypes.h"
-#include "Service.h"
+#include <Core/DataTypes.h>
+#include <Core/Service.h>
 #include <vector>
 #include <unordered_map>
 
@@ -12,7 +12,7 @@
 
 namespace TGL
 {
-    class EntityManager : public Service<EntityManager>
+    class EntityManager final : public Service<EntityManager>
     {
     private:
         friend class Application;

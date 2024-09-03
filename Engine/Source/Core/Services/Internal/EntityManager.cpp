@@ -1,4 +1,4 @@
-﻿#include <Core/EntityManager.h>
+﻿#include <Core/Services/Internal/EntityManager.h>
 
 #include <Implementations/Components/SpriteRenderer.h>
 #include <Game/GameMode.h>

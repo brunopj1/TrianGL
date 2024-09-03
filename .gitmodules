@@ -25,6 +25,7 @@
 [submodule "Wiki"]
 	path = Wiki
 	url = https://github.com/brunopj1/TrianGL.wiki.git
+	branch = main
 [submodule "Libs/googletest/googletest"]
 	path = Libs/googletest/googletest
 	url = https://github.com/google/googletest.git

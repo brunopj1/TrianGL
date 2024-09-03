@@ -1,8 +1,8 @@
-#include <Core/Window.h>
+#include <Core/Services/Window.h>
 
 #include <Core/Application.h>
 #include <Events/WindowEvents.h>
-#include "Internal/RenderLayer.h"
+#include "Core/Internal/RenderLayer.h"
 #include <format>
 
 #include <Implementations/Entities/Camera.h>
@@ -38,8 +38,7 @@ bool Window::IsMaximized() const
     return RenderLayer::IsMaximized(m_WindowPtr);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::Maximize()
+void Window::Maximize() // NOLINT(CppMemberFunctionMayBeConst)
 {
     RenderLayer::MaximizeWindow(m_WindowPtr);
 }
@@ -49,14 +48,12 @@ bool Window::IsMinimized() const
     return RenderLayer::IsMinimized(m_WindowPtr);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::Minimize()
+void Window::Minimize() // NOLINT(CppMemberFunctionMayBeConst)
 {
     RenderLayer::MinimizeWindow(m_WindowPtr);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::Restore()
+void Window::Restore() // NOLINT(CppMemberFunctionMayBeConst)
 {
     RenderLayer::RestoreWindow(m_WindowPtr);
 }
@@ -78,8 +75,7 @@ glm::ivec2 Window::GetPosition() const
     return m_Position;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::SetPosition(const glm::ivec2 position)
+void Window::SetPosition(const glm::ivec2 position) // NOLINT(CppMemberFunctionMayBeConst)
 {
     // m_Position is updated in the callback
     RenderLayer::SetWindowPosition(m_WindowPtr, position);
@@ -90,8 +86,7 @@ glm::uvec2 Window::GetResolution() const
     return m_Resolution;
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::SetResolution(const glm::uvec2 resolution)
+void Window::SetResolution(const glm::uvec2 resolution) // NOLINT(CppMemberFunctionMayBeConst)
 {
     if (resolution.x < minimum_window_resolution.x || resolution.y < minimum_window_resolution.y)
     {
@@ -120,8 +115,7 @@ void Window::SetVsync(const bool vsync)
     RenderLayer::SetSwapInterval(m_Vsync);
 }
 
-// ReSharper disable once CppMemberFunctionMayBeConst
-void Window::Close()
+void Window::Close() // NOLINT(CppMemberFunctionMayBeConst)
 {
     RenderLayer::CloseWindow(m_WindowPtr);
 }
@@ -164,6 +158,11 @@ GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm
 void Window::Terminate() const
 {
     RenderLayer::DestroyGlfwWindow(m_WindowPtr);
+}
+
+GLFWwindow* Window::GetGlfwWindow() const
+{
+    return m_WindowPtr;
 }
 
 void Window::PositionCallback(GLFWwindow* /*windowPtr*/, i32 x, i32 y)
@@ -242,9 +241,4 @@ void Window::MinimizeCallback(GLFWwindow* /*windowPtr*/, const i32 minimized)
             listener->OnWindowRestored();
         }
     }
-}
-
-GLFWwindow* Window::GetGlfwWindow() const
-{
-    return m_WindowPtr;
 }

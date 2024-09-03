@@ -4,13 +4,12 @@
 #include "Entities/Snake.h"
 #include "Implementations/Entities/Camera.h"
 #include "Implementations/Components/SpriteRenderer.h"
-#include "Core/InputSystem.h"
-#include "Core/Window.h"
+#include "Core/Services/InputSystem.h"
+#include "Core/Services/Window.h"
 #include "Assets/Material.h"
 
 #ifdef IMGUI
 #include <imgui.h>
-#include <imgui_stdlib.h>
 #endif
 
 using namespace TGL;
@@ -102,8 +101,6 @@ void SnakeGameMode::RenderImGui()
                 apple->RandomizePosition(m_Grid);
             }
         }
-
-        ImGui::InputText("Test", &test);
     }
 
     ImGui::End();

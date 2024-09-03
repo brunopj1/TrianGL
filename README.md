@@ -15,6 +15,7 @@ Currently, **TrianGL** only supports Windows. Support for other platforms may be
 ## Installation
 
 When cloning this repository, make sure to use the `--recurse-submodules` flag to also clone the dependencies.
+But if you have already cloned the repository without the submodules don't worry, the build script will take care of that for you.
 
 This engine uses premake to generate the project files.
 But don't worry, you don't need to have premake installed, as its binaries are included in the repository.

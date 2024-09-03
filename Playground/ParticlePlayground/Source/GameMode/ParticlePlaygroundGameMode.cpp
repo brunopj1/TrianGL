@@ -1,6 +1,6 @@
 #include "ParticlePlaygroundGameMode.h"
 
-#include "Core/InputSystem.h"
+#include "Core/Services/InputSystem.h"
 #include "Implementations/Entities/Camera.h"
 
 using namespace TGL;

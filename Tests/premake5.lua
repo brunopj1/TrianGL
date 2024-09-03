@@ -8,12 +8,15 @@ project "Tests"
     includedirs {
         "../Engine/Source/",
         "../Libs/glm/glm/",
-        "../Libs/googletest/googletest/googletest/include/"
+        "../Libs/googletest/googletest/googletest/include/",
+        "Source/"
     }
     
     files {
         "premake5.lua",
-        "**.cpp"
+        "Source/**.cpp",
+        "Source/**.hpp",
+        "Source/**.h"
     }
     
     links {
