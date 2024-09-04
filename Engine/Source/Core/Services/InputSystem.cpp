@@ -82,10 +82,10 @@ void InputSystem::Init(GLFWwindow* windowPtr)
 	m_MousePosition = InputLayer::GetMousePosition(m_WindowPtr);
 	m_LastMousePosition = m_MousePosition;
 
-	InputLayer::BindKeyboardCallback(windowPtr, KeyboardCallback);
-	InputLayer::BindMouseButtonCallback(windowPtr, MouseButtonCallback);
-	InputLayer::BindMousePositionCallback(windowPtr, MousePositionCallback);
-	InputLayer::BindMouseScrollCallback(windowPtr, MouseScrollCallback);
+	InputLayer::SetKeyboardCallback(windowPtr, KeyboardCallback);
+	InputLayer::SetMouseButtonCallback(windowPtr, MouseButtonCallback);
+	InputLayer::SetMousePositionCallback(windowPtr, MousePositionCallback);
+	InputLayer::SetMouseScrollCallback(windowPtr, MouseScrollCallback);
 }
 
 void InputSystem::OnEndOfFrame()

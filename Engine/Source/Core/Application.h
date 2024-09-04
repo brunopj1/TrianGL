@@ -18,14 +18,17 @@ namespace TGL
 		glm::ivec2 WindowPosition = {50, 50};
 		glm::uvec2 WindowResolution = {1280, 720};
 		bool Fullscreen = false;
-		bool Vsync = true;
+		bool Vsync = false;
 	};
 
 	struct ServiceCollection
 	{
+		// Public services
 		Clock* Clock = nullptr;
 		Window* Window = nullptr;
 		InputSystem* InputSystem = nullptr;
+
+		// Private services
 		EntityManager* EntityManager = nullptr;
 		AssetManager* AssetManager = nullptr;
 	};
@@ -50,12 +53,12 @@ namespace TGL
 		DELETE_COPY_AND_MOVE_CONSTRUCTORS(Application);
 
 	public:
-#ifndef TESTING
+#ifndef TESTING // Default implementation
 		template <SpawnableGameMode T, typename... Args>
-		static void Run(const ApplicationConfig& config, Args&&... args);
-#else
+		static f32 Run(const ApplicationConfig& config, Args&&... args);
+#else // Testing implementation
 		template <SpawnableGameMode T, typename... Args>
-		static void Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection = {}, Args&&... args);
+		static f32 Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection = {}, Args&&... args);
 #endif
 
 	private:
@@ -63,7 +66,7 @@ namespace TGL
 		void Terminate();
 
 	private:
-		void GameLoop(GameMode* gameMode);
+		f32 GameLoop(GameMode* gameMode);
 
 	private:
 		void NewFrame();
@@ -74,9 +77,9 @@ namespace TGL
 	};
 
 	// Template definitions
-#ifndef TESTING
+#ifndef TESTING // Default implementation
 	template <SpawnableGameMode T, typename... Args>
-	void Application::Run(const ApplicationConfig& config, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+	f32 Application::Run(const ApplicationConfig& config, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
 		// Check if the game is already running
 		if (s_Running)
@@ -112,14 +115,17 @@ namespace TGL
 		GameMode* gameMode = application.m_EntityManager->CreateGameMode<T>(std::forward<Args>(args)...);
 
 		// Run the game loop
-		application.GameLoop(gameMode);
+		const f32 duration = application.GameLoop(gameMode);
 
 		// Terminate the application
 		application.Terminate();
+
+		// Return the duration of the game loop
+		return duration;
 	}
-#else
+#else // Testing implementation
 	template <SpawnableGameMode T, typename... Args>
-	void Application::Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+	f32 Application::Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
 		// Check if the game is already running
 		if (s_Running)
@@ -161,32 +167,40 @@ namespace TGL
 		GameMode* gameMode = application.m_EntityManager->CreateGameMode<T>(std::forward<Args>(args)...);
 
 		// Run the game loop
-		application.GameLoop(gameMode);
+		const f32 duration = application.GameLoop(gameMode);
 
 		// Terminate the application
 		application.Terminate();
 
 		// Delete the default services
+
+		// NOLINTBEGIN(readability-delete-null-pointer)
+
 		if (mockServiceCollection.Clock == nullptr)
 		{
-			delete serviceCollection.Clock; // NOLINT(readability-delete-null-pointer)
+			delete serviceCollection.Clock;
 		}
 		if (mockServiceCollection.Window == nullptr)
 		{
-			delete serviceCollection.Window; // NOLINT(readability-delete-null-pointer)
+			delete serviceCollection.Window;
 		}
 		if (mockServiceCollection.InputSystem == nullptr)
 		{
-			delete serviceCollection.InputSystem; // NOLINT(readability-delete-null-pointer)
+			delete serviceCollection.InputSystem;
 		}
 		if (mockServiceCollection.EntityManager == nullptr)
 		{
-			delete serviceCollection.EntityManager; // NOLINT(readability-delete-null-pointer)
+			delete serviceCollection.EntityManager;
 		}
 		if (mockServiceCollection.AssetManager == nullptr)
 		{
-			delete serviceCollection.AssetManager; // NOLINT(readability-delete-null-pointer)
+			delete serviceCollection.AssetManager;
 		}
+
+		// NOLINTEND(readability-delete-null-pointer)
+
+		// Return the duration of the game loop
+		return duration;
 	}
 #endif
 }

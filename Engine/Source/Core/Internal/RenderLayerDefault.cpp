@@ -25,26 +25,6 @@ void RenderLayer::SetErrorCallback(void (*func)(i32, const char*))
 	glfwSetErrorCallback(func);
 }
 
-void RenderLayer::SetWindowPositionCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32))
-{
-	glfwSetWindowPosCallback(windowPtr, func);
-}
-
-void RenderLayer::SetWindowSizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32))
-{
-	glfwSetWindowSizeCallback(windowPtr, func);
-}
-
-void RenderLayer::SetWindowMaximizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32))
-{
-	glfwSetWindowMaximizeCallback(windowPtr, func);
-}
-
-void RenderLayer::SetWindowMinimizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32))
-{
-	glfwSetWindowIconifyCallback(windowPtr, func);
-}
-
 bool RenderLayer::InitGlfw()
 {
 	return glfwInit();
@@ -184,61 +164,6 @@ void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCoun
 	drawList->AddText(windowPos, IM_COL32(255, 255, 255, 255), cMessage);
 #endif
 #endif
-}
-
-void RenderLayer::CloseWindow(GLFWwindow* windowPtr)
-{
-	glfwSetWindowShouldClose(windowPtr, GLFW_TRUE);
-}
-
-bool RenderLayer::ShouldCloseWindow(GLFWwindow* windowPtr)
-{
-	return glfwWindowShouldClose(windowPtr);
-}
-
-void RenderLayer::SetWindowTitle(GLFWwindow* windowPtr, const std::string& title)
-{
-	glfwSetWindowTitle(windowPtr, title.c_str());
-}
-
-void RenderLayer::SetWindowPosition(GLFWwindow* windowPtr, const glm::ivec2& position)
-{
-	glfwSetWindowPos(windowPtr, position.x, position.y);
-}
-
-void RenderLayer::SetWindowResolution(GLFWwindow* windowPtr, const glm::uvec2& resolution)
-{
-	glfwSetWindowSize(windowPtr, resolution.x, resolution.y);
-}
-
-void RenderLayer::SetFullscreen(GLFWwindow* windowPtr, const bool fullscreen, const glm::uvec2& position, const glm::uvec2& resolution)
-{
-	glfwSetWindowMonitor(windowPtr, fullscreen ? glfwGetPrimaryMonitor() : nullptr, position.x, position.y, resolution.x, resolution.y, GLFW_DONT_CARE);
-}
-
-void RenderLayer::MaximizeWindow(GLFWwindow* windowPtr)
-{
-	glfwMaximizeWindow(windowPtr);
-}
-
-void RenderLayer::MinimizeWindow(GLFWwindow* windowPtr)
-{
-	glfwIconifyWindow(windowPtr);
-}
-
-void RenderLayer::RestoreWindow(GLFWwindow* windowPtr)
-{
-	glfwRestoreWindow(windowPtr);
-}
-
-bool RenderLayer::IsMaximized(GLFWwindow* windowPtr)
-{
-	return glfwGetWindowAttrib(windowPtr, GLFW_MAXIMIZED);
-}
-
-bool RenderLayer::IsMinimized(GLFWwindow* windowPtr)
-{
-	return glfwGetWindowAttrib(windowPtr, GLFW_ICONIFIED);
 }
 
 void RenderLayer::SetSwapInterval(const bool vsync)

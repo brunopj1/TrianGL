@@ -58,7 +58,7 @@ i32 main()
 {{
     TGL::ApplicationConfig config;
     config.WindowTitle = "TrianGL - {projectName}";
-    config.Vsync = true;
+    config.Vsync = false;
 
     TGL::Application::Run<{projectName}GameMode>(config);
 

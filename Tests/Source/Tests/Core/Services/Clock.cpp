@@ -3,7 +3,7 @@
 #include "Core/Application.h"
 #include "Core/Services/Window.h"
 #include "Game/GameMode.h"
-#include "Util/GameTestMacros.h"
+#include "Util/GameTestAbstractions.h"
 
 using namespace TGL;
 
@@ -47,7 +47,7 @@ TEST_GAME_BEGIN(Clock, TimeProgression)
 		}
 	}
 }
-TEST_GAME_END
+TEST_GAME_END()
 
 TEST_GAME_BEGIN(Clock, FrameRate)
 {
@@ -61,8 +61,13 @@ TEST_GAME_BEGIN(Clock, FrameRate)
 		if (clock.IsNewSecond())
 		{
 			ASSERT_EQ(clock.GetFrameRate(), frameCount);
+			ASSERT_GE(clock.GetTotalTime(), 1.0f);
 			Window::Get().Close();
+		}
+		else
+		{
+			ASSERT_LE(clock.GetTotalTime(), 1.0f);
 		}
 	}
 }
-TEST_GAME_END
+TEST_GAME_END()

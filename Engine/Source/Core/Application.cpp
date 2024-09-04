@@ -58,7 +58,7 @@ void Application::Init(const ApplicationConfig& config) // NOLINT(CppMemberFunct
 	m_EntityManager->Init();
 }
 
-void Application::GameLoop(GameMode* gameMode)
+f32 Application::GameLoop(GameMode* gameMode)
 {
 	// Start the clock
 	m_Clock->Start();
@@ -67,7 +67,7 @@ void Application::GameLoop(GameMode* gameMode)
 	gameMode->OnStart();
 
 	// Run the game loop
-	while (!m_Window->ShouldClose())
+	while (!m_Window->IsClosing())
 	{
 		m_InputSystem->PollEvents();
 
@@ -75,6 +75,8 @@ void Application::GameLoop(GameMode* gameMode)
 
 		Cleanup();
 	}
+
+	return m_Clock->GetTotalTime();
 }
 
 void Application::Terminate() // NOLINT(CppMemberFunctionMayBeConst)

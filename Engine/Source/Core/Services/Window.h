@@ -15,18 +15,25 @@ namespace TGL
 	{
 	private:
 		friend class Application;
-		friend class RenderLayer;
+		friend class InputLayer;
 
 	protected:
 		GLFWwindow* m_WindowPtr = nullptr;
 
 	protected:
 		std::string m_Title;
+
 		glm::ivec2 m_Position;
 		glm::uvec2 m_Resolution;
 		f32 m_AspectRatio;
-		bool m_Fullscreen;
-		bool m_Vsync;
+
+		bool m_Fullscreen = false;
+		bool m_Maximized = false;
+		bool m_Minimized = false;
+
+		bool m_Vsync = false;
+
+		bool m_Closing = false;
 
 	protected:
 		Window() = default;
@@ -59,9 +66,7 @@ namespace TGL
 		SERVICE_API void SetVsync(bool vsync);
 
 		SERVICE_API void Close();
-
-	protected:
-		SERVICE_API bool ShouldClose() const;
+		SERVICE_API bool IsClosing() const;
 
 	protected:
 		SERVICE_API GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
@@ -71,6 +76,8 @@ namespace TGL
 		SERVICE_API GLFWwindow* GetGlfwWindow() const;
 
 	protected:
+		static void CloseCallback(GLFWwindow* windowPtr);
+
 		static void PositionCallback(GLFWwindow* windowPtr, i32 x, i32 y);
 		static void SizeCallback(GLFWwindow* windowPtr, i32 width, i32 height);
 

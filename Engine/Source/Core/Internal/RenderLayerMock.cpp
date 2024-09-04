@@ -5,24 +5,9 @@
 
 using namespace TGL;
 
-// Mock variables
-
-bool g_ShouldClose = false;
-
-bool g_IsMaximized = false;
-bool g_IsMinimized = false;
-
 // NOLINTBEGIN(CppParameterNeverUsed)
 
 void RenderLayer::SetErrorCallback(void (*func)(i32, const char*)) {}
-
-void RenderLayer::SetWindowPositionCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32)) {}
-
-void RenderLayer::SetWindowSizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32, i32)) {}
-
-void RenderLayer::SetWindowMaximizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32)) {}
-
-void RenderLayer::SetWindowMinimizeCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*, i32)) {}
 
 bool RenderLayer::InitGlfw()
 {
@@ -65,73 +50,6 @@ void RenderLayer::PrepareImguiFrame() {}
 void RenderLayer::RenderImguiFrame() {}
 
 void RenderLayer::RenderImGuiDebugInfo(u32 framerate, u32 entityCount, u32 componentCount) {}
-
-void RenderLayer::CloseWindow(GLFWwindow* windowPtr)
-{
-	g_ShouldClose = true;
-}
-
-bool RenderLayer::ShouldCloseWindow(GLFWwindow* windowPtr)
-{
-	return g_ShouldClose;
-}
-
-void RenderLayer::SetWindowTitle(GLFWwindow* windowPtr, const std::string& title) {}
-
-void RenderLayer::SetWindowPosition(GLFWwindow* windowPtr, const glm::ivec2& position)
-{
-	Window::PositionCallback(windowPtr, position.x, position.y);
-}
-
-void RenderLayer::SetWindowResolution(GLFWwindow* windowPtr, const glm::uvec2& resolution)
-{
-	Window::SizeCallback(windowPtr, resolution.x, resolution.y);
-}
-
-void RenderLayer::SetFullscreen(GLFWwindow* windowPtr, const bool fullscreen, const glm::uvec2& position, const glm::uvec2& resolution)
-{
-	Window::FullscreenCallback(fullscreen);
-}
-
-void RenderLayer::MaximizeWindow(GLFWwindow* windowPtr)
-{
-	g_IsMaximized = true;
-	g_IsMinimized = false;
-
-	Window::MaximizeCallback(windowPtr, 1);
-}
-
-void RenderLayer::MinimizeWindow(GLFWwindow* windowPtr)
-{
-	g_IsMinimized = true;
-	g_IsMaximized = false;
-
-	Window::MinimizeCallback(windowPtr, 1);
-}
-
-void RenderLayer::RestoreWindow(GLFWwindow* windowPtr)
-{
-	if (g_IsMaximized)
-	{
-		g_IsMaximized = false;
-		Window::MaximizeCallback(windowPtr, 0);
-	}
-	else if (g_IsMinimized)
-	{
-		g_IsMinimized = false;
-		Window::MinimizeCallback(windowPtr, 0);
-	}
-}
-
-bool RenderLayer::IsMaximized(GLFWwindow* windowPtr)
-{
-	return g_IsMaximized;
-}
-
-bool RenderLayer::IsMinimized(GLFWwindow* windowPtr)
-{
-	return g_IsMinimized;
-}
 
 void RenderLayer::SetSwapInterval(bool vsync) {}
 

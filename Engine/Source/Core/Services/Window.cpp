@@ -1,3 +1,4 @@
+#include "Core/Internal/InputLayer.h"
 #include "Core/Internal/RenderLayer.h"
 #include <Core/Application.h>
 #include <Core/Services/Window.h>
@@ -27,7 +28,7 @@ void Window::SetFullscreen(const bool fullscreen)
 
 	m_Fullscreen = fullscreen;
 
-	RenderLayer::SetFullscreen(m_WindowPtr, fullscreen, m_Position, m_Resolution);
+	InputLayer::SetFullscreen(m_WindowPtr, fullscreen, m_Position, m_Resolution);
 
 	// There is no glfw callback for fullscreen, so we need to call the event manually
 	FullscreenCallback(fullscreen);
@@ -35,27 +36,27 @@ void Window::SetFullscreen(const bool fullscreen)
 
 bool Window::IsMaximized() const
 {
-	return RenderLayer::IsMaximized(m_WindowPtr);
+	return m_Maximized;
 }
 
 void Window::Maximize() // NOLINT(CppMemberFunctionMayBeConst)
 {
-	RenderLayer::MaximizeWindow(m_WindowPtr);
+	InputLayer::MaximizeWindow(m_WindowPtr);
 }
 
 bool Window::IsMinimized() const
 {
-	return RenderLayer::IsMinimized(m_WindowPtr);
+	return m_Minimized;
 }
 
 void Window::Minimize() // NOLINT(CppMemberFunctionMayBeConst)
 {
-	RenderLayer::MinimizeWindow(m_WindowPtr);
+	InputLayer::MinimizeWindow(m_WindowPtr);
 }
 
 void Window::Restore() // NOLINT(CppMemberFunctionMayBeConst)
 {
-	RenderLayer::RestoreWindow(m_WindowPtr);
+	InputLayer::RestoreWindow(m_WindowPtr);
 }
 
 std::string Window::GetTitle()
@@ -67,7 +68,7 @@ void Window::SetTitle(const std::string& title)
 {
 	m_Title = title;
 
-	RenderLayer::SetWindowTitle(m_WindowPtr, m_Title);
+	InputLayer::SetWindowTitle(m_WindowPtr, m_Title);
 }
 
 glm::ivec2 Window::GetPosition() const
@@ -78,7 +79,7 @@ glm::ivec2 Window::GetPosition() const
 void Window::SetPosition(const glm::ivec2 position) // NOLINT(CppMemberFunctionMayBeConst)
 {
 	// m_Position is updated in the callback
-	RenderLayer::SetWindowPosition(m_WindowPtr, position);
+	InputLayer::SetWindowPosition(m_WindowPtr, position);
 }
 
 glm::uvec2 Window::GetResolution() const
@@ -95,7 +96,7 @@ void Window::SetResolution(const glm::uvec2 resolution) // NOLINT(CppMemberFunct
 
 	// m_Resolution is updated in the callback
 
-	RenderLayer::SetWindowResolution(m_WindowPtr, resolution);
+	InputLayer::SetWindowResolution(m_WindowPtr, resolution);
 }
 
 f32 Window::GetAspectRatio() const
@@ -117,12 +118,12 @@ void Window::SetVsync(const bool vsync)
 
 void Window::Close() // NOLINT(CppMemberFunctionMayBeConst)
 {
-	RenderLayer::CloseWindow(m_WindowPtr);
+	InputLayer::CloseWindow(m_WindowPtr);
 }
 
-bool Window::ShouldClose() const
+bool Window::IsClosing() const
 {
-	return RenderLayer::ShouldCloseWindow(m_WindowPtr);
+	return m_Closing;
 }
 
 GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm::uvec2 resolution, const bool fullscreen, const bool vsync)
@@ -141,10 +142,11 @@ GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm
 		throw FailedToInitializeEngineException("Failed to create GLFW window");
 	}
 
-	RenderLayer::SetWindowPositionCallback(m_WindowPtr, PositionCallback);
-	RenderLayer::SetWindowSizeCallback(m_WindowPtr, SizeCallback);
-	RenderLayer::SetWindowMaximizeCallback(m_WindowPtr, MaximizeCallback);
-	RenderLayer::SetWindowMinimizeCallback(m_WindowPtr, MinimizeCallback);
+	InputLayer::SetWindowCloseCallback(m_WindowPtr, CloseCallback);
+	InputLayer::SetWindowPositionCallback(m_WindowPtr, PositionCallback);
+	InputLayer::SetWindowSizeCallback(m_WindowPtr, SizeCallback);
+	InputLayer::SetWindowMaximizeCallback(m_WindowPtr, MaximizeCallback);
+	InputLayer::SetWindowMinimizeCallback(m_WindowPtr, MinimizeCallback);
 
 	SetPosition(m_Position);
 
@@ -167,11 +169,15 @@ GLFWwindow* Window::GetGlfwWindow() const
 {
 	return m_WindowPtr;
 }
+void Window::CloseCallback(GLFWwindow* /*windowPtr*/)
+{
+	Window& window = Get();
+	window.m_Closing = true;
+}
 
 void Window::PositionCallback(GLFWwindow* /*windowPtr*/, i32 x, i32 y)
 {
 	Window& window = Get();
-
 	window.m_Position = {x, y};
 
 	for (const auto listener : WindowMovedEvent::s_Listeners)
@@ -183,7 +189,6 @@ void Window::PositionCallback(GLFWwindow* /*windowPtr*/, i32 x, i32 y)
 void Window::SizeCallback(GLFWwindow* /*windowPtr*/, i32 width, i32 height)
 {
 	Window& window = Get();
-
 	window.m_Resolution = {width, height};
 	window.m_AspectRatio = static_cast<f32>(width) / static_cast<f32>(height);
 
@@ -212,6 +217,9 @@ void Window::FullscreenCallback(const bool fullscreen)
 
 void Window::MaximizeCallback(GLFWwindow* /*windowPtr*/, const i32 maximized)
 {
+	Window& window = Get();
+	window.m_Maximized = maximized;
+
 	if (maximized)
 	{
 		for (const auto listener : WindowMaximizedEvent::s_Listeners)
@@ -230,6 +238,9 @@ void Window::MaximizeCallback(GLFWwindow* /*windowPtr*/, const i32 maximized)
 
 void Window::MinimizeCallback(GLFWwindow* /*windowPtr*/, const i32 minimized)
 {
+	Window& window = Get();
+	window.m_Minimized = minimized;
+
 	if (minimized)
 	{
 		for (const auto listener : WindowMinimizedEvent::s_Listeners)

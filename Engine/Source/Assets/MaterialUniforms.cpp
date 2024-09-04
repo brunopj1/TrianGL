@@ -37,71 +37,85 @@ void MaterialUniformImpl<i32>::BindInternal() const
 	RenderLayer::SetUniform1i(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::ivec2>::BindInternal() const
 {
 	RenderLayer::SetUniform2iv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::ivec3>::BindInternal() const
 {
 	RenderLayer::SetUniform3iv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::ivec4>::BindInternal() const
 {
 	RenderLayer::SetUniform4iv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<u32>::BindInternal() const
 {
 	RenderLayer::SetUniform1ui(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::uvec2>::BindInternal() const
 {
 	RenderLayer::SetUniform2uiv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::uvec3>::BindInternal() const
 {
 	RenderLayer::SetUniform3uiv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::uvec4>::BindInternal() const
 {
 	RenderLayer::SetUniform4uiv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<f32>::BindInternal() const
 {
 	RenderLayer::SetUniform1f(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::vec2>::BindInternal() const
 {
 	RenderLayer::SetUniform2fv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::vec3>::BindInternal() const
 {
 	RenderLayer::SetUniform3fv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::vec4>::BindInternal() const
 {
 	RenderLayer::SetUniform4fv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::mat2>::BindInternal() const
 {
 	RenderLayer::SetUniformMatrix2fv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::mat3>::BindInternal() const
 {
 	RenderLayer::SetUniformMatrix3fv(m_Location, Value);
 }
 
+template <>
 void MaterialUniformImpl<glm::mat4>::BindInternal() const
 {
 	RenderLayer::SetUniformMatrix4fv(m_Location, Value);

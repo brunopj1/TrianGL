@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <Core/DataTypes.h>
+
 // clang-format off
 
 // TODO why are there some keys missing? (Plus key)

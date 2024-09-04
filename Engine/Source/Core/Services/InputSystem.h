@@ -18,6 +18,7 @@ namespace TGL
 	{
 	private:
 		friend class Application;
+		friend class InputLayer;
 
 	protected:
 		GLFWwindow* m_WindowPtr = nullptr;
