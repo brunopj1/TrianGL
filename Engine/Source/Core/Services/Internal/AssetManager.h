@@ -24,6 +24,8 @@ namespace TGL
 	{
 	private:
 		friend class Application;
+		friend class ServiceCollection;
+		friend struct ServiceDeleter<AssetManager>;
 
 		friend class Texture;
 		friend class TextureSlice;

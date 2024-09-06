@@ -18,6 +18,9 @@ namespace TGL
 	{
 	private:
 		friend class Application;
+		friend class ServiceCollection;
+		friend struct ServiceDeleter<InputSystem>;
+
 		friend class InputLayer;
 
 	protected:

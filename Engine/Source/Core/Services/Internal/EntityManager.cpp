@@ -95,21 +95,6 @@ u32 EntityManager::GetComponentCount() const
 	return static_cast<u32>(m_Components.size());
 }
 
-void EntityManager::StoreObjectCallbacks(GameObject* object)
-{
-	// Updatable
-
-	AddToUpdateQueue(object, m_OnStartQueue);
-	// The object will be added to the update queue when it leaves the start queue
-
-	// Renderable
-
-	if (const auto renderable = dynamic_cast<Renderable*>(object); renderable != nullptr)
-	{
-		AddToRenderQueue(renderable, m_RenderQueue);
-	}
-}
-
 void EntityManager::RemoveObjectCallbacks(GameObject* object)
 {
 	// Updatable

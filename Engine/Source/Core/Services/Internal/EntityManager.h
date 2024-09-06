@@ -15,6 +15,9 @@ namespace TGL
 	{
 	private:
 		friend class Application;
+		friend class ServiceCollection;
+		friend struct ServiceDeleter<EntityManager>;
+
 		friend class RenderLayer;
 		friend class GameObject;
 		friend class GameMode;
@@ -65,7 +68,8 @@ namespace TGL
 		u32 GetComponentCount() const;
 
 	private:
-		void StoreObjectCallbacks(GameObject* object);
+		template <typename T>
+		void StoreObjectCallbacks(T* object);
 		void RemoveObjectCallbacks(GameObject* object);
 
 	private:
@@ -120,6 +124,30 @@ namespace TGL
 
 	// Template definitions
 
+	template <typename T>
+	void EntityManager::StoreObjectCallbacks(T* object)
+	{
+		// Updatable
+
+		if constexpr (std::is_base_of_v<GameMode, T>)
+		{
+			// No need to add to the OnStartQueue because the GameMode::OnStart will be called manually
+			AddToUpdateQueue(object, m_OnUpdateQueue);
+		}
+		else /* Entity or Component */
+		{
+			// No need to add to the OnUpdateQueue because it will be added automatically after leaving the OnStartQueue
+			AddToUpdateQueue(object, m_OnStartQueue);
+		}
+
+		// Renderable
+
+		if constexpr (std::is_base_of_v<Renderable, T>)
+		{
+			AddToRenderQueue(object, m_RenderQueue);
+		}
+	}
+
 	template <typename T, typename... Args>
 		requires SpawnableGameMode<T, Args...>
 	T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
@@ -133,6 +161,9 @@ namespace TGL
 		m_GameMode = instance;
 
 		StoreObjectCallbacks(instance);
+
+		// Remove from the start queue because the GameMode::OnStart will be called manually
+		std::erase(m_OnStartQueue, instance);
 
 		return instance;
 	}
@@ -176,7 +207,7 @@ namespace TGL
 	template <SearchableEntity T>
 	T* EntityManager::FindEntityGlobally()
 	{
-		for (auto entity : m_Entities)
+		for (auto entity : m_Entities | std::views::values)
 		{
 			if (T* casted = dynamic_cast<T*>(entity))
 			{
@@ -222,7 +253,7 @@ namespace TGL
 	{
 		std::vector<T*> components;
 
-		for (auto component : m_Components)
+		for (auto component : m_Components | std::views::values)
 		{
 			if (T* casted = dynamic_cast<T*>(component))
 			{

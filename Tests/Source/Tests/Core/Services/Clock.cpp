@@ -1,13 +1,11 @@
 ﻿#include "Core/Services/Clock.h"
 
 #include "Core/Application.h"
-#include "Core/Services/Window.h"
-#include "Game/GameMode.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;
 
-TEST_GAME_BEGIN(Clock, TimeProgression)
+BEGIN_GAME_TEST(Clock, TimeProgression)
 {
 	void OnUpdate(const f32 deltaTime) override
 	{
@@ -17,39 +15,39 @@ TEST_GAME_BEGIN(Clock, TimeProgression)
 		const Clock& clock = Clock::Get();
 
 		// Delta time
-		ASSERT_GT(clock.GetDeltaTime(), 0.0f);
+		EXPECT_GT(clock.GetDeltaTime(), 0.0f);
 
 		// Total time
 		const f32 currentTime = clock.GetTotalTime();
 
-		ASSERT_GT(currentTime, lastTime);
-		ASSERT_GE(currentTime, deltaTime);
-		ASSERT_GT(currentTime, 0.0f);
+		EXPECT_GT(currentTime, lastTime);
+		EXPECT_GE(currentTime, deltaTime);
+		EXPECT_GT(currentTime, 0.0f);
 
 		lastTime = currentTime;
 
 		// Frame count
 		const i32 currentFrame = clock.GetFrameCount();
 
-		ASSERT_GE(currentFrame, 0);
-		ASSERT_EQ(currentFrame, lastFrame + 1);
+		EXPECT_GE(currentFrame, 0);
+		EXPECT_EQ(currentFrame, lastFrame + 1);
 
 		lastFrame = currentFrame;
 
 		// New Second
 		const bool isNewSecond = clock.IsNewSecond();
 
-		ASSERT_EQ(isNewSecond, currentTime >= 1.0f);
+		EXPECT_EQ(isNewSecond, currentTime >= 1.0f);
 
 		if (isNewSecond)
 		{
-			Window::Get().Close();
+			EndTest();
 		}
 	}
 }
-TEST_GAME_END()
+END_GAME_TEST()
 
-TEST_GAME_BEGIN(Clock, FrameRate)
+BEGIN_GAME_TEST(Clock, FrameRate)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
@@ -60,14 +58,15 @@ TEST_GAME_BEGIN(Clock, FrameRate)
 
 		if (clock.IsNewSecond())
 		{
-			ASSERT_EQ(clock.GetFrameRate(), frameCount);
-			ASSERT_GE(clock.GetTotalTime(), 1.0f);
-			Window::Get().Close();
+			EXPECT_EQ(clock.GetFrameRate(), frameCount);
+			EXPECT_GE(clock.GetTotalTime(), 1.0f);
+
+			EndTest();
 		}
 		else
 		{
-			ASSERT_LE(clock.GetTotalTime(), 1.0f);
+			EXPECT_LE(clock.GetTotalTime(), 1.0f);
 		}
 	}
 }
-TEST_GAME_END()
+END_GAME_TEST()

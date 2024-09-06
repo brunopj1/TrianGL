@@ -4,26 +4,34 @@
 #include "Game/GameMode.h"
 #include "gtest/gtest.h"
 
+// Begins a game test without mocking
+#define BEGIN_GAME_TEST(test_suite_name, test_name) \
+	BEGIN_GAME_TEST_INTERNAL(test_suite_name, test_name, nullptr)
+
+// Begins a game test with mocking
+#define BEGIN_GAME_TEST_MOCKED(test_suite_name, test_name, mock_services_builder) \
+	BEGIN_GAME_TEST_INTERNAL(test_suite_name, test_name, mock_services_builder)
+
+// Ends the current game test
+// This macro is used because writing a semicolon directly after the test causes clang-format to screw up the formatting
+#define END_GAME_TEST() ;
+
+// Internal stuff (don't use these directly)
+
 // This macro will create a test inside a new GameMode class
 // This test will run in the GameMode's update loop
-#define TEST_GAME_BEGIN(test_suite_name, test_name)                                   \
-	static_assert(sizeof(#test_suite_name) > 1, "test_suite_name must not be empty"); \
-	static_assert(sizeof(#test_name) > 1, "test_name must not be empty");             \
-                                                                                      \
-	class test_suite_name##_##test_name##_GameMode;                                   \
-                                                                                      \
-	TEST(test_suite_name, test_name)                                                  \
-	{                                                                                 \
-		const f32 duration = RunGameTest<test_suite_name##_##test_name##_GameMode>(); \
-                                                                                      \
-		ASSERT_GT(duration, 0.0f);                                                    \
-	}                                                                                 \
-                                                                                      \
-	class test_suite_name##_##test_name##_GameMode final : public TGL::TestGameMode
-
-// This macro will end the current game test scope
-// This macro is used because writing a semicolon directly after the test causes clang-format to screw up the formatting
-#define TEST_GAME_END() ;
+// To mock the services set the mock parameter to true and implement the [GetMockedServices() -> ServiceCollection] static method
+#define BEGIN_GAME_TEST_INTERNAL(test_suite_name, test_name, mock_services_builder)                                     \
+	class test_suite_name##_##test_name##_TestGameMode;                                                                 \
+                                                                                                                        \
+	TEST(test_suite_name, test_name)                                                                                    \
+	{                                                                                                                   \
+		const RunDetails runDetails = RunGameTest<test_suite_name##_##test_name##_TestGameMode>(mock_services_builder); \
+                                                                                                                        \
+		EXPECT_GT(runDetails.FrameCount, 0);                                                                            \
+	}                                                                                                                   \
+                                                                                                                        \
+	class test_suite_name##_##test_name##_TestGameMode final : public TGL::TestGameMode
 
 namespace TGL
 {
@@ -33,21 +41,31 @@ namespace TGL
 	class TestGameMode : public GameMode // NOLINT(CppClassCanBeFinal)
 	{
 	protected:
-		void OnLateUpdate(f32 deltaTime) override
+		static void EndTest()
 		{
+			Window::Get().Close();
+		}
+
+	protected:
+		void OnLateUpdate(const f32 deltaTime) override
+		{
+			GameMode::OnLateUpdate(deltaTime);
+
 			// Stop running after 5 seconds
 			const Clock& clock = Clock::Get();
 			if (clock.GetTotalTime() > 5.0f)
 			{
-				Window::Get().Close();
-				ASSERT_LT(clock.GetTotalTime(), 5.0f);
+				EXPECT_LT(clock.GetTotalTime(), 5.0f);
+				EndTest();
+				return;
 			}
 
 			// Stop running if any assert fails
 			if (testing::Test::HasFailure())
 			{
-				Window::Get().Close();
-				ASSERT_FALSE(testing::Test::HasFailure());
+				EXPECT_FALSE(testing::Test::HasFailure());
+				EndTest();
+				return;
 			}
 		}
 	};
@@ -55,9 +73,18 @@ namespace TGL
 	// Test runner function
 	// This is used to allow running the Application with a forward declared GameMode
 	template <typename T>
-	f32 RunGameTest()
+	RunDetails RunGameTest(const std::function<void(ServiceCollection&)>& mockServicesBuilder = nullptr)
 	{
-		return Application::Run<T>(ApplicationConfig(), ServiceCollection());
+		ServiceCollection mockServiceCollection;
+
+		if (mockServicesBuilder != nullptr)
+		{
+			mockServicesBuilder(mockServiceCollection);
+		}
+
+		const RunDetails runDetails = Application::Run<T>(ApplicationConfig(), mockServiceCollection);
+
+		return runDetails;
 	}
 
 }

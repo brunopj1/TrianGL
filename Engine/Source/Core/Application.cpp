@@ -11,7 +11,11 @@
 using namespace TGL;
 
 Application::Application(const ServiceCollection& serviceCollection)
-	: m_Clock(serviceCollection.Clock), m_Window(serviceCollection.Window), m_InputSystem(serviceCollection.InputSystem), m_EntityManager(serviceCollection.EntityManager), m_AssetManager(serviceCollection.AssetManager)
+	: m_Clock(serviceCollection.ClockImpl.get()),
+	  m_Window(serviceCollection.WindowImpl.get()),
+	  m_InputSystem(serviceCollection.InputSystemImpl.get()),
+	  m_EntityManager(serviceCollection.EntityManagerImpl.get()),
+	  m_AssetManager(serviceCollection.AssetManagerImpl.get())
 {
 	s_Running = true;
 }
@@ -58,7 +62,7 @@ void Application::Init(const ApplicationConfig& config) // NOLINT(CppMemberFunct
 	m_EntityManager->Init();
 }
 
-f32 Application::GameLoop(GameMode* gameMode)
+void Application::GameLoop(GameMode* gameMode)
 {
 	// Start the clock
 	m_Clock->Start();
@@ -69,14 +73,14 @@ f32 Application::GameLoop(GameMode* gameMode)
 	// Run the game loop
 	while (!m_Window->IsClosing())
 	{
+		m_Clock->Update();
+
 		m_InputSystem->PollEvents();
 
 		NewFrame();
 
 		Cleanup();
 	}
-
-	return m_Clock->GetTotalTime();
 }
 
 void Application::Terminate() // NOLINT(CppMemberFunctionMayBeConst)
@@ -96,10 +100,12 @@ void Application::NewFrame() // NOLINT(CppMemberFunctionMayBeConst)
 {
 	RenderLayer::PrepareImguiFrame();
 
+	// Get the delta time
+
+	const f32 deltaTime = m_Clock->GetDeltaTime();
+
 	// Update
 
-	m_Clock->Update();
-	const f32 deltaTime = m_Clock->GetDeltaTime();
 	m_EntityManager->Update(deltaTime);
 
 	// Render

@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Core/ServiceCollection.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
+#include "Internal/Macros/TestMacros.h"
 #include "Services/Clock.h"
 #include "Services/Window.h"
 #include <Core/DataTypes.h>
@@ -21,16 +23,10 @@ namespace TGL
 		bool Vsync = false;
 	};
 
-	struct ServiceCollection
+	struct RunDetails
 	{
-		// Public services
-		Clock* Clock = nullptr;
-		Window* Window = nullptr;
-		InputSystem* InputSystem = nullptr;
-
-		// Private services
-		EntityManager* EntityManager = nullptr;
-		AssetManager* AssetManager = nullptr;
+		f32 Duration = 0.0f;
+		u32 FrameCount = 0;
 	};
 
 	class Application
@@ -53,20 +49,20 @@ namespace TGL
 		DELETE_COPY_AND_MOVE_CONSTRUCTORS(Application);
 
 	public:
-#ifndef TESTING // Default implementation
 		template <SpawnableGameMode T, typename... Args>
-		static f32 Run(const ApplicationConfig& config, Args&&... args);
-#else // Testing implementation
+		static RunDetails Run(const ApplicationConfig& config, Args&&... args);
+
+		TEST_RUN_PRIVACY()
 		template <SpawnableGameMode T, typename... Args>
-		static f32 Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection = {}, Args&&... args);
-#endif
+		static RunDetails Run(const ApplicationConfig& config, ServiceCollection& serviceCollection, Args&&... args);
+
 
 	private:
 		void Init(const ApplicationConfig& config);
 		void Terminate();
 
 	private:
-		f32 GameLoop(GameMode* gameMode);
+		void GameLoop(GameMode* gameMode);
 
 	private:
 		void NewFrame();
@@ -77,55 +73,16 @@ namespace TGL
 	};
 
 	// Template definitions
-#ifndef TESTING // Default implementation
-	template <SpawnableGameMode T, typename... Args>
-	f32 Application::Run(const ApplicationConfig& config, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
-	{
-		// Check if the game is already running
-		if (s_Running)
-		{
-			throw FailedToInitializeEngineException("Cannot run multiple instances of the engine at the same time");
-		}
 
-		// Create the services
+	template <SpawnableGameMode T, typename... Args>
+	RunDetails Application::Run(const ApplicationConfig& config, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+	{
 		ServiceCollection serviceCollection;
-
-		Clock clockService;
-		serviceCollection.Clock = &clockService;
-
-		Window windowService;
-		serviceCollection.Window = &windowService;
-
-		InputSystem inputSystemService;
-		serviceCollection.InputSystem = &inputSystemService;
-
-		EntityManager entityManagerService;
-		serviceCollection.EntityManager = &entityManagerService;
-
-		AssetManager assetManagerService;
-		serviceCollection.AssetManager = &assetManagerService;
-
-		// Create the application
-		Application application(serviceCollection);
-
-		// Initialize the application
-		application.Init(config);
-
-		// Create the GameMode
-		GameMode* gameMode = application.m_EntityManager->CreateGameMode<T>(std::forward<Args>(args)...);
-
-		// Run the game loop
-		const f32 duration = application.GameLoop(gameMode);
-
-		// Terminate the application
-		application.Terminate();
-
-		// Return the duration of the game loop
-		return duration;
+		return Run<T>(config, serviceCollection, std::forward<Args>(args)...);
 	}
-#else // Testing implementation
+
 	template <SpawnableGameMode T, typename... Args>
-	f32 Application::Run(const ApplicationConfig& config, const ServiceCollection& mockServiceCollection, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
+	RunDetails Application::Run(const ApplicationConfig& config, ServiceCollection& serviceCollection, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
 		// Check if the game is already running
 		if (s_Running)
@@ -133,29 +90,14 @@ namespace TGL
 			throw FailedToInitializeEngineException("Cannot run multiple instances of the engine at the same time");
 		}
 
-		// Create the services
-		ServiceCollection serviceCollection = {mockServiceCollection};
+		// Create the public services
+		serviceCollection.CreateService<Clock>();
+		serviceCollection.CreateService<Window>();
+		serviceCollection.CreateService<InputSystem>();
 
-		if (mockServiceCollection.Clock == nullptr)
-		{
-			serviceCollection.Clock = new Clock();
-		}
-		if (mockServiceCollection.Window == nullptr)
-		{
-			serviceCollection.Window = new Window();
-		}
-		if (mockServiceCollection.InputSystem == nullptr)
-		{
-			serviceCollection.InputSystem = new InputSystem();
-		}
-		if (mockServiceCollection.EntityManager == nullptr)
-		{
-			serviceCollection.EntityManager = new EntityManager();
-		}
-		if (mockServiceCollection.AssetManager == nullptr)
-		{
-			serviceCollection.AssetManager = new AssetManager();
-		}
+		// Create the private services
+		serviceCollection.CreateService<EntityManager>();
+		serviceCollection.CreateService<AssetManager>();
 
 		// Create the application
 		Application application(serviceCollection);
@@ -167,40 +109,17 @@ namespace TGL
 		GameMode* gameMode = application.m_EntityManager->CreateGameMode<T>(std::forward<Args>(args)...);
 
 		// Run the game loop
-		const f32 duration = application.GameLoop(gameMode);
+		application.GameLoop(gameMode);
+
+		// Get the run details
+		RunDetails details;
+		details.Duration = application.m_Clock->GetTotalTime();
+		details.FrameCount = application.m_Clock->GetFrameCount();
 
 		// Terminate the application
 		application.Terminate();
 
-		// Delete the default services
-
-		// NOLINTBEGIN(readability-delete-null-pointer)
-
-		if (mockServiceCollection.Clock == nullptr)
-		{
-			delete serviceCollection.Clock;
-		}
-		if (mockServiceCollection.Window == nullptr)
-		{
-			delete serviceCollection.Window;
-		}
-		if (mockServiceCollection.InputSystem == nullptr)
-		{
-			delete serviceCollection.InputSystem;
-		}
-		if (mockServiceCollection.EntityManager == nullptr)
-		{
-			delete serviceCollection.EntityManager;
-		}
-		if (mockServiceCollection.AssetManager == nullptr)
-		{
-			delete serviceCollection.AssetManager;
-		}
-
-		// NOLINTEND(readability-delete-null-pointer)
-
 		// Return the duration of the game loop
-		return duration;
+		return details;
 	}
-#endif
 }

@@ -11,6 +11,8 @@ namespace TGL
 	{
 	private:
 		friend class Application;
+		friend class ServiceCollection;
+		friend struct ServiceDeleter<Clock>;
 
 	protected:
 		f32 m_TotalTime = 0.0f;

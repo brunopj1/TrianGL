@@ -6,10 +6,6 @@
 
 using namespace TGL;
 
-// Mock variables
-
-MouseMode g_MouseMode = MouseMode::Normal;
-
 // NOLINTBEGIN(CppParameterNeverUsed)
 
 void InputLayer::SetWindowCloseCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*))
@@ -78,10 +74,7 @@ void InputLayer::RestoreWindow(GLFWwindow* windowPtr)
 	}
 }
 
-void InputLayer::SetMouseInputMode(GLFWwindow* windowPtr, const MouseMode mode)
-{
-	g_MouseMode = mode;
-}
+void InputLayer::SetMouseInputMode(GLFWwindow* windowPtr, const MouseMode mode) {}
 
 glm::ivec2 InputLayer::GetMousePosition(GLFWwindow* windowPtr)
 {
