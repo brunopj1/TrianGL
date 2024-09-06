@@ -1,6 +1,6 @@
-﻿#include "Core/Internal/AudioLayer.h"
+﻿#include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
-#include <Core/Services/Internal/AssetManager.h>
+#include <Core/Services/Private/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Implementations/Components/AudioPlayer.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
@@ -34,14 +34,16 @@ bool Audio::IsStreamed() const
 
 f32 Audio::GetVolume() const
 {
-	return AudioLayer::GetAudioVolume(m_SoloudAudio);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	return audioBackend.GetAudioVolume(m_SoloudAudio);
 }
 
 void Audio::SetVolume(const f32 volume) // NOLINT(CppMemberFunctionMayBeConst)
 {
 	const f32 clampedVolume = volume < 0.0f ? 0.0f : volume;
 
-	AudioLayer::SetAudioVolume(m_SoloudAudio, clampedVolume);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.SetAudioVolume(m_SoloudAudio, clampedVolume);
 
 	for (const AudioPlayer* player : m_CurrentPlayers)
 	{
@@ -51,7 +53,8 @@ void Audio::SetVolume(const f32 volume) // NOLINT(CppMemberFunctionMayBeConst)
 
 void Audio::Init()
 {
-	m_SoloudAudio = AudioLayer::LoadAudio(m_FilePath, m_Streamed);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	m_SoloudAudio = audioBackend.LoadAudio(m_FilePath, m_Streamed);
 
 	if (m_SoloudAudio == nullptr)
 	{
@@ -61,7 +64,8 @@ void Audio::Init()
 
 void Audio::Free()
 {
-	AudioLayer::UnloadAudio(m_SoloudAudio);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.UnloadAudio(m_SoloudAudio);
 	m_SoloudAudio = nullptr;
 }
 

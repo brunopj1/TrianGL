@@ -4,7 +4,7 @@
 #include "Internal/Macros/ClassMacros.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
-#include <Core/Services/Internal/AssetManager.h>
+#include <Core/Services/Private/AssetManager.h>
 #include <Internal/Concepts/MaterialConcepts.h>
 #include <Memory/SharedPtr.h>
 #include <string>

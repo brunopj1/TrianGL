@@ -1,4 +1,4 @@
-﻿#include <Core/Services/Internal/EntityManager.h>
+﻿#include <Core/Services/Private/EntityManager.h>
 #include <Game/Rendering/Renderable.h>
 
 using namespace TGL;

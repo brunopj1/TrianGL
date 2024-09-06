@@ -1,6 +1,6 @@
-﻿#include "Core/Services/Window.h"
+﻿#include "Core/Services/Public/Window.h"
 
-#include "Core/Services/Clock.h"
+#include "Core/Services/Public/Clock.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;

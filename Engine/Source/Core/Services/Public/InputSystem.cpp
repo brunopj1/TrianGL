@@ -1,6 +1,6 @@
-﻿#include "Core/Internal/InputLayer.h"
-#include "Core/Internal/RenderLayer.h"
-#include <Core/Services/InputSystem.h>
+﻿#include "Core/Services/Backends/InputBackend.h"
+#include "Core/Services/Backends/RenderBackend.h"
+#include <Core/Services/Public/InputSystem.h>
 
 #ifdef IMGUI
 #include <imgui_impl_glfw.h>
@@ -55,7 +55,8 @@ glm::ivec2 InputSystem::GetMouseDelta() const
 
 void InputSystem::SetMousePosition(const glm::ivec2 position)
 {
-	InputLayer::SetMousePosition(m_WindowPtr, position);
+	InputBackend& inputBackend = InputBackend::Get();
+	inputBackend.SetMousePosition(m_WindowPtr, position);
 	m_MousePosition = position;
 }
 
@@ -71,21 +72,24 @@ MouseMode InputSystem::GetMouseMode() const
 
 void InputSystem::SetMouseMode(const MouseMode mode)
 {
-	InputLayer::SetMouseInputMode(m_WindowPtr, mode);
+	InputBackend& inputBackend = InputBackend::Get();
+	inputBackend.SetMouseInputMode(m_WindowPtr, mode);
 	m_MouseMode = mode;
 }
 
 void InputSystem::Init(GLFWwindow* windowPtr)
 {
+	InputBackend& inputBackend = InputBackend::Get();
+
 	m_WindowPtr = windowPtr;
 
-	m_MousePosition = InputLayer::GetMousePosition(m_WindowPtr);
+	m_MousePosition = inputBackend.GetMousePosition(m_WindowPtr);
 	m_LastMousePosition = m_MousePosition;
 
-	InputLayer::SetKeyboardCallback(windowPtr, KeyboardCallback);
-	InputLayer::SetMouseButtonCallback(windowPtr, MouseButtonCallback);
-	InputLayer::SetMousePositionCallback(windowPtr, MousePositionCallback);
-	InputLayer::SetMouseScrollCallback(windowPtr, MouseScrollCallback);
+	inputBackend.SetKeyboardCallback(windowPtr, KeyboardCallback);
+	inputBackend.SetMouseButtonCallback(windowPtr, MouseButtonCallback);
+	inputBackend.SetMousePositionCallback(windowPtr, MousePositionCallback);
+	inputBackend.SetMouseScrollCallback(windowPtr, MouseScrollCallback);
 }
 
 void InputSystem::OnEndOfFrame()
@@ -104,7 +108,8 @@ void InputSystem::OnEndOfFrame()
 
 void InputSystem::PollEvents() // NOLINT(CppMemberFunctionMayBeStatic)
 {
-	InputLayer::PollEvents();
+	InputBackend& inputBackend = InputBackend::Get();
+	inputBackend.PollEvents();
 }
 
 void InputSystem::KeyboardCallback(GLFWwindow* /*windowPtr*/, const i32 key, const i32 /*scancode*/, const i32 action, const i32 /*mods*/)

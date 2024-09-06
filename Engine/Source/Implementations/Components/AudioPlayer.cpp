@@ -1,6 +1,6 @@
-﻿#include "Core/Internal/AudioLayer.h"
+﻿#include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
-#include <Core/Services/Internal/AssetManager.h>
+#include <Core/Services/Private/AssetManager.h>
 #include <Implementations/Components/AudioPlayer.h>
 #include <utility>
 
@@ -29,7 +29,8 @@ void AudioPlayer::OnUpdate(f32 deltaTime)
 		return;
 	}
 
-	if (!AudioLayer::IsValidAudioHandle(soloudEngine, m_Handle))
+	AudioBackend& audioBackend = AudioBackend::Get();
+	if (!audioBackend.IsValidAudioHandle(soloudEngine, m_Handle))
 	{
 		m_Status = AudioPlayerStatus::Stopped;
 
@@ -76,9 +77,11 @@ void AudioPlayer::Play()
 		return;
 	}
 
+	AudioBackend& audioBackend = AudioBackend::Get();
+
 	if (m_Status == AudioPlayerStatus::Stopped)
 	{
-		m_Handle = AudioLayer::PlayAudio(soloudEngine, m_Audio->m_SoloudAudio);
+		m_Handle = audioBackend.PlayAudio(soloudEngine, m_Audio->m_SoloudAudio);
 
 		m_Audio->AddPlayer(this);
 
@@ -87,7 +90,7 @@ void AudioPlayer::Play()
 	}
 	else if (m_Status == AudioPlayerStatus::Paused)
 	{
-		AudioLayer::ResumeAudio(soloudEngine, m_Handle);
+		audioBackend.ResumeAudio(soloudEngine, m_Handle);
 	}
 
 	m_Status = AudioPlayerStatus::Playing;
@@ -108,7 +111,9 @@ void AudioPlayer::Pause()
 		return;
 	}
 
-	AudioLayer::PauseAudio(soloudEngine, m_Handle);
+
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.PauseAudio(soloudEngine, m_Handle);
 
 	m_Status = AudioPlayerStatus::Paused;
 }
@@ -128,7 +133,8 @@ void AudioPlayer::Stop()
 		return;
 	}
 
-	AudioLayer::StopAudio(soloudEngine, m_Handle);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.StopAudio(soloudEngine, m_Handle);
 
 	m_Status = AudioPlayerStatus::Stopped;
 
@@ -186,7 +192,8 @@ void AudioPlayer::UpdateCurrentAudioVolume() const
 		return;
 	}
 
-	AudioLayer::SetAudioVolume(soloudEngine, m_Handle, GetFinalVolume());
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.SetAudioVolume(soloudEngine, m_Handle, GetFinalVolume());
 }
 
 void AudioPlayer::UpdateCurrentAudioLoop() const
@@ -199,5 +206,6 @@ void AudioPlayer::UpdateCurrentAudioLoop() const
 		return;
 	}
 
-	AudioLayer::SetAudioLoop(soloudEngine, m_Handle, m_Loop);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.SetAudioLoop(soloudEngine, m_Handle, m_Loop);
 }

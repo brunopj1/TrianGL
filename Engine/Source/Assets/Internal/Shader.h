@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <Core/DataTypes.h>
-#include <Core/Internal/RenderLayer.h>
+#include <Core/Services/Backends/RenderBackend.h>
 #include <string>
 #include <unordered_map>
 
@@ -37,12 +37,12 @@ namespace TGL
 		void Free();
 
 	private:
-		void LinkProgram();
-		static i32 CompileShader(const std::string& shaderPath, ShaderType type);
+		void LinkProgram(RenderBackend& renderBackend);
+		static i32 CompileShader(const std::string& shaderPath, ShaderType type, RenderBackend& renderBackend);
 		static std::string ReadShaderFile(const std::string& filePath);
 
 	private:
-		void LoadUniformLocations();
+		void LoadUniformLocations(RenderBackend& renderBackend);
 		i32 GetUniformLocation(const std::string& name) const;
 
 	private:

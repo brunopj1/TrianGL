@@ -1,13 +1,13 @@
 ﻿#ifndef TESTING
 
-#include "AudioLayer.h"
+#include "AudioBackend.h"
 #include "soloud.h"
 #include "soloud_wav.h"
 #include "soloud_wavstream.h"
 
 using namespace TGL;
 
-SoLoud::Soloud* AudioLayer::InitSoloud(int& errorCode)
+SoLoud::Soloud* AudioBackend::InitSoloud(int& errorCode)
 {
 	SoLoud::Soloud* soloudEngine = new SoLoud::Soloud();
 
@@ -23,17 +23,17 @@ SoLoud::Soloud* AudioLayer::InitSoloud(int& errorCode)
 	return soloudEngine;
 }
 
-void AudioLayer::TerminateSoloud(const SoLoud::Soloud* soloudEngine)
+void AudioBackend::TerminateSoloud(const SoLoud::Soloud* soloudEngine)
 {
 	delete soloudEngine;
 }
 
-void AudioLayer::SetupSoloudSettings(SoLoud::Soloud* soloudEngine)
+void AudioBackend::SetupSoloudSettings(SoLoud::Soloud* soloudEngine)
 {
 	soloudEngine->setGlobalVolume(0.1f);
 }
 
-SoLoud::AudioSource* AudioLayer::LoadAudio(const std::string& filePath, const bool stream)
+SoLoud::AudioSource* AudioBackend::LoadAudio(const std::string& filePath, const bool stream)
 {
 	SoLoud::result result;
 	SoLoud::AudioSource* audioSource;
@@ -60,52 +60,52 @@ SoLoud::AudioSource* AudioLayer::LoadAudio(const std::string& filePath, const bo
 	return audioSource;
 }
 
-void AudioLayer::UnloadAudio(const SoLoud::AudioSource* audioSource)
+void AudioBackend::UnloadAudio(const SoLoud::AudioSource* audioSource)
 {
 	delete audioSource;
 }
 
-i32 AudioLayer::PlayAudio(SoLoud::Soloud* soloudEngine, SoLoud::AudioSource* audioSource)
+i32 AudioBackend::PlayAudio(SoLoud::Soloud* soloudEngine, SoLoud::AudioSource* audioSource)
 {
 	return soloudEngine->play(*audioSource);
 }
 
-void AudioLayer::ResumeAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
+void AudioBackend::ResumeAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
 {
 	soloudEngine->setPause(handle, false);
 }
 
-void AudioLayer::PauseAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
+void AudioBackend::PauseAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
 {
 	soloudEngine->setPause(handle, true);
 }
 
-void AudioLayer::StopAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
+void AudioBackend::StopAudio(SoLoud::Soloud* soloudEngine, const i32 handle)
 {
 	soloudEngine->stop(handle);
 }
 
-bool AudioLayer::IsValidAudioHandle(SoLoud::Soloud* soloudEngine, const i32 handle)
+bool AudioBackend::IsValidAudioHandle(SoLoud::Soloud* soloudEngine, const i32 handle)
 {
 	return soloudEngine->isValidVoiceHandle(handle);
 }
 
-void AudioLayer::SetAudioVolume(SoLoud::AudioSource* audioSource, const f32 volume)
+void AudioBackend::SetAudioVolume(SoLoud::AudioSource* audioSource, const f32 volume)
 {
 	audioSource->setVolume(volume);
 }
 
-f32 AudioLayer::GetAudioVolume(const SoLoud::AudioSource* audioSource)
+f32 AudioBackend::GetAudioVolume(const SoLoud::AudioSource* audioSource)
 {
 	return audioSource->mVolume;
 }
 
-void AudioLayer::SetAudioVolume(SoLoud::Soloud* soloudEngine, const i32 handle, const f32 volume)
+void AudioBackend::SetAudioVolume(SoLoud::Soloud* soloudEngine, const i32 handle, const f32 volume)
 {
 	soloudEngine->setVolume(handle, volume);
 }
 
-void AudioLayer::SetAudioLoop(SoLoud::Soloud* soloudEngine, const i32 handle, const bool loop)
+void AudioBackend::SetAudioLoop(SoLoud::Soloud* soloudEngine, const i32 handle, const bool loop)
 {
 	soloudEngine->setLooping(handle, loop);
 }

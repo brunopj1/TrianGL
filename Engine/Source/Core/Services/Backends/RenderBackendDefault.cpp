@@ -3,7 +3,7 @@
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #define GLFW_INCLUDE_NONE
 
-#include "RenderLayer.h"
+#include "RenderBackend.h"
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
@@ -20,22 +20,22 @@
 
 using namespace TGL;
 
-void RenderLayer::SetErrorCallback(void (*func)(i32, const char*))
+void RenderBackend::SetErrorCallback(void (*func)(i32, const char*))
 {
 	glfwSetErrorCallback(func);
 }
 
-bool RenderLayer::InitGlfw()
+bool RenderBackend::InitGlfw()
 {
 	return glfwInit();
 }
 
-bool RenderLayer::InitGlad()
+bool RenderBackend::InitGlad()
 {
 	return gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)); // NOLINT(clang-diagnostic-cast-function-type-strict)
 }
 
-bool RenderLayer::InitImgui(GLFWwindow* windowPtr) // NOLINT(CppParameterNeverUsed)
+bool RenderBackend::InitImgui(GLFWwindow* windowPtr) // NOLINT(CppParameterNeverUsed)
 {
 #ifdef IMGUI
 	IMGUI_CHECKVERSION();
@@ -58,14 +58,14 @@ bool RenderLayer::InitImgui(GLFWwindow* windowPtr) // NOLINT(CppParameterNeverUs
 	return true;
 }
 
-void RenderLayer::SetupOpenGlVersion(const i32 majorVersion, const i32 minorVersion, const bool coreProfile)
+void RenderBackend::SetupOpenGlVersion(const i32 majorVersion, const i32 minorVersion, const bool coreProfile)
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, majorVersion);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, minorVersion);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, coreProfile ? GLFW_OPENGL_CORE_PROFILE : GLFW_OPENGL_COMPAT_PROFILE);
 }
 
-void RenderLayer::DebugVersions()
+void RenderBackend::DebugVersions()
 {
 #ifdef DEBUG
 	std::cout << "GLFW version: " << glfwGetVersionString() << '\n';
@@ -76,7 +76,7 @@ void RenderLayer::DebugVersions()
 #endif
 }
 
-void RenderLayer::SetupOpenGlSettings()
+void RenderBackend::SetupOpenGlSettings()
 {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -85,12 +85,12 @@ void RenderLayer::SetupOpenGlSettings()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void RenderLayer::TerminateGlfw()
+void RenderBackend::TerminateGlfw()
 {
 	glfwTerminate();
 }
 
-void RenderLayer::TerminateImgui()
+void RenderBackend::TerminateImgui()
 {
 #ifdef IMGUI
 	ImGui_ImplOpenGL3_Shutdown();
@@ -99,7 +99,7 @@ void RenderLayer::TerminateImgui()
 #endif
 }
 
-GLFWwindow* RenderLayer::CreateGlfwWindow(const std::string& title, const glm::uvec2& resolution, const glm::uvec2& minResolution)
+GLFWwindow* RenderBackend::CreateGlfwWindow(const std::string& title, const glm::uvec2& resolution, const glm::uvec2& minResolution)
 {
 	GLFWwindow* windowPtr = glfwCreateWindow(resolution.x, resolution.y, title.c_str(), nullptr, nullptr);
 
@@ -113,23 +113,23 @@ GLFWwindow* RenderLayer::CreateGlfwWindow(const std::string& title, const glm::u
 	return windowPtr;
 }
 
-void RenderLayer::DestroyGlfwWindow(GLFWwindow* windowPtr)
+void RenderBackend::DestroyGlfwWindow(GLFWwindow* windowPtr)
 {
 	glfwDestroyWindow(windowPtr);
 }
 
-void RenderLayer::ClearBuffers(const glm::vec3& color)
+void RenderBackend::ClearBuffers(const glm::vec3& color)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glClearColor(color.r, color.g, color.b, 1.0f);
 }
 
-void RenderLayer::SwapBuffers(GLFWwindow* windowPtr)
+void RenderBackend::SwapBuffers(GLFWwindow* windowPtr)
 {
 	glfwSwapBuffers(windowPtr);
 }
 
-void RenderLayer::PrepareImguiFrame()
+void RenderBackend::PrepareImguiFrame()
 {
 #ifdef IMGUI
 	ImGui_ImplOpenGL3_NewFrame();
@@ -138,7 +138,7 @@ void RenderLayer::PrepareImguiFrame()
 #endif
 }
 
-void RenderLayer::RenderImguiFrame()
+void RenderBackend::RenderImguiFrame()
 {
 #ifdef IMGUI
 	ImGui::Render();
@@ -146,7 +146,7 @@ void RenderLayer::RenderImguiFrame()
 #endif
 }
 
-void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCount, const u32 componentCount) // NOLINT(CppParameterNeverUsed)
+void RenderBackend::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCount, const u32 componentCount) // NOLINT(CppParameterNeverUsed)
 {
 #ifdef DEBUG
 #ifdef IMGUI
@@ -166,17 +166,17 @@ void RenderLayer::RenderImGuiDebugInfo(const u32 framerate, const u32 entityCoun
 #endif
 }
 
-void RenderLayer::SetSwapInterval(const bool vsync)
+void RenderBackend::SetSwapInterval(const bool vsync)
 {
 	glfwSwapInterval(vsync);
 }
 
-void RenderLayer::SetViewport(const glm::uvec2& resolution)
+void RenderBackend::SetViewport(const glm::uvec2& resolution)
 {
 	glViewport(0, 0, resolution.x, resolution.y);
 }
 
-void RenderLayer::DrawElements(const u32 vao, const u32 ebo, const u32 vertexCount)
+void RenderBackend::DrawElements(const u32 vao, const u32 ebo, const u32 vertexCount)
 {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -186,7 +186,7 @@ void RenderLayer::DrawElements(const u32 vao, const u32 ebo, const u32 vertexCou
 	glBindVertexArray(0);
 }
 
-void RenderLayer::DrawElementsInstanced(const u32 vao, const u32 ebo, const u32 vertexCount, const u32 instanceCount)
+void RenderBackend::DrawElementsInstanced(const u32 vao, const u32 ebo, const u32 vertexCount, const u32 instanceCount)
 {
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
@@ -196,37 +196,37 @@ void RenderLayer::DrawElementsInstanced(const u32 vao, const u32 ebo, const u32 
 	glBindVertexArray(0);
 }
 
-void RenderLayer::GenerateBuffer(u32& buffer, const BufferType bufferType)
+void RenderBackend::GenerateBuffer(u32& buffer, const BufferType bufferType)
 {
 	const i32 glBufferType = static_cast<i32>(bufferType);
 	glGenBuffers(1, &buffer);
 	glBindBuffer(glBufferType, buffer);
 }
 
-void RenderLayer::GenerateVertexArray(u32& vao)
+void RenderBackend::GenerateVertexArray(u32& vao)
 {
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 }
 
-void RenderLayer::DeleteBuffer(const u32 buffer)
+void RenderBackend::DeleteBuffer(const u32 buffer)
 {
 	glDeleteBuffers(1, &buffer);
 }
 
-void RenderLayer::DeleteVertexArray(const u32 vao)
+void RenderBackend::DeleteVertexArray(const u32 vao)
 {
 	glDeleteVertexArrays(1, &vao);
 }
 
-void RenderLayer::SetVertexAttributePointer(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
+void RenderBackend::SetVertexAttributePointer(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
 {
 	const i32 glDataType = static_cast<i32>(dataType);
 	glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(static_cast<uintptr_t>(offset))); // NOLINT(performance-no-int-to-ptr)
 	glEnableVertexAttribArray(index);
 }
 
-void RenderLayer::SetVertexAttributePointerForInstancing(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
+void RenderBackend::SetVertexAttributePointerForInstancing(const u32 index, const i32 count, const VertexAttributeDataType dataType, const bool normalized, const u32 stride, const u32 offset)
 {
 	const i32 glDataType = static_cast<i32>(dataType);
 	glVertexAttribPointer(index, count, glDataType, normalized, stride, reinterpret_cast<void*>(static_cast<uintptr_t>(offset))); // NOLINT(performance-no-int-to-ptr)
@@ -234,7 +234,7 @@ void RenderLayer::SetVertexAttributePointerForInstancing(const u32 index, const 
 	glVertexAttribDivisor(index, 1);
 }
 
-void RenderLayer::SetBufferData(const u32 buffer, const BufferType bufferType, const BufferDrawType drawType, const u32 byteSize, const void* data)
+void RenderBackend::SetBufferData(const u32 buffer, const BufferType bufferType, const BufferDrawType drawType, const u32 byteSize, const void* data)
 {
 	const i32 glBufferType = static_cast<i32>(bufferType);
 	const i32 glDrawType = static_cast<i32>(drawType);
@@ -242,43 +242,43 @@ void RenderLayer::SetBufferData(const u32 buffer, const BufferType bufferType, c
 	glBufferData(glBufferType, byteSize, data, glDrawType);
 }
 
-void RenderLayer::UpdateBufferData(const u32 buffer, const BufferType bufferType, const u32 byteOffset, const u32 byteSize, const void* data)
+void RenderBackend::UpdateBufferData(const u32 buffer, const BufferType bufferType, const u32 byteOffset, const u32 byteSize, const void* data)
 {
 	const i32 glBufferType = static_cast<i32>(bufferType);
 	glBindBuffer(glBufferType, buffer);
 	glBufferSubData(GL_ARRAY_BUFFER, byteOffset, byteSize, data);
 }
 
-void RenderLayer::BindBuffer(const u32 buffer, const BufferType bufferType)
+void RenderBackend::BindBuffer(const u32 buffer, const BufferType bufferType)
 {
 	const i32 glBufferType = static_cast<i32>(bufferType);
 	glBindBuffer(glBufferType, buffer);
 }
 
-void RenderLayer::UnbindVertexArray()
+void RenderBackend::UnbindVertexArray()
 {
 	glBindVertexArray(0);
 }
 
-void RenderLayer::GenerateTexture(u32& textureId)
+void RenderBackend::GenerateTexture(u32& textureId)
 {
 	glGenTextures(1, &textureId);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void RenderLayer::DeleteTexture(const u32 textureId)
+void RenderBackend::DeleteTexture(const u32 textureId)
 {
 	glDeleteTextures(1, &textureId);
 }
 
-void RenderLayer::SetTextureWrapMode(TextureWrapMode wrapMode)
+void RenderBackend::SetTextureWrapMode(TextureWrapMode wrapMode)
 {
 	const i32 glWrapParameter = static_cast<i32>(wrapMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, glWrapParameter);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, glWrapParameter);
 }
 
-void RenderLayer::SetTextureFilterMode(const TextureFilterMode filterMode, const TextureFilterMode mipmapFilterMode, const bool usingMipmaps)
+void RenderBackend::SetTextureFilterMode(const TextureFilterMode filterMode, const TextureFilterMode mipmapFilterMode, const bool usingMipmaps)
 {
 	const i32 glMagFilterParameter = static_cast<i32>(filterMode);
 	i32 glMinFilterParameter = glMagFilterParameter;
@@ -299,50 +299,50 @@ void RenderLayer::SetTextureFilterMode(const TextureFilterMode filterMode, const
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, glMagFilterParameter);
 }
 
-void RenderLayer::SetTextureData(const glm::uvec2& resolution, const u8* data)
+void RenderBackend::SetTextureData(const glm::uvec2& resolution, const u8* data)
 {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, resolution.x, resolution.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
-void RenderLayer::GenerateTextureMipmaps()
+void RenderBackend::GenerateTextureMipmaps()
 {
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-void RenderLayer::BindTexture(const u32 textureId, const u32 slot)
+void RenderBackend::BindTexture(const u32 textureId, const u32 slot)
 {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, textureId);
 }
 
-void RenderLayer::UnbindTexture(const u32 slot)
+void RenderBackend::UnbindTexture(const u32 slot)
 {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-u32 RenderLayer::CreateProgram()
+u32 RenderBackend::CreateProgram()
 {
 	return glCreateProgram();
 }
 
-u32 RenderLayer::CreateShader(ShaderType shaderType)
+u32 RenderBackend::CreateShader(ShaderType shaderType)
 {
 	const i32 glShaderType = static_cast<i32>(shaderType);
 	return glCreateShader(glShaderType);
 }
 
-void RenderLayer::DeleteProgram(const u32 programId)
+void RenderBackend::DeleteProgram(const u32 programId)
 {
 	glDeleteProgram(programId);
 }
 
-void RenderLayer::DeleteShader(const u32 shaderId)
+void RenderBackend::DeleteShader(const u32 shaderId)
 {
 	glDeleteShader(shaderId);
 }
 
-bool RenderLayer::CompileShader(const u32 shaderId, const std::string& shaderSource, std::string& errorLog)
+bool RenderBackend::CompileShader(const u32 shaderId, const std::string& shaderSource, std::string& errorLog)
 {
 	const char* shaderSourcePtr = shaderSource.c_str();
 
@@ -369,12 +369,12 @@ bool RenderLayer::CompileShader(const u32 shaderId, const std::string& shaderSou
 	return true;
 }
 
-void RenderLayer::AttachShader(const u32 programId, const u32 shaderId)
+void RenderBackend::AttachShader(const u32 programId, const u32 shaderId)
 {
 	glAttachShader(programId, shaderId);
 }
 
-bool RenderLayer::LinkProgram(const u32 programId, std::string& errorLog)
+bool RenderBackend::LinkProgram(const u32 programId, std::string& errorLog)
 {
 	glLinkProgram(programId);
 
@@ -398,7 +398,7 @@ bool RenderLayer::LinkProgram(const u32 programId, std::string& errorLog)
 	return true;
 }
 
-std::vector<ShaderUniformInfo> RenderLayer::GetShaderUniforms(const u32 programId)
+std::vector<ShaderUniformInfo> RenderBackend::GetShaderUniforms(const u32 programId)
 {
 	i32 uniformCount = 0;
 	glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &uniformCount);
@@ -420,84 +420,84 @@ std::vector<ShaderUniformInfo> RenderLayer::GetShaderUniforms(const u32 programI
 	return uniforms;
 }
 
-void RenderLayer::UseProgram(const u32 programId)
+void RenderBackend::UseProgram(const u32 programId)
 {
 	glUseProgram(programId);
 }
 
 // NOLINTBEGIN(CppInconsistentNaming)
 
-void RenderLayer::SetUniform1i(const i32 location, const i32 value)
+void RenderBackend::SetUniform1i(const i32 location, const i32 value)
 {
 	glUniform1i(location, value);
 }
 
-void RenderLayer::SetUniform2iv(const i32 location, const glm::ivec2& value)
+void RenderBackend::SetUniform2iv(const i32 location, const glm::ivec2& value)
 {
 	glUniform2iv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform3iv(const i32 location, const glm::ivec3& value)
+void RenderBackend::SetUniform3iv(const i32 location, const glm::ivec3& value)
 {
 	glUniform3iv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform4iv(const i32 location, const glm::ivec4& value)
+void RenderBackend::SetUniform4iv(const i32 location, const glm::ivec4& value)
 {
 	glUniform4iv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform1ui(const i32 location, const u32 value)
+void RenderBackend::SetUniform1ui(const i32 location, const u32 value)
 {
 	glUniform1ui(location, value);
 }
 
-void RenderLayer::SetUniform2uiv(const i32 location, const glm::uvec2& value)
+void RenderBackend::SetUniform2uiv(const i32 location, const glm::uvec2& value)
 {
 	glUniform2uiv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform3uiv(const i32 location, const glm::uvec3& value)
+void RenderBackend::SetUniform3uiv(const i32 location, const glm::uvec3& value)
 {
 	glUniform3uiv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform4uiv(const i32 location, const glm::uvec4& value)
+void RenderBackend::SetUniform4uiv(const i32 location, const glm::uvec4& value)
 {
 	glUniform4uiv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform1f(const i32 location, const f32 value)
+void RenderBackend::SetUniform1f(const i32 location, const f32 value)
 {
 	glUniform1f(location, value);
 }
 
-void RenderLayer::SetUniform2fv(const i32 location, const glm::vec2& value)
+void RenderBackend::SetUniform2fv(const i32 location, const glm::vec2& value)
 {
 	glUniform2fv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform3fv(const i32 location, const glm::vec3& value)
+void RenderBackend::SetUniform3fv(const i32 location, const glm::vec3& value)
 {
 	glUniform3fv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniform4fv(const i32 location, const glm::vec4& value)
+void RenderBackend::SetUniform4fv(const i32 location, const glm::vec4& value)
 {
 	glUniform4fv(location, 1, &value[0]);
 }
 
-void RenderLayer::SetUniformMatrix2fv(const i32 location, const glm::mat2& value)
+void RenderBackend::SetUniformMatrix2fv(const i32 location, const glm::mat2& value)
 {
 	glUniformMatrix2fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-void RenderLayer::SetUniformMatrix3fv(const i32 location, const glm::mat3& value)
+void RenderBackend::SetUniformMatrix3fv(const i32 location, const glm::mat3& value)
 {
 	glUniformMatrix3fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-void RenderLayer::SetUniformMatrix4fv(const i32 location, const glm::mat4& value)
+void RenderBackend::SetUniformMatrix4fv(const i32 location, const glm::mat4& value)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 }

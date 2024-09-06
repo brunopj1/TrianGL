@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <Core/Services/Internal/EntityManager.h>
+#include <Core/Services/Private/EntityManager.h>
 #include <Internal/Concepts/EntitySystemConcepts.h>
 
 namespace TGL

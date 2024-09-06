@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <Core/Services/Internal/EntityManager.h>
+#include <Core/Services/Private/EntityManager.h>
 #include <Game/Component.h>
 #include <Game/Entity.h>
 #include <Internal/Concepts/SmartPointerConcepts.h>

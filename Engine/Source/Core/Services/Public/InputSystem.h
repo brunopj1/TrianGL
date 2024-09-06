@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Internal/Macros/ServiceMacros.h"
+#include "Internal/Macros/MockingMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/InputCodes.h>
 #include <Core/Service.h>
@@ -21,7 +21,7 @@ namespace TGL
 		friend class ServiceCollection;
 		friend struct ServiceDeleter<InputSystem>;
 
-		friend class InputLayer;
+		friend class InputBackend;
 
 	protected:
 		GLFWwindow* m_WindowPtr = nullptr;
@@ -46,33 +46,33 @@ namespace TGL
 
 	protected:
 		InputSystem() = default;
-		SERVICE_DESTRUCTOR ~InputSystem() = default;
+		MOCKABLE_DESTRUCTOR ~InputSystem() = default;
 
 	public:
-		SERVICE_API bool IsKeyDown(KeyCode key) const;
-		SERVICE_API bool WasKeyPressed(KeyCode key) const;
-		SERVICE_API bool WasKeyRepeated(KeyCode key) const;
-		SERVICE_API bool WasKeyReleased(KeyCode key) const;
+		MOCKABLE_METHOD bool IsKeyDown(KeyCode key) const;
+		MOCKABLE_METHOD bool WasKeyPressed(KeyCode key) const;
+		MOCKABLE_METHOD bool WasKeyRepeated(KeyCode key) const;
+		MOCKABLE_METHOD bool WasKeyReleased(KeyCode key) const;
 
-		SERVICE_API bool IsMouseButtonDown(MouseButton button) const;
-		SERVICE_API bool WasMouseButtonPressed(MouseButton button) const;
-		SERVICE_API bool WasMouseButtonReleased(MouseButton button) const;
+		MOCKABLE_METHOD bool IsMouseButtonDown(MouseButton button) const;
+		MOCKABLE_METHOD bool WasMouseButtonPressed(MouseButton button) const;
+		MOCKABLE_METHOD bool WasMouseButtonReleased(MouseButton button) const;
 
-		SERVICE_API glm::ivec2 GetMousePosition() const;
-		SERVICE_API glm::ivec2 GetMouseDelta() const;
-		SERVICE_API void SetMousePosition(glm::ivec2 position);
+		MOCKABLE_METHOD glm::ivec2 GetMousePosition() const;
+		MOCKABLE_METHOD glm::ivec2 GetMouseDelta() const;
+		MOCKABLE_METHOD void SetMousePosition(glm::ivec2 position);
 
-		SERVICE_API i32 GetMouseScroll() const;
+		MOCKABLE_METHOD i32 GetMouseScroll() const;
 
-		SERVICE_API MouseMode GetMouseMode() const;
-		SERVICE_API void SetMouseMode(MouseMode mode);
-
-	protected:
-		SERVICE_API void Init(GLFWwindow* windowPtr);
+		MOCKABLE_METHOD MouseMode GetMouseMode() const;
+		MOCKABLE_METHOD void SetMouseMode(MouseMode mode);
 
 	protected:
-		SERVICE_API void OnEndOfFrame();
-		SERVICE_API void PollEvents();
+		MOCKABLE_METHOD void Init(GLFWwindow* windowPtr);
+
+	protected:
+		MOCKABLE_METHOD void OnEndOfFrame();
+		MOCKABLE_METHOD void PollEvents();
 
 	protected:
 		static void KeyboardCallback(GLFWwindow* windowPtr, i32 key, i32 scancode, i32 action, i32 mods);

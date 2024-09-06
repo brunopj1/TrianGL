@@ -1,7 +1,7 @@
 ﻿#include "Snake.h"
 
 #include "Apple.h"
-#include "Core/Services/InputSystem.h"
+#include "Core/Services/Public/InputSystem.h"
 #include "Implementations/Assets/DefaultSpriteMaterial.h"
 #include <utility>
 

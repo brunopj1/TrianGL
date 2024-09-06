@@ -3,12 +3,12 @@
 #include "Core/ServiceCollection.h"
 #include "Exceptions/Core/FailedToInitializeEngineException.h"
 #include "Internal/Macros/TestMacros.h"
-#include "Services/Clock.h"
-#include "Services/Window.h"
+#include "Services/Backends/AudioBackend.h"
+#include "Services/Public/Clock.h"
 #include <Core/DataTypes.h>
-#include <Core/Services/InputSystem.h>
-#include <Core/Services/Internal/AssetManager.h>
-#include <Core/Services/Internal/EntityManager.h>
+#include <Core/Services/Private/AssetManager.h>
+#include <Core/Services/Private/EntityManager.h>
+#include <Core/Services/Public/InputSystem.h>
 
 // TODO ensure that all const methods return pointer to const data
 
@@ -35,11 +35,19 @@ namespace TGL
 		static inline bool s_Running = false;
 
 	private:
-		Clock* m_Clock;
-		Window* m_Window;
-		InputSystem* m_InputSystem;
-		EntityManager* m_EntityManager;
-		AssetManager* m_AssetManager;
+		// Public services
+		Clock& m_Clock;
+		Window& m_Window;
+		InputSystem& m_InputSystem;
+
+		// Private services
+		EntityManager& m_EntityManager;
+		AssetManager& m_AssetManager;
+
+		// Backend services
+		RenderBackend& m_RenderBackend;
+		InputBackend& m_InputBackend;
+		AudioBackend& m_AudioBackend;
 
 	private:
 		Application(const ServiceCollection& serviceCollection);
@@ -99,6 +107,11 @@ namespace TGL
 		serviceCollection.CreateService<EntityManager>();
 		serviceCollection.CreateService<AssetManager>();
 
+		// Create the backend services
+		serviceCollection.CreateService<RenderBackend>();
+		serviceCollection.CreateService<InputBackend>();
+		serviceCollection.CreateService<AudioBackend>();
+
 		// Create the application
 		Application application(serviceCollection);
 
@@ -106,15 +119,15 @@ namespace TGL
 		application.Init(config);
 
 		// Create the GameMode
-		GameMode* gameMode = application.m_EntityManager->CreateGameMode<T>(std::forward<Args>(args)...);
+		GameMode* gameMode = application.m_EntityManager.CreateGameMode<T>(std::forward<Args>(args)...);
 
 		// Run the game loop
 		application.GameLoop(gameMode);
 
 		// Get the run details
 		RunDetails details;
-		details.Duration = application.m_Clock->GetTotalTime();
-		details.FrameCount = application.m_Clock->GetFrameCount();
+		details.Duration = application.m_Clock.GetTotalTime();
+		details.FrameCount = application.m_Clock.GetFrameCount();
 
 		// Terminate the application
 		application.Terminate();

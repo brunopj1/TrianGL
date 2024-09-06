@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Internal/Macros/ServiceMacros.h"
+#include "Internal/Macros/MockingMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
 #include <chrono>
@@ -31,21 +31,21 @@ namespace TGL
 
 	protected:
 		Clock() = default;
-		SERVICE_DESTRUCTOR ~Clock() = default;
+		MOCKABLE_DESTRUCTOR ~Clock() = default;
 
 	public:
-		SERVICE_API f32 GetTotalTime() const;
-		SERVICE_API f32 GetDeltaTime() const;
+		MOCKABLE_METHOD f32 GetTotalTime() const;
+		MOCKABLE_METHOD f32 GetDeltaTime() const;
 
-		SERVICE_API u32 GetFrameCount() const;
-		SERVICE_API u32 GetFrameRate() const;
+		MOCKABLE_METHOD u32 GetFrameCount() const;
+		MOCKABLE_METHOD u32 GetFrameRate() const;
 
-		SERVICE_API bool IsNewSecond() const;
-
-	protected:
-		SERVICE_API void Start();
+		MOCKABLE_METHOD bool IsNewSecond() const;
 
 	protected:
-		SERVICE_API void Update();
+		MOCKABLE_METHOD void Start();
+
+	protected:
+		MOCKABLE_METHOD void Update();
 	};
 }

@@ -3,15 +3,15 @@
 // NOLINTBEGIN(CppClangTidyBugproneMacroParentheses)
 
 #ifdef TESTING
-#define SERVICE_DESTRUCTOR virtual
+#define MOCKABLE_DESTRUCTOR virtual
 #else
-#define SERVICE_DESTRUCTOR
+#define MOCKABLE_DESTRUCTOR
 #endif
 
 #ifdef TESTING
-#define SERVICE_API virtual
+#define MOCKABLE_METHOD virtual
 #else
-#define SERVICE_API
+#define MOCKABLE_METHOD
 #endif
 
 // NOLINTEND(CppClangTidyBugproneMacroParentheses)

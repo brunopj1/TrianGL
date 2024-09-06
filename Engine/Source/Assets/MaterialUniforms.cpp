@@ -1,9 +1,9 @@
 ﻿#include "Core/DataTypes.h"
-#include "Core/Internal/RenderLayer.h"
+#include "Core/Services/Backends/RenderBackend.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Assets/Texture.h>
-#include <Core/Services/Internal/AssetManager.h>
+#include <Core/Services/Private/AssetManager.h>
 
 using namespace TGL;
 
@@ -34,91 +34,106 @@ void MaterialUniform::Bind() const
 template <>
 void MaterialUniformImpl<i32>::BindInternal() const
 {
-	RenderLayer::SetUniform1i(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform1i(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::ivec2>::BindInternal() const
 {
-	RenderLayer::SetUniform2iv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform2iv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::ivec3>::BindInternal() const
 {
-	RenderLayer::SetUniform3iv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform3iv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::ivec4>::BindInternal() const
 {
-	RenderLayer::SetUniform4iv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform4iv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<u32>::BindInternal() const
 {
-	RenderLayer::SetUniform1ui(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform1ui(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::uvec2>::BindInternal() const
 {
-	RenderLayer::SetUniform2uiv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform2uiv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::uvec3>::BindInternal() const
 {
-	RenderLayer::SetUniform3uiv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform3uiv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::uvec4>::BindInternal() const
 {
-	RenderLayer::SetUniform4uiv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform4uiv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<f32>::BindInternal() const
 {
-	RenderLayer::SetUniform1f(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform1f(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::vec2>::BindInternal() const
 {
-	RenderLayer::SetUniform2fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform2fv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::vec3>::BindInternal() const
 {
-	RenderLayer::SetUniform3fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform3fv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::vec4>::BindInternal() const
 {
-	RenderLayer::SetUniform4fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniform4fv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::mat2>::BindInternal() const
 {
-	RenderLayer::SetUniformMatrix2fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniformMatrix2fv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::mat3>::BindInternal() const
 {
-	RenderLayer::SetUniformMatrix3fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniformMatrix3fv(m_Location, Value);
 }
 
 template <>
 void MaterialUniformImpl<glm::mat4>::BindInternal() const
 {
-	RenderLayer::SetUniformMatrix4fv(m_Location, Value);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetUniformMatrix4fv(m_Location, Value);
 }
 
 SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
@@ -146,16 +161,19 @@ void SpriteUniform::BindInternal() const
 	if (m_Location != -1)
 	{
 		Value->Bind(m_Slot);
-		RenderLayer::SetUniform1i(m_Location, m_Slot);
+		RenderBackend& renderBackend = RenderBackend::Get();
+		renderBackend.SetUniform1i(m_Location, m_Slot);
 	}
 
 	if (m_MatrixLocation != -1)
 	{
-		RenderLayer::SetUniformMatrix4fv(m_MatrixLocation, Value->GetMatrix());
+		RenderBackend& renderBackend = RenderBackend::Get();
+		renderBackend.SetUniformMatrix4fv(m_MatrixLocation, Value->GetMatrix());
 	}
 
 	if (m_ResolutionLocation != -1)
 	{
-		RenderLayer::SetUniform2uiv(m_ResolutionLocation, Value->GetResolution());
+		RenderBackend& renderBackend = RenderBackend::Get();
+		renderBackend.SetUniform2uiv(m_ResolutionLocation, Value->GetResolution());
 	}
 }

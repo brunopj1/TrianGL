@@ -1,7 +1,7 @@
 ﻿#include "Core/DataTypes.h"
-#include "Core/Internal/RenderLayer.h"
+#include "Core/Services/Backends/RenderBackend.h"
 #include <ASsets/Texture.h>
-#include <Core/Services/Internal/AssetManager.h>
+#include <Core/Services/Private/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb_image.h>
@@ -10,7 +10,8 @@ using namespace TGL;
 
 void Sprite::Unbind(const u8 slot)
 {
-	RenderLayer::UnbindTexture(slot);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.UnbindTexture(slot);
 }
 
 TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix)
@@ -36,7 +37,8 @@ const glm::uvec2& TextureSlice::GetResolution() const
 
 void TextureSlice::Bind(const u8 slot) const
 {
-	RenderLayer::BindTexture(m_Texture->m_TextureId, slot);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.BindTexture(m_Texture->m_TextureId, slot);
 }
 
 const glm::mat4& TextureSlice::GetMatrix() const
@@ -177,16 +179,18 @@ void Texture::Init(const TextureParameters& parameters)
 
 	m_Resolution = {width, height};
 
-	RenderLayer::GenerateTexture(m_TextureId);
+	RenderBackend& renderBackend = RenderBackend::Get();
 
-	RenderLayer::SetTextureWrapMode(parameters.Wrap);
-	RenderLayer::SetTextureFilterMode(parameters.Filter, parameters.MipmapFilter, parameters.GenerateMipmaps);
+	renderBackend.GenerateTexture(m_TextureId);
 
-	RenderLayer::SetTextureData(m_Resolution, data);
+	renderBackend.SetTextureWrapMode(parameters.Wrap);
+	renderBackend.SetTextureFilterMode(parameters.Filter, parameters.MipmapFilter, parameters.GenerateMipmaps);
+
+	renderBackend.SetTextureData(m_Resolution, data);
 
 	if (parameters.GenerateMipmaps)
 	{
-		RenderLayer::GenerateTextureMipmaps();
+		renderBackend.GenerateTextureMipmaps();
 	}
 
 	stbi_image_free(data);
@@ -194,13 +198,15 @@ void Texture::Init(const TextureParameters& parameters)
 
 void Texture::Free()
 {
-	RenderLayer::DeleteTexture(m_TextureId);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.DeleteTexture(m_TextureId);
 	m_TextureId = 0;
 }
 
 void Texture::Bind(const u8 slot) const
 {
-	RenderLayer::BindTexture(m_TextureId, slot);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.BindTexture(m_TextureId, slot);
 }
 
 const glm::mat4& Texture::GetMatrix() const

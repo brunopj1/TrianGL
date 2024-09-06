@@ -1,11 +1,14 @@
 ﻿#pragma once
 
 #include "Internal/Concepts/ServiceCollection.h"
-#include "Services/Clock.h"
-#include "Services/InputSystem.h"
-#include "Services/Internal/AssetManager.h"
-#include "Services/Internal/EntityManager.h"
-#include "Services/Window.h"
+#include "Services/Backends/AudioBackend.h"
+#include "Services/Backends/InputBackend.h"
+#include "Services/Backends/RenderBackend.h"
+#include "Services/Private/AssetManager.h"
+#include "Services/Private/EntityManager.h"
+#include "Services/Public/Clock.h"
+#include "Services/Public/InputSystem.h"
+#include "Services/Public/Window.h"
 #include <memory>
 
 namespace TGL
@@ -21,6 +24,11 @@ namespace TGL
 		// Private services
 		std::unique_ptr<EntityManager, ServiceDeleter<EntityManager>> EntityManagerImpl = nullptr;
 		std::unique_ptr<AssetManager, ServiceDeleter<AssetManager>> AssetManagerImpl = nullptr;
+
+		// Backend services
+		std::unique_ptr<RenderBackend, ServiceDeleter<RenderBackend>> RenderBackendImpl = nullptr;
+		std::unique_ptr<InputBackend, ServiceDeleter<InputBackend>> InputBackendImpl = nullptr;
+		std::unique_ptr<AudioBackend, ServiceDeleter<AudioBackend>> AudioBackendImpl = nullptr;
 
 	public:
 		ServiceCollection() = default;
@@ -64,6 +72,27 @@ namespace TGL
 				if (AssetManagerImpl == nullptr)
 				{
 					AssetManagerImpl = std::unique_ptr<T, ServiceDeleter<AssetManager>>(new T());
+				}
+			}
+			else if constexpr (IsValidServiceOfType<RenderBackend, T>)
+			{
+				if (RenderBackendImpl == nullptr)
+				{
+					RenderBackendImpl = std::unique_ptr<T, ServiceDeleter<RenderBackend>>(new T());
+				}
+			}
+			else if constexpr (IsValidServiceOfType<InputBackend, T>)
+			{
+				if (InputBackendImpl == nullptr)
+				{
+					InputBackendImpl = std::unique_ptr<T, ServiceDeleter<InputBackend>>(new T());
+				}
+			}
+			else if constexpr (IsValidServiceOfType<AudioBackend, T>)
+			{
+				if (AudioBackendImpl == nullptr)
+				{
+					AudioBackendImpl = std::unique_ptr<T, ServiceDeleter<AudioBackend>>(new T());
 				}
 			}
 			else

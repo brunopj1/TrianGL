@@ -18,7 +18,7 @@ namespace TGL
 		friend class ServiceCollection;
 		friend struct ServiceDeleter<EntityManager>;
 
-		friend class RenderLayer;
+		friend class RenderBackend;
 		friend class GameObject;
 		friend class GameMode;
 		friend class Entity;

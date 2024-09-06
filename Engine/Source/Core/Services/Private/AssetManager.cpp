@@ -1,8 +1,8 @@
-﻿#include <Core/Services/Internal/AssetManager.h>
+﻿#include <Core/Services/Private/AssetManager.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "Core/Internal/AudioLayer.h"
+#include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
 #include <Assets/Material.h>
 #include <Assets/Texture.h>
@@ -20,15 +20,17 @@ void AssetManager::Init()
 	stbi_set_flip_vertically_on_load(true);
 
 	// SoLoud
+	AudioBackend& audioBackend = AudioBackend::Get();
+
 	int errorCode = 0;
-	m_SoloudEngine = AudioLayer::InitSoloud(errorCode);
+	m_SoloudEngine = audioBackend.InitSoloud(errorCode);
 
 	if (m_SoloudEngine == nullptr)
 	{
 		throw FailedToInitializeEngineException(std::format("Failed to init SoLoud (error code: {0})", errorCode));
 	}
 
-	AudioLayer::SetupSoloudSettings(m_SoloudEngine);
+	audioBackend.SetupSoloudSettings(m_SoloudEngine);
 
 	// Quad asset
 	InitQuad();
@@ -40,7 +42,8 @@ void AssetManager::Terminate()
 	TerminateQuad();
 
 	// SoLoud
-	AudioLayer::TerminateSoloud(m_SoloudEngine);
+	AudioBackend& audioBackend = AudioBackend::Get();
+	audioBackend.TerminateSoloud(m_SoloudEngine);
 	m_SoloudEngine = nullptr;
 }
 
@@ -63,34 +66,39 @@ void AssetManager::InitQuad()
 
 	// clang-format on
 
-	RenderLayer::GenerateVertexArray(m_QuadVao);
+	RenderBackend& renderBackend = RenderBackend::Get();
 
-	RenderLayer::GenerateBuffer(m_QuadVbo, BufferType::ArrayBuffer);
-	RenderLayer::SetBufferData(m_QuadVbo, BufferType::ArrayBuffer, BufferDrawType::StaticDraw, sizeof(vertices), vertices);
+	renderBackend.GenerateVertexArray(m_QuadVao);
 
-	RenderLayer::GenerateBuffer(m_QuadEbo, BufferType::ElementArrayBuffer);
-	RenderLayer::SetBufferData(m_QuadEbo, BufferType::ElementArrayBuffer, BufferDrawType::StaticDraw, sizeof(indices), indices);
+	renderBackend.GenerateBuffer(m_QuadVbo, BufferType::ArrayBuffer);
+	renderBackend.SetBufferData(m_QuadVbo, BufferType::ArrayBuffer, BufferDrawType::StaticDraw, sizeof(vertices), vertices);
+
+	renderBackend.GenerateBuffer(m_QuadEbo, BufferType::ElementArrayBuffer);
+	renderBackend.SetBufferData(m_QuadEbo, BufferType::ElementArrayBuffer, BufferDrawType::StaticDraw, sizeof(indices), indices);
 
 	SetupQuadVertexAttributes();
 
-	RenderLayer::UnbindVertexArray();
+	renderBackend.UnbindVertexArray();
 }
 
 void AssetManager::SetupQuadVertexAttributes() const // NOLINT(CppMemberFunctionMayBeStatic)
 {
-	RenderLayer::SetVertexAttributePointer(0, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 0);
-	RenderLayer::SetVertexAttributePointer(1, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 2 * sizeof(f32));
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.SetVertexAttributePointer(0, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 0);
+	renderBackend.SetVertexAttributePointer(1, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 2 * sizeof(f32));
 }
 
 void AssetManager::TerminateQuad()
 {
-	RenderLayer::DeleteBuffer(m_QuadVbo);
+	RenderBackend& renderBackend = RenderBackend::Get();
+
+	renderBackend.DeleteBuffer(m_QuadVbo);
 	m_QuadVbo = 0;
 
-	RenderLayer::DeleteBuffer(m_QuadEbo);
+	renderBackend.DeleteBuffer(m_QuadEbo);
 	m_QuadEbo = 0;
 
-	RenderLayer::DeleteVertexArray(m_QuadVao);
+	renderBackend.DeleteVertexArray(m_QuadVao);
 	m_QuadVao = 0;
 }
 

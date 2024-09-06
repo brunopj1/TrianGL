@@ -1,8 +1,8 @@
 #include "SnakeGameMode.h"
 
 #include "Assets/Material.h"
-#include "Core/Services/InputSystem.h"
-#include "Core/Services/Window.h"
+#include "Core/Services/Public/InputSystem.h"
+#include "Core/Services/Public/Window.h"
 #include "Entities/Apple.h"
 #include "Entities/Snake.h"
 #include "Implementations/Components/SpriteRenderer.h"

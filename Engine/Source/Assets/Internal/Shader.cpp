@@ -1,5 +1,5 @@
 ﻿#include "Core/DataTypes.h"
-#include "Core/Internal/RenderLayer.h"
+#include "Core/Services/Backends/RenderBackend.h"
 #include <Assets/Internal/Shader.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Exceptions/Common/FileTooBigException.h>
@@ -19,35 +19,39 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
 
 void Shader::Init()
 {
-	m_VertexShaderId = CompileShader(m_VertexShader, ShaderType::Vertex);
-	m_FragmentShaderId = CompileShader(m_FragmentShader, ShaderType::Fragment);
+	RenderBackend& renderBackend = RenderBackend::Get();
 
-	LinkProgram();
+	m_VertexShaderId = CompileShader(m_VertexShader, ShaderType::Vertex, renderBackend);
+	m_FragmentShaderId = CompileShader(m_FragmentShader, ShaderType::Fragment, renderBackend);
 
-	LoadUniformLocations();
+	LinkProgram(renderBackend);
+
+	LoadUniformLocations(renderBackend);
 }
 
 void Shader::Free()
 {
-	RenderLayer::DeleteShader(m_VertexShaderId);
+	RenderBackend& renderBackend = RenderBackend::Get();
+
+	renderBackend.DeleteShader(m_VertexShaderId);
 	m_VertexShaderId = 0;
 
-	RenderLayer::DeleteShader(m_FragmentShaderId);
+	renderBackend.DeleteShader(m_FragmentShaderId);
 	m_FragmentShaderId = 0;
 
-	RenderLayer::DeleteProgram(m_ProgramId);
+	renderBackend.DeleteProgram(m_ProgramId);
 	m_ProgramId = 0;
 }
 
-void Shader::LinkProgram()
+void Shader::LinkProgram(RenderBackend& renderBackend)
 {
-	m_ProgramId = RenderLayer::CreateProgram();
+	m_ProgramId = renderBackend.CreateProgram();
 
-	RenderLayer::AttachShader(m_ProgramId, m_VertexShaderId);
-	RenderLayer::AttachShader(m_ProgramId, m_FragmentShaderId);
+	renderBackend.AttachShader(m_ProgramId, m_VertexShaderId);
+	renderBackend.AttachShader(m_ProgramId, m_FragmentShaderId);
 
 	std::string errorLog;
-	const bool success = RenderLayer::LinkProgram(m_ProgramId, errorLog);
+	const bool success = renderBackend.LinkProgram(m_ProgramId, errorLog);
 
 	if (!success)
 	{
@@ -55,14 +59,14 @@ void Shader::LinkProgram()
 	}
 }
 
-i32 Shader::CompileShader(const std::string& shaderPath, const ShaderType type)
+i32 Shader::CompileShader(const std::string& shaderPath, const ShaderType type, RenderBackend& renderBackend)
 {
 	const std::string shaderSource = ReadShaderFile(shaderPath);
 
-	const i32 shaderId = RenderLayer::CreateShader(type);
+	const i32 shaderId = renderBackend.CreateShader(type);
 
 	std::string errorLog;
-	const bool success = RenderLayer::CompileShader(shaderId, shaderSource, errorLog);
+	const bool success = renderBackend.CompileShader(shaderId, shaderSource, errorLog);
 
 	if (!success)
 	{
@@ -93,9 +97,9 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
 	return stringStream.str();
 }
 
-void Shader::LoadUniformLocations()
+void Shader::LoadUniformLocations(RenderBackend& renderBackend)
 {
-	const auto uniforms = RenderLayer::GetShaderUniforms(m_ProgramId);
+	const auto uniforms = renderBackend.GetShaderUniforms(m_ProgramId);
 
 	for (const auto& uniform : uniforms)
 	{
@@ -111,7 +115,8 @@ i32 Shader::GetUniformLocation(const std::string& name) const
 
 void Shader::Use() const
 {
-	RenderLayer::UseProgram(m_ProgramId);
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.UseProgram(m_ProgramId);
 }
 
 std::size_t ShaderHash::operator()(const Shader* shader) const

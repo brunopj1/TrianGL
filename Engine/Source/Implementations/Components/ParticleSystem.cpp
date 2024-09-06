@@ -1,5 +1,5 @@
 ﻿#include "Assets/Material.h"
-#include "Core/Internal/RenderLayer.h"
+#include "Core/Services/Backends/RenderBackend.h"
 #include <Implementations/Components/ParticleSystem.h>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -103,7 +103,8 @@ void ParticleSystem::OnUpdate(const f32 deltaTime)
 		}
 	}
 
-	RenderLayer::UpdateBufferData(m_ParticleVbo, BufferType::ArrayBuffer, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
+	RenderBackend& renderBackend = RenderBackend::Get();
+	renderBackend.UpdateBufferData(m_ParticleVbo, BufferType::ArrayBuffer, 0, m_MaxParticles * sizeof(ParticleGpuData), m_ParticlesGpu.data());
 
 	while (m_ParticlesCpu[m_LastUsedParticleIndex].RemainingDuration <= 0.0f && m_LastUsedParticleIndex > 0)
 	{
@@ -127,42 +128,47 @@ void ParticleSystem::Render() const
 
 	m_Material->Use(modelMatrix);
 
+	RenderBackend& renderBackend = RenderBackend::Get();
 	const AssetManager& assetManager = AssetManager::Get();
-	RenderLayer::DrawElementsInstanced(m_ParticleVao, assetManager.GetQuadEbo(), 6, m_LastUsedParticleIndex + 1);
+	renderBackend.DrawElementsInstanced(m_ParticleVao, assetManager.GetQuadEbo(), 6, m_LastUsedParticleIndex + 1);
 }
 
 void ParticleSystem::Init()
 {
+	RenderBackend& renderBackend = RenderBackend::Get();
+
 	m_ParticlesCpu.resize(m_MaxParticles);
 	m_ParticlesGpu.resize(m_MaxParticles);
 
-	RenderLayer::GenerateVertexArray(m_ParticleVao);
+	renderBackend.GenerateVertexArray(m_ParticleVao);
 
 	const AssetManager& assetManager = AssetManager::Get();
 
 	// Bind the quad EBO and VBO and setup the attributes
-	RenderLayer::BindBuffer(assetManager.GetQuadEbo(), BufferType::ElementArrayBuffer);
-	RenderLayer::BindBuffer(assetManager.GetQuadVbo(), BufferType::ArrayBuffer);
+	renderBackend.BindBuffer(assetManager.GetQuadEbo(), BufferType::ElementArrayBuffer);
+	renderBackend.BindBuffer(assetManager.GetQuadVbo(), BufferType::ArrayBuffer);
 	assetManager.SetupQuadVertexAttributes();
 
-	RenderLayer::GenerateBuffer(m_ParticleVbo, BufferType::ArrayBuffer);
-	RenderLayer::SetBufferData(m_ParticleVbo, BufferType::ArrayBuffer, BufferDrawType::StreamDraw, m_MaxParticles * sizeof(ParticleGpuData), nullptr);
+	renderBackend.GenerateBuffer(m_ParticleVbo, BufferType::ArrayBuffer);
+	renderBackend.SetBufferData(m_ParticleVbo, BufferType::ArrayBuffer, BufferDrawType::StreamDraw, m_MaxParticles * sizeof(ParticleGpuData), nullptr);
 
-	RenderLayer::SetVertexAttributePointerForInstancing(2, 2, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Position));
-	RenderLayer::SetVertexAttributePointerForInstancing(3, 4, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Color));
-	RenderLayer::SetVertexAttributePointerForInstancing(4, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Scale));
-	RenderLayer::SetVertexAttributePointerForInstancing(5, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Rotation));
-	RenderLayer::SetVertexAttributePointerForInstancing(6, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, RemainingDuration));
+	renderBackend.SetVertexAttributePointerForInstancing(2, 2, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Position));
+	renderBackend.SetVertexAttributePointerForInstancing(3, 4, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Color));
+	renderBackend.SetVertexAttributePointerForInstancing(4, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Scale));
+	renderBackend.SetVertexAttributePointerForInstancing(5, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, Rotation));
+	renderBackend.SetVertexAttributePointerForInstancing(6, 1, VertexAttributeDataType::F32, false, sizeof(ParticleGpuData), offsetof(ParticleGpuData, RemainingDuration));
 
-	RenderLayer::UnbindVertexArray();
+	renderBackend.UnbindVertexArray();
 }
 
 void ParticleSystem::Terminate()
 {
-	RenderLayer::DeleteBuffer(m_ParticleVbo);
+	RenderBackend& renderBackend = RenderBackend::Get();
+
+	renderBackend.DeleteBuffer(m_ParticleVbo);
 	m_ParticleVbo = 0;
 
-	RenderLayer::DeleteVertexArray(m_ParticleVao);
+	renderBackend.DeleteVertexArray(m_ParticleVao);
 	m_ParticleVao = 0;
 }
 

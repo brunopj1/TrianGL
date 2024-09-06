@@ -1,4 +1,4 @@
-﻿#include "Core/Internal/RenderLayer.h"
+﻿#include "Core/Services/Backends/RenderBackend.h"
 #include <Assets/Material.h>
 #include <Game/Entity.h>
 #include <Implementations/Assets/DefaultSpriteMaterial.h>
@@ -73,6 +73,7 @@ void SpriteRenderer::Render() const
 
 	m_Material->Use(modelMatrix);
 
+	RenderBackend& renderBackend = RenderBackend::Get();
 	const AssetManager& assetManager = AssetManager::Get();
-	RenderLayer::DrawElements(assetManager.GetQuadVao(), assetManager.GetQuadEbo(), 6);
+	renderBackend.DrawElements(assetManager.GetQuadVao(), assetManager.GetQuadEbo(), 6);
 }

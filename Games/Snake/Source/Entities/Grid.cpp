@@ -1,6 +1,6 @@
 ﻿#include "Grid.h"
 
-#include "Core/Services/Window.h"
+#include "Core/Services/Public/Window.h"
 #include "GameMode/RenderingOrder.h"
 #include "Implementations/Components/SpriteRenderer.h"
 #include "Implementations/Entities/Camera.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Internal/Macros/ServiceMacros.h"
+#include "Internal/Macros/MockingMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
 #include <glm/vec2.hpp>
@@ -18,7 +18,7 @@ namespace TGL
 		friend class ServiceCollection;
 		friend struct ServiceDeleter<Window>;
 
-		friend class InputLayer;
+		friend class InputBackend;
 
 	protected:
 		GLFWwindow* m_WindowPtr = nullptr;
@@ -40,43 +40,43 @@ namespace TGL
 
 	protected:
 		Window() = default;
-		SERVICE_DESTRUCTOR ~Window() = default;
+		MOCKABLE_DESTRUCTOR ~Window() = default;
 
 	public:
-		SERVICE_API bool IsFullscreen() const;
-		SERVICE_API void SetFullscreen(bool fullscreen);
+		MOCKABLE_METHOD bool IsFullscreen() const;
+		MOCKABLE_METHOD void SetFullscreen(bool fullscreen);
 
-		SERVICE_API bool IsMaximized() const;
-		SERVICE_API void Maximize();
+		MOCKABLE_METHOD bool IsMaximized() const;
+		MOCKABLE_METHOD void Maximize();
 
-		SERVICE_API bool IsMinimized() const;
-		SERVICE_API void Minimize();
+		MOCKABLE_METHOD bool IsMinimized() const;
+		MOCKABLE_METHOD void Minimize();
 
-		SERVICE_API void Restore();
+		MOCKABLE_METHOD void Restore();
 
-		SERVICE_API std::string GetTitle();
-		SERVICE_API void SetTitle(const std::string& title);
+		MOCKABLE_METHOD std::string GetTitle();
+		MOCKABLE_METHOD void SetTitle(const std::string& title);
 
-		SERVICE_API glm::ivec2 GetPosition() const;
-		SERVICE_API void SetPosition(glm::ivec2 position);
+		MOCKABLE_METHOD glm::ivec2 GetPosition() const;
+		MOCKABLE_METHOD void SetPosition(glm::ivec2 position);
 
-		SERVICE_API glm::uvec2 GetResolution() const;
-		SERVICE_API void SetResolution(glm::uvec2 resolution);
+		MOCKABLE_METHOD glm::uvec2 GetResolution() const;
+		MOCKABLE_METHOD void SetResolution(glm::uvec2 resolution);
 
-		SERVICE_API f32 GetAspectRatio() const;
+		MOCKABLE_METHOD f32 GetAspectRatio() const;
 
-		SERVICE_API bool IsVsync() const;
-		SERVICE_API void SetVsync(bool vsync);
+		MOCKABLE_METHOD bool IsVsync() const;
+		MOCKABLE_METHOD void SetVsync(bool vsync);
 
-		SERVICE_API void Close();
-		SERVICE_API bool IsClosing() const;
-
-	protected:
-		SERVICE_API GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
-		SERVICE_API void Terminate() const;
+		MOCKABLE_METHOD void Close();
+		MOCKABLE_METHOD bool IsClosing() const;
 
 	protected:
-		SERVICE_API GLFWwindow* GetGlfwWindow() const;
+		MOCKABLE_METHOD GLFWwindow* Init(std::string title, glm::ivec2 position, glm::uvec2 resolution, bool fullscreen, bool vsync);
+		MOCKABLE_METHOD void Terminate() const;
+
+	protected:
+		MOCKABLE_METHOD GLFWwindow* GetGlfwWindow() const;
 
 	protected:
 		static void CloseCallback(GLFWwindow* windowPtr);

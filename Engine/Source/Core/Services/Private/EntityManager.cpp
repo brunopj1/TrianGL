@@ -1,4 +1,4 @@
-﻿#include <Core/Services/Internal/EntityManager.h>
+﻿#include <Core/Services/Private/EntityManager.h>
 #include <Game/Component.h>
 #include <Game/Entity.h>
 #include <Game/GameMode.h>
