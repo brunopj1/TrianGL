@@ -2,8 +2,8 @@ project "Snake"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/")
-    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/")
+    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/")
+    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/Snake/")
     
     includedirs {
         "../../Engine/Source/",
@@ -20,10 +20,12 @@ project "Snake"
     
     links { "Engine" }
     
-    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/"
+    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/"
     
     postbuildcommands {
-        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
+        "{RMDIR} ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/Assets/",
+        "{COPYDIR} ../../Engine/Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/Assets/",
+        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/Assets/"
     }
 
     filter "configurations:Debug"

@@ -2,8 +2,8 @@ project "AudioPlayground"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/")
-    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/")
+    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/AudioPlayground/")
+    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/AudioPlayground/")
     
     includedirs {
         "../../Engine/Source/",
@@ -19,11 +19,13 @@ project "AudioPlayground"
     }
     
     links { "Engine" }
-    
-    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/"
+
+    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/AudioPlayground/"
     
     postbuildcommands {
-        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Assets/"
+        "{RMDIR} ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Snake/AudioPlayground/",
+        "{COPYDIR} ../../Engine/Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/AudioPlayground/Assets/",
+        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/AudioPlayground/Assets/"
     }
 
     filter "configurations:Debug"

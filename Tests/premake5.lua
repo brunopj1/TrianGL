@@ -2,8 +2,8 @@ project "Tests"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir("../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
-    objdir("../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}")
+    targetdir("../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/Tests/")
+    objdir("../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/Tests/")
     
     includedirs {
         "../Engine/Source/",
@@ -24,7 +24,13 @@ project "Tests"
         "Google-Test"
     }
 
-    debugdir "../Bin/%{cfg.buildcfg}/%{cfg.platform}/"
+    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/"
+    
+    postbuildcommands {
+        "{RMDIR} ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/Assets/",
+        "{COPYDIR} ../../Engine/Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/Assets/",
+        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/Assets/"
+    }
 
     filter "configurations:not Testing"
         kind "None"
