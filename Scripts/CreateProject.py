@@ -15,8 +15,8 @@ project "{projectName}"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir("../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/")
-    objdir("../../Obj/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/")
+    targetdir("../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/")
+    objdir("../../Obj/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/")
     
     includedirs {{
         "../../Engine/Source/",
@@ -33,12 +33,12 @@ project "{projectName}"
     
     links {{ "Engine" }}
     
-    debugdir "../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/"
+    debugdir "../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/"
     
     postbuildcommands {{
-        "{{RMDIR}} ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/Assets/",
-        "{{COPYDIR}} ../../Engine/Assets/ ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/Assets/",
-        "{{COPYDIR}} Assets/ ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/{projectName}/Assets/"
+        "{{RMDIR}} ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/Assets/",
+        "{{COPYDIR}} ../../Engine/Assets/ ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/Assets/",
+        "{{COPYDIR}} Assets/ ../../Bin/%{{cfg.buildcfg}}/%{{cfg.platform}}/%{{projectName}}/Assets/"
     }}
 
     filter "configurations:Debug"

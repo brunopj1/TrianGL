@@ -2,8 +2,8 @@ project "ParticlePlayground"
     kind "ConsoleApp"
     language "C++"
     
-    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/")
-    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/")
+    targetdir("../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/")
+    objdir("../../Obj/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/")
     
     includedirs {
         "../../Engine/Source/",
@@ -20,12 +20,12 @@ project "ParticlePlayground"
     
     links { "Engine" }
 
-    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/"
+    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/"
     
     postbuildcommands {
-        "{RMDIR} ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/Assets/",
-        "{COPYDIR} ../../Engine/Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/Assets/",
-        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/ParticlePlayground/Assets/"
+        "{RMDIR} ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/Assets/",
+        "{COPYDIR} ../../Engine/Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/Assets/",
+        "{COPYDIR} Assets/ ../../Bin/%{cfg.buildcfg}/%{cfg.platform}/%{prj.name}/Assets/"
     }
 
     filter "configurations:Debug"
