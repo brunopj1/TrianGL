@@ -1,4 +1,5 @@
-﻿#ifdef TESTING
+﻿#include <fstream>
+#ifdef TESTING
 
 #include "AudioBackend.h"
 
@@ -17,6 +18,13 @@ void AudioBackend::SetupSoloudSettings(SoLoud::Soloud* soloudEngine) {}
 
 SoLoud::AudioSource* AudioBackend::LoadAudio(const std::string& filePath, bool stream)
 {
+	const std::ifstream file(filePath);
+
+	if (!file.good())
+	{
+		return nullptr;
+	}
+
 	return (SoLoud::AudioSource*)0x1; // NOLINT(CppCStyleCast)
 }
 
@@ -39,11 +47,6 @@ bool AudioBackend::IsValidAudioHandle(SoLoud::Soloud* soloudEngine, i32 handle)
 }
 
 void AudioBackend::SetAudioVolume(SoLoud::AudioSource* audioSource, f32 volume) {}
-
-f32 AudioBackend::GetAudioVolume(const SoLoud::AudioSource* audioSource)
-{
-	return 1.0f;
-}
 
 void AudioBackend::SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 volume) {}
 

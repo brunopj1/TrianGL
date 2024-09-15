@@ -55,7 +55,7 @@ jobs:
 
       # Run the tests
       - name: Run tests
-        run: OpenCppCoverage --cover_children --sources=Engine\Source Bin\Testing\Win64\Tests\Tests.exe
+        run: OpenCppCoverage --cover_children --sources=Engine\Source --working_dir=Bin\Testing\Win64\Tests Bin\Testing\Win64\Tests\Tests.exe
 
       # Check the coverage
       - name: Check the coverage

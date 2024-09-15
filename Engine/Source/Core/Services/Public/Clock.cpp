@@ -29,17 +29,17 @@ bool Clock::IsNewSecond() const
 
 void Clock::Start()
 {
-	m_StartTime = m_FrameTime = std::chrono::steady_clock::now();
+	m_StartTime = m_LastFrameTime = std::chrono::steady_clock::now();
 }
 
 void Clock::Update()
 {
-	const auto currentTime = std::chrono::steady_clock::now();
+	const auto currentTime = CalculateCurrentTime();
 
-	m_DeltaTime = std::chrono::duration<f32>(currentTime - m_FrameTime).count();
+	m_DeltaTime = std::chrono::duration<f32>(currentTime - m_LastFrameTime).count();
 	m_TotalTime = std::chrono::duration<f32>(currentTime - m_StartTime).count();
 
-	m_FrameTime = currentTime;
+	m_LastFrameTime = currentTime;
 
 	m_TotalFrameCount++;
 	m_SecondFrameCount++;
@@ -56,4 +56,9 @@ void Clock::Update()
 	{
 		m_IsNewSecond = false;
 	}
+}
+
+std::chrono::steady_clock::time_point Clock::CalculateCurrentTime() const
+{
+	return std::chrono::steady_clock::now();
 }

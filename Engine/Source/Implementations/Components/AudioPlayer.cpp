@@ -143,12 +143,12 @@ void AudioPlayer::Stop()
 	m_Audio->RemovePlayer(this);
 }
 
-f32 AudioPlayer::GetVolume() const
+f32 AudioPlayer::GetPlayerVolume() const
 {
 	return m_Volume;
 }
 
-void AudioPlayer::SetVolume(const f32 volume)
+void AudioPlayer::SetPlayerVolume(const f32 volume)
 {
 	m_Volume = volume < 0.0f ? 0.0f : volume;
 
@@ -160,7 +160,7 @@ void AudioPlayer::SetVolume(const f32 volume)
 	UpdateCurrentAudioVolume();
 }
 
-f32 AudioPlayer::GetFinalVolume() const
+f32 AudioPlayer::GetEffectiveVolume() const
 {
 	return m_Volume * m_Audio->GetVolume();
 }
@@ -193,7 +193,7 @@ void AudioPlayer::UpdateCurrentAudioVolume() const
 	}
 
 	AudioBackend& audioBackend = AudioBackend::Get();
-	audioBackend.SetAudioVolume(soloudEngine, m_Handle, GetFinalVolume());
+	audioBackend.SetAudioVolume(soloudEngine, m_Handle, GetEffectiveVolume());
 }
 
 void AudioPlayer::UpdateCurrentAudioLoop() const

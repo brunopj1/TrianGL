@@ -1,8 +1,8 @@
 ﻿#include "Core/DataTypes.h"
 #include "Core/Services/Backends/RenderBackend.h"
+#include "Exceptions/OpenGL/ShaderLinkingException.h"
 #include <Assets/Internal/Shader.h>
 #include <Exceptions/Common/FileNotFoundException.h>
-#include <Exceptions/Common/FileTooBigException.h>
 #include <Exceptions/OpenGL/ShaderCompilationException.h>
 #include <fstream>
 #include <sstream>
@@ -17,14 +17,20 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
 	// These methods are called by the TGL::AssetManager
 }
 
+i32 Shader::GetUniformLocation(const std::string& name) const
+{
+	const auto it = m_UniformLocations.find(name);
+	return it != m_UniformLocations.end() ? it->second : -1;
+}
+
 void Shader::Init()
 {
 	RenderBackend& renderBackend = RenderBackend::Get();
 
-	m_VertexShaderId = CompileShader(m_VertexShader, ShaderType::Vertex, renderBackend);
-	m_FragmentShaderId = CompileShader(m_FragmentShader, ShaderType::Fragment, renderBackend);
+	const u32 vertexShaderId = CompileShader(m_VertexShader, ShaderType::Vertex, renderBackend);
+	const u32 fragmentShaderId = CompileShader(m_FragmentShader, ShaderType::Fragment, renderBackend);
 
-	LinkProgram(renderBackend);
+	LinkProgram(renderBackend, vertexShaderId, fragmentShaderId);
 
 	LoadUniformLocations(renderBackend);
 }
@@ -32,30 +38,30 @@ void Shader::Init()
 void Shader::Free()
 {
 	RenderBackend& renderBackend = RenderBackend::Get();
-
-	renderBackend.DeleteShader(m_VertexShaderId);
-	m_VertexShaderId = 0;
-
-	renderBackend.DeleteShader(m_FragmentShaderId);
-	m_FragmentShaderId = 0;
-
 	renderBackend.DeleteProgram(m_ProgramId);
 	m_ProgramId = 0;
 }
 
-void Shader::LinkProgram(RenderBackend& renderBackend)
+void Shader::LinkProgram(RenderBackend& renderBackend, const u32 vertexShaderId, const u32 fragmentShaderId)
 {
 	m_ProgramId = renderBackend.CreateProgram();
 
-	renderBackend.AttachShader(m_ProgramId, m_VertexShaderId);
-	renderBackend.AttachShader(m_ProgramId, m_FragmentShaderId);
+	renderBackend.AttachShader(m_ProgramId, vertexShaderId);
+	renderBackend.AttachShader(m_ProgramId, fragmentShaderId);
 
 	std::string errorLog;
 	const bool success = renderBackend.LinkProgram(m_ProgramId, errorLog);
 
+	renderBackend.DetachShader(m_ProgramId, vertexShaderId);
+	renderBackend.DeleteShader(vertexShaderId);
+
+	renderBackend.DetachShader(m_ProgramId, fragmentShaderId);
+	renderBackend.DeleteShader(fragmentShaderId);
+
 	if (!success)
 	{
-		throw ShaderCompilationException(errorLog);
+		renderBackend.DeleteProgram(m_ProgramId);
+		throw ShaderLinkingException(errorLog);
 	}
 }
 
@@ -70,6 +76,7 @@ i32 Shader::CompileShader(const std::string& shaderPath, const ShaderType type, 
 
 	if (!success)
 	{
+		renderBackend.DeleteShader(shaderId);
 		throw ShaderCompilationException(type == ShaderType::Vertex, errorLog);
 	}
 
@@ -83,12 +90,6 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
 	if (!file || !file.is_open())
 	{
 		throw FileNotFoundException(filePath);
-	}
-
-	// 64KiB sanity check for shaders:
-	if (const auto size = file.gcount(); size > 0x10000)
-	{
-		throw FileTooBigException(filePath, "64KiB");
 	}
 
 	std::stringstream stringStream;
@@ -105,12 +106,6 @@ void Shader::LoadUniformLocations(RenderBackend& renderBackend)
 	{
 		m_UniformLocations[uniform.Name] = uniform.Location;
 	}
-}
-
-i32 Shader::GetUniformLocation(const std::string& name) const
-{
-	const auto it = m_UniformLocations.find(name);
-	return it != m_UniformLocations.end() ? it->second : -1;
 }
 
 void Shader::Use() const

@@ -95,11 +95,6 @@ void AudioBackend::SetAudioVolume(SoLoud::AudioSource* audioSource, const f32 vo
 	audioSource->setVolume(volume);
 }
 
-f32 AudioBackend::GetAudioVolume(const SoLoud::AudioSource* audioSource)
-{
-	return audioSource->mVolume;
-}
-
 void AudioBackend::SetAudioVolume(SoLoud::Soloud* soloudEngine, const i32 handle, const f32 volume)
 {
 	soloudEngine->setVolume(handle, volume);

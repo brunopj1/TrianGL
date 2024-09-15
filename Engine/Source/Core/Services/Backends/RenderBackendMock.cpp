@@ -106,6 +106,8 @@ u32 RenderBackend::CreateShader(ShaderType shaderType)
 
 void RenderBackend::DeleteProgram(u32 programId) {}
 
+void RenderBackend::DetachShader(u32 programId, u32 shaderId) {}
+
 void RenderBackend::DeleteShader(u32 shaderId) {}
 
 bool RenderBackend::CompileShader(u32 shaderId, const std::string& shaderSource, std::string& errorLog)
@@ -132,33 +134,33 @@ void RenderBackend::UseProgram(u32 programId) {}
 
 void RenderBackend::SetUniform1i(int location, int value) {}
 
-void RenderBackend::SetUniform2iv(int location, const glm::ivec2& value) {}
+void RenderBackend::SetUniform2i(int location, const glm::ivec2& value) {}
 
-void RenderBackend::SetUniform3iv(int location, const glm::ivec3& value) {}
+void RenderBackend::SetUniform3i(int location, const glm::ivec3& value) {}
 
-void RenderBackend::SetUniform4iv(int location, const glm::ivec4& value) {}
+void RenderBackend::SetUniform4i(int location, const glm::ivec4& value) {}
 
 void RenderBackend::SetUniform1ui(int location, unsigned int value) {}
 
-void RenderBackend::SetUniform2uiv(int location, const glm::uvec2& value) {}
+void RenderBackend::SetUniform2ui(int location, const glm::uvec2& value) {}
 
-void RenderBackend::SetUniform3uiv(int location, const glm::uvec3& value) {}
+void RenderBackend::SetUniform3ui(int location, const glm::uvec3& value) {}
 
-void RenderBackend::SetUniform4uiv(int location, const glm::uvec4& value) {}
+void RenderBackend::SetUniform4ui(int location, const glm::uvec4& value) {}
 
 void RenderBackend::SetUniform1f(int location, float value) {}
 
-void RenderBackend::SetUniform2fv(int location, const glm::vec2& value) {}
+void RenderBackend::SetUniform2f(int location, const glm::vec2& value) {}
 
-void RenderBackend::SetUniform3fv(int location, const glm::vec3& value) {}
+void RenderBackend::SetUniform3f(int location, const glm::vec3& value) {}
 
-void RenderBackend::SetUniform4fv(int location, const glm::vec4& value) {}
+void RenderBackend::SetUniform4f(int location, const glm::vec4& value) {}
 
-void RenderBackend::SetUniformMatrix2fv(int location, const glm::mat2& value) {}
+void RenderBackend::SetUniformMatrix2f(int location, const glm::mat2& value) {}
 
-void RenderBackend::SetUniformMatrix3fv(int location, const glm::mat3& value) {}
+void RenderBackend::SetUniformMatrix3f(int location, const glm::mat3& value) {}
 
-void RenderBackend::SetUniformMatrix4fv(int location, const glm::mat4& value) {}
+void RenderBackend::SetUniformMatrix4f(int location, const glm::mat4& value) {}
 
 // NOLINTEND(CppInconsistentNaming)
 // NOLINTEND(CppParameterNeverUsed)

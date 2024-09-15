@@ -135,31 +135,17 @@ SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> text
 	return new TextureSlice(std::move(texture), index);
 }
 
-void AssetManager::UnloadTexture(Texture* texture) // NOLINT(CppMemberFunctionMayBeStatic)
-{
-	texture->Free();
-}
-
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream) // NOLINT(CppMemberFunctionMayBeStatic)
 {
 	PREPARE_SPAWNER_ASSERT(Audio);
 
 	Audio* instance = new Audio(filePath, stream);
 
-	instance->Init();
-
 	return instance;
-}
-
-void AssetManager::UnloadAudio(Audio* audio) // NOLINT(CppMemberFunctionMayBeStatic)
-{
-	audio->Free();
 }
 
 void AssetManager::UnloadMaterialUniforms(const Material* material) // NOLINT(CppMemberFunctionMayBeStatic)
 {
-	// No need to assert here since this doesn't interact with OpenGL
-
 	for (const auto uniform : material->m_Uniforms)
 	{
 		PREPARE_SPAWNER_ASSERT(MaterialUniform);
@@ -170,15 +156,22 @@ void AssetManager::UnloadMaterialUniforms(const Material* material) // NOLINT(Cp
 
 Shader* AssetManager::LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
-	// No need to assert here since this is only used internally
-
 	const auto newShader = new Shader(vertexShaderPath, fragmentShaderPath);
 	const auto it = m_Shaders.find(newShader);
 
 	if (it == m_Shaders.end())
 	{
+		try
+		{
+			newShader->Init();
+		}
+		catch (const std::exception&)
+		{
+			delete newShader;
+			throw;
+		}
+
 		m_Shaders[newShader] = 1;
-		newShader->Init();
 		return newShader;
 	}
 
@@ -189,8 +182,6 @@ Shader* AssetManager::LoadShader(const std::string& vertexShaderPath, const std:
 
 void AssetManager::UnloadShader(Shader* shader)
 {
-	// No need to assert here since this is only used internally
-
 	const auto it = m_Shaders.find(shader);
 
 	if (it->second == 1)

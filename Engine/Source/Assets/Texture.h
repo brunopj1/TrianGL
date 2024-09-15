@@ -88,7 +88,7 @@ namespace TGL
 		const glm::mat4& GetMatrix() const override;
 	};
 
-	// Main class-
+	// Main class
 
 	class Texture final : public Sprite, public SharedFromThis<Texture>
 	{

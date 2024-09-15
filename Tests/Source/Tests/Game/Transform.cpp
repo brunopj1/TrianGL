@@ -84,6 +84,10 @@ BEGIN_GAME_TEST(Transform, Scale)
 		EXPECT_NEAR(transform.GetScale().x, 2.0f, 0.0001f);
 		EXPECT_NEAR(transform.GetScale().y, 1.0f, 0.0001f);
 
+		transform.ScaleBy(0.5f);
+		EXPECT_NEAR(transform.GetScale().x, 1.0f, 0.0001f);
+		EXPECT_NEAR(transform.GetScale().y, 0.5f, 0.0001f);
+
 		EndTest();
 	}
 }

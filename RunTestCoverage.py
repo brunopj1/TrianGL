@@ -4,7 +4,7 @@ import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Execute the coverage report script
-os.system("OpenCppCoverage --cover_children --sources=Engine\\Source Bin\\Testing\\Win64\\Tests\\Tests.exe")
+os.system("OpenCppCoverage --cover_children --sources=Engine\\Source --working_dir=Bin\\Testing\\Win64\\Tests Bin\\Testing\\Win64\\Tests\\Tests.exe")
 
 # Find the coverage report folder
 directories = [d for d in os.listdir() if os.path.isdir(d) and d.startswith("CoverageReport")]

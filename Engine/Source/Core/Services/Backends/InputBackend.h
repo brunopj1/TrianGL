@@ -3,7 +3,7 @@
 #include "Core/DataTypes.h"
 #include "Core/InputCodes.h"
 #include "Core/Service.h"
-#include "Internal/Macros/MockingMacros.h"
+#include "Internal/Macros/TestMacros.h"
 #include "glm/vec2.hpp"
 #include <string>
 

@@ -19,6 +19,6 @@ namespace TGL
 		~DefaultParticleMaterial() override = default;
 
 	protected:
-		void OnRenderSetup() const override;
+		void OnRenderSetup() override;
 	};
 }

@@ -2,7 +2,7 @@
 
 #include "Implementations/Assets/DefaultParticleMaterial.h"
 #include <Game/Component.h>
-#include <Game/Rendering/Renderable.h>
+#include <Game/Internal/Renderable.h>
 #include <Memory/SharedPtr.h>
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
@@ -65,6 +65,10 @@ namespace TGL
 	public:
 		ParticleSystem(u32 maxParticles = 1000, SharedPtr<Material> material = nullptr);
 		~ParticleSystem() override;
+
+	public:
+		u32 GetMaxParticles() const;
+		u32 GetParticleCount() const;
 
 	public:
 		SharedPtr<Material> GetMaterial() const;

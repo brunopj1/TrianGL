@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Core/DataTypes.h"
 #include <format>
 #include <stdexcept>
 

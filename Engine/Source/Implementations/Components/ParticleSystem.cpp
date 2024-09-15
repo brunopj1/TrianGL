@@ -15,6 +15,25 @@ ParticleSystem::~ParticleSystem()
 {
 	Terminate();
 }
+u32 ParticleSystem::GetMaxParticles() const
+{
+	return m_MaxParticles;
+}
+
+u32 ParticleSystem::GetParticleCount() const
+{
+	u32 count = 0;
+
+	for (u32 i = 0; i <= m_LastUsedParticleIndex; i++)
+	{
+		if (m_ParticlesCpu[i].RemainingDuration > 0.0f)
+		{
+			count++;
+		}
+	}
+
+	return count;
+}
 
 SharedPtr<Material> ParticleSystem::GetMaterial() const
 {

@@ -45,7 +45,7 @@ f32 Camera::GetHorizontalSize() const
 	return m_HorizontalSize;
 }
 
-void Camera::SetHorizontalSize(const f32 size, const bool lock)
+void Camera::SetHorizontalSize(const f32 size)
 {
 	if (size <= 0.0f)
 	{
@@ -53,10 +53,6 @@ void Camera::SetHorizontalSize(const f32 size, const bool lock)
 	}
 
 	m_HorizontalSize = size;
-	if (lock)
-	{
-		m_LockHorizontalSize = true;
-	}
 }
 
 f32 Camera::GetVerticalSize() const
@@ -64,7 +60,7 @@ f32 Camera::GetVerticalSize() const
 	return m_HorizontalSize / m_AspectRatio;
 }
 
-void Camera::SetVerticalSize(const f32 size, const bool lock)
+void Camera::SetVerticalSize(const f32 size)
 {
 	if (size <= 0.0f)
 	{
@@ -72,20 +68,6 @@ void Camera::SetVerticalSize(const f32 size, const bool lock)
 	}
 
 	m_HorizontalSize = size * m_AspectRatio;
-	if (lock)
-	{
-		m_LockHorizontalSize = false;
-	}
-}
-
-void Camera::LockSize(const bool horizontally)
-{
-	m_LockHorizontalSize = horizontally;
-}
-
-bool Camera::IsSizeLockedHorizontally() const
-{
-	return m_LockHorizontalSize;
 }
 
 f32 Camera::GetAspectRatio() const

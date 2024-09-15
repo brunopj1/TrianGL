@@ -39,19 +39,19 @@ namespace TGL
 		DELETE_COPY_AND_MOVE_CONSTRUCTORS(Material);
 
 	protected:
-		virtual void OnRenderSetup() const;
+		virtual void OnRenderSetup();
 
 	public:
 		template <typename T, typename... Args>
 			requires SpawnableMaterial<T, Args...>
 		static SharedPtr<T> CreateInstanceOf(Args&&... args);
 
-	protected:
+	public:
 		template <SpawnableMaterialUniform T>
 		T* AddUniform(const std::string& name, bool createIfInvalid = true);
 
 	private:
-		void Use(const glm::mat4& modelMatrix) const;
+		void Use(const glm::mat4& modelMatrix);
 
 		void CreateEngineUniforms();
 		void UpdateEngineUniforms(const glm::mat4& modelMatrix) const;

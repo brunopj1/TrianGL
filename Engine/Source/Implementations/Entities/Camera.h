@@ -16,7 +16,6 @@ namespace TGL
 
 	private:
 		f32 m_HorizontalSize = 10.0f;
-		bool m_LockHorizontalSize = true;
 		f32 m_AspectRatio;
 
 		glm::ivec2 m_DepthRange = {-1000, 1000};
@@ -41,13 +40,10 @@ namespace TGL
 		glm::vec2 GetSize() const;
 
 		f32 GetHorizontalSize() const;
-		void SetHorizontalSize(f32 size, bool lock = false);
+		void SetHorizontalSize(f32 size);
 
 		f32 GetVerticalSize() const;
-		void SetVerticalSize(f32 size, bool lock = false);
-
-		void LockSize(bool horizontally);
-		bool IsSizeLockedHorizontally() const;
+		void SetVerticalSize(f32 size);
 
 		f32 GetAspectRatio() const;
 

@@ -20,6 +20,8 @@
 
 using namespace TGL;
 
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
+
 void RenderBackend::SetErrorCallback(void (*func)(i32, const char*))
 {
 	glfwSetErrorCallback(func);
@@ -337,6 +339,11 @@ void RenderBackend::DeleteProgram(const u32 programId)
 	glDeleteProgram(programId);
 }
 
+void RenderBackend::DetachShader(u32 programId, u32 shaderId)
+{
+	glDetachShader(programId, shaderId);
+}
+
 void RenderBackend::DeleteShader(const u32 shaderId)
 {
 	glDeleteShader(shaderId);
@@ -409,12 +416,17 @@ std::vector<ShaderUniformInfo> RenderBackend::GetShaderUniforms(const u32 progra
 	char name[bufSize];
 	i32 nameLength;
 
+	u32 uniformDataType;
+	i32 uniformSize;
+
 	for (i32 i = 0; i < uniformCount; i++)
 	{
 		ShaderUniformInfo& uniform = uniforms[i];
-		glGetActiveUniform(programId, i, bufSize, &nameLength, &uniform.Size, &uniform.DataType, name);
+		glGetActiveUniform(programId, i, bufSize, &nameLength, &uniformSize, &uniformDataType, name);
 		uniform.Name = name;
 		uniform.Location = glGetUniformLocation(programId, name);
+		uniform.DataType = static_cast<UniformDataType>(uniformDataType);
+		uniform.Size = uniformSize;
 	}
 
 	return uniforms;
@@ -432,17 +444,17 @@ void RenderBackend::SetUniform1i(const i32 location, const i32 value)
 	glUniform1i(location, value);
 }
 
-void RenderBackend::SetUniform2iv(const i32 location, const glm::ivec2& value)
+void RenderBackend::SetUniform2i(const i32 location, const glm::ivec2& value)
 {
 	glUniform2iv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform3iv(const i32 location, const glm::ivec3& value)
+void RenderBackend::SetUniform3i(const i32 location, const glm::ivec3& value)
 {
 	glUniform3iv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform4iv(const i32 location, const glm::ivec4& value)
+void RenderBackend::SetUniform4i(const i32 location, const glm::ivec4& value)
 {
 	glUniform4iv(location, 1, &value[0]);
 }
@@ -452,17 +464,17 @@ void RenderBackend::SetUniform1ui(const i32 location, const u32 value)
 	glUniform1ui(location, value);
 }
 
-void RenderBackend::SetUniform2uiv(const i32 location, const glm::uvec2& value)
+void RenderBackend::SetUniform2ui(const i32 location, const glm::uvec2& value)
 {
 	glUniform2uiv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform3uiv(const i32 location, const glm::uvec3& value)
+void RenderBackend::SetUniform3ui(const i32 location, const glm::uvec3& value)
 {
 	glUniform3uiv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform4uiv(const i32 location, const glm::uvec4& value)
+void RenderBackend::SetUniform4ui(const i32 location, const glm::uvec4& value)
 {
 	glUniform4uiv(location, 1, &value[0]);
 }
@@ -472,36 +484,37 @@ void RenderBackend::SetUniform1f(const i32 location, const f32 value)
 	glUniform1f(location, value);
 }
 
-void RenderBackend::SetUniform2fv(const i32 location, const glm::vec2& value)
+void RenderBackend::SetUniform2f(const i32 location, const glm::vec2& value)
 {
 	glUniform2fv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform3fv(const i32 location, const glm::vec3& value)
+void RenderBackend::SetUniform3f(const i32 location, const glm::vec3& value)
 {
 	glUniform3fv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniform4fv(const i32 location, const glm::vec4& value)
+void RenderBackend::SetUniform4f(const i32 location, const glm::vec4& value)
 {
 	glUniform4fv(location, 1, &value[0]);
 }
 
-void RenderBackend::SetUniformMatrix2fv(const i32 location, const glm::mat2& value)
+void RenderBackend::SetUniformMatrix2f(const i32 location, const glm::mat2& value)
 {
 	glUniformMatrix2fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-void RenderBackend::SetUniformMatrix3fv(const i32 location, const glm::mat3& value)
+void RenderBackend::SetUniformMatrix3f(const i32 location, const glm::mat3& value)
 {
 	glUniformMatrix3fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
-void RenderBackend::SetUniformMatrix4fv(const i32 location, const glm::mat4& value)
+void RenderBackend::SetUniformMatrix4f(const i32 location, const glm::mat4& value)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
 }
 
 // NOLINTEND(CppInconsistentNaming)
+// NOLINTEND(CppMemberFunctionMayBeStatic)
 
 #endif

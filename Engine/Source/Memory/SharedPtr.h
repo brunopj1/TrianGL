@@ -162,6 +162,18 @@ namespace TGL
 			return left.m_ReferenceCounter != right.m_ReferenceCounter;
 		}
 
+		template <typename U>
+		friend bool operator==(const SharedPtr& left, const SharedPtr<U>& right)
+		{
+			return left.Get() == right.Get();
+		}
+
+		template <typename U>
+		friend bool operator!=(const SharedPtr& left, const SharedPtr<U>& right)
+		{
+			return left.Get() != right.Get();
+		}
+
 		friend bool operator==(const SharedPtr& left, std::nullptr_t)
 		{
 			return left.Get() == nullptr;

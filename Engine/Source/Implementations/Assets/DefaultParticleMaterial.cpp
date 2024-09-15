@@ -8,7 +8,7 @@ DefaultParticleMaterial::DefaultParticleMaterial()
 	BorderRadius->Value = 0.3f;
 }
 
-void DefaultParticleMaterial::OnRenderSetup() const
+void DefaultParticleMaterial::OnRenderSetup()
 {
 	IsSpriteValid->Value = Sprite->HasValue();
 }

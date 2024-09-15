@@ -128,8 +128,10 @@ BEGIN_GAME_TEST(Entity, Transform)
 	void OnUpdate(f32 deltaTime) override
 	{
 		TestEntity* entity = SpawnEntity<TestEntity>();
-
 		EXPECT_NO_THROW(entity->GetTransform());
+
+		const TestEntity* constEntity = entity;
+		EXPECT_NO_THROW(constEntity->GetTransform());
 
 		EndTest();
 	}

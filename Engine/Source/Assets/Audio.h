@@ -20,8 +20,10 @@ namespace TGL
 
 	private:
 		std::string m_FilePath;
-		bool m_Streamed;
 		SoLoud::AudioSource* m_SoloudAudio = nullptr;
+		bool m_Streamed;
+
+		f32 m_Volume = 1.0f;
 
 	private:
 		std::pmr::vector<AudioPlayer*> m_CurrentPlayers;

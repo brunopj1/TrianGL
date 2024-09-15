@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Internal/Macros/MockingMacros.h"
+#include "Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/InputCodes.h>
 #include <Core/Service.h>

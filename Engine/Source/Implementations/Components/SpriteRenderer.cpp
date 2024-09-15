@@ -46,6 +46,10 @@ void SpriteRenderer::SetPivot(const glm::vec2& pivot)
 {
 	m_Pivot = pivot;
 }
+void SpriteRenderer::ResetPivot()
+{
+	m_Pivot = glm::vec2(0.5f);
+}
 
 void SpriteRenderer::Render() const
 {

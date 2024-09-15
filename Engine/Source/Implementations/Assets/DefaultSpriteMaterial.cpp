@@ -10,7 +10,7 @@ DefaultSpriteMaterial::DefaultSpriteMaterial()
 	IsSpriteValid->Value = 0;
 }
 
-void DefaultSpriteMaterial::OnRenderSetup() const
+void DefaultSpriteMaterial::OnRenderSetup()
 {
 	IsSpriteValid->Value = Sprite->HasValue();
 }

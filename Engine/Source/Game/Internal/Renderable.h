@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Core/DataTypes.h"
 
+// TODO add the transform here?
+
 namespace TGL
 {
 	class Renderable

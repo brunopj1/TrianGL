@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <Game/Component.h>
-#include <Game/Rendering/Renderable.h>
+#include <Game/Internal/Renderable.h>
 #include <Implementations/Assets/DefaultSpriteMaterial.h>
 #include <Memory/SharedPtr.h>
 
@@ -34,7 +34,8 @@ namespace TGL
 		SharedPtr<DefaultSpriteMaterial> UseDefaultMaterial();
 
 		glm::vec2 GetPivot() const;
-		void SetPivot(const glm::vec2& pivot);
+		void SetPivot(const glm::vec2& pivot); // TODO additional SetPivot with an enum
+		void ResetPivot();
 
 	private:
 		void Render() const override;

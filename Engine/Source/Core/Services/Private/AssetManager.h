@@ -15,12 +15,14 @@ namespace SoLoud
 	class Soloud;
 }
 
+// TODO create a class for the quad again
+
 namespace TGL
 {
 	// Forward declarations
 	struct TextureParameters;
 
-	class AssetManager final : public Service<AssetManager>
+	class AssetManager : public Service<AssetManager>
 	{
 	private:
 		friend class Application;
@@ -49,7 +51,7 @@ namespace TGL
 		DECLARE_SPAWNER_ASSERT_VAR(Material);
 		DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
 
-	private:
+	protected:
 		u32 m_QuadVao = 0;
 		u32 m_QuadVbo = 0;
 		u32 m_QuadEbo = 0;
@@ -58,33 +60,31 @@ namespace TGL
 
 		SoLoud::Soloud* m_SoloudEngine = nullptr;
 
-	private:
+	protected:
 		AssetManager() = default;
-		~AssetManager() = default;
+		MOCKABLE_DESTRUCTOR ~AssetManager() = default;
 
-	private:
-		void Init();
-		void Terminate();
+	protected:
+		MOCKABLE_METHOD void Init();
+		MOCKABLE_METHOD void Terminate();
 
-	private:
-		void InitQuad();
-		void SetupQuadVertexAttributes() const;
-		void TerminateQuad();
+	protected:
+		MOCKABLE_METHOD void InitQuad();
+		MOCKABLE_METHOD void SetupQuadVertexAttributes() const;
+		MOCKABLE_METHOD void TerminateQuad();
 
-		u32 GetQuadVao() const;
-		u32 GetQuadVbo() const;
-		u32 GetQuadEbo() const;
+		MOCKABLE_METHOD u32 GetQuadVao() const;
+		MOCKABLE_METHOD u32 GetQuadVbo() const;
+		MOCKABLE_METHOD u32 GetQuadEbo() const;
 
-	private:
-		SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
-		SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
-		void UnloadTexture(Texture* texture);
+	protected:
+		MOCKABLE_METHOD SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
+		MOCKABLE_METHOD SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
 
-	private:
-		SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
-		void UnloadAudio(Audio* audio);
+	protected:
+		MOCKABLE_METHOD SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
 
-	private:
+	protected:
 		template <typename T, typename... Args>
 			requires SpawnableMaterial<T, Args...>
 		SharedPtr<T> LoadMaterial(Args&&... args);
@@ -92,11 +92,11 @@ namespace TGL
 		template <SpawnableMaterialUniform T>
 		T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector);
 
-		void UnloadMaterialUniforms(const Material* material);
+		MOCKABLE_METHOD void UnloadMaterialUniforms(const Material* material);
 
-	private:
-		Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-		void UnloadShader(Shader* shader);
+	protected:
+		MOCKABLE_METHOD Shader* LoadShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+		MOCKABLE_METHOD void UnloadShader(Shader* shader);
 	};
 
 	// Template definitions
@@ -115,7 +115,8 @@ namespace TGL
 	template <SpawnableMaterialUniform T>
 	T* AssetManager::CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
 	{
-		// No need to assert here since this doesn't interact with OpenGL
+		// TODO add option to throw an exception if the uniform is invalid
+		// TODO ensure that the uniform data type and size are correct (and add unit tests)
 
 		PREPARE_SPAWNER_ASSERT(MaterialUniform);
 

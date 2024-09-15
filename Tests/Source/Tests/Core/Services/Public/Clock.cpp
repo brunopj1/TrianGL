@@ -5,7 +5,28 @@
 
 using namespace TGL;
 
-BEGIN_GAME_TEST(Clock, TimeProgression)
+// Mock services
+
+namespace
+{
+	class MockClock final : public Clock
+	{
+	protected:
+		std::chrono::steady_clock::time_point CalculateCurrentTime() const override
+		{
+			return m_LastFrameTime + std::chrono::milliseconds(100);
+		}
+	};
+
+	void MockServiceBuilder(ServiceCollection& collection)
+	{
+		collection.CreateService<MockClock>();
+	}
+}
+
+// Tests
+
+BEGIN_GAME_TEST_MOCKED(Clock, TimeProgression, MockServiceBuilder)
 {
 	void OnUpdate(const f32 deltaTime) override
 	{
@@ -47,7 +68,7 @@ BEGIN_GAME_TEST(Clock, TimeProgression)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST(Clock, FrameRate)
+BEGIN_GAME_TEST_MOCKED(Clock, FrameRate, MockServiceBuilder)
 {
 	void OnUpdate(f32 deltaTime) override
 	{

@@ -70,10 +70,10 @@ void AudioPlayerTester::OnUpdate(f32 deltaTime)
 
 		ImGui::Separator();
 
-		f32 volume = m_AudioPlayer->GetVolume();
+		f32 volume = m_AudioPlayer->GetPlayerVolume();
 		if (ImGui::SliderFloat("Volume", &volume, 0.0f, 5.0f))
 		{
-			m_AudioPlayer->SetVolume(volume);
+			m_AudioPlayer->SetPlayerVolume(volume);
 		}
 
 		bool loop = m_AudioPlayer->GetLoop();

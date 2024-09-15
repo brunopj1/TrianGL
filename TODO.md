@@ -21,6 +21,12 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
   - How to deal with cyclic dependencies?
   - Forward declare the methods of the classes?
 
+## Testing
+
+- Use google mock 
+- Check if the tests can use a coroutine for the GameMode::OnUpdate method
+  - Add the WaitSeconds() and WaitFrames() methods, that should mock the passing of time
+
 ## General
 
 - Move the spawning and lookup methods to global functions (and update the wiki)

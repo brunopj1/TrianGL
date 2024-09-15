@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
@@ -11,7 +12,7 @@
 
 namespace TGL
 {
-	class EntityManager final : public Service<EntityManager>
+	class EntityManager : public Service<EntityManager>
 	{
 	private:
 		friend class Application;
@@ -33,10 +34,10 @@ namespace TGL
 		DECLARE_SPAWNER_ASSERT_VAR(Entity);
 		DECLARE_SPAWNER_ASSERT_VAR(Component);
 
-	private:
+	protected:
 		u64 m_NextId;
 
-	private:
+	protected:
 		GameMode* m_GameMode = nullptr;
 
 		std::unordered_map<u64, Entity*> m_Entities;
@@ -47,62 +48,62 @@ namespace TGL
 
 		std::vector<Renderable*> m_RenderQueue;
 
-	private:
+	protected:
 		EntityManager() = default;
-		~EntityManager() = default;
+		MOCKABLE_DESTRUCTOR ~EntityManager() = default;
 
-	private:
-		void Init();
-		void Terminate();
+	protected:
+		MOCKABLE_METHOD void Init();
+		MOCKABLE_METHOD void Terminate();
 
-	private:
-		void Update(f32 deltaTime);
-		void Render() const;
+	protected:
+		MOCKABLE_METHOD void Update(f32 deltaTime);
+		MOCKABLE_METHOD void Render() const;
 
-	private:
-		GameMode* GetGameMode() const;
-		Entity* GetEntity(u64 id) const;
-		Component* GetComponent(u64 id) const;
+	protected:
+		MOCKABLE_METHOD GameMode* GetGameMode() const;
+		MOCKABLE_METHOD Entity* GetEntity(u64 id) const;
+		MOCKABLE_METHOD Component* GetComponent(u64 id) const;
 
-		u32 GetEntityCount() const;
-		u32 GetComponentCount() const;
+		MOCKABLE_METHOD u32 GetEntityCount() const;
+		MOCKABLE_METHOD u32 GetComponentCount() const;
 
-	private:
+	protected:
 		template <typename T>
 		void StoreObjectCallbacks(T* object);
 		void RemoveObjectCallbacks(GameObject* object);
 
-	private:
-		static void AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue);
-		static void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
+	protected:
+		MOCKABLE_METHOD void AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue);
+		MOCKABLE_METHOD void AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue);
 
-	private:
-		void UpdateRenderableOrder(Renderable* renderable);
+	protected:
+		MOCKABLE_METHOD void UpdateRenderableOrder(Renderable* renderable);
 
-	private:
+	protected:
 		// This cannot be executed directly because of circular dependencies
-		static void SetupEntityComponentRelationship(Entity* entity, Component* component);
+		MOCKABLE_METHOD void SetupEntityComponentRelationship(Entity* entity, Component* component);
 
-	private:
+	protected:
 		template <typename T, typename... Args>
 			requires SpawnableGameMode<T, Args...>
 		T* CreateGameMode(Args&&... args);
 
-		void DestroyGameMode();
+		MOCKABLE_METHOD void DestroyGameMode();
 
 		template <typename T, typename... Args>
 			requires SpawnableEntity<T, Args...>
 		T* CreateEntity(Args&&... args);
 
-		void DestroyEntity(Entity* entity);
+		MOCKABLE_METHOD void DestroyEntity(Entity* entity);
 
 		template <typename T, typename... Args>
 			requires SpawnableComponent<T, Args...>
 		T* CreateComponent(Entity* parent, Args&&... args);
 
-		void DestroyComponent(Component* component);
+		MOCKABLE_METHOD void DestroyComponent(Component* component);
 
-	private:
+	protected:
 		template <SearchableEntity T>
 		T* FindEntityGlobally();
 

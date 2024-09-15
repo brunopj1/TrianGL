@@ -51,10 +51,10 @@ namespace TGL
 		void Stop();
 
 	public:
-		f32 GetVolume() const;
-		void SetVolume(f32 volume);
+		f32 GetPlayerVolume() const;
+		void SetPlayerVolume(f32 volume);
 
-		f32 GetFinalVolume() const;
+		f32 GetEffectiveVolume() const;
 
 		bool GetLoop() const;
 		void SetLoop(bool loop);

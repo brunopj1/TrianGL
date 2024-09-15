@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Internal/Macros/MockingMacros.h"
+#include "Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
 #include <chrono>
@@ -27,7 +27,7 @@ namespace TGL
 
 	protected:
 		std::chrono::steady_clock::time_point m_StartTime;
-		std::chrono::steady_clock::time_point m_FrameTime;
+		std::chrono::steady_clock::time_point m_LastFrameTime;
 
 	protected:
 		Clock() = default;
@@ -47,5 +47,8 @@ namespace TGL
 
 	protected:
 		MOCKABLE_METHOD void Update();
+
+	protected:
+		MOCKABLE_METHOD std::chrono::steady_clock::time_point CalculateCurrentTime() const;
 	};
 }

@@ -25,9 +25,9 @@ Material::~Material()
 	assetManager.UnloadShader(m_Shader);
 }
 
-void Material::OnRenderSetup() const {}
+void Material::OnRenderSetup() {}
 
-void Material::Use(const glm::mat4& modelMatrix) const
+void Material::Use(const glm::mat4& modelMatrix)
 {
 	m_Shader->Use();
 

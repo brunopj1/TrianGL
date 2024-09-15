@@ -25,25 +25,25 @@ namespace TGL
 
 	private:
 		i32 m_ProgramId = 0;
-		i32 m_VertexShaderId = 0;
-		i32 m_FragmentShaderId = 0;
 
 	private:
 		Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
 		~Shader() = default;
+
+	public: // Public for testing
+		i32 GetUniformLocation(const std::string& name) const;
 
 	private:
 		void Init();
 		void Free();
 
 	private:
-		void LinkProgram(RenderBackend& renderBackend);
+		void LinkProgram(RenderBackend& renderBackend, u32 vertexShaderId, u32 fragmentShaderId);
 		static i32 CompileShader(const std::string& shaderPath, ShaderType type, RenderBackend& renderBackend);
 		static std::string ReadShaderFile(const std::string& filePath);
 
 	private:
 		void LoadUniformLocations(RenderBackend& renderBackend);
-		i32 GetUniformLocation(const std::string& name) const;
 
 	private:
 		void Use() const;

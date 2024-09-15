@@ -3,7 +3,7 @@
 #include "Assets/Texture.h"
 #include "Core/DataTypes.h"
 #include "Core/Service.h"
-#include "Internal/Macros/MockingMacros.h"
+#include "Internal/Macros/TestMacros.h"
 #include "glm/mat2x2.hpp"
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"
@@ -54,14 +54,27 @@ namespace TGL
         Compute  = 0x91B9  // GL_COMPUTE_SHADER
     };
 
+	enum class UniformDataType : u16
+	{
+		I8  = 0x1400,      // GL_BYTE
+		U8  = 0x1401,      // GL_UNSIGNED_BYTE
+		I16 = 0x1402,      // GL_SHORT
+		U16 = 0x1403,      // GL_UNSIGNED_SHORT
+		I32 = 0x1404,      // GL_INT
+		U32 = 0x1405,      // GL_UNSIGNED_INT
+		F32 = 0x1406,      // GL_FLOAT
+		F64 = 0x140A,      // GL_DOUBLE
+		Sampler2D = 0x8B5E // GL_SAMPLER_2D
+	};
+
 	// clang-format on
 
 	struct ShaderUniformInfo final
 	{
 		std::string Name;
-		i32 Size;
-		u32 DataType;
 		i32 Location;
+		UniformDataType DataType;
+		i32 Size;
 	};
 
 	class RenderBackend : public Service<RenderBackend> // NOLINT(CppClassCanBeFinal)
@@ -157,6 +170,7 @@ namespace TGL
 		MOCKABLE_METHOD u32 CreateShader(ShaderType shaderType);
 
 		MOCKABLE_METHOD void DeleteProgram(u32 programId);
+		MOCKABLE_METHOD void DetachShader(u32 programId, u32 shaderId);
 		MOCKABLE_METHOD void DeleteShader(u32 shaderId);
 
 		MOCKABLE_METHOD bool CompileShader(u32 shaderId, const std::string& shaderSource, std::string& errorLog);
@@ -170,20 +184,20 @@ namespace TGL
 	protected:
 		// NOLINTBEGIN(CppInconsistentNaming)
 		MOCKABLE_METHOD void SetUniform1i(i32 location, i32 value);
-		MOCKABLE_METHOD void SetUniform2iv(i32 location, const glm::ivec2& value);
-		MOCKABLE_METHOD void SetUniform3iv(i32 location, const glm::ivec3& value);
-		MOCKABLE_METHOD void SetUniform4iv(i32 location, const glm::ivec4& value);
+		MOCKABLE_METHOD void SetUniform2i(i32 location, const glm::ivec2& value);
+		MOCKABLE_METHOD void SetUniform3i(i32 location, const glm::ivec3& value);
+		MOCKABLE_METHOD void SetUniform4i(i32 location, const glm::ivec4& value);
 		MOCKABLE_METHOD void SetUniform1ui(i32 location, u32 value);
-		MOCKABLE_METHOD void SetUniform2uiv(i32 location, const glm::uvec2& value);
-		MOCKABLE_METHOD void SetUniform3uiv(i32 location, const glm::uvec3& value);
-		MOCKABLE_METHOD void SetUniform4uiv(i32 location, const glm::uvec4& value);
+		MOCKABLE_METHOD void SetUniform2ui(i32 location, const glm::uvec2& value);
+		MOCKABLE_METHOD void SetUniform3ui(i32 location, const glm::uvec3& value);
+		MOCKABLE_METHOD void SetUniform4ui(i32 location, const glm::uvec4& value);
 		MOCKABLE_METHOD void SetUniform1f(i32 location, f32 value);
-		MOCKABLE_METHOD void SetUniform2fv(i32 location, const glm::vec2& value);
-		MOCKABLE_METHOD void SetUniform3fv(i32 location, const glm::vec3& value);
-		MOCKABLE_METHOD void SetUniform4fv(i32 location, const glm::vec4& value);
-		MOCKABLE_METHOD void SetUniformMatrix2fv(i32 location, const glm::mat2& value);
-		MOCKABLE_METHOD void SetUniformMatrix3fv(i32 location, const glm::mat3& value);
-		MOCKABLE_METHOD void SetUniformMatrix4fv(i32 location, const glm::mat4& value);
+		MOCKABLE_METHOD void SetUniform2f(i32 location, const glm::vec2& value);
+		MOCKABLE_METHOD void SetUniform3f(i32 location, const glm::vec3& value);
+		MOCKABLE_METHOD void SetUniform4f(i32 location, const glm::vec4& value);
+		MOCKABLE_METHOD void SetUniformMatrix2f(i32 location, const glm::mat2& value);
+		MOCKABLE_METHOD void SetUniformMatrix3f(i32 location, const glm::mat3& value);
+		MOCKABLE_METHOD void SetUniformMatrix4f(i32 location, const glm::mat4& value);
 		// NOLINTEND(CppInconsistentNaming)
 	};
 }

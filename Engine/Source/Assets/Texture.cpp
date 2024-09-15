@@ -56,8 +56,7 @@ Texture::~Texture()
 {
 	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
-	AssetManager& assetManager = AssetManager::Get();
-	assetManager.UnloadTexture(this);
+	Free();
 }
 
 SharedPtr<Texture> Texture::Load(const std::string& filePath, const TextureParameters& parameters)
@@ -94,10 +93,20 @@ SharedPtr<TextureSlice> Texture::GetSlice(const u32 index)
 
 u32 Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
-	const glm::uvec2 topRight = offset + resolution;
-	if (topRight.x > m_Resolution.x || topRight.y > m_Resolution.y)
+	if (resolution.x <= 0 || resolution.y <= 0 || resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
 	{
-		throw std::runtime_error("Invalid resolution or offset");
+		throw std::invalid_argument("Invalid resolution");
+	}
+
+	if (offset.x < 0 || offset.y < 0 || offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
+	{
+		throw std::invalid_argument("Invalid offset");
+	}
+
+	const glm::uvec2 corner = offset + resolution;
+	if (corner.x > m_Resolution.x || corner.y > m_Resolution.y)
+	{
+		throw std::invalid_argument("Invalid bounds");
 	}
 
 	CreateSliceInternal(resolution, offset);
@@ -113,21 +122,30 @@ SharedPtr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution,
 
 u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
 {
+	if (resolution.x <= 0 || resolution.y <= 0 || resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
+	{
+		throw std::invalid_argument("Invalid resolution");
+	}
+
+	if (spacing.x < 0 || spacing.y < 0 || spacing.x >= resolution.x || spacing.y >= resolution.y)
+	{
+		throw std::invalid_argument("Invalid spacing");
+	}
+
 	const glm::uvec2 totalPadding = padding * 2u;
-	if (totalPadding.x >= m_Resolution.x || totalPadding.y >= m_Resolution.y)
+	if (padding.x < 0 || padding.y < 0 || totalPadding.x >= m_Resolution.x || totalPadding.y >= m_Resolution.y)
 	{
-		throw std::runtime_error("Invalid padding");
+		throw std::invalid_argument("Invalid padding");
 	}
 
-	const glm::uvec2 contentResolution = m_Resolution - totalPadding + spacing;
+	const glm::uvec2 effectiveContentResolution = m_Resolution - totalPadding + spacing;
 	const glm::uvec2 effectiveSliceResolution = resolution + spacing;
-	const glm::uvec2 contentRemainder = contentResolution % effectiveSliceResolution;
-	if (contentRemainder.x != 0 || contentRemainder.y != 0)
-	{
-		throw std::runtime_error("Invalid resolution or spacing");
-	}
 
-	const glm::uvec2 sliceCount = contentResolution / effectiveSliceResolution;
+	const glm::uvec2 sliceCount = effectiveContentResolution / effectiveSliceResolution;
+	if (sliceCount.x == 0 || sliceCount.y == 0)
+	{
+		throw std::invalid_argument("Invalid bounds");
+	}
 
 	for (u32 y = 0; y < sliceCount.y; y++)
 	{

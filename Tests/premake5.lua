@@ -24,7 +24,7 @@ project "Tests"
         "Google-Test"
     }
 
-    debugdir "../../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/"
+    debugdir "../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/"
     
     postbuildcommands {
         "{RMDIR} ../Bin/%{cfg.buildcfg}/%{cfg.platform}/Tests/Assets/",

@@ -2,7 +2,7 @@
 
 #include "Core/DataTypes.h"
 #include "Core/Service.h"
-#include "Internal/Macros/MockingMacros.h"
+#include "Internal/Macros/TestMacros.h"
 #include <string>
 
 // Forward declarations
@@ -49,7 +49,6 @@ namespace TGL
 
 	protected:
 		MOCKABLE_METHOD void SetAudioVolume(SoLoud::AudioSource* audioSource, f32 volume);
-		MOCKABLE_METHOD f32 GetAudioVolume(const SoLoud::AudioSource* audioSource);
 
 	protected:
 		MOCKABLE_METHOD void SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 volume);

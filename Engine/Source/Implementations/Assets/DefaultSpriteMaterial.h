@@ -18,6 +18,6 @@ namespace TGL
 		~DefaultSpriteMaterial() override = default;
 
 	protected:
-		void OnRenderSetup() const override;
+		void OnRenderSetup() override;
 	};
 }

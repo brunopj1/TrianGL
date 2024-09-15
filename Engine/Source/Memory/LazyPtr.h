@@ -80,59 +80,31 @@ namespace TGL
 			return left.m_Id == right.m_Id;
 		}
 
-		friend bool operator==(const LazyPtr& left, std::nullptr_t)
-		{
-			return left.m_Id == 0;
-		}
-
 		friend bool operator!=(const LazyPtr& left, const LazyPtr& right)
 		{
 			return left.m_Id != right.m_Id;
 		}
 
+		template <typename U>
+		friend bool operator==(const LazyPtr& left, const LazyPtr<U>& right)
+		{
+			return left.m_Id == right.m_Id;
+		}
+
+		template <typename U>
+		friend bool operator!=(const LazyPtr& left, const LazyPtr<U>& right)
+		{
+			return left.m_Id != right.m_Id;
+		}
+
+		friend bool operator==(const LazyPtr& left, std::nullptr_t)
+		{
+			return left.m_Id == 0;
+		}
+
 		friend bool operator!=(const LazyPtr& left, std::nullptr_t)
 		{
 			return left.m_Id != 0;
-		}
-
-		friend bool operator<(const LazyPtr& left, const LazyPtr& right)
-		{
-			return left.m_Id < right.m_Id;
-		}
-
-		friend bool operator<(const LazyPtr& left, std::nullptr_t)
-		{
-			return left.m_Id < 0;
-		}
-
-		friend bool operator<=(const LazyPtr& left, const LazyPtr& right)
-		{
-			return left.m_Id <= right.m_Id;
-		}
-
-		friend bool operator<=(const LazyPtr& left, std::nullptr_t)
-		{
-			return left.m_Id <= 0;
-		}
-
-		friend bool operator>(const LazyPtr& left, const LazyPtr& right)
-		{
-			return left.m_Id > right.m_Id;
-		}
-
-		friend bool operator>(const LazyPtr& left, std::nullptr_t)
-		{
-			return left.m_Id > 0;
-		}
-
-		friend bool operator>=(const LazyPtr& left, const LazyPtr& right)
-		{
-			return left.m_Id >= right.m_Id;
-		}
-
-		friend bool operator>=(const LazyPtr& left, std::nullptr_t)
-		{
-			return left.m_Id >= 0; // NOLINT(CppUnsignedZeroComparison)
 		}
 
 	public:

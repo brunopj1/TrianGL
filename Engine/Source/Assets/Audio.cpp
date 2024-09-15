@@ -11,14 +11,15 @@ Audio::Audio(std::string filePath, const bool stream)
 	: m_FilePath(std::move(filePath)), m_Streamed(stream)
 {
 	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Audio);
+
+	Init();
 }
 
 Audio::~Audio()
 {
 	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
-	AssetManager& assetManager = AssetManager::Get();
-	assetManager.UnloadAudio(this);
+	Free();
 }
 
 SharedPtr<Audio> Audio::Load(const std::string& filePath, const bool stream)
@@ -34,16 +35,15 @@ bool Audio::IsStreamed() const
 
 f32 Audio::GetVolume() const
 {
-	AudioBackend& audioBackend = AudioBackend::Get();
-	return audioBackend.GetAudioVolume(m_SoloudAudio);
+	return m_Volume;
 }
 
-void Audio::SetVolume(const f32 volume) // NOLINT(CppMemberFunctionMayBeConst)
+void Audio::SetVolume(const f32 volume)
 {
-	const f32 clampedVolume = volume < 0.0f ? 0.0f : volume;
+	m_Volume = volume < 0.0f ? 0.0f : volume;
 
 	AudioBackend& audioBackend = AudioBackend::Get();
-	audioBackend.SetAudioVolume(m_SoloudAudio, clampedVolume);
+	audioBackend.SetAudioVolume(m_SoloudAudio, m_Volume);
 
 	for (const AudioPlayer* player : m_CurrentPlayers)
 	{
@@ -60,6 +60,9 @@ void Audio::Init()
 	{
 		throw FileNotFoundException(m_FilePath);
 	}
+
+	// Setup the default audio settings
+	SetVolume(m_Volume);
 }
 
 void Audio::Free()

@@ -40,6 +40,9 @@ namespace TGL
 	// This class also ensures that the test will stop running if any assert fails
 	class TestGameMode : public GameMode // NOLINT(CppClassCanBeFinal)
 	{
+	private:
+		std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
+
 	protected:
 		static void EndTest()
 		{
@@ -47,15 +50,21 @@ namespace TGL
 		}
 
 	protected:
+		void OnStart() override
+		{
+			m_StartTime = std::chrono::steady_clock::now();
+		}
+
 		void OnLateUpdate(const f32 deltaTime) override
 		{
 			GameMode::OnLateUpdate(deltaTime);
 
 			// Stop running after 5 seconds
-			const Clock& clock = Clock::Get();
-			if (clock.GetTotalTime() > 5.0f)
+			const auto now = std::chrono::steady_clock::now();
+			const f32 elapsedTime = std::chrono::duration<f32>(now - m_StartTime).count();
+			if (elapsedTime >= 5.0f)
 			{
-				EXPECT_LT(clock.GetTotalTime(), 5.0f);
+				EXPECT_LT(elapsedTime, 5.0f);
 				EndTest();
 				return;
 			}

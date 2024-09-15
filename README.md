@@ -1,5 +1,7 @@
 # TrianGL
 
+![Build Status](https://github.com/brunopj1/TrianGL/actions/workflows/Build-And-Test/badge.svg)
+
 **TrianGL** is a 2D game engine written in C++ and OpenGL.
 It's main goal is to be as easy to use as possible, allowing developers to quickly create games without worrying about low-level tasks such as engine initialization, rendering, input handling, etc..
 
