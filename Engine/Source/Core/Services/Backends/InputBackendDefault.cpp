@@ -6,6 +6,8 @@
 
 using namespace TGL;
 
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
+
 void InputBackend::SetWindowCloseCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*))
 {
 	glfwSetWindowCloseCallback(windowPtr, func);
@@ -113,5 +115,7 @@ void InputBackend::PollEvents()
 {
 	glfwPollEvents();
 }
+
+// NOLINTEND(CppMemberFunctionMayBeStatic)
 
 #endif

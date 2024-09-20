@@ -1,11 +1,11 @@
-﻿#include <fstream>
-#ifdef TESTING
+﻿#ifdef TESTING
 
 #include "AudioBackend.h"
+#include <fstream>
 
 using namespace TGL;
 
-// NOLINTBEGIN(CppParameterNeverUsed)
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 SoLoud::Soloud* AudioBackend::InitSoloud(int& errorCode)
 {
@@ -52,6 +52,6 @@ void AudioBackend::SetAudioVolume(SoLoud::Soloud* soloudEngine, i32 handle, f32 
 
 void AudioBackend::SetAudioLoop(SoLoud::Soloud* soloudEngine, i32 handle, bool loop) {}
 
-// NOLINTEND(CppParameterNeverUsed)
+// NOLINTEND(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 #endif

@@ -110,7 +110,7 @@ void EntityManager::RemoveObjectCallbacks(GameObject* object)
 	}
 }
 
-void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)
+void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue) // NOLINT(CppMemberFunctionMayBeStatic)
 {
 	const auto order = object->GetOrderOfExecution();
 
@@ -126,7 +126,7 @@ void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*
 	queue.push_back(object);
 }
 
-void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue)
+void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue) // NOLINT(CppMemberFunctionMayBeStatic)
 {
 	const auto order = renderable->GetZIndex();
 
@@ -149,7 +149,7 @@ void EntityManager::UpdateRenderableOrder(Renderable* renderable)
 	AddToRenderQueue(renderable, m_RenderQueue);
 }
 
-void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component)
+void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component) // NOLINT(CppMemberFunctionMayBeStatic)
 {
 	entity->m_Components.push_back(component);
 	component->m_Parent = entity;

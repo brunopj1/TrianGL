@@ -58,7 +58,7 @@ void Clock::Update()
 	}
 }
 
-std::chrono::steady_clock::time_point Clock::CalculateCurrentTime() const
+std::chrono::steady_clock::time_point Clock::CalculateCurrentTime() const // NOLINT(CppMemberFunctionMayBeStatic)
 {
 	return std::chrono::steady_clock::now();
 }

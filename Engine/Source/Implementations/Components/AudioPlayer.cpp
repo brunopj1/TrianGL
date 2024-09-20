@@ -24,11 +24,6 @@ void AudioPlayer::OnUpdate(f32 deltaTime)
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
-
 	AudioBackend& audioBackend = AudioBackend::Get();
 	if (!audioBackend.IsValidAudioHandle(soloudEngine, m_Handle))
 	{
@@ -72,11 +67,6 @@ void AudioPlayer::Play()
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
-
 	AudioBackend& audioBackend = AudioBackend::Get();
 
 	if (m_Status == AudioPlayerStatus::Stopped)
@@ -106,12 +96,6 @@ void AudioPlayer::Pause()
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
-
-
 	AudioBackend& audioBackend = AudioBackend::Get();
 	audioBackend.PauseAudio(soloudEngine, m_Handle);
 
@@ -127,11 +111,6 @@ void AudioPlayer::Stop()
 
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
-
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
 
 	AudioBackend& audioBackend = AudioBackend::Get();
 	audioBackend.StopAudio(soloudEngine, m_Handle);
@@ -187,11 +166,6 @@ void AudioPlayer::UpdateCurrentAudioVolume() const
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
 
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
-
 	AudioBackend& audioBackend = AudioBackend::Get();
 	audioBackend.SetAudioVolume(soloudEngine, m_Handle, GetEffectiveVolume());
 }
@@ -200,11 +174,6 @@ void AudioPlayer::UpdateCurrentAudioLoop() const
 {
 	const AssetManager& assetManager = AssetManager::Get();
 	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
-
-	if (soloudEngine == nullptr)
-	{
-		return;
-	}
 
 	AudioBackend& audioBackend = AudioBackend::Get();
 	audioBackend.SetAudioLoop(soloudEngine, m_Handle, m_Loop);

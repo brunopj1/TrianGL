@@ -76,17 +76,16 @@ namespace
 		{
 			std::vector<ShaderUniformInfo> uniforms;
 
-			uniforms.push_back({
-				.Name = "uPosition",
+			uniforms.push_back({.Name = "uPosition",
 								.Location = 1,
 								.DataType = UniformDataType::F32,
 								.Size = 2});
 
 			uniforms.push_back({
 				.Name = "uSize",
-								.Location = 2,
-								.DataType = UniformDataType::I32,
-								.Size = 2,
+				.Location = 2,
+				.DataType = UniformDataType::I32,
+				.Size = 2,
 			});
 
 			return uniforms;

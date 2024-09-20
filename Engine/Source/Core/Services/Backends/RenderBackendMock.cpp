@@ -4,7 +4,7 @@
 
 using namespace TGL;
 
-// NOLINTBEGIN(CppParameterNeverUsed)
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 void RenderBackend::SetErrorCallback(void (*func)(i32, const char*)) {}
 
@@ -163,6 +163,6 @@ void RenderBackend::SetUniformMatrix3f(int location, const glm::mat3& value) {}
 void RenderBackend::SetUniformMatrix4f(int location, const glm::mat4& value) {}
 
 // NOLINTEND(CppInconsistentNaming)
-// NOLINTEND(CppParameterNeverUsed)
+// NOLINTEND(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 #endif

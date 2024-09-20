@@ -1,13 +1,12 @@
-﻿#include <Core/Services/Public/InputSystem.h>
-
-#ifdef TESTING
+﻿#ifdef TESTING
 
 #include <Core/Services/Backends/InputBackend.h>
 #include <Core/Services/Public/Window.h>
+#include <Core/Services/Public/InputSystem.h>
 
 using namespace TGL;
 
-// NOLINTBEGIN(CppParameterNeverUsed)
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 void InputBackend::SetWindowCloseCallback(GLFWwindow* windowPtr, void (*func)(GLFWwindow*))
 {
@@ -89,6 +88,6 @@ void InputBackend::SetMousePosition(GLFWwindow* windowPtr, const glm::ivec2& pos
 
 void InputBackend::PollEvents() {}
 
-// NOLINTEND(CppParameterNeverUsed)
+// NOLINTEND(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 #endif

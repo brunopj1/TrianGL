@@ -8,7 +8,6 @@
 #include <Assets/Texture.h>
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
 #include <format>
-#include <ranges>
 #include <stb_image.h>
 #include <thread>
 

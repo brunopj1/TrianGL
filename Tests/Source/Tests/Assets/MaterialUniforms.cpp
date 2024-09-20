@@ -48,12 +48,10 @@ namespace
 		{
 			std::vector<ShaderUniformInfo> uniforms;
 
-			uniforms.push_back({
-				.Name = "uTestUniform",
-				.Location = 1,
-				.DataType = s_UniformDataType,
-				.Size = s_UniformSize
-			});
+			uniforms.push_back({.Name = "uTestUniform",
+								.Location = 1,
+								.DataType = s_UniformDataType,
+								.Size = s_UniformSize});
 
 			return uniforms;
 		}

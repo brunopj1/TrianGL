@@ -339,7 +339,7 @@ void RenderBackend::DeleteProgram(const u32 programId)
 	glDeleteProgram(programId);
 }
 
-void RenderBackend::DetachShader(u32 programId, u32 shaderId)
+void RenderBackend::DetachShader(const u32 programId, const u32 shaderId)
 {
 	glDetachShader(programId, shaderId);
 }

@@ -7,6 +7,8 @@
 
 using namespace TGL;
 
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
+
 SoLoud::Soloud* AudioBackend::InitSoloud(int& errorCode)
 {
 	SoLoud::Soloud* soloudEngine = new SoLoud::Soloud();
@@ -104,5 +106,7 @@ void AudioBackend::SetAudioLoop(SoLoud::Soloud* soloudEngine, const i32 handle, 
 {
 	soloudEngine->setLooping(handle, loop);
 }
+
+// NOLINTEND(CppMemberFunctionMayBeStatic)
 
 #endif
