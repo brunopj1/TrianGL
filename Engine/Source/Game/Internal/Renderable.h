@@ -22,6 +22,6 @@ namespace TGL
 		void SetZIndex(i32 zIndex);
 
 	protected:
-		virtual void Render() const = 0;
+		virtual void Render() = 0;
 	};
 }

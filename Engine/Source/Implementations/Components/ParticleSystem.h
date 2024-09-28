@@ -46,7 +46,7 @@ namespace TGL
 		f32 RemainingDuration;
 	};
 
-	class ParticleSystem final : public Component, public Renderable
+	class ParticleSystem : public Component, public Renderable  // NOLINT(CppClassCanBeFinal)
 	{
 	private:
 		std::vector<ParticleCpuData> m_ParticlesCpu;
@@ -81,8 +81,8 @@ namespace TGL
 	private:
 		void OnUpdate(f32 deltaTime) override;
 
-	protected:
-		void Render() const override;
+	private:
+		void Render() override;
 
 	private:
 		void Init();

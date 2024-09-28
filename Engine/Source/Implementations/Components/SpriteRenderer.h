@@ -10,7 +10,7 @@ namespace TGL
 	// Forward declarations
 	class Material;
 
-	class SpriteRenderer final : public Component, public Renderable
+	class SpriteRenderer : public Component, public Renderable // NOLINT(CppClassCanBeFinal)
 	{
 	private:
 		friend class Application;
@@ -38,6 +38,6 @@ namespace TGL
 		void ResetPivot();
 
 	private:
-		void Render() const override;
+		void Render() override;
 	};
 }

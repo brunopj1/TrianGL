@@ -68,7 +68,8 @@ namespace TGL
 		}
 
 	public:
-		template <typename U, typename = std::enable_if_t<std::is_base_of_v<U, T>>>
+		template <typename U>
+			requires SmartPointerConversion<T, U>
 		operator LazyPtr<U>() const // NOLINT(CppNonExplicitConversionOperator)
 		{
 			return LazyPtr<U>(m_Id);
@@ -86,12 +87,14 @@ namespace TGL
 		}
 
 		template <typename U>
+			requires SmartPointerComparison<T, U>
 		friend bool operator==(const LazyPtr& left, const LazyPtr<U>& right)
 		{
 			return left.m_Id == right.m_Id;
 		}
 
 		template <typename U>
+			requires SmartPointerComparison<T, U>
 		friend bool operator!=(const LazyPtr& left, const LazyPtr<U>& right)
 		{
 			return left.m_Id != right.m_Id;
@@ -108,12 +111,22 @@ namespace TGL
 		}
 
 	public:
-		T* operator->() const
+		T* operator->()
+		{
+			return Get();
+		}
+		
+		const T* operator->() const
 		{
 			return Get();
 		}
 
-		T* operator*() const
+		T* operator*()
+		{
+			return Get();
+		}
+
+		const T* operator*() const
 		{
 			return Get();
 		}
@@ -155,7 +168,7 @@ namespace TGL
 			}
 		}
 
-		T* Get() const
+		const T* Get() const
 		{
 			if (m_Id == 0)
 			{
@@ -166,25 +179,20 @@ namespace TGL
 			{
 				const EntityManager& entityManager = EntityManager::Get();
 				Entity* entityPtr = entityManager.GetEntity(m_Id);
-				T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
+				const T* ptr = entityPtr ? CastTo<T>(entityPtr) : nullptr;
 				return ptr;
 			}
 			else if constexpr (std::is_base_of_v<Component, T>)
 			{
 				const EntityManager& entityManager = EntityManager::Get();
 				Component* componentPtr = entityManager.GetComponent(m_Id);
-				T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
+				const T* ptr = componentPtr ? CastTo<T>(componentPtr) : nullptr;
 				return ptr;
 			}
 			else
 			{
 				return nullptr;
 			}
-		}
-
-		bool IsValid()
-		{
-			return Get() != nullptr;
 		}
 
 		bool IsValid() const
@@ -203,11 +211,13 @@ namespace TGL
 
 		if constexpr (std::is_base_of_v<To, From>)
 		{
-			return LazyPtr(static_cast<To*>(object.Get()));
+			From* ptr = const_cast<From*>(object.Get());
+			return LazyPtr(static_cast<To*>(ptr));
 		}
 		else if constexpr (std::is_base_of_v<From, To>)
 		{
-			return LazyPtr(dynamic_cast<To*>(object.Get()));
+			From* ptr = const_cast<From*>(object.Get());
+			return LazyPtr(dynamic_cast<To*>(ptr));
 		}
 		else
 		{

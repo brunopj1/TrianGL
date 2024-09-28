@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Internal/Concepts/SmartPointerConcepts.h"
 #include "Internal/Macros/ClassMacros.h"
 #include <Core/DataTypes.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
@@ -27,6 +28,8 @@ namespace TGL
 		template <typename T>
 		friend class SharedPtr;
 
+		friend class Animation;
+		friend class AnimationFrame;
 		friend class Audio;
 		friend class Material;
 		friend class Texture;
@@ -145,9 +148,9 @@ namespace TGL
 		}
 
 		template <typename U>
+			requires SmartPointerConversion<T, U>
 		operator SharedPtr<U>() const // NOLINT(CppNonExplicitConversionOperator)
 		{
-			static_assert(std::is_base_of_v<U, T>, "U must be a base class of T");
 			return SharedPtr<U>(m_Pointer, m_ReferenceCounter);
 		}
 
@@ -163,12 +166,14 @@ namespace TGL
 		}
 
 		template <typename U>
+			requires SmartPointerComparison<T, U>
 		friend bool operator==(const SharedPtr& left, const SharedPtr<U>& right)
 		{
 			return left.Get() == right.Get();
 		}
 
 		template <typename U>
+			requires SmartPointerComparison<T, U>
 		friend bool operator!=(const SharedPtr& left, const SharedPtr<U>& right)
 		{
 			return left.Get() != right.Get();
@@ -185,18 +190,33 @@ namespace TGL
 		}
 
 	public:
-		T* operator->() const
+		T* operator->()
+		{
+			return Get();
+		}
+		
+		const T* operator->() const
 		{
 			return Get();
 		}
 
-		T* operator*() const
+		T* operator*()
+		{
+			return Get();
+		}
+
+		const T* operator*() const
 		{
 			return Get();
 		}
 
 	public:
-		T* Get() const
+		T* Get()
+		{
+			return m_Pointer;
+		}
+		
+		const T* Get() const
 		{
 			return m_Pointer;
 		}
@@ -263,14 +283,16 @@ namespace TGL
 		{
 			return nullptr;
 		}
-
+		
 		if constexpr (std::is_base_of_v<To, From>)
 		{
-			return SharedPtr(static_cast<To*>(object.Get()), object.m_ReferenceCounter);
+			From* ptr = const_cast<From*>(object.Get());
+			return SharedPtr<To>(static_cast<To*>(ptr), object.m_ReferenceCounter);
 		}
 		else if constexpr (std::is_base_of_v<From, To>)
 		{
-			return SharedPtr(dynamic_cast<To*>(object.Get()), object.m_ReferenceCounter);
+			From* ptr = const_cast<From*>(object.Get());
+			return SharedPtr<To>(dynamic_cast<To*>(ptr), object.m_ReferenceCounter);
 		}
 		else
 		{

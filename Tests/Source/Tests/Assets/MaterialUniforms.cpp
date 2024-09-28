@@ -197,7 +197,7 @@ T* SetupUniformTest(const UniformDataType dataType, const u32 size)
 	MockRenderBackend::s_UniformSize = size;
 	MockRenderBackend::s_UniformDataType = dataType;
 
-	const SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
+	SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
 	spriteRenderer->SetMaterial(material);
 
 	T* uniform = material->AddUniform<T>("uTestUniform", false);

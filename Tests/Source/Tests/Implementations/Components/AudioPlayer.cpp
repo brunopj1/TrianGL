@@ -132,7 +132,7 @@ BEGIN_GAME_TEST(AudioPlayer, Volume)
 		TestEntity* entity = SpawnEntity<TestEntity>();
 		AudioPlayer* audioPlayer = entity->AttachComponent<AudioPlayer>();
 
-		const SharedPtr<Audio> audio = Audio::Load("Assets/Audio/test.wav");
+		SharedPtr<Audio> audio = Audio::Load("Assets/Audio/test.wav");
 		audioPlayer->SetAudio(audio);
 
 		audioPlayer->SetPlayerVolume(0.5f);

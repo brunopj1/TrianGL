@@ -17,7 +17,7 @@ namespace TGL
 		f32 m_Rotation = 0.0f;
 		glm::vec2 m_Scale = {1.0f, 1.0f};
 
-		mutable glm::mat4 m_TransformMatrix = glm::mat4(1.0f);
+		glm::mat4 m_TransformMatrix = glm::mat4(1.0f);
 
 		bool m_WasModified = false;
 
@@ -46,6 +46,6 @@ namespace TGL
 		void ScaleBy(f32 scale);
 
 	private:
-		glm::mat4 GetTransformMatrix() const;
+		glm::mat4 GetTransformMatrix();
 	};
 }

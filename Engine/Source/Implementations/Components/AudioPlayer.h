@@ -15,7 +15,7 @@ namespace TGL
 	// Forward declarations
 	class Audio;
 
-	class AudioPlayer final : public Component
+	class AudioPlayer : public Component // NOLINT(CppClassCanBeFinal)
 	{
 	private:
 		friend class Audio;
@@ -34,9 +34,6 @@ namespace TGL
 	public:
 		AudioPlayer(SharedPtr<Audio> audio = nullptr);
 		~AudioPlayer() override;
-
-	protected:
-		void OnUpdate(f32 deltaTime) override;
 
 	public:
 		SharedPtr<Audio> GetAudio() const;
@@ -58,6 +55,9 @@ namespace TGL
 
 		bool GetLoop() const;
 		void SetLoop(bool loop);
+
+	protected:
+		void OnUpdate(f32 deltaTime) override;
 
 	private:
 		void UpdateCurrentAudioVolume() const;

@@ -131,7 +131,7 @@ void ParticleSystem::OnUpdate(const f32 deltaTime)
 	}
 }
 
-void ParticleSystem::Render() const
+void ParticleSystem::Render()
 {
 	if (m_Material == nullptr)
 	{

@@ -50,7 +50,7 @@ BEGIN_GAME_TEST(Texture, CreateSlice)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
-		const SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
 		EXPECT_NE(texture.Get(), nullptr);
 		EXPECT_EQ(texture->GetSliceCount(), 0);
 
@@ -84,7 +84,7 @@ BEGIN_GAME_TEST(Texture, CreateSliceGrid)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
-		const SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
 		EXPECT_NE(texture.Get(), nullptr);
 
 		const u32 sliceCount1 = texture->CreateSliceGrid({4, 4});
@@ -129,7 +129,7 @@ BEGIN_GAME_TEST(Texture, SliceInfo)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
-		const SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
 		EXPECT_NE(texture.Get(), nullptr);
 
 		const SharedPtr<TextureSlice> slice = texture->CreateAndGetSlice({4, 4}, {0, 0});

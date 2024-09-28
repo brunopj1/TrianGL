@@ -14,27 +14,6 @@ AudioPlayer::~AudioPlayer()
 	Stop();
 }
 
-void AudioPlayer::OnUpdate(f32 deltaTime)
-{
-	if (m_Handle == -1)
-	{
-		return;
-	}
-
-	const AssetManager& assetManager = AssetManager::Get();
-	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
-
-	AudioBackend& audioBackend = AudioBackend::Get();
-	if (!audioBackend.IsValidAudioHandle(soloudEngine, m_Handle))
-	{
-		m_Status = AudioPlayerStatus::Stopped;
-
-		m_Handle = -1;
-
-		m_Audio->RemovePlayer(this);
-	}
-}
-
 SharedPtr<Audio> AudioPlayer::GetAudio() const
 {
 	return m_Audio;
@@ -42,6 +21,11 @@ SharedPtr<Audio> AudioPlayer::GetAudio() const
 
 void AudioPlayer::SetAudio(SharedPtr<Audio> audio)
 {
+	if (m_Audio == audio)
+	{
+		return;
+	}
+	
 	Stop();
 
 	m_Audio = std::move(audio);
@@ -159,6 +143,27 @@ void AudioPlayer::SetLoop(const bool loop)
 	}
 
 	UpdateCurrentAudioLoop();
+}
+
+void AudioPlayer::OnUpdate(f32 deltaTime)
+{
+	if (m_Handle == -1)
+	{
+		return;
+	}
+
+	const AssetManager& assetManager = AssetManager::Get();
+	SoLoud::Soloud* soloudEngine = assetManager.m_SoloudEngine;
+
+	AudioBackend& audioBackend = AudioBackend::Get();
+	if (!audioBackend.IsValidAudioHandle(soloudEngine, m_Handle))
+	{
+		m_Status = AudioPlayerStatus::Stopped;
+
+		m_Handle = -1;
+
+		m_Audio->RemovePlayer(this);
+	}
 }
 
 void AudioPlayer::UpdateCurrentAudioVolume() const

@@ -28,7 +28,7 @@ BEGIN_GAME_TEST(Audio, Volume)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
-		const SharedPtr<Audio> audio = Audio::Load("Assets/Audio/test.wav", false);
+		SharedPtr<Audio> audio = Audio::Load("Assets/Audio/test.wav", false);
 		ASSERT_NE(audio.Get(), nullptr);
 
 		ASSERT_NEAR(audio->GetVolume(), 1.0f, 0.0001f);
