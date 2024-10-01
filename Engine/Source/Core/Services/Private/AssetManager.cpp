@@ -2,6 +2,7 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 
+#include "Assets/Animation.h"
 #include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
 #include <Assets/Material.h>
@@ -12,6 +13,8 @@
 #include <thread>
 
 using namespace TGL;
+
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
 
 void AssetManager::Init()
 {
@@ -80,7 +83,7 @@ void AssetManager::InitQuad()
 	renderBackend.UnbindVertexArray();
 }
 
-void AssetManager::SetupQuadVertexAttributes() const // NOLINT(CppMemberFunctionMayBeStatic)
+void AssetManager::SetupQuadVertexAttributes() const
 {
 	RenderBackend& renderBackend = RenderBackend::Get();
 	renderBackend.SetVertexAttributePointer(0, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 0);
@@ -116,7 +119,7 @@ u32 AssetManager::GetQuadEbo() const
 	return m_QuadEbo;
 }
 
-SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters) // NOLINT(CppMemberFunctionMayBeStatic)
+SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
 	PREPARE_SPAWNER_ASSERT(Texture);
 
@@ -127,14 +130,28 @@ SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const 
 	return instance;
 }
 
-SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index) // NOLINT(CppMemberFunctionMayBeStatic)
+SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index)
 {
 	PREPARE_SPAWNER_ASSERT(TextureSlice);
 
 	return new TextureSlice(std::move(texture), index);
 }
+SharedPtr<Animation> AssetManager::CreateAnimation()
+{
+	PREPARE_SPAWNER_ASSERT(Animation);
 
-SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream) // NOLINT(CppMemberFunctionMayBeStatic)
+	Animation* instance = new Animation();
+
+	return instance;
+}
+SharedPtr<AnimationFrame> AssetManager::CreateAnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, const f32 duration)
+{
+	PREPARE_SPAWNER_ASSERT(AnimationFrame);
+
+	return new AnimationFrame(animation, std::move(sprite), duration);
+}
+
+SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
 	PREPARE_SPAWNER_ASSERT(Audio);
 
@@ -143,9 +160,16 @@ SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool
 	return instance;
 }
 
-void AssetManager::UnloadMaterialUniforms(const Material* material) // NOLINT(CppMemberFunctionMayBeStatic)
+void AssetManager::UnloadMaterialUniforms(const Material* material)
 {
-	for (const auto uniform : material->m_Uniforms)
+	for (const auto uniform : material->m_ValidUniforms)
+	{
+		PREPARE_SPAWNER_ASSERT(MaterialUniform);
+
+		delete uniform;
+	}
+
+	for (const auto uniform : material->m_InvalidUniforms)
 	{
 		PREPARE_SPAWNER_ASSERT(MaterialUniform);
 
@@ -193,3 +217,5 @@ void AssetManager::UnloadShader(Shader* shader)
 
 	m_Shaders[shader] = it->second - 1;
 }
+
+// NOLINTEND(CppMemberFunctionMayBeStatic)

@@ -6,6 +6,8 @@
 
 using namespace TGL;
 
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
+
 void EntityManager::Init()
 {
 	m_NextId = 1;
@@ -110,7 +112,7 @@ void EntityManager::RemoveObjectCallbacks(GameObject* object)
 	}
 }
 
-void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue) // NOLINT(CppMemberFunctionMayBeStatic)
+void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)
 {
 	const auto order = object->GetOrderOfExecution();
 
@@ -126,7 +128,7 @@ void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*
 	queue.push_back(object);
 }
 
-void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue) // NOLINT(CppMemberFunctionMayBeStatic)
+void EntityManager::AddToRenderQueue(Renderable* renderable, std::vector<Renderable*>& queue)
 {
 	const auto order = renderable->GetZIndex();
 
@@ -149,7 +151,7 @@ void EntityManager::UpdateRenderableOrder(Renderable* renderable)
 	AddToRenderQueue(renderable, m_RenderQueue);
 }
 
-void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component) // NOLINT(CppMemberFunctionMayBeStatic)
+void EntityManager::SetupEntityComponentRelationship(Entity* entity, Component* component)
 {
 	entity->m_Components.push_back(component);
 	component->m_Parent = entity;
@@ -202,3 +204,5 @@ void EntityManager::DestroyComponent(Component* component)
 
 	delete component;
 }
+
+// NOLINTEND(CppMemberFunctionMayBeStatic)

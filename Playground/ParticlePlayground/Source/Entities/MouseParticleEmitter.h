@@ -49,6 +49,9 @@ protected:
 	void OnUpdate(f32 deltaTime) override;
 
 private:
+	void SpawnParticles(f32 deltaTime);
+
+private:
 	void RenderImGui();
 	static void RenderImGuiRangeFloat(const char* label, f32& value1, f32& value2, f32 min, f32 max);
 	static void RenderImGuiRangeColor(const char* label, glm::vec3& value1, glm::vec3& value2);

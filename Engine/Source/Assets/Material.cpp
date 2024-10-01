@@ -35,7 +35,7 @@ void Material::Use(const glm::mat4& modelMatrix)
 
 	OnRenderSetup();
 
-	for (const auto uniform : m_Uniforms)
+	for (const auto uniform : m_ValidUniforms)
 	{
 		uniform->Bind();
 	}

@@ -22,7 +22,8 @@ namespace TGL
 
 	private:
 		Shader* m_Shader;
-		std::vector<MaterialUniform*> m_Uniforms;
+		std::vector<MaterialUniform*> m_ValidUniforms;
+		std::vector<MaterialUniform*> m_InvalidUniforms;
 		u8 m_NextTextureSlot = 0;
 
 	private:
@@ -71,6 +72,6 @@ namespace TGL
 	T* Material::AddUniform(const std::string& name, const bool createIfInvalid)
 	{
 		AssetManager& assetManager = AssetManager::Get();
-		return assetManager.CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_Uniforms);
+		return assetManager.CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_ValidUniforms, m_InvalidUniforms);
 	}
 }

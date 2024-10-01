@@ -199,6 +199,9 @@ namespace
 
 // Tests
 
+// TODO test that only the valid uniforms are being bound
+// TODO test that every uniform is being deleted, even if invalid
+
 BEGIN_GAME_TEST(Material, CreateInstanceOf)
 {
 	void OnUpdate(f32 deltaTime) override

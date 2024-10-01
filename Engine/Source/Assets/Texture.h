@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Internal/Sprite.h"
+#include "TextureSlice.h"
 #include <Memory/SharedPtr.h>
 #include <glm/mat2x2.hpp>
 #include <glm/vec2.hpp>
@@ -26,69 +28,13 @@ namespace TGL
 
 	// clang-format on
 
-	struct TextureParameters
+	struct TextureParameters final
 	{
 		bool GenerateMipmaps = true;
 		TextureWrapMode Wrap = TextureWrapMode::Repeat;
 		TextureFilterMode Filter = TextureFilterMode::Linear;
 		TextureFilterMode MipmapFilter = TextureFilterMode::Linear;
 	};
-
-	class Sprite
-	{
-	private:
-		friend class SpriteUniform;
-
-	public:
-		Sprite() = default;
-		virtual ~Sprite() = default;
-
-	private:
-		static void Unbind(u8 slot);
-		virtual void Bind(u8 slot) const = 0;
-
-		virtual const glm::mat4& GetMatrix() const = 0;
-		virtual const glm::uvec2& GetResolution() const = 0;
-	};
-
-	struct TextureSliceInfo
-	{
-	private:
-		friend class Texture;
-		friend class TextureSlice;
-
-	private:
-		glm::uvec2 Resolution;
-		glm::uvec2 Offset;
-		glm::mat4 TextureMatrix;
-
-	private:
-		TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::mat4& textureMatrix);
-	};
-
-	class TextureSlice final : public Sprite
-	{
-	private:
-		friend class Texture;
-
-	private:
-		SharedPtr<Texture> m_Texture;
-		i32 m_Index;
-
-	public:
-		TextureSlice(SharedPtr<Texture> texture, u32 index);
-		~TextureSlice() override;
-
-	public:
-		SharedPtr<Texture> GetTexture() const;
-		const glm::uvec2& GetResolution() const override; // Also used by Sprite class
-
-	private:
-		void Bind(u8 slot) const override;
-		const glm::mat4& GetMatrix() const override;
-	};
-
-	// Main class
 
 	class Texture final : public Sprite, public SharedFromThis<Texture>
 	{

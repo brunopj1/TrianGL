@@ -23,6 +23,11 @@ AudioTester::AudioTester(const std::string& path, const bool stream)
 
 void AudioTester::OnUpdate(f32 deltaTime)
 {
+	RenderAudioWindow();
+}
+
+void AudioTester::RenderAudioWindow()
+{
 #ifdef IMGUI
 	ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(audio_window_size.x, audio_window_size.y), ImGuiCond_Appearing);

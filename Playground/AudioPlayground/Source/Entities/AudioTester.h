@@ -24,5 +24,6 @@ protected:
 	void OnUpdate(f32 deltaTime) override;
 
 public:
+	void RenderAudioWindow();
 	static void RenderAudioSelector(TGL::AudioPlayer* audioPlayer, i32& currentAudioId);
 };

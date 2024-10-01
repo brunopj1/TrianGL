@@ -23,4 +23,7 @@ public:
 
 protected:
 	void OnUpdate(f32 deltaTime) override;
+
+private:
+	void RenderAudioPlayerWindow();
 };

@@ -1,5 +1,6 @@
 ﻿#include "Core/DataTypes.h"
 #include "Core/Services/Backends/RenderBackend.h"
+#include "Implementations/Components/Animator.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Assets/Texture.h>
@@ -139,6 +140,11 @@ void MaterialUniformImpl<glm::mat4>::BindInternal() const
 SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
 	: MaterialUniform(shader, name), m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")), m_ResolutionLocation(shader->GetUniformLocation(name + "Resolution")), m_Slot(0), Value(nullptr) // The slot is updated by the spawner
 {}
+
+SpriteUniform::~SpriteUniform()
+{
+	Animator::RemoveAllActiveAnimators(this);
+}
 
 bool SpriteUniform::HasValue() const
 {

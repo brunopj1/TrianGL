@@ -29,11 +29,13 @@ namespace TGL
 		friend class ServiceCollection;
 		friend struct ServiceDeleter<AssetManager>;
 
-		friend class Texture;
-		friend class TextureSlice;
+		friend class Animation;
+		friend class AnimationFrame;
 		friend class Audio;
 		friend class Material;
 		friend class MaterialUniform;
+		friend class Texture;
+		friend class TextureSlice;
 
 		friend class SpriteRenderer;
 		friend class ParticleSystem;
@@ -45,11 +47,13 @@ namespace TGL
 		friend class SharedPtr;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(Texture);
-		DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
+		DECLARE_SPAWNER_ASSERT_VAR(Animation);
+		DECLARE_SPAWNER_ASSERT_VAR(AnimationFrame);
 		DECLARE_SPAWNER_ASSERT_VAR(Audio);
 		DECLARE_SPAWNER_ASSERT_VAR(Material);
 		DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
+		DECLARE_SPAWNER_ASSERT_VAR(Texture);
+		DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
 
 	protected:
 		u32 m_QuadVao = 0;
@@ -82,6 +86,10 @@ namespace TGL
 		MOCKABLE_METHOD SharedPtr<TextureSlice> CreateTextureSlice(SharedPtr<Texture> texture, i32 index);
 
 	protected:
+		MOCKABLE_METHOD SharedPtr<Animation> CreateAnimation();
+		MOCKABLE_METHOD SharedPtr<AnimationFrame> CreateAnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, f32 duration);
+
+	protected:
 		MOCKABLE_METHOD SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);
 
 	protected:
@@ -90,7 +98,7 @@ namespace TGL
 		SharedPtr<T> LoadMaterial(Args&&... args);
 
 		template <SpawnableMaterialUniform T>
-		T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector);
+		T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms);
 
 		MOCKABLE_METHOD void UnloadMaterialUniforms(const Material* material);
 
@@ -113,7 +121,7 @@ namespace TGL
 	}
 
 	template <SpawnableMaterialUniform T>
-	T* AssetManager::CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& uniformVector)
+	T* AssetManager::CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms)
 	{
 		// TODO add option to throw an exception if the uniform is invalid
 		// TODO ensure that the uniform data type and size are correct (and add unit tests)
@@ -132,9 +140,13 @@ namespace TGL
 
 		if (instance->IsValid())
 		{
-			uniformVector.push_back(instance);
+			validUniforms.push_back(instance);
 		}
-		else if (!createIfInvalid)
+		else if (createIfInvalid)
+		{
+			invalidUniforms.push_back(instance);
+		}
+		else
 		{
 			PREPARE_SPAWNER_ASSERT(MaterialUniform);
 

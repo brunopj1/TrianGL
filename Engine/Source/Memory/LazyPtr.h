@@ -115,7 +115,7 @@ namespace TGL
 		{
 			return Get();
 		}
-		
+
 		const T* operator->() const
 		{
 			return Get();

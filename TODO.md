@@ -10,6 +10,7 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Mention the animations and animators in the wiki
 - Mention the custom datatypes in the wiki (and use them in every code snippet)
 - Explain the existing entities and components (Camera, etc...)
 - Mention the Util classes (Random only for now)

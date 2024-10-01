@@ -49,6 +49,7 @@ group "Dependencies"
     include "Libs/googletest/premake5.lua"
 
 group "Playground"
+    include "Playground/AnimationPlayground/premake5.lua"
     include "Playground/AudioPlayground/premake5.lua"
     include "Playground/ParticlePlayground/premake5.lua"
 

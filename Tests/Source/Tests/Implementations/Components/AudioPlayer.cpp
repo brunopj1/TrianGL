@@ -46,6 +46,8 @@ namespace
 
 // Tests
 
+// TODO PlaybackCompletion with loop = true
+
 BEGIN_GAME_TEST(AudioPlayer, PlaybackControls)
 {
 	void OnUpdate(f32 deltaTime) override
@@ -89,7 +91,7 @@ BEGIN_GAME_TEST_MOCKED(AudioPlayer, PlaybackCompletion, MockServiceBuilder)
 {
 	i32 GetOrderOfExecution() const override
 	{
-		// TODO remove this and set the particle system order to -1
+		// TODO remove this and set the audio player order to -1
 		return 1;
 	}
 

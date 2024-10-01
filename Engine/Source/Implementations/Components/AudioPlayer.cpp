@@ -25,7 +25,7 @@ void AudioPlayer::SetAudio(SharedPtr<Audio> audio)
 	{
 		return;
 	}
-	
+
 	Stop();
 
 	m_Audio = std::move(audio);

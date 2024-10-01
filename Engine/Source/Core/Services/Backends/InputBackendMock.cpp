@@ -1,8 +1,8 @@
 ﻿#ifdef TESTING
 
 #include <Core/Services/Backends/InputBackend.h>
-#include <Core/Services/Public/Window.h>
 #include <Core/Services/Public/InputSystem.h>
+#include <Core/Services/Public/Window.h>
 
 using namespace TGL;
 

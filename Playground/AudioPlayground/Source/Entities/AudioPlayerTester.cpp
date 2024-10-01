@@ -10,7 +10,6 @@
 
 using namespace TGL;
 
-
 AudioPlayerTester::AudioPlayerTester()
 	: Entity(true), m_AudioPlayerId(s_NextId++)
 {
@@ -24,6 +23,11 @@ AudioPlayerTester::AudioPlayerTester()
 }
 
 void AudioPlayerTester::OnUpdate(f32 deltaTime)
+{
+	RenderAudioPlayerWindow();
+}
+
+void AudioPlayerTester::RenderAudioPlayerWindow()
 {
 #ifdef IMGUI
 	ImGui::SetNextWindowPos(ImVec2(m_WindowPos.x, m_WindowPos.y), ImGuiCond_Appearing);

@@ -194,7 +194,7 @@ namespace TGL
 		{
 			return Get();
 		}
-		
+
 		const T* operator->() const
 		{
 			return Get();
@@ -215,7 +215,7 @@ namespace TGL
 		{
 			return m_Pointer;
 		}
-		
+
 		const T* Get() const
 		{
 			return m_Pointer;
@@ -283,7 +283,7 @@ namespace TGL
 		{
 			return nullptr;
 		}
-		
+
 		if constexpr (std::is_base_of_v<To, From>)
 		{
 			From* ptr = const_cast<From*>(object.Get());

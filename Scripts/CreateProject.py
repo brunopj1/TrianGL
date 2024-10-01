@@ -1,6 +1,6 @@
 # Configuration ---------------------------------------------------------------
 
-projectName = "ParticlePlayground"
+projectName = "AnimationPlayground"
 
 isGame = False # If set to False, the project will be created in the 'Playgrounds' folder
 

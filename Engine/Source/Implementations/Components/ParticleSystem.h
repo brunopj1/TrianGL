@@ -46,7 +46,7 @@ namespace TGL
 		f32 RemainingDuration;
 	};
 
-	class ParticleSystem : public Component, public Renderable  // NOLINT(CppClassCanBeFinal)
+	class ParticleSystem : public Component, public Renderable // NOLINT(CppClassCanBeFinal)
 	{
 	private:
 		std::vector<ParticleCpuData> m_ParticlesCpu;

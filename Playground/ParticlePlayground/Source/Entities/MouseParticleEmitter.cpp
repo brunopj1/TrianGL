@@ -30,6 +30,11 @@ void MouseParticleEmitter::OnUpdate(const f32 deltaTime)
 {
 	RenderImGui();
 
+	SpawnParticles(deltaTime);
+}
+
+void MouseParticleEmitter::SpawnParticles(f32 deltaTime)
+{
 	if (m_Timer > 0.0f)
 	{
 		m_Timer -= deltaTime;

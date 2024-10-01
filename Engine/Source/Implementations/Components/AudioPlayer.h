@@ -53,6 +53,7 @@ namespace TGL
 
 		f32 GetEffectiveVolume() const;
 
+	public:
 		bool GetLoop() const;
 		void SetLoop(bool loop);
 

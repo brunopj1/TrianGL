@@ -101,7 +101,7 @@ namespace TGL
 
 	public:
 		SpriteUniform(const Shader* shader, const std::string& name);
-		~SpriteUniform() override = default;
+		~SpriteUniform() override;
 
 	public:
 		bool HasValue() const;
