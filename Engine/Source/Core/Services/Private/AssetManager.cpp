@@ -3,6 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include "Assets/Animation.h"
+#include "Assets/AnimationSprite.h"
 #include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
 #include <Assets/Material.h>
@@ -149,6 +150,13 @@ SharedPtr<AnimationFrame> AssetManager::CreateAnimationFrame(Animation* animatio
 	PREPARE_SPAWNER_ASSERT(AnimationFrame);
 
 	return new AnimationFrame(animation, std::move(sprite), duration);
+}
+
+SharedPtr<AnimationSprite> AssetManager::CreateAnimationSprite()
+{
+	PREPARE_SPAWNER_ASSERT(AnimationSprite);
+
+	return new AnimationSprite();
 }
 
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)

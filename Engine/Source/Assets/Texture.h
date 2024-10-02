@@ -83,7 +83,7 @@ namespace TGL
 		void Free();
 
 	private:
-		void Bind(u8 slot) const override;
+		bool Bind(u8 slot) const override;
 		const glm::mat4& GetMatrix() const override;
 	};
 }

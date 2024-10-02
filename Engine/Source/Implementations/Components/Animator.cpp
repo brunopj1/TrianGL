@@ -1,18 +1,17 @@
 ﻿#include "Animator.h"
 
 #include "Assets/Animation.h"
+#include "Assets/AnimationSprite.h"
+#include "Core/Services/Private/AssetManager.h"
 #include <stdexcept>
 
 using namespace TGL;
 
 Animator::Animator()
 	: Component(true, I32_MIN)
-{}
-
-Animator::~Animator()
 {
-	// Set the target uniform to nullptr to remove this animator from the active animators map
-	SetTargetUniform(nullptr);
+	AssetManager& assetManager = AssetManager::Get();
+	m_AnimationSprite = assetManager.CreateAnimationSprite();
 }
 
 void Animator::SetAnimation(SharedPtr<Animation> animation)
@@ -32,29 +31,9 @@ SharedPtr<Animation> Animator::GetAnimation() const
 	return m_Animation;
 }
 
-void Animator::SetTargetUniform(SpriteUniform* spriteUniform)
+SharedPtr<AnimationSprite> Animator::GetAnimationSprite() const
 {
-	if (m_TargetUniform == spriteUniform)
-	{
-		return;
-	}
-
-	// Check if the new uniform is already being used by another animator
-	if (spriteUniform != nullptr && s_ActiveAnimators.contains(spriteUniform))
-	{
-		throw std::invalid_argument("The specified uniform is already being used by a different animator");
-	}
-
-	Stop();
-
-	UpdateActiveAnimators(m_TargetUniform, spriteUniform, this);
-
-	m_TargetUniform = spriteUniform;
-}
-
-SpriteUniform* Animator::GetTargetUniform() const
-{
-	return m_TargetUniform;
+	return m_AnimationSprite;
 }
 
 AnimatorStatus Animator::GetStatus() const
@@ -69,7 +48,7 @@ void Animator::Play()
 		return;
 	}
 
-	if (m_Animation == nullptr || m_TargetUniform == nullptr)
+	if (m_Animation == nullptr)
 	{
 		return;
 	}
@@ -124,7 +103,7 @@ void Animator::JumpToTime(const f32 time)
 }
 void Animator::ApplyCurrentFrame()
 {
-	if (m_Animation == nullptr || m_TargetUniform == nullptr)
+	if (m_Animation == nullptr)
 	{
 		return;
 	}
@@ -133,7 +112,7 @@ void Animator::ApplyCurrentFrame()
 
 	if (currentSprite != nullptr)
 	{
-		m_TargetUniform->Value = currentSprite;
+		m_AnimationSprite->m_CurrentSprite = currentSprite;
 	}
 }
 
@@ -166,36 +145,10 @@ void Animator::OnUpdate(const f32 deltaTime)
 
 	if (currentSprite != nullptr)
 	{
-		m_TargetUniform->Value = currentSprite;
+		m_AnimationSprite->m_CurrentSprite = currentSprite;
 	}
 	else
 	{
 		Stop();
-	}
-}
-
-void Animator::UpdateActiveAnimators(SpriteUniform* previousTargetUniform, SpriteUniform* newTargetUniform, Animator* animator)
-{
-	// Remove the previous active animator
-	if (previousTargetUniform != nullptr)
-	{
-		s_ActiveAnimators.erase(previousTargetUniform);
-	}
-
-	// Add the new active animator
-	if (newTargetUniform != nullptr)
-	{
-		s_ActiveAnimators[newTargetUniform] = animator;
-	}
-}
-
-void Animator::RemoveAllActiveAnimators(SpriteUniform* spriteUniform)
-{
-	if (s_ActiveAnimators.contains(spriteUniform))
-	{
-		Animator* animator = s_ActiveAnimators[spriteUniform];
-		animator->m_TargetUniform = nullptr;
-
-		s_ActiveAnimators.erase(spriteUniform);
 	}
 }

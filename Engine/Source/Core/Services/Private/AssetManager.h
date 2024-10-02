@@ -33,6 +33,7 @@ namespace TGL
 
 		friend class Animation;
 		friend class AnimationFrame;
+		friend class AnimationSprite;
 		friend class Audio;
 		friend class Material;
 		friend class MaterialUniform;
@@ -42,6 +43,7 @@ namespace TGL
 		friend class SpriteRenderer;
 		friend class ParticleSystem;
 		friend class AudioPlayer;
+		friend class Animator;
 
 		friend class ReferenceCounter;
 
@@ -49,13 +51,14 @@ namespace TGL
 		friend class SharedPtr;
 
 	private:
-		DECLARE_SPAWNER_EXPECT_VAR(Animation);
-		DECLARE_SPAWNER_EXPECT_VAR(AnimationFrame);
-		DECLARE_SPAWNER_EXPECT_VAR(Audio);
-		DECLARE_SPAWNER_EXPECT_VAR(Material);
-		DECLARE_SPAWNER_EXPECT_VAR(MaterialUniform);
-		DECLARE_SPAWNER_EXPECT_VAR(Texture);
-		DECLARE_SPAWNER_EXPECT_VAR(TextureSlice);
+		DECLARE_SPAWNER_ASSERT_VAR(Animation);
+		DECLARE_SPAWNER_ASSERT_VAR(AnimationFrame);
+		DECLARE_SPAWNER_ASSERT_VAR(AnimationSprite);
+		DECLARE_SPAWNER_ASSERT_VAR(Audio);
+		DECLARE_SPAWNER_ASSERT_VAR(Material);
+		DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
+		DECLARE_SPAWNER_ASSERT_VAR(Texture);
+		DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
 
 	protected:
 		u32 m_QuadVao = 0;
@@ -90,6 +93,9 @@ namespace TGL
 	protected:
 		MOCKABLE_METHOD SharedPtr<Animation> CreateAnimation();
 		MOCKABLE_METHOD SharedPtr<AnimationFrame> CreateAnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, f32 duration);
+
+	protected:
+		MOCKABLE_METHOD SharedPtr<AnimationSprite> CreateAnimationSprite();
 
 	protected:
 		MOCKABLE_METHOD SharedPtr<Audio> LoadAudio(const std::string& filePath, bool stream);

@@ -30,7 +30,6 @@ BEGIN_GAME_TEST(Animation, Frames)
 		EXPECT_NE(frame1, nullptr);
 		EXPECT_EQ(animation->GetFrameCount(), 1);
 
-
 		const SharedPtr<AnimationFrame> frame2 = animation->AddFrame(texture->GetSlice(1), 0.2f);
 		EXPECT_NE(frame2, nullptr);
 		EXPECT_EQ(animation->GetFrameCount(), 2);
@@ -64,7 +63,6 @@ BEGIN_GAME_TEST(Animation, Duration)
 		const SharedPtr<AnimationFrame> frame1 = animation->AddFrame(texture->GetSlice(0), 0.1f);
 		EXPECT_NEAR(animation->GetDuration(), 0.1f, 0.001f);
 		EXPECT_TRUE(animation->IsUsingDefaultDuration());
-
 
 		const SharedPtr<AnimationFrame> frame2 = animation->AddFrame(texture->GetSlice(1), 0.2f);
 		EXPECT_NEAR(animation->GetDuration(), 0.3f, 0.001f);

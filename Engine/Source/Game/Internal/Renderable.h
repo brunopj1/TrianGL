@@ -21,7 +21,7 @@ namespace TGL
 	public:
 		Transform& GetTransform();
 		const Transform& GetTransform() const;
-		
+
 	public:
 		i32 GetZIndex() const;
 		void SetZIndex(i32 zIndex);

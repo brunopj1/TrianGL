@@ -278,13 +278,14 @@ END_GAME_TEST()
 
 BEGIN_GAME_TEST(Material, OnRenderSetup)
 {
+	SharedPtr<TestMaterial> m_Material;
+
 	void OnUpdate(f32 deltaTime) override
 	{
 		const Clock& clock = Clock::Get();
 		const u32 frame = clock.GetFrameCount();
 
 		static SpriteRenderer* spriteRenderer = nullptr;
-		static SharedPtr<TestMaterial> material = nullptr;
 
 		if (frame == 1)
 		{
@@ -292,29 +293,27 @@ BEGIN_GAME_TEST(Material, OnRenderSetup)
 
 			TestEntity* entity = SpawnEntity<TestEntity>();
 			spriteRenderer = entity->AttachComponent<SpriteRenderer>();
-			material = Material::CreateInstanceOf<TestMaterial>();
-			spriteRenderer->SetMaterial(material);
+			m_Material = Material::CreateInstanceOf<TestMaterial>();
+			spriteRenderer->SetMaterial(m_Material);
 
-			EXPECT_EQ(material->m_OnRenderSetupCalls, 0);
+			EXPECT_EQ(m_Material->m_OnRenderSetupCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			EXPECT_EQ(material->m_OnRenderSetupCalls, 1);
+			EXPECT_EQ(m_Material->m_OnRenderSetupCalls, 1);
 			spriteRenderer->SetMaterial(nullptr);
 		}
 
 		if (frame == 3)
 		{
-			EXPECT_EQ(material->m_OnRenderSetupCalls, 1);
-			spriteRenderer->SetMaterial(material);
+			EXPECT_EQ(m_Material->m_OnRenderSetupCalls, 1);
+			spriteRenderer->SetMaterial(m_Material);
 		}
 
 		if (frame == 4)
 		{
-			EXPECT_EQ(material->m_OnRenderSetupCalls, 2);
-
-			material = nullptr; // Keeping assets alive in static variables causes crashes when freeing memory
+			EXPECT_EQ(m_Material->m_OnRenderSetupCalls, 2);
 
 			EndTest();
 		}

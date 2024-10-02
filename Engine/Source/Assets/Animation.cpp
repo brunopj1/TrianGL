@@ -20,12 +20,12 @@ AnimationFrame::AnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, c
 		throw std::invalid_argument("The duration must be greater than zero");
 	}
 
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, AnimationFrame);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, AnimationFrame);
 }
 
 AnimationFrame::~AnimationFrame()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 }
 
 SharedPtr<Sprite> AnimationFrame::GetSprite() const
@@ -40,12 +40,12 @@ f32 AnimationFrame::GetDuration() const
 
 Animation::Animation()
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Animation);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Animation);
 }
 
 Animation::~Animation()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
 	for (SharedPtr<AnimationFrame>& frame : m_Frames)
 	{

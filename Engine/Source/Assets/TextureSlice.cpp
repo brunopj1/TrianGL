@@ -1,6 +1,7 @@
 ﻿#include "TextureSlice.h"
 
 #include "Core/Services/Backends/RenderBackend.h"
+#include "Core/Services/Private/AssetManager.h"
 #include "Texture.h"
 
 using namespace TGL;
@@ -9,11 +10,14 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
 	: Resolution(resolution), Offset(offset), TextureMatrix(textureMatrix) {}
 
 TextureSlice::TextureSlice(SharedPtr<Texture> texture, const u32 index)
-	: m_Texture(std::move(texture)), m_Index(index) {}
+	: m_Texture(std::move(texture)), m_Index(index)
+{
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(AssetManager, TextureSlice);
+}
 
 TextureSlice::~TextureSlice()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 }
 
 SharedPtr<Texture> TextureSlice::GetTexture() const
@@ -26,10 +30,11 @@ const glm::uvec2& TextureSlice::GetResolution() const
 	return m_Texture->m_Slices[m_Index].Resolution;
 }
 
-void TextureSlice::Bind(const u8 slot) const
+bool TextureSlice::Bind(const u8 slot) const
 {
 	RenderBackend& renderBackend = RenderBackend::Get();
 	renderBackend.BindTexture(m_Texture->m_TextureId, slot);
+	return true;
 }
 
 const glm::mat4& TextureSlice::GetMatrix() const

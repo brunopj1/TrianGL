@@ -1,0 +1,49 @@
+﻿#include "AnimationSprite.h"
+
+#include "Core/Services/Private/AssetManager.h"
+
+using namespace TGL;
+
+AnimationSprite::AnimationSprite()
+{
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(AssetManager, AnimationSprite);
+}
+
+AnimationSprite::~AnimationSprite()
+{
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+}
+SharedPtr<Sprite> AnimationSprite::GetCurrentSprite() const
+{
+	return m_CurrentSprite;
+}
+
+bool AnimationSprite::Bind(const u8 slot) const
+{
+	if (m_CurrentSprite == nullptr)
+	{
+		return false;
+	}
+
+	return m_CurrentSprite->Bind(slot);
+}
+
+const glm::mat4& AnimationSprite::GetMatrix() const
+{
+	if (m_CurrentSprite == nullptr)
+	{
+		return s_DefaultMatrix;
+	}
+
+	return m_CurrentSprite->GetMatrix();
+}
+
+const glm::uvec2& AnimationSprite::GetResolution() const
+{
+	if (m_CurrentSprite == nullptr)
+	{
+		return s_DefaultResolution;
+	}
+
+	return m_CurrentSprite->GetResolution();
+}

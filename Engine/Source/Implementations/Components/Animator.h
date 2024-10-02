@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Assets/MaterialUniforms.h"
+#include "Assets/AnimationSprite.h"
 #include "Game/Component.h"
 #include "Memory/SharedPtr.h"
 
@@ -22,11 +22,8 @@ namespace TGL
 		friend class SpriteUniform;
 
 	private:
-		static inline std::unordered_map<SpriteUniform*, Animator*> s_ActiveAnimators;
-
-	private:
+		SharedPtr<AnimationSprite> m_AnimationSprite = nullptr;
 		SharedPtr<Animation> m_Animation = nullptr;
-		SpriteUniform* m_TargetUniform = nullptr;
 
 	private:
 		AnimatorStatus m_Status = AnimatorStatus::Stopped;
@@ -37,15 +34,14 @@ namespace TGL
 
 	public:
 		Animator();
-		~Animator() override;
+		~Animator() override = default;
 
 	public:
 		void SetAnimation(SharedPtr<Animation> animation);
 		SharedPtr<Animation> GetAnimation() const;
 
 	public:
-		void SetTargetUniform(SpriteUniform* spriteUniform);
-		SpriteUniform* GetTargetUniform() const;
+		SharedPtr<AnimationSprite> GetAnimationSprite() const;
 
 	public:
 		AnimatorStatus GetStatus() const;
@@ -68,10 +64,6 @@ namespace TGL
 
 	protected:
 		void OnUpdate(f32 deltaTime) override;
-
-	private:
-		static void UpdateActiveAnimators(SpriteUniform* previousTargetUniform, SpriteUniform* newTargetUniform, Animator* animator);
-		static void RemoveAllActiveAnimators(SpriteUniform* spriteUniform);
 	};
 
 }

@@ -28,13 +28,14 @@ namespace TGL
 
 		friend class Animation;
 		friend class AnimationFrame;
+		friend class AnimationSprite;
 		friend class Audio;
 		friend class Material;
 		friend class Texture;
 		friend class TextureSlice;
 
 	private:
-		DECLARE_SPAWNER_EXPECT_VAR(Asset);
+		DECLARE_SPAWNER_ASSERT_VAR(Asset);
 
 	public:
 		SharedPtrSpawnerUtil() = delete;
@@ -247,7 +248,7 @@ namespace TGL
 
 			if (m_ReferenceCounter->m_Counter == 0)
 			{
-				PREPARE_SPAWNER_EXPECT_EXT(SharedPtrSpawnerUtil, Asset);
+				PREPARE_SPAWNER_ASSERT_EXT(SharedPtrSpawnerUtil, Asset);
 
 				delete m_ReferenceCounter;
 				delete m_Pointer;

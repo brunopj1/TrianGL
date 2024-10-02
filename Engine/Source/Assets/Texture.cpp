@@ -11,12 +11,12 @@ using namespace TGL;
 Texture::Texture(std::string filePath)
 	: m_FilePath(std::move(filePath))
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Texture);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Texture);
 }
 
 Texture::~Texture()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
 	Free();
 }
@@ -183,10 +183,11 @@ void Texture::Free()
 	m_TextureId = 0;
 }
 
-void Texture::Bind(const u8 slot) const
+bool Texture::Bind(const u8 slot) const
 {
 	RenderBackend& renderBackend = RenderBackend::Get();
 	renderBackend.BindTexture(m_TextureId, slot);
+	return true;
 }
 
 const glm::mat4& Texture::GetMatrix() const

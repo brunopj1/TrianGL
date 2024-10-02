@@ -11,6 +11,7 @@ namespace TGL
 	class Audio;
 	class Animation;
 	class AnimationFrame;
+	class AnimationSprite;
 	class Material;
 	class Sprite;
 	class Texture;
@@ -26,6 +27,7 @@ namespace TGL
 		std::is_same_v<Audio, T> ||
 		std::is_same_v<Animation, T> ||
 		std::is_same_v<AnimationFrame, T> ||
+		std::is_same_v<AnimationSprite, T> ||
 		std::is_base_of_v<Material, T> ||
 		std::is_same_v<Sprite, T> ||
 		std::is_same_v<Texture, T> ||

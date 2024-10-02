@@ -7,12 +7,12 @@ using namespace TGL;
 Entity::Entity(const bool shouldUpdate, const i32 orderOfExecution)
 	: GameObject(shouldUpdate, orderOfExecution)
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
 }
 
 Entity::~Entity()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Entity);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Entity);
 }
 
 Transform& Entity::GetTransform()

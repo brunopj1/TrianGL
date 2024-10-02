@@ -10,15 +10,17 @@ namespace TGL
 	{
 	private:
 		friend class SpriteUniform;
+		friend class AnimationSprite;
 
 	public:
 		Sprite() = default;
 		virtual ~Sprite() = default;
 
 	private:
+		virtual bool Bind(u8 slot) const = 0;
 		static void Unbind(u8 slot);
-		virtual void Bind(u8 slot) const = 0;
 
+	private:
 		virtual const glm::mat4& GetMatrix() const = 0;
 		virtual const glm::uvec2& GetResolution() const = 0;
 	};

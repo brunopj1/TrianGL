@@ -56,7 +56,7 @@ constexpr f64 F64_SMALLEST = std::numeric_limits<f64>::min();
 
 // Ensure that the floating point types are using the correct sizes
 
-static_assert(CHAR_BIT * sizeof (float) == 32, "The size of the float type is not 32 bits");
-static_assert(CHAR_BIT * sizeof (double) == 64, "The size of the double type is not 64 bits");
+static_assert(CHAR_BIT * sizeof(float) == 32, "The size of the float type is not 32 bits");
+static_assert(CHAR_BIT * sizeof(double) == 64, "The size of the double type is not 64 bits");
 
 // NOLINTEND(CppInconsistentNaming)

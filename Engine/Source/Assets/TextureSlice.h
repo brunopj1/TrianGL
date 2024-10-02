@@ -40,7 +40,7 @@ namespace TGL
 		const glm::uvec2& GetResolution() const override; // Also used by Sprite class
 
 	private:
-		void Bind(u8 slot) const override;
+		bool Bind(u8 slot) const override;
 		const glm::mat4& GetMatrix() const override;
 	};
 }

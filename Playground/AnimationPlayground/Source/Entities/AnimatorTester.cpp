@@ -19,11 +19,10 @@ AnimatorTester::AnimatorTester(const glm::vec2& position)
 
 	GetTransform().SetPosition(position);
 
+	m_Animator = AttachComponent<Animator>();
 	SpriteRenderer* spriteRenderer = AttachComponent<SpriteRenderer>();
 	SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
-
-	m_Animator = AttachComponent<Animator>();
-	m_Animator->SetTargetUniform(material->Sprite);
+	material->Sprite->Value = m_Animator->GetAnimationSprite();
 
 	m_WindowPos = window_padding * glm::vec2(1, 2); // Padding from the top left corner
 	m_WindowPos.y += animation_window_size.y; // Skip the animation window vertically

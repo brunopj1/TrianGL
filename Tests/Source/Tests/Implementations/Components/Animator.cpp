@@ -74,36 +74,6 @@ BEGIN_GAME_TEST(Animator, Animation)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST(Animator, TargetUniform)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		TestEntity* entity = SpawnEntity<TestEntity>();
-		Animator* animator = entity->AttachComponent<Animator>();
-		SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
-		SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
-
-		EXPECT_EQ(animator->GetTargetUniform(), nullptr);
-
-		animator->SetTargetUniform(material->Sprite);
-		EXPECT_EQ(animator->GetTargetUniform(), material->Sprite);
-
-		animator->SetTargetUniform(nullptr);
-		EXPECT_EQ(animator->GetTargetUniform(), nullptr);
-
-		Animator* otherAnimator = entity->AttachComponent<Animator>();
-		otherAnimator->SetTargetUniform(material->Sprite);
-		EXPECT_THROW(animator->SetTargetUniform(material->Sprite), std::invalid_argument);
-
-		otherAnimator->Detach();
-		animator->SetTargetUniform(material->Sprite);
-		EXPECT_EQ(animator->GetTargetUniform(), material->Sprite);
-
-		EndTest();
-	}
-}
-END_GAME_TEST()
-
 BEGIN_GAME_TEST(Animator, Loop)
 {
 	void OnUpdate(f32 deltaTime) override
@@ -149,7 +119,7 @@ BEGIN_GAME_TEST(Animator, PlaybackControls)
 		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		animator->SetAnimation(animation);
-		animator->SetTargetUniform(material->Sprite);
+		material->Sprite->Value = animator->GetAnimationSprite();
 
 		animator->Play();
 		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
@@ -176,65 +146,72 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackCompletion, MockServiceBuilder)
 		const u32 frame = clock.GetFrameCount();
 
 		static Animator* animator = nullptr;
-		static SharedPtr<DefaultSpriteMaterial> material = nullptr;
-		static SharedPtr<Animation> animation = nullptr;
+		static SpriteRenderer* spriteRenderer = nullptr;
 
 		if (frame == 1)
 		{
 			TestEntity* entity = SpawnEntity<TestEntity>();
 			animator = entity->AttachComponent<Animator>();
-
-			SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
-			material = spriteRenderer->UseDefaultMaterial();
-			animation = CreateAnimation();
+			spriteRenderer = entity->AttachComponent<SpriteRenderer>();
+			SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
+			const SharedPtr<Animation> animation = CreateAnimation();
 
 			animator->SetAnimation(animation);
-			animator->SetTargetUniform(material->Sprite);
+			material->Sprite->Value = animator->GetAnimationSprite();
 			animator->Play();
 		}
+
+		SharedPtr<Animation> animation = animator->GetAnimation();
+		SharedPtr<AnimationSprite> animationSprite = animator->GetAnimationSprite();
+		SharedPtr<DefaultSpriteMaterial> material = CastTo<DefaultSpriteMaterial>(spriteRenderer->GetMaterial());
 
 		if (frame == 1)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), 0.0f, 0.001f);
-			EXPECT_EQ(material->Sprite->Value, nullptr);
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
+			EXPECT_EQ(animationSprite->GetCurrentSprite(), nullptr);
 		}
 
 		if (frame == 2)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), 0.15f, 0.001f);
-			EXPECT_EQ(material->Sprite->Value, animation->GetFrame(1)->GetSprite());
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
+			EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(1)->GetSprite());
 		}
 
 		if (frame == 3)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), 0.30f, 0.001f);
-			EXPECT_EQ(material->Sprite->Value, animation->GetFrame(2)->GetSprite());
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
+			EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(2)->GetSprite());
 		}
 
 		if (frame == 4)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), 0.45f, 0.001f);
-			EXPECT_EQ(material->Sprite->Value, animation->GetFrame(3)->GetSprite());
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
+			EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(3)->GetSprite());
 		}
 
 		if (frame == 5)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), 0.60f, 0.001f);
-			EXPECT_EQ(material->Sprite->Value, animation->GetFrame(3)->GetSprite());
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
+			EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(3)->GetSprite());
 		}
 
 		if (frame == 6)
 		{
 			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 			EXPECT_NEAR(animator->GetTime(), 0.0f, 0.001f);
+			EXPECT_EQ(material->Sprite->Value, animationSprite);
 
 			material = nullptr;
-			animation = nullptr;
 			EndTest();
 		}
 	}
@@ -260,7 +237,7 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithLoop, MockServiceBuilder)
 			const SharedPtr<Animation> animation = CreateAnimation();
 
 			animator->SetAnimation(animation);
-			animator->SetTargetUniform(material->Sprite);
+			material->Sprite->Value = animator->GetAnimationSprite();
 			animator->SetLoop(true);
 			animator->Play();
 		}
@@ -316,54 +293,39 @@ BEGIN_GAME_TEST(Animator, ApplyCurrentFrame)
 
 		SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
 		const SharedPtr<Animation> animation = CreateAnimation();
+		const SharedPtr<AnimationSprite> animationSprite = animator->GetAnimationSprite();
 
 		animator->SetAnimation(animation);
-		animator->SetTargetUniform(material->Sprite);
+		material->Sprite->Value = animationSprite;
 
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(0)->GetSprite());
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(0)->GetSprite());
 
 		animator->JumpToTime(0.05f);
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(0)->GetSprite());
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(0)->GetSprite());
 
 		animator->JumpToTime(0.15f);
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(1)->GetSprite());
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(1)->GetSprite());
 
 		animator->JumpToTime(0.25f);
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(2)->GetSprite());
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(2)->GetSprite());
 
 		animator->JumpToTime(0.45f);
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(3)->GetSprite());
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(3)->GetSprite());
 
 		animator->JumpToTime(0.05f);
 		animator->ApplyCurrentFrame();
-		EXPECT_EQ(material->Sprite->Value, animation->GetFrame(0)->GetSprite());
-
-		EndTest();
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST(Animator, OnTargetUniformDeleted)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		TestEntity* entity = SpawnEntity<TestEntity>();
-		Animator* animator = entity->AttachComponent<Animator>();
-		SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
-		SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
-
-		animator->SetTargetUniform(material->Sprite);
-		EXPECT_EQ(animator->GetTargetUniform(), material->Sprite);
-
-		spriteRenderer->SetMaterial(nullptr);
-		material = nullptr;
-
-		EXPECT_EQ(animator->GetTargetUniform(), nullptr);
+		EXPECT_EQ(material->Sprite->Value, animationSprite);
+		EXPECT_EQ(animationSprite->GetCurrentSprite(), animation->GetFrame(0)->GetSprite());
 
 		EndTest();
 	}

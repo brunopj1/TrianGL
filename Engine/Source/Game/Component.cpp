@@ -6,12 +6,12 @@ using namespace TGL;
 Component::Component(const bool shouldUpdate, const i32 orderOfExecution)
 	: GameObject(shouldUpdate, orderOfExecution)
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
 }
 
 Component::~Component()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Component);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Component);
 }
 
 Entity* Component::GetParent() const

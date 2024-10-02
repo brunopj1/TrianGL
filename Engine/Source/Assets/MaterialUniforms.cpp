@@ -3,7 +3,6 @@
 #include "Implementations/Components/Animator.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
-#include <Assets/Texture.h>
 #include <Core/Services/Private/AssetManager.h>
 
 using namespace TGL;
@@ -11,12 +10,12 @@ using namespace TGL;
 MaterialUniform::MaterialUniform(const Shader* shader, const std::string& name)
 	: m_Location(shader->GetUniformLocation(name))
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, MaterialUniform);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 MaterialUniform::~MaterialUniform()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::AssetManager, MaterialUniform);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 bool MaterialUniform::IsValid() const
@@ -138,13 +137,8 @@ void MaterialUniformImpl<glm::mat4>::BindInternal() const
 }
 
 SpriteUniform::SpriteUniform(const Shader* shader, const std::string& name)
-	: MaterialUniform(shader, name), m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")), m_ResolutionLocation(shader->GetUniformLocation(name + "Resolution")), m_Slot(0), Value(nullptr) // The slot is updated by the spawner
+	: MaterialUniform(shader, name), m_MatrixLocation(shader->GetUniformLocation(name + "Matrix")), m_ResolutionLocation(shader->GetUniformLocation(name + "Resolution"))
 {}
-
-SpriteUniform::~SpriteUniform()
-{
-	Animator::RemoveAllActiveAnimators(this);
-}
 
 bool SpriteUniform::HasValue() const
 {
@@ -158,28 +152,28 @@ bool SpriteUniform::IsValid() const
 
 void SpriteUniform::BindInternal() const
 {
-	if (Value == nullptr) // If location is -1 the sampler is not being used, so we don't need to unbind
-	{
-		Sprite::Unbind(m_Slot);
-		return;
-	}
+	RenderBackend& renderBackend = RenderBackend::Get();
 
-	if (m_Location != -1)
+	if (m_Location != -1 && Value != nullptr)
 	{
-		Value->Bind(m_Slot);
-		RenderBackend& renderBackend = RenderBackend::Get();
+		const bool isBound = Value->Bind(m_Slot);
 		renderBackend.SetUniform1i(m_Location, m_Slot);
+
+		if (!isBound)
+		{
+			Sprite::Unbind(m_Slot);
+		}
 	}
 
 	if (m_MatrixLocation != -1)
 	{
-		RenderBackend& renderBackend = RenderBackend::Get();
-		renderBackend.SetUniformMatrix4f(m_MatrixLocation, Value->GetMatrix());
+		const auto value = Value != nullptr ? Value->GetMatrix() : glm::mat4(1.0f);
+		renderBackend.SetUniformMatrix4f(m_MatrixLocation, value);
 	}
 
 	if (m_ResolutionLocation != -1)
 	{
-		RenderBackend& renderBackend = RenderBackend::Get();
-		renderBackend.SetUniform2ui(m_ResolutionLocation, Value->GetResolution());
+		const auto value = Value != nullptr ? Value->GetResolution() : glm::uvec2(0);
+		renderBackend.SetUniform2ui(m_ResolutionLocation, value);
 	}
 }

@@ -8,7 +8,7 @@ using namespace TGL;
 
 Material::Material(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Material);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Material);
 
 	AssetManager& assetManager = AssetManager::Get();
 	m_Shader = assetManager.LoadShader(vertexShaderPath, fragmentShaderPath);
@@ -18,7 +18,7 @@ Material::Material(const std::string& vertexShaderPath, const std::string& fragm
 
 Material::~Material()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
 	AssetManager& assetManager = AssetManager::Get();
 	assetManager.UnloadMaterialUniforms(this);

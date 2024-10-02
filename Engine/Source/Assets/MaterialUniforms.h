@@ -10,7 +10,7 @@ namespace TGL
 {
 	// Forward declaration
 	class Shader;
-	
+
 	// Base class
 	class MaterialUniform
 	{
@@ -94,14 +94,14 @@ namespace TGL
 	private:
 		i32 m_MatrixLocation;
 		i32 m_ResolutionLocation;
-		u8 m_Slot;
+		u8 m_Slot = 0;
 
 	public:
 		SharedPtr<Sprite> Value;
 
 	public:
 		SpriteUniform(const Shader* shader, const std::string& name);
-		~SpriteUniform() override;
+		~SpriteUniform() override = default;
 
 	public:
 		bool HasValue() const;

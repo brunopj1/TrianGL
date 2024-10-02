@@ -10,14 +10,14 @@ using namespace TGL;
 Audio::Audio(std::string filePath, const bool stream)
 	: m_FilePath(std::move(filePath)), m_Streamed(stream)
 {
-	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Audio);
+	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Audio);
 
 	Init();
 }
 
 Audio::~Audio()
 {
-	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
 	Free();
 }
