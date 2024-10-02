@@ -86,12 +86,7 @@ BEGIN_GAME_TEST(GameObject, Update)
 		static inline bool s_OnUpdateCalled = false;
 
 		TestEntity1()
-			: Entity(false) {}
-
-		i32 GetOrderOfExecution() const override
-		{
-			return -1;
-		}
+			: Entity(false, -1) {}
 
 		void OnUpdate(f32 deltaTime) override
 		{
@@ -105,12 +100,7 @@ BEGIN_GAME_TEST(GameObject, Update)
 		static inline bool s_OnUpdateCalled = false;
 
 		TestEntity2()
-			: Entity(true) {}
-
-		i32 GetOrderOfExecution() const override
-		{
-			return -1;
-		}
+			: Entity(true, -1) {}
 
 		void OnUpdate(f32 deltaTime) override
 		{
@@ -158,12 +148,7 @@ public:
 	{
 	public:
 		TestEntity()
-			: Entity(true) {}
-
-		i32 GetOrderOfExecution() const override
-		{
-			return 0;
-		}
+			: Entity(true, 0) {}
 
 		void OnStart() override
 		{
@@ -196,12 +181,7 @@ public:
 	{
 	public:
 		TestComponentA()
-			: Component(true) {}
-
-		i32 GetOrderOfExecution() const override
-		{
-			return 1;
-		}
+			: Component(true, 1) {}
 
 		void OnStart() override
 		{
@@ -236,12 +216,7 @@ public:
 	{
 	public:
 		TestComponentB()
-			: Component(true) {}
-
-		i32 GetOrderOfExecution() const override
-		{
-			return -1;
-		}
+			: Component(true, -1) {}
 
 		void OnStart() override
 		{

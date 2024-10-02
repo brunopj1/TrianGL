@@ -10,7 +10,7 @@ namespace TGL
 {
 	// Forward declaration
 	class Shader;
-
+	
 	// Base class
 	class MaterialUniform
 	{

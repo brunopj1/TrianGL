@@ -3,15 +3,15 @@
 
 using namespace TGL;
 
-Component::Component(const bool shouldUpdate)
-	: GameObject(shouldUpdate)
+Component::Component(const bool shouldUpdate, const i32 orderOfExecution)
+	: GameObject(shouldUpdate, orderOfExecution)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
+	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Component);
 }
 
 Component::~Component()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Component);
+	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Component);
 }
 
 Entity* Component::GetParent() const

@@ -2,13 +2,8 @@
 
 using namespace TGL;
 
-GameObject::GameObject(const bool shouldUpdate)
-	: m_ShouldUpdate(shouldUpdate) {}
-
-i32 GameObject::GetOrderOfExecution() const
-{
-	return 0;
-}
+GameObject::GameObject(const bool shouldUpdate, const i32 orderOfExecution)
+	: m_ShouldUpdate(shouldUpdate), m_OrderOfExecution(orderOfExecution) {}
 
 void GameObject::OnStart() {}
 

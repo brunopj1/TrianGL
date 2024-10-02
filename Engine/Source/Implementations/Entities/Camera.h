@@ -55,7 +55,6 @@ namespace TGL
 		void SetBackgroundColor(const glm::vec3& color);
 
 	public:
-		// TODO optimize the matrix calculations for these methods
 		glm::vec2 ScreenToWorldPosition(const glm::vec2& screenPos) const;
 		glm::vec2 WorldToScreenPosition(const glm::vec2& worldPos) const;
 

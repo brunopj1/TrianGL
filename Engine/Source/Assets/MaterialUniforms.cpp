@@ -11,12 +11,12 @@ using namespace TGL;
 MaterialUniform::MaterialUniform(const Shader* shader, const std::string& name)
 	: m_Location(shader->GetUniformLocation(name))
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, MaterialUniform);
+	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 MaterialUniform::~MaterialUniform()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::AssetManager, MaterialUniform);
+	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::AssetManager, MaterialUniform);
 }
 
 bool MaterialUniform::IsValid() const

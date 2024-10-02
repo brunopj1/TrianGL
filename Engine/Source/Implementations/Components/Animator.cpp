@@ -6,7 +6,7 @@
 using namespace TGL;
 
 Animator::Animator()
-	: Component(true)
+	: Component(true, I32_MIN)
 {}
 
 Animator::~Animator()

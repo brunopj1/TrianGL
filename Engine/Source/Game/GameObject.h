@@ -16,13 +16,11 @@ namespace TGL
 	private:
 		u64 m_Id = 0;
 		bool m_ShouldUpdate;
+		i32 m_OrderOfExecution;
 
 	protected:
-		GameObject(bool shouldUpdate);
+		GameObject(bool shouldUpdate, i32 orderOfExecution);
 		virtual ~GameObject() = default;
-
-	protected:
-		virtual i32 GetOrderOfExecution() const;
 
 	protected:
 		virtual void OnStart();

@@ -14,7 +14,7 @@ namespace TGL
 		Entity* m_Parent = nullptr;
 
 	protected:
-		Component(bool shouldUpdate);
+		Component(bool shouldUpdate, i32 orderOfExecution = 0);
 		~Component() override;
 
 	public:

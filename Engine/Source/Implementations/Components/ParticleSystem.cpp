@@ -6,7 +6,7 @@
 using namespace TGL;
 
 ParticleSystem::ParticleSystem(const u32 maxParticles, SharedPtr<Material> material)
-	: Component(true), m_MaxParticles(maxParticles), m_Material(std::move(material))
+	: Component(true, I32_MIN), m_MaxParticles(maxParticles), m_Material(std::move(material))
 {
 	Init();
 }
@@ -138,7 +138,10 @@ void ParticleSystem::Render()
 		return;
 	}
 
-	glm::mat4 modelMatrix = GetParent()->GetTransform().GetTransformMatrix();
+	const glm::mat4 parentModelMatrix = GetParent()->GetTransform().GetTransformMatrix();
+	const glm::mat4 rendererModelMatrix = GetTransform().GetTransformMatrix();
+
+	glm::mat4 modelMatrix = parentModelMatrix * rendererModelMatrix;
 
 	if (const i32 zIndex = GetZIndex(); zIndex != 0)
 	{

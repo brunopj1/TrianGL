@@ -7,8 +7,6 @@
 #include <cstddef>
 #include <type_traits>
 
-// TODO add the concept to the all templated classes
-
 namespace TGL
 {
 	class ReferenceCounter final
@@ -36,7 +34,7 @@ namespace TGL
 		friend class TextureSlice;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(Asset);
+		DECLARE_SPAWNER_EXPECT_VAR(Asset);
 
 	public:
 		SharedPtrSpawnerUtil() = delete;
@@ -46,6 +44,7 @@ namespace TGL
 		DELETE_COPY_AND_MOVE_CONSTRUCTORS(SharedPtrSpawnerUtil);
 	};
 
+	// TODO use the 'SharedPointerValue' concept here
 	template <typename T>
 	class SharedPtr final
 	{
@@ -248,7 +247,7 @@ namespace TGL
 
 			if (m_ReferenceCounter->m_Counter == 0)
 			{
-				PREPARE_SPAWNER_ASSERT_EXT(SharedPtrSpawnerUtil, Asset);
+				PREPARE_SPAWNER_EXPECT_EXT(SharedPtrSpawnerUtil, Asset);
 
 				delete m_ReferenceCounter;
 				delete m_Pointer;

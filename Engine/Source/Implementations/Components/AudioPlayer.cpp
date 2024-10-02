@@ -7,7 +7,7 @@
 using namespace TGL;
 
 AudioPlayer::AudioPlayer(SharedPtr<Audio> audio)
-	: Component(true), m_Audio(std::move(audio)) {}
+	: Component(true, I32_MIN), m_Audio(std::move(audio)) {}
 
 AudioPlayer::~AudioPlayer()
 {

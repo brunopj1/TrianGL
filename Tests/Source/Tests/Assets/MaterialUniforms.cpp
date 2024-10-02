@@ -216,19 +216,19 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, IntUniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			IntUniform* uniform = SetupUniformTest<IntUniform>(UniformDataType::I32, 1);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123;
-			ASSERT_EQ(uniform->Value, 123);
+			EXPECT_EQ(uniform->Value, 123);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 1);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
 
 			EndTest();
 		}
@@ -246,20 +246,20 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int2Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Int2Uniform* uniform = SetupUniformTest<Int2Uniform>(UniformDataType::I32, 2);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 2);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
 
 			EndTest();
 		}
@@ -277,21 +277,21 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int3Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Int3Uniform* uniform = SetupUniformTest<Int3Uniform>(UniformDataType::I32, 3);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
-			ASSERT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 3);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
 
 			EndTest();
 		}
@@ -309,22 +309,22 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int4Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Int4Uniform* uniform = SetupUniformTest<Int4Uniform>(UniformDataType::I32, 4);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789, -321};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
-			ASSERT_EQ(uniform->Value.z, 789);
-			ASSERT_EQ(uniform->Value.w, -321);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.w, -321);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
 
 			EndTest();
 		}
@@ -342,19 +342,19 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, UintUniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			UintUniform* uniform = SetupUniformTest<UintUniform>(UniformDataType::U32, 1);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123;
-			ASSERT_EQ(uniform->Value, 123);
+			EXPECT_EQ(uniform->Value, 123);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 1);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
 
 			EndTest();
 		}
@@ -372,20 +372,20 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint2Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Uint2Uniform* uniform = SetupUniformTest<Uint2Uniform>(UniformDataType::U32, 2);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 2);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
 
 			EndTest();
 		}
@@ -403,21 +403,21 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint3Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Uint3Uniform* uniform = SetupUniformTest<Uint3Uniform>(UniformDataType::U32, 3);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
-			ASSERT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 3);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
 
 			EndTest();
 		}
@@ -435,22 +435,22 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint4Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Uint4Uniform* uniform = SetupUniformTest<Uint4Uniform>(UniformDataType::U32, 4);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789, 321};
-			ASSERT_EQ(uniform->Value.x, 123);
-			ASSERT_EQ(uniform->Value.y, 456);
-			ASSERT_EQ(uniform->Value.z, 789);
-			ASSERT_EQ(uniform->Value.w, 321);
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.w, 321);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
 
 			EndTest();
 		}
@@ -468,19 +468,19 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, FloatUniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			FloatUniform* uniform = SetupUniformTest<FloatUniform>(UniformDataType::F32, 1);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123.0f;
-			ASSERT_EQ(uniform->Value, 123.0f);
+			EXPECT_EQ(uniform->Value, 123.0f);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 1);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
 
 			EndTest();
 		}
@@ -498,20 +498,20 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float2Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Float2Uniform* uniform = SetupUniformTest<Float2Uniform>(UniformDataType::F32, 2);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123.0f, 456.0f};
-			ASSERT_EQ(uniform->Value.x, 123.0f);
-			ASSERT_EQ(uniform->Value.y, 456.0f);
+			EXPECT_EQ(uniform->Value.x, 123.0f);
+			EXPECT_EQ(uniform->Value.y, 456.0f);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 2);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
 
 			EndTest();
 		}
@@ -529,21 +529,21 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float3Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Float3Uniform* uniform = SetupUniformTest<Float3Uniform>(UniformDataType::F32, 3);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123.0f, 456.0f, 789.0f};
-			ASSERT_EQ(uniform->Value.x, 123.0f);
-			ASSERT_EQ(uniform->Value.y, 456.0f);
-			ASSERT_EQ(uniform->Value.z, 789.0f);
+			EXPECT_EQ(uniform->Value.x, 123.0f);
+			EXPECT_EQ(uniform->Value.y, 456.0f);
+			EXPECT_EQ(uniform->Value.z, 789.0f);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 3);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
 
 			EndTest();
 		}
@@ -561,22 +561,22 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float4Uniform, MockServiceBuilder)
 		if (frame == 1)
 		{
 			Float4Uniform* uniform = SetupUniformTest<Float4Uniform>(UniformDataType::F32, 4);
-			ASSERT_NE(uniform, nullptr);
+			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789, -321};
-			ASSERT_EQ(uniform->Value.x, 123.0f);
-			ASSERT_EQ(uniform->Value.y, 456.0f);
-			ASSERT_EQ(uniform->Value.z, 789.0f);
-			ASSERT_EQ(uniform->Value.w, -321.0f);
+			EXPECT_EQ(uniform->Value.x, 123.0f);
+			EXPECT_EQ(uniform->Value.y, 456.0f);
+			EXPECT_EQ(uniform->Value.z, 789.0f);
+			EXPECT_EQ(uniform->Value.w, -321.0f);
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			ASSERT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
+			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
 
 			EndTest();
 		}

@@ -30,9 +30,9 @@ namespace TGL
 		friend class LazyPtr;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(GameMode);
-		DECLARE_SPAWNER_ASSERT_VAR(Entity);
-		DECLARE_SPAWNER_ASSERT_VAR(Component);
+		DECLARE_SPAWNER_EXPECT_VAR(GameMode);
+		DECLARE_SPAWNER_EXPECT_VAR(Entity);
+		DECLARE_SPAWNER_EXPECT_VAR(Component);
 
 	protected:
 		u64 m_NextId;

@@ -1,5 +1,4 @@
 ﻿#include "Util/GameTestAbstractions.h"
-#include <glm/detail/func_trigonometric.inl>
 
 using namespace TGL;
 

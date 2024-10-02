@@ -1,5 +1,4 @@
-﻿#include <Core/Application.h>
-#include <Util/RandomNumberGenerator.h>
+﻿#include <Util/RandomNumberGenerator.h>
 #include <chrono>
 
 using namespace TGL;

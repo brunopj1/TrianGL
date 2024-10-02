@@ -11,7 +11,7 @@ namespace TGL
 		friend class EntityManager;
 
 	protected:
-		GameMode();
+		GameMode(i32 orderOfExecution = 0);
 		~GameMode() override;
 
 	protected:

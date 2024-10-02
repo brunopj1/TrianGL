@@ -18,7 +18,7 @@ namespace TGL
 		std::vector<Component*> m_Components;
 
 	protected:
-		Entity(bool shouldUpdate);
+		Entity(bool shouldUpdate, i32 orderOfExecution = 0);
 		~Entity() override;
 
 	public:

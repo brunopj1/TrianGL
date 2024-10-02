@@ -188,11 +188,11 @@ BEGIN_GAME_TEST(ParticleSystem, MaxParticles)
 		for (u32 i = 0; i < 10; i++)
 		{
 			const bool success = particleSystem->Emit({.Duration = 1.0f});
-			ASSERT_TRUE(success);
+			EXPECT_TRUE(success);
 		}
 
 		const bool success = particleSystem->Emit({.Duration = 1.0f});
-		ASSERT_FALSE(success);
+		EXPECT_FALSE(success);
 
 		EndTest();
 	}
@@ -201,12 +201,6 @@ END_GAME_TEST()
 
 BEGIN_GAME_TEST_MOCKED(ParticleSystem, Lifetime, MockServiceBuilder)
 {
-	i32 GetOrderOfExecution() const override
-	{
-		// TODO remove this and set the particle system order to -1
-		return 1;
-	}
-
 	void OnUpdate(f32 deltaTime) override
 	{
 		const Clock& clock = Clock::Get();
@@ -281,15 +275,15 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, Render, MockServiceBuilder)
 
 			MockEntityManager::s_Renderable = particleSystem;
 
-			ASSERT_EQ(MockRenderBackend::s_UseProgramCalls, 0);
-			ASSERT_EQ(MockRenderBackend::s_DrawElementsInstancedCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_UseProgramCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_DrawElementsInstancedCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_TRUE(MockEntityManager::s_WasRendered);
-			ASSERT_EQ(MockRenderBackend::s_UseProgramCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_DrawElementsInstancedCalls, 1);
+			EXPECT_TRUE(MockEntityManager::s_WasRendered);
+			EXPECT_EQ(MockRenderBackend::s_UseProgramCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_DrawElementsInstancedCalls, 1);
 
 			EndTest();
 		}

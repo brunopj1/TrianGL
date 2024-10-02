@@ -1,11 +1,13 @@
 ﻿#pragma once
 
+#include "Assets/MaterialUniforms.h"
 #include <Assets/Internal/Shader.h>
 #include <Core/Service.h>
 #include <Internal/Asserts/SpawnerAsserts.h>
 #include <Internal/Concepts/MaterialConcepts.h>
 #include <Memory/SharedPtr.h>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 
@@ -47,13 +49,13 @@ namespace TGL
 		friend class SharedPtr;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(Animation);
-		DECLARE_SPAWNER_ASSERT_VAR(AnimationFrame);
-		DECLARE_SPAWNER_ASSERT_VAR(Audio);
-		DECLARE_SPAWNER_ASSERT_VAR(Material);
-		DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
-		DECLARE_SPAWNER_ASSERT_VAR(Texture);
-		DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
+		DECLARE_SPAWNER_EXPECT_VAR(Animation);
+		DECLARE_SPAWNER_EXPECT_VAR(AnimationFrame);
+		DECLARE_SPAWNER_EXPECT_VAR(Audio);
+		DECLARE_SPAWNER_EXPECT_VAR(Material);
+		DECLARE_SPAWNER_EXPECT_VAR(MaterialUniform);
+		DECLARE_SPAWNER_EXPECT_VAR(Texture);
+		DECLARE_SPAWNER_EXPECT_VAR(TextureSlice);
 
 	protected:
 		u32 m_QuadVao = 0;

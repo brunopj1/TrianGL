@@ -207,22 +207,22 @@ BEGIN_GAME_TEST(Material, CreateInstanceOf)
 	void OnUpdate(f32 deltaTime) override
 	{
 		const SharedPtr<TestMaterial> material1 = Material::CreateInstanceOf<TestMaterial>();
-		ASSERT_NE(material1.Get(), nullptr);
+		EXPECT_NE(material1.Get(), nullptr);
 		EXPECT_EQ(material1->m_Size->Value, TestMaterial::default_size);
 		EXPECT_EQ(material1->m_Color->Value, TestMaterial::default_color);
 
 		const SharedPtr<TestMaterial> material2 = Material::CreateInstanceOf<TestMaterial>(42);
-		ASSERT_NE(material2.Get(), nullptr);
+		EXPECT_NE(material2.Get(), nullptr);
 		EXPECT_EQ(material2->m_Size->Value, 42);
 		EXPECT_EQ(material2->m_Color->Value, TestMaterial::default_color);
 
 		const SharedPtr<TestMaterial> material3 = Material::CreateInstanceOf<TestMaterial>(glm::vec4(0.9f, 0.8f, 0.7f, 1.0f));
-		ASSERT_NE(material3.Get(), nullptr);
+		EXPECT_NE(material3.Get(), nullptr);
 		EXPECT_EQ(material3->m_Size->Value, TestMaterial::default_size);
 		EXPECT_EQ(material3->m_Color->Value, glm::vec4(0.9f, 0.8f, 0.7f, 1.0f));
 
 		const SharedPtr<TestMaterial> material4 = Material::CreateInstanceOf<TestMaterial>(42, glm::vec4(0.9f, 0.8f, 0.7f, 1.0f));
-		ASSERT_NE(material4.Get(), nullptr);
+		EXPECT_NE(material4.Get(), nullptr);
 		EXPECT_EQ(material4->m_Size->Value, 42);
 		EXPECT_EQ(material4->m_Color->Value, glm::vec4(0.9f, 0.8f, 0.7f, 1.0f));
 
@@ -239,36 +239,36 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		MockRenderBackend::s_InvalidColorUniform = false;
 		MockRenderBackend::s_InvalidSizeUniform = false;
 		SharedPtr<TestMaterial> material1 = Material::CreateInstanceOf<TestMaterial>(true);
-		ASSERT_NE(material1.Get(), nullptr);
-		ASSERT_NE(material1->m_Color, nullptr);
-		ASSERT_NE(material1->m_Size, nullptr);
+		EXPECT_NE(material1.Get(), nullptr);
+		EXPECT_NE(material1->m_Color, nullptr);
+		EXPECT_NE(material1->m_Size, nullptr);
 		material1 = nullptr;
 
-		// Valid uniforms, don't create if invalid
+		// Valid uniforms, ignore if invalid
 		MockRenderBackend::s_InvalidColorUniform = false;
 		MockRenderBackend::s_InvalidSizeUniform = false;
 		SharedPtr<TestMaterial> material2 = Material::CreateInstanceOf<TestMaterial>(false);
-		ASSERT_NE(material2.Get(), nullptr);
-		ASSERT_NE(material2->m_Color, nullptr);
-		ASSERT_NE(material2->m_Size, nullptr);
+		EXPECT_NE(material2.Get(), nullptr);
+		EXPECT_NE(material2->m_Color, nullptr);
+		EXPECT_NE(material2->m_Size, nullptr);
 		material2 = nullptr;
 
 		// Invalid color uniform, create if invalid
 		MockRenderBackend::s_InvalidColorUniform = true;
 		MockRenderBackend::s_InvalidSizeUniform = false;
 		SharedPtr<TestMaterial> material3 = Material::CreateInstanceOf<TestMaterial>(true);
-		ASSERT_NE(material3.Get(), nullptr);
-		ASSERT_NE(material3->m_Color, nullptr);
-		ASSERT_NE(material3->m_Size, nullptr);
+		EXPECT_NE(material3.Get(), nullptr);
+		EXPECT_NE(material3->m_Color, nullptr);
+		EXPECT_NE(material3->m_Size, nullptr);
 		material3 = nullptr;
 
-		// Invalid color uniform, don't create if invalid
+		// Invalid color uniform, ignore if invalid
 		MockRenderBackend::s_InvalidColorUniform = true;
 		MockRenderBackend::s_InvalidSizeUniform = false;
 		SharedPtr<TestMaterial> material4 = Material::CreateInstanceOf<TestMaterial>(false);
-		ASSERT_NE(material4.Get(), nullptr);
+		EXPECT_NE(material4.Get(), nullptr);
 		EXPECT_EQ(material4->m_Color, nullptr);
-		ASSERT_NE(material4->m_Size, nullptr);
+		EXPECT_NE(material4->m_Size, nullptr);
 		material4 = nullptr;
 
 		EndTest();
@@ -295,24 +295,24 @@ BEGIN_GAME_TEST(Material, OnRenderSetup)
 			material = Material::CreateInstanceOf<TestMaterial>();
 			spriteRenderer->SetMaterial(material);
 
-			ASSERT_EQ(material->m_OnRenderSetupCalls, 0);
+			EXPECT_EQ(material->m_OnRenderSetupCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(material->m_OnRenderSetupCalls, 1);
+			EXPECT_EQ(material->m_OnRenderSetupCalls, 1);
 			spriteRenderer->SetMaterial(nullptr);
 		}
 
 		if (frame == 3)
 		{
-			ASSERT_EQ(material->m_OnRenderSetupCalls, 1);
+			EXPECT_EQ(material->m_OnRenderSetupCalls, 1);
 			spriteRenderer->SetMaterial(material);
 		}
 
 		if (frame == 4)
 		{
-			ASSERT_EQ(material->m_OnRenderSetupCalls, 2);
+			EXPECT_EQ(material->m_OnRenderSetupCalls, 2);
 
 			material = nullptr; // Keeping assets alive in static variables causes crashes when freeing memory
 
@@ -343,12 +343,12 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 
 			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(true));
 
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 2);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 2);
 
 			spriteRenderer->SetMaterial(nullptr);
 
@@ -360,7 +360,7 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 
 		if (frame == 3)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 3);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 3);
 
 			spriteRenderer->SetMaterial(nullptr);
 
@@ -372,7 +372,7 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 
 		if (frame == 4)
 		{
-			ASSERT_EQ(MockRenderBackend::s_SetUniformCalls, 3);
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 3);
 
 			EndTest();
 		}

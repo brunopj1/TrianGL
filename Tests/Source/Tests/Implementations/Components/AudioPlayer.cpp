@@ -46,8 +46,6 @@ namespace
 
 // Tests
 
-// TODO PlaybackCompletion with loop = true
-
 BEGIN_GAME_TEST(AudioPlayer, PlaybackControls)
 {
 	void OnUpdate(f32 deltaTime) override
@@ -56,31 +54,31 @@ BEGIN_GAME_TEST(AudioPlayer, PlaybackControls)
 		AudioPlayer* audioPlayer = entity->AttachComponent<AudioPlayer>();
 
 		audioPlayer->Play();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 		audioPlayer->Pause();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 		audioPlayer->Play();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 		audioPlayer->Stop();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 		const SharedPtr<Audio> audio = Audio::Load("Assets/Audio/test.wav");
 		audioPlayer->SetAudio(audio);
 
 		audioPlayer->Play();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
 
 		audioPlayer->Pause();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Paused);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Paused);
 
 		audioPlayer->Play();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
 
 		audioPlayer->Stop();
-		ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+		EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 		EndTest();
 	}
@@ -89,12 +87,6 @@ END_GAME_TEST()
 
 BEGIN_GAME_TEST_MOCKED(AudioPlayer, PlaybackCompletion, MockServiceBuilder)
 {
-	i32 GetOrderOfExecution() const override
-	{
-		// TODO remove this and set the audio player order to -1
-		return 1;
-	}
-
 	void OnUpdate(f32 deltaTime) override
 	{
 		const Clock& clock = Clock::Get();
@@ -114,12 +106,12 @@ BEGIN_GAME_TEST_MOCKED(AudioPlayer, PlaybackCompletion, MockServiceBuilder)
 
 		if (frame >= 1 && frame <= 5)
 		{
-			ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
+			EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Playing);
 		}
 
 		if (frame == 6)
 		{
-			ASSERT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
+			EXPECT_EQ(audioPlayer->GetStatus(), AudioPlayerStatus::Stopped);
 
 			EndTest();
 		}
@@ -138,20 +130,20 @@ BEGIN_GAME_TEST(AudioPlayer, Volume)
 		audioPlayer->SetAudio(audio);
 
 		audioPlayer->SetPlayerVolume(0.5f);
-		ASSERT_NEAR(audioPlayer->GetPlayerVolume(), 0.5f, 0.001f);
+		EXPECT_NEAR(audioPlayer->GetPlayerVolume(), 0.5f, 0.001f);
 
 		audioPlayer->SetPlayerVolume(1.5f);
-		ASSERT_NEAR(audioPlayer->GetPlayerVolume(), 1.50f, 0.001f);
+		EXPECT_NEAR(audioPlayer->GetPlayerVolume(), 1.50f, 0.001f);
 
 		audioPlayer->SetPlayerVolume(0.0f);
-		ASSERT_NEAR(audioPlayer->GetPlayerVolume(), 0.0f, 0.001f);
+		EXPECT_NEAR(audioPlayer->GetPlayerVolume(), 0.0f, 0.001f);
 
 		audioPlayer->SetPlayerVolume(-0.5f);
-		ASSERT_NEAR(audioPlayer->GetPlayerVolume(), 0.0f, 0.001f);
+		EXPECT_NEAR(audioPlayer->GetPlayerVolume(), 0.0f, 0.001f);
 
 		audioPlayer->SetPlayerVolume(0.5f);
 		audio->SetVolume(0.5f);
-		ASSERT_NEAR(audioPlayer->GetEffectiveVolume(), 0.25f, 0.001f);
+		EXPECT_NEAR(audioPlayer->GetEffectiveVolume(), 0.25f, 0.001f);
 
 		EndTest();
 	}
@@ -169,10 +161,10 @@ BEGIN_GAME_TEST(AudioPlayer, Loop)
 		audioPlayer->SetAudio(audio);
 
 		audioPlayer->SetLoop(true);
-		ASSERT_TRUE(audioPlayer->GetLoop());
+		EXPECT_TRUE(audioPlayer->GetLoop());
 
 		audioPlayer->SetLoop(false);
-		ASSERT_FALSE(audioPlayer->GetLoop());
+		EXPECT_FALSE(audioPlayer->GetLoop());
 
 		EndTest();
 	}

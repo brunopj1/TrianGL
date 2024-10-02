@@ -104,29 +104,29 @@ BEGIN_GAME_TEST_MOCKED(Shader, Load, MockServiceBuilder)
 	void OnUpdate(f32 deltaTime) override
 	{
 		MockAssetManager* assetManager = dynamic_cast<MockAssetManager*>(&AssetManager::Get());
-		ASSERT_NE(assetManager, nullptr);
+		EXPECT_NE(assetManager, nullptr);
 
 		const std::string vertexPath = "Assets/Shaders/test.vert";
 		const std::string fragmentPath = "Assets/Shaders/test.frag";
 
 		Shader* shader = assetManager->LoadShader(vertexPath, fragmentPath);
-		ASSERT_NE(shader, nullptr);
+		EXPECT_NE(shader, nullptr);
 		EXPECT_EQ(assetManager->GetShaderCount(), 1);
 
 		assetManager->UnloadShader(shader);
 		EXPECT_EQ(assetManager->GetShaderCount(), 0);
 
 		MockRenderBackend::s_FailNextShaderCompile = true;
-		ASSERT_THROW(assetManager->LoadShader(vertexPath, fragmentPath), ShaderCompilationException);
+		EXPECT_THROW(assetManager->LoadShader(vertexPath, fragmentPath), ShaderCompilationException);
 		EXPECT_EQ(assetManager->GetShaderCount(), 0);
 
 		MockRenderBackend::s_FailNextShaderLink = true;
-		ASSERT_THROW(assetManager->LoadShader(vertexPath, fragmentPath), ShaderLinkingException);
+		EXPECT_THROW(assetManager->LoadShader(vertexPath, fragmentPath), ShaderLinkingException);
 		EXPECT_EQ(assetManager->GetShaderCount(), 0);
 
 		const std::string invalidVertexPath = "Assets/Shaders/invalid.vert";
 		const std::string invalidFragmentPath = "Assets/Shaders/invalid.frag";
-		ASSERT_THROW(assetManager->LoadShader(invalidVertexPath, invalidFragmentPath), FileNotFoundException);
+		EXPECT_THROW(assetManager->LoadShader(invalidVertexPath, invalidFragmentPath), FileNotFoundException);
 		EXPECT_EQ(assetManager->GetShaderCount(), 0);
 
 		EndTest();
@@ -139,7 +139,7 @@ BEGIN_GAME_TEST_MOCKED(Shader, InstanceReused, MockServiceBuilder)
 	void OnUpdate(f32 deltaTime) override
 	{
 		MockAssetManager* assetManager = dynamic_cast<MockAssetManager*>(&AssetManager::Get());
-		ASSERT_NE(assetManager, nullptr);
+		EXPECT_NE(assetManager, nullptr);
 
 		const std::string vertexPath1 = "Assets/Shaders/test.vert";
 		const std::string fragmentPath1 = "Assets/Shaders/test.frag";
@@ -158,7 +158,7 @@ BEGIN_GAME_TEST_MOCKED(Shader, InstanceReused, MockServiceBuilder)
 		Shader* shader2 = assetManager->LoadShader(vertexPath2, fragmentPath2);
 		EXPECT_EQ(assetManager->GetShaderCount(), 2);
 		EXPECT_EQ(assetManager->GetShaderUsageCount(shader2), 1);
-		ASSERT_NE(shader1, shader2);
+		EXPECT_NE(shader1, shader2);
 
 		Shader* shader3 = assetManager->LoadShader(vertexPath1, fragmentPath1);
 		EXPECT_EQ(assetManager->GetShaderCount(), 2);
@@ -189,13 +189,13 @@ BEGIN_GAME_TEST_MOCKED(Shader, GetUniform, MockServiceBuilder)
 	void OnUpdate(f32 deltaTime) override
 	{
 		MockAssetManager* assetManager = dynamic_cast<MockAssetManager*>(&AssetManager::Get());
-		ASSERT_NE(assetManager, nullptr);
+		EXPECT_NE(assetManager, nullptr);
 
 		const std::string vertexPath = "Assets/Shaders/test.vert";
 		const std::string fragmentPath = "Assets/Shaders/test.frag";
 
 		const Shader* shader = assetManager->LoadShader(vertexPath, fragmentPath);
-		ASSERT_NE(shader, nullptr);
+		EXPECT_NE(shader, nullptr);
 
 		i32 uniformLocation = shader->GetUniformLocation("uPosition");
 		EXPECT_EQ(uniformLocation, 1);

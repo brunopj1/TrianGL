@@ -13,7 +13,7 @@ TextureSlice::TextureSlice(SharedPtr<Texture> texture, const u32 index)
 
 TextureSlice::~TextureSlice()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 }
 
 SharedPtr<Texture> TextureSlice::GetTexture() const

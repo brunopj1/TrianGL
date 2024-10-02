@@ -11,12 +11,12 @@ using namespace TGL;
 Texture::Texture(std::string filePath)
 	: m_FilePath(std::move(filePath))
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Texture);
+	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Texture);
 }
 
 Texture::~Texture()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
 
 	Free();
 }

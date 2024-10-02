@@ -132,23 +132,23 @@ BEGIN_GAME_TEST(SpriteRenderer, Pivot)
 		SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
 
 		const glm::vec2 pivot1 = spriteRenderer->GetPivot();
-		ASSERT_EQ(pivot1.x, 0.5f);
-		ASSERT_EQ(pivot1.y, 0.5f);
+		EXPECT_EQ(pivot1.x, 0.5f);
+		EXPECT_EQ(pivot1.y, 0.5f);
 
 		spriteRenderer->SetPivot({0.1f, 0.2f});
 		const glm::vec2 pivot2 = spriteRenderer->GetPivot();
-		ASSERT_EQ(pivot2.x, 0.1f);
-		ASSERT_EQ(pivot2.y, 0.2f);
+		EXPECT_EQ(pivot2.x, 0.1f);
+		EXPECT_EQ(pivot2.y, 0.2f);
 
 		spriteRenderer->SetPivot({-0.3f, 2.4f});
 		const glm::vec2 pivot3 = spriteRenderer->GetPivot();
-		ASSERT_EQ(pivot3.x, -0.3f);
-		ASSERT_EQ(pivot3.y, 2.4f);
+		EXPECT_EQ(pivot3.x, -0.3f);
+		EXPECT_EQ(pivot3.y, 2.4f);
 
 		spriteRenderer->ResetPivot();
 		const glm::vec2 pivot4 = spriteRenderer->GetPivot();
-		ASSERT_EQ(pivot4.x, 0.5f);
-		ASSERT_EQ(pivot4.y, 0.5f);
+		EXPECT_EQ(pivot4.x, 0.5f);
+		EXPECT_EQ(pivot4.y, 0.5f);
 
 		EndTest();
 	}
@@ -172,15 +172,15 @@ BEGIN_GAME_TEST_MOCKED(SpriteRenderer, Render, MockServiceBuilder)
 
 			MockEntityManager::s_Renderable = spriteRenderer;
 
-			ASSERT_EQ(MockRenderBackend::s_UseProgramCalls, 0);
-			ASSERT_EQ(MockRenderBackend::s_DrawElementsCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_UseProgramCalls, 0);
+			EXPECT_EQ(MockRenderBackend::s_DrawElementsCalls, 0);
 		}
 
 		if (frame == 2)
 		{
-			ASSERT_TRUE(MockEntityManager::s_WasRendered);
-			ASSERT_EQ(MockRenderBackend::s_UseProgramCalls, 1);
-			ASSERT_EQ(MockRenderBackend::s_DrawElementsCalls, 1);
+			EXPECT_TRUE(MockEntityManager::s_WasRendered);
+			EXPECT_EQ(MockRenderBackend::s_UseProgramCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_DrawElementsCalls, 1);
 
 			EndTest();
 		}

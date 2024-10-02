@@ -114,11 +114,11 @@ void EntityManager::RemoveObjectCallbacks(GameObject* object)
 
 void EntityManager::AddToUpdateQueue(GameObject* object, std::vector<GameObject*>& queue)
 {
-	const auto order = object->GetOrderOfExecution();
+	const auto order = object->m_OrderOfExecution;
 
 	for (auto it = queue.begin(); it != queue.end(); ++it)
 	{
-		if ((*it)->GetOrderOfExecution() > order)
+		if ((*it)->m_OrderOfExecution > order)
 		{
 			queue.insert(it, object);
 			return;

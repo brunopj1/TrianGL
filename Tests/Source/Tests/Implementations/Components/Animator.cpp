@@ -137,31 +137,31 @@ BEGIN_GAME_TEST(Animator, PlaybackControls)
 		const SharedPtr<Animation> animation = CreateAnimation();
 
 		animator->Play();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		animator->Pause();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		animator->Play();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		animator->Stop();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		animator->SetAnimation(animation);
 		animator->SetTargetUniform(material->Sprite);
 
 		animator->Play();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 
 		animator->Pause();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Paused);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Paused);
 
 		animator->Play();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 
 		animator->Stop();
-		ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+		EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
 
 		EndTest();
 	}
@@ -170,12 +170,6 @@ END_GAME_TEST()
 
 BEGIN_GAME_TEST_MOCKED(Animator, PlaybackCompletion, MockServiceBuilder)
 {
-	i32 GetOrderOfExecution() const override
-	{
-		// TODO remove this and set the animator order to -1
-		return 1;
-	}
-
 	void OnUpdate(f32 deltaTime) override
 	{
 		const Clock& clock = Clock::Get();
@@ -236,8 +230,8 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackCompletion, MockServiceBuilder)
 
 		if (frame == 6)
 		{
-			ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
-			ASSERT_NEAR(animator->GetTime(), 0.0f, 0.001f);
+			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+			EXPECT_NEAR(animator->GetTime(), 0.0f, 0.001f);
 
 			material = nullptr;
 			animation = nullptr;
@@ -249,12 +243,6 @@ END_GAME_TEST()
 
 BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithLoop, MockServiceBuilder)
 {
-	i32 GetOrderOfExecution() const override
-	{
-		// TODO remove this and set the animator order to -1
-		return 1;
-	}
-
 	void OnUpdate(f32 deltaTime) override
 	{
 		const Clock& clock = Clock::Get();
@@ -285,7 +273,7 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithLoop, MockServiceBuilder)
 
 		if (frame == 6)
 		{
-			ASSERT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
+			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
 			EXPECT_NEAR(animator->GetTime(), (frame - 1) * 0.15f - animator->GetAnimation()->GetDuration(), 0.001f);
 
 			EndTest();
@@ -370,12 +358,12 @@ BEGIN_GAME_TEST(Animator, OnTargetUniformDeleted)
 		SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
 
 		animator->SetTargetUniform(material->Sprite);
-		ASSERT_EQ(animator->GetTargetUniform(), material->Sprite);
+		EXPECT_EQ(animator->GetTargetUniform(), material->Sprite);
 
 		spriteRenderer->SetMaterial(nullptr);
 		material = nullptr;
 
-		ASSERT_EQ(animator->GetTargetUniform(), nullptr);
+		EXPECT_EQ(animator->GetTargetUniform(), nullptr);
 
 		EndTest();
 	}

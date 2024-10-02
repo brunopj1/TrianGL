@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-enum class RenderingOrder
+enum class RenderingOrder : i8
 {
 	Grid = -1,
 	Apple = 1,
-	Snake,
-	Particles,
+	Snake = 2,
+	Particles = 3,
 };

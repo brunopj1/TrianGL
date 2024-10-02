@@ -16,7 +16,6 @@ namespace TGL
 		friend class Application;
 
 	private:
-		Transform m_Transform;
 		SharedPtr<Material> m_Material = nullptr;
 		glm::vec2 m_Pivot = glm::vec2(0.5f);
 		glm::bvec2 m_Flip = glm::bvec2(false);
@@ -26,13 +25,11 @@ namespace TGL
 		~SpriteRenderer() override = default;
 
 	public:
-		Transform& GetTransform();
-		const Transform& GetTransform() const;
-
 		SharedPtr<Material> GetMaterial() const;
 		void SetMaterial(SharedPtr<Material> material);
 		SharedPtr<DefaultSpriteMaterial> UseDefaultMaterial();
 
+	public:
 		glm::vec2 GetPivot() const;
 		void SetPivot(const glm::vec2& pivot); // TODO additional SetPivot with an enum
 		void ResetPivot();

@@ -8,17 +8,7 @@
 using namespace TGL;
 
 SpriteRenderer::SpriteRenderer(SharedPtr<Material> material)
-	: Component(false), m_Material(std::move(material)) {}
-
-Transform& SpriteRenderer::GetTransform()
-{
-	return m_Transform;
-}
-
-const Transform& SpriteRenderer::GetTransform() const
-{
-	return m_Transform;
-}
+	: Component(false, I32_MIN), m_Material(std::move(material)) {}
 
 SharedPtr<Material> SpriteRenderer::GetMaterial() const
 {

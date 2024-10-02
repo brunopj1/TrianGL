@@ -4,15 +4,15 @@
 
 using namespace TGL;
 
-Entity::Entity(const bool shouldUpdate)
-	: GameObject(shouldUpdate)
+Entity::Entity(const bool shouldUpdate, const i32 orderOfExecution)
+	: GameObject(shouldUpdate, orderOfExecution)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
+	EXPECT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, Entity);
 }
 
 Entity::~Entity()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Entity);
+	EXPECT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, Entity);
 }
 
 Transform& Entity::GetTransform()

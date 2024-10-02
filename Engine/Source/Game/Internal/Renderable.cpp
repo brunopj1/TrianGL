@@ -3,6 +3,16 @@
 
 using namespace TGL;
 
+Transform& Renderable::GetTransform()
+{
+	return m_Transform;
+}
+
+const Transform& Renderable::GetTransform() const
+{
+	return m_Transform;
+}
+
 i32 Renderable::GetZIndex() const
 {
 	return m_ZIndex;
