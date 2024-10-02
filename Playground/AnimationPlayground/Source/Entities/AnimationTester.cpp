@@ -41,19 +41,7 @@ void AnimationTester::RenderAnimationWindow()
 	{
 		for (i32 i = 0; i < m_Animation->GetFrameCount(); i++)
 		{
-			ImGui::PushID(i);
-
-			ImGui::Text("Frame %d:", i + 1);
-			SharedPtr<AnimationFrame> frame = m_Animation->GetFrame(i);
-
-			f32 duration = frame->GetDuration();
-
-			if (ImGui::SliderFloat("Duration", &duration, 0.0f, 1.0f))
-			{
-				frame->SetDuration(duration);
-			}
-
-			ImGui::PopID();
+			ImGui::Text("Frame %d: %.3f seconds", i, m_Animation->GetFrame(i)->GetDuration());
 		}
 	}
 
