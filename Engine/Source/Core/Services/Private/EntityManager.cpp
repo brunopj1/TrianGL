@@ -166,11 +166,12 @@ void EntityManager::DestroyGameMode()
 
 	RemoveObjectCallbacks(m_GameMode);
 
-	PREPARE_SPAWNER_ASSERT(GameMode);
+	PREPARE_SPAWNER_USAGE_DESTRUCTOR(GameMode);
 
 	delete m_GameMode;
-
 	m_GameMode = nullptr;
+
+	ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(GameMode);
 }
 
 void EntityManager::DestroyEntity(Entity* entity)
@@ -184,9 +185,11 @@ void EntityManager::DestroyEntity(Entity* entity)
 
 	entity->DetachAllComponents();
 
-	PREPARE_SPAWNER_ASSERT(Entity);
+	PREPARE_SPAWNER_USAGE_DESTRUCTOR(Entity);
 
 	delete entity;
+
+	ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(Entity);
 }
 
 void EntityManager::DestroyComponent(Component* component)
@@ -200,9 +203,11 @@ void EntityManager::DestroyComponent(Component* component)
 
 	std::erase(component->m_Parent->m_Components, component);
 
-	PREPARE_SPAWNER_ASSERT(Component);
+	PREPARE_SPAWNER_USAGE_DESTRUCTOR(Component);
 
 	delete component;
+	
+	ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(Component);
 }
 
 // NOLINTEND(CppMemberFunctionMayBeStatic)

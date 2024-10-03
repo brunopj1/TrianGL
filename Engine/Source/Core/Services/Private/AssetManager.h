@@ -121,9 +121,11 @@ namespace TGL
 		requires SpawnableMaterial<T, Args...>
 	SharedPtr<T> AssetManager::LoadMaterial(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_ASSERT(Material);
+		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Material);
 
 		T* instance = new T(std::forward<Args>(args)...);
+
+		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Material);
 
 		return instance;
 	}
@@ -134,9 +136,11 @@ namespace TGL
 		// TODO add option to throw an exception if the uniform is invalid
 		// TODO ensure that the uniform data type and size are correct (and add unit tests)
 
-		PREPARE_SPAWNER_ASSERT(MaterialUniform);
+		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(MaterialUniform);
 
 		T* instance = new T(shader, name);
+
+		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(MaterialUniform);
 
 		if constexpr (std::is_same_v<T, SpriteUniform>)
 		{
@@ -156,10 +160,12 @@ namespace TGL
 		}
 		else
 		{
-			PREPARE_SPAWNER_ASSERT(MaterialUniform);
+			PREPARE_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 
 			delete instance;
 			instance = nullptr;
+
+			ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 		}
 
 		return instance;

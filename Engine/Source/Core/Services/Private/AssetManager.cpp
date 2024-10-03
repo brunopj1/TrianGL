@@ -122,9 +122,11 @@ u32 AssetManager::GetQuadEbo() const
 
 SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)
 {
-	PREPARE_SPAWNER_ASSERT(Texture);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Texture);
 
 	Texture* instance = new Texture(filePath);
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Texture);
 
 	instance->Init(parameters);
 
@@ -133,37 +135,53 @@ SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const 
 
 SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> texture, const i32 index)
 {
-	PREPARE_SPAWNER_ASSERT(TextureSlice);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(TextureSlice);
 
-	return new TextureSlice(std::move(texture), index);
+	SharedPtr<TextureSlice> instance = new TextureSlice(std::move(texture), index);
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(TextureSlice);
+	
+	return instance;
 }
 SharedPtr<Animation> AssetManager::CreateAnimation()
 {
-	PREPARE_SPAWNER_ASSERT(Animation);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Animation);
 
 	Animation* instance = new Animation();
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Animation);
 
 	return instance;
 }
 SharedPtr<AnimationFrame> AssetManager::CreateAnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, const f32 duration)
 {
-	PREPARE_SPAWNER_ASSERT(AnimationFrame);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(AnimationFrame);
 
-	return new AnimationFrame(animation, std::move(sprite), duration);
-}
+	SharedPtr<AnimationFrame> instance = new AnimationFrame(animation, std::move(sprite), duration);
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(AnimationFrame);
+
+	return		instance;
+} 
 
 SharedPtr<AnimationSprite> AssetManager::CreateAnimationSprite()
 {
-	PREPARE_SPAWNER_ASSERT(AnimationSprite);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(AnimationSprite);
 
-	return new AnimationSprite();
+	SharedPtr<AnimationSprite> instance = new AnimationSprite();
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(AnimationSprite);
+	
+	return instance;
 }
 
 SharedPtr<Audio> AssetManager::LoadAudio(const std::string& filePath, const bool stream)
 {
-	PREPARE_SPAWNER_ASSERT(Audio);
+	PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Audio);
 
 	Audio* instance = new Audio(filePath, stream);
+
+	ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Audio);
 
 	return instance;
 }
@@ -172,16 +190,20 @@ void AssetManager::UnloadMaterialUniforms(const Material* material)
 {
 	for (const auto uniform : material->m_ValidUniforms)
 	{
-		PREPARE_SPAWNER_ASSERT(MaterialUniform);
+		PREPARE_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 
 		delete uniform;
+
+		ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 	}
 
 	for (const auto uniform : material->m_InvalidUniforms)
 	{
-		PREPARE_SPAWNER_ASSERT(MaterialUniform);
+		PREPARE_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 
 		delete uniform;
+		
+		ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
 	}
 }
 

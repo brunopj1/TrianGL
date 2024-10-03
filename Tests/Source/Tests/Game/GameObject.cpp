@@ -25,6 +25,19 @@ BEGIN_GAME_TEST(GameObject, Constructor)
 		}
 	};
 
+	class ExceptionEntity final : public Entity
+	{
+	public:
+		ExceptionEntity(const bool shouldThrow)
+			: Entity(false)
+		{
+			if (shouldThrow)
+			{
+				throw std::exception();
+			}
+		}
+	};
+
 	void OnUpdate(f32 deltaTime) override
 	{
 		TestEntity* entity1 = SpawnEntity<TestEntity>();
@@ -36,6 +49,11 @@ BEGIN_GAME_TEST(GameObject, Constructor)
 		TestEntity* entity3 = SpawnEntity<TestEntity>("test", true);
 		EXPECT_NE(entity3, nullptr);
 
+		EXPECT_THROW(SpawnEntity<ExceptionEntity>(true), std::exception);
+		
+		ExceptionEntity* entity4 = SpawnEntity<ExceptionEntity>(false);
+		EXPECT_NE(entity4, nullptr);
+		
 		EndTest();
 	}
 }

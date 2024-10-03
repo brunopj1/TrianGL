@@ -7,6 +7,8 @@
 #include <cstddef>
 #include <type_traits>
 
+// TODO control access by using SharedPtr<const T> instead of const SharedPtr<T>
+
 namespace TGL
 {
 	class ReferenceCounter final
@@ -19,7 +21,6 @@ namespace TGL
 		u32 m_Counter = 1;
 	};
 
-	// TODO can the spawner var be moved to the AssetManager?
 	class SharedPtrSpawnerUtil final
 	{
 	private:
@@ -248,10 +249,12 @@ namespace TGL
 
 			if (m_ReferenceCounter->m_Counter == 0)
 			{
-				PREPARE_SPAWNER_ASSERT_EXT(SharedPtrSpawnerUtil, Asset);
+				PREPARE_SPAWNER_USAGE_DESTRUCTOR_EXT(SharedPtrSpawnerUtil, Asset);
 
 				delete m_ReferenceCounter;
 				delete m_Pointer;
+
+				ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR_EXT(SharedPtrSpawnerUtil, Asset);
 			}
 		}
 	};

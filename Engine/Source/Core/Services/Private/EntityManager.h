@@ -153,9 +153,11 @@ namespace TGL
 		requires SpawnableGameMode<T, Args...>
 	T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_ASSERT(GameMode);
+		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(GameMode);
 
 		T* instance = new T(std::forward<Args>(args)...);
+
+		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(GameMode);
 
 		instance->m_Id = m_NextId++;
 
@@ -173,9 +175,11 @@ namespace TGL
 		requires SpawnableEntity<T, Args...>
 	T* EntityManager::CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_ASSERT(Entity);
+		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Entity);
 
 		T* instance = new T(std::forward<Args>(args)...);
+
+		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Entity);
 
 		instance->m_Id = m_NextId++;
 
@@ -190,9 +194,11 @@ namespace TGL
 		requires SpawnableComponent<T, Args...>
 	T* EntityManager::CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_ASSERT(Component);
+		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Component);
 
 		T* instance = new T(std::forward<Args>(args)...);
+
+		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Component);
 
 		instance->m_Id = m_NextId++;
 
