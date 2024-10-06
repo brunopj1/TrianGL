@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "Internal/Concepts/SmartPointerConcepts.h"
+#include "Internal/Macros/AssetFactoryMacros.h"
 #include "Internal/Macros/ClassMacros.h"
 #include <Core/DataTypes.h>
-#include <Internal/Asserts/SpawnerAsserts.h>
 #include <cstddef>
 #include <type_traits>
 
@@ -21,9 +21,11 @@ namespace TGL
 		u32 m_Counter = 1;
 	};
 
-	class SharedPtrSpawnerUtil final
+	class AssetFactoryUtil final
 	{
 	private:
+		friend class AssetManager;
+	
 		template <typename T>
 		friend class SharedPtr;
 
@@ -32,20 +34,21 @@ namespace TGL
 		friend class AnimationSprite;
 		friend class Audio;
 		friend class Material;
+		friend class MaterialUniform;
 		friend class Texture;
 		friend class TextureSlice;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(Asset);
+		DECLARE_ASSET_FACTORY_DESTRUCTOR_VAR();
 
 	public:
-		SharedPtrSpawnerUtil() = delete;
-		~SharedPtrSpawnerUtil() = delete;
+		AssetFactoryUtil() = delete;
+		~AssetFactoryUtil() = delete;
 
 	public:
-		DELETE_COPY_AND_MOVE_CONSTRUCTORS(SharedPtrSpawnerUtil);
+		DELETE_COPY_AND_MOVE_CONSTRUCTORS(AssetFactoryUtil);
 	};
-
+	
 	// TODO use the 'SharedPointerValue' concept here
 	template <typename T>
 	class SharedPtr final
@@ -249,12 +252,12 @@ namespace TGL
 
 			if (m_ReferenceCounter->m_Counter == 0)
 			{
-				PREPARE_SPAWNER_USAGE_DESTRUCTOR_EXT(SharedPtrSpawnerUtil, Asset);
+				PREPARE_ASSET_FACTORY_DESTRUCTOR();
 
 				delete m_ReferenceCounter;
 				delete m_Pointer;
 
-				ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR_EXT(SharedPtrSpawnerUtil, Asset);
+				ASSERT_POST_ASSET_FACTORY_DESTRUCTOR();
 			}
 		}
 	};

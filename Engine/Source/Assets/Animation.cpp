@@ -1,7 +1,6 @@
 ﻿#include "Animation.h"
 
 #include "Core/Services/Private/AssetManager.h"
-#include "Internal/Asserts/SpawnerAsserts.h"
 #include <stdexcept>
 #include <utility>
 
@@ -10,6 +9,8 @@ using namespace TGL;
 AnimationFrame::AnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, const f32 duration)
 	: m_Animation(animation), m_Sprite(std::move(sprite)), m_Duration(duration)
 {
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(AnimationFrame);
+	
 	if (m_Sprite == nullptr)
 	{
 		throw std::invalid_argument("The sprite cannot be null");
@@ -19,13 +20,11 @@ AnimationFrame::AnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, c
 	{
 		throw std::invalid_argument("The duration must be greater than zero");
 	}
-
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, AnimationFrame);
 }
 
 AnimationFrame::~AnimationFrame()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 }
 
 SharedPtr<Sprite> AnimationFrame::GetSprite() const
@@ -40,12 +39,12 @@ f32 AnimationFrame::GetDuration() const
 
 Animation::Animation()
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Animation);
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(Animation);
 }
 
 Animation::~Animation()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 
 	for (SharedPtr<AnimationFrame>& frame : m_Frames)
 	{

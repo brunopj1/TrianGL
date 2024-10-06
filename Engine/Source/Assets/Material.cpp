@@ -8,7 +8,7 @@ using namespace TGL;
 
 Material::Material(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Material);
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(Material);
 
 	AssetManager& assetManager = AssetManager::Get();
 	m_Shader = assetManager.LoadShader(vertexShaderPath, fragmentShaderPath);
@@ -18,7 +18,7 @@ Material::Material(const std::string& vertexShaderPath, const std::string& fragm
 
 Material::~Material()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 
 	AssetManager& assetManager = AssetManager::Get();
 	assetManager.UnloadMaterialUniforms(this);
@@ -43,10 +43,10 @@ void Material::Use(const glm::mat4& modelMatrix)
 
 void Material::CreateEngineUniforms()
 {
-	m_PvmMatrix = AddUniform<Mat4Uniform>("uPVMMatrix", false);
-	m_ProjectionMatrix = AddUniform<Mat4Uniform>("uProjectionMatrix", false);
-	m_ViewMatrix = AddUniform<Mat4Uniform>("uViewMatrix", false);
-	m_ModelMatrix = AddUniform<Mat4Uniform>("uModelMatrix", false);
+	m_PvmMatrix = AddUniform<Mat4Uniform>("uPVMMatrix", OnInvalidUniform::Ignore);
+	m_ProjectionMatrix = AddUniform<Mat4Uniform>("uProjectionMatrix", OnInvalidUniform::Ignore);
+	m_ViewMatrix = AddUniform<Mat4Uniform>("uViewMatrix", OnInvalidUniform::Ignore);
+	m_ModelMatrix = AddUniform<Mat4Uniform>("uModelMatrix", OnInvalidUniform::Ignore);
 }
 
 void Material::UpdateEngineUniforms(const glm::mat4& modelMatrix) const

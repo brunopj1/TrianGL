@@ -6,12 +6,12 @@ using namespace TGL;
 GameMode::GameMode(const i32 orderOfExecution)
 	: GameObject(true, orderOfExecution)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::EntityManager, GameMode);
+	ASSERT_ENTITY_FACTORY_CONSTRUCTOR(GameMode);
 }
 
 GameMode::~GameMode()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::EntityManager, GameMode);
+	ASSERT_ENTITY_FACTORY_DESTRUCTOR(GameMode);
 }
 
 void GameMode::OnEarlyUpdate(f32 deltaTime) {}

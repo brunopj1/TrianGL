@@ -8,9 +8,17 @@
 
 namespace TGL
 {
+	// Helper enum
+	enum class OnInvalidUniform : u8
+	{
+		Create,
+		Ignore,
+		Throw
+	};
+	
 	// Forward declaration
 	class Shader;
-
+	
 	// Base class
 	class MaterialUniform
 	{

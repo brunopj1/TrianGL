@@ -200,7 +200,7 @@ T* SetupUniformTest(const UniformDataType dataType, const u32 size)
 	SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
 	spriteRenderer->SetMaterial(material);
 
-	T* uniform = material->AddUniform<T>("uTestUniform", false);
+	T* uniform = material->AddUniform<T>("uTestUniform", OnInvalidUniform::Ignore);
 	return uniform;
 }
 

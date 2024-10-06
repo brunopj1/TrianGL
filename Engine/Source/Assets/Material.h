@@ -49,7 +49,7 @@ namespace TGL
 
 	public:
 		template <SpawnableMaterialUniform T>
-		T* AddUniform(const std::string& name, bool createIfInvalid = true);
+		T* AddUniform(const std::string& name, OnInvalidUniform onInvalid = OnInvalidUniform::Create);
 
 	private:
 		void Use(const glm::mat4& modelMatrix);
@@ -69,9 +69,9 @@ namespace TGL
 	}
 
 	template <SpawnableMaterialUniform T>
-	T* Material::AddUniform(const std::string& name, const bool createIfInvalid)
+	T* Material::AddUniform(const std::string& name, const OnInvalidUniform onInvalid)
 	{
 		AssetManager& assetManager = AssetManager::Get();
-		return assetManager.CreateMaterialUniform<T>(name, createIfInvalid, m_Shader, m_NextTextureSlot, m_ValidUniforms, m_InvalidUniforms);
+		return assetManager.CreateMaterialUniform<T>(name, onInvalid, m_Shader, m_NextTextureSlot, m_ValidUniforms, m_InvalidUniforms);
 	}
 }

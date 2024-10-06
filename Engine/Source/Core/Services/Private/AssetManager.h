@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "Assets/MaterialUniforms.h"
+#include "Internal/Macros/AssetFactoryMacros.h"
 #include <Assets/Internal/Shader.h>
 #include <Core/Service.h>
-#include <Internal/Asserts/SpawnerAsserts.h>
 #include <Internal/Concepts/MaterialConcepts.h>
 #include <Memory/SharedPtr.h>
 #include <memory>
@@ -51,14 +51,14 @@ namespace TGL
 		friend class SharedPtr;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(Animation);
-		DECLARE_SPAWNER_ASSERT_VAR(AnimationFrame);
-		DECLARE_SPAWNER_ASSERT_VAR(AnimationSprite);
-		DECLARE_SPAWNER_ASSERT_VAR(Audio);
-		DECLARE_SPAWNER_ASSERT_VAR(Material);
-		DECLARE_SPAWNER_ASSERT_VAR(MaterialUniform);
-		DECLARE_SPAWNER_ASSERT_VAR(Texture);
-		DECLARE_SPAWNER_ASSERT_VAR(TextureSlice);
+		DECLARE_ASSET_FACTORY_VAR(Animation);
+		DECLARE_ASSET_FACTORY_VAR(AnimationFrame);
+		DECLARE_ASSET_FACTORY_VAR(AnimationSprite);
+		DECLARE_ASSET_FACTORY_VAR(Audio);
+		DECLARE_ASSET_FACTORY_VAR(Material);
+		DECLARE_ASSET_FACTORY_VAR(MaterialUniform);
+		DECLARE_ASSET_FACTORY_VAR(Texture);
+		DECLARE_ASSET_FACTORY_VAR(TextureSlice);
 
 	protected:
 		u32 m_QuadVao = 0;
@@ -106,7 +106,7 @@ namespace TGL
 		SharedPtr<T> LoadMaterial(Args&&... args);
 
 		template <SpawnableMaterialUniform T>
-		T* CreateMaterialUniform(const std::string& name, bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms);
+		T* CreateMaterialUniform(const std::string& name, OnInvalidUniform onInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms);
 
 		MOCKABLE_METHOD void UnloadMaterialUniforms(const Material* material);
 
@@ -121,26 +121,25 @@ namespace TGL
 		requires SpawnableMaterial<T, Args...>
 	SharedPtr<T> AssetManager::LoadMaterial(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Material);
+		PREPARE_ASSET_FACTORY_CONSTRUCTOR(Material);
 
 		T* instance = new T(std::forward<Args>(args)...);
 
-		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Material);
+		ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(Material);
 
 		return instance;
 	}
 
 	template <SpawnableMaterialUniform T>
-	T* AssetManager::CreateMaterialUniform(const std::string& name, const bool createIfInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms)
+	T* AssetManager::CreateMaterialUniform(const std::string& name, const OnInvalidUniform onInvalid, const Shader* shader, u8& nextTextureSlot, std::vector<MaterialUniform*>& validUniforms, std::vector<MaterialUniform*>& invalidUniforms)
 	{
-		// TODO add option to throw an exception if the uniform is invalid
 		// TODO ensure that the uniform data type and size are correct (and add unit tests)
 
-		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(MaterialUniform);
+		PREPARE_ASSET_FACTORY_CONSTRUCTOR(MaterialUniform);
 
 		T* instance = new T(shader, name);
 
-		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(MaterialUniform);
+		ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(MaterialUniform);
 
 		if constexpr (std::is_same_v<T, SpriteUniform>)
 		{
@@ -154,18 +153,23 @@ namespace TGL
 		{
 			validUniforms.push_back(instance);
 		}
-		else if (createIfInvalid)
+		else if (onInvalid == OnInvalidUniform::Create)
 		{
 			invalidUniforms.push_back(instance);
 		}
 		else
 		{
-			PREPARE_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
+			PREPARE_ASSET_FACTORY_DESTRUCTOR();
 
 			delete instance;
 			instance = nullptr;
 
-			ASSERT_POST_SPAWNER_USAGE_DESTRUCTOR(MaterialUniform);
+			ASSERT_POST_ASSET_FACTORY_DESTRUCTOR();
+
+			if (onInvalid == OnInvalidUniform::Throw)
+			{
+				throw std::invalid_argument("The uniform is invalid");
+			}
 		}
 
 		return instance;

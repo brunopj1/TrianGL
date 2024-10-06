@@ -1,9 +1,9 @@
 ﻿#pragma once
 
+#include "Internal/Macros/EntityFactoryMacros.h"
 #include "Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
-#include <Internal/Asserts/SpawnerAsserts.h>
 #include <Internal/Concepts/EntitySystemConcepts.h>
 #include <Internal/Concepts/SmartPointerConcepts.h>
 #include <ranges>
@@ -30,9 +30,9 @@ namespace TGL
 		friend class LazyPtr;
 
 	private:
-		DECLARE_SPAWNER_ASSERT_VAR(GameMode);
-		DECLARE_SPAWNER_ASSERT_VAR(Entity);
-		DECLARE_SPAWNER_ASSERT_VAR(Component);
+		DECLARE_ENTITY_FACTORY_VAR(GameMode);
+		DECLARE_ENTITY_FACTORY_VAR(Entity);
+		DECLARE_ENTITY_FACTORY_VAR(Component);
 
 	protected:
 		u64 m_NextId;
@@ -153,11 +153,11 @@ namespace TGL
 		requires SpawnableGameMode<T, Args...>
 	T* EntityManager::CreateGameMode(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(GameMode);
+		PREPARE_ENTITY_FACTORY_CONSTRUCTOR(GameMode);
 
 		T* instance = new T(std::forward<Args>(args)...);
 
-		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(GameMode);
+		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(GameMode);
 
 		instance->m_Id = m_NextId++;
 
@@ -175,11 +175,11 @@ namespace TGL
 		requires SpawnableEntity<T, Args...>
 	T* EntityManager::CreateEntity(Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Entity);
+		PREPARE_ENTITY_FACTORY_CONSTRUCTOR(Entity);
 
 		T* instance = new T(std::forward<Args>(args)...);
 
-		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Entity);
+		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(Entity);
 
 		instance->m_Id = m_NextId++;
 
@@ -194,11 +194,11 @@ namespace TGL
 		requires SpawnableComponent<T, Args...>
 	T* EntityManager::CreateComponent(Entity* parent, Args&&... args) // NOLINT(cppcoreguidelines-missing-std-forward)
 	{
-		PREPARE_SPAWNER_USAGE_CONSTRUCTOR(Component);
+		PREPARE_ENTITY_FACTORY_CONSTRUCTOR(Component);
 
 		T* instance = new T(std::forward<Args>(args)...);
 
-		ASSERT_POST_SPAWNER_USAGE_CONSTRUCTOR(Component);
+		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(Component);
 
 		instance->m_Id = m_NextId++;
 

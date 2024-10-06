@@ -3,21 +3,20 @@
 #include <Core/Services/Private/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <Implementations/Components/AudioPlayer.h>
-#include <Internal/Asserts/SpawnerAsserts.h>
 
 using namespace TGL;
 
 Audio::Audio(std::string filePath, const bool stream)
 	: m_FilePath(std::move(filePath)), m_Streamed(stream)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(TGL::AssetManager, Audio);
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(Audio);
 
 	Init();
 }
 
 Audio::~Audio()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 
 	Free();
 }

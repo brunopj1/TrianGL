@@ -6,12 +6,12 @@ using namespace TGL;
 
 AnimationSprite::AnimationSprite()
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(AssetManager, AnimationSprite);
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(AnimationSprite);
 }
 
 AnimationSprite::~AnimationSprite()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 }
 SharedPtr<Sprite> AnimationSprite::GetCurrentSprite() const
 {

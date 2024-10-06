@@ -49,10 +49,10 @@ namespace
 			: TestMaterial(default_size, default_color)
 		{}
 
-		TestMaterial(const bool createUniformsIfInvalid)
+		TestMaterial(const OnInvalidUniform ifInvalid)
 			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag"),
-			  m_Size(AddUniform<IntUniform>("uSize", createUniformsIfInvalid)),
-			  m_Color(AddUniform<Float4Uniform>("uColor", createUniformsIfInvalid))
+			  m_Size(AddUniform<IntUniform>("uSize", ifInvalid)),
+			  m_Color(AddUniform<Float4Uniform>("uColor", ifInvalid))
 		{}
 
 		void OnRenderSetup() override
@@ -238,25 +238,25 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		// Valid uniforms, create if invalid
 		MockRenderBackend::s_InvalidColorUniform = false;
 		MockRenderBackend::s_InvalidSizeUniform = false;
-		SharedPtr<TestMaterial> material1 = Material::CreateInstanceOf<TestMaterial>(true);
+		SharedPtr<TestMaterial> material1 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create);
 		EXPECT_NE(material1.Get(), nullptr);
 		EXPECT_NE(material1->m_Color, nullptr);
 		EXPECT_NE(material1->m_Size, nullptr);
 		material1 = nullptr;
 
-		// Valid uniforms, ignore if invalid
-		MockRenderBackend::s_InvalidColorUniform = false;
+		// Invalid color uniform, create if invalid
+		MockRenderBackend::s_InvalidColorUniform = true;
 		MockRenderBackend::s_InvalidSizeUniform = false;
-		SharedPtr<TestMaterial> material2 = Material::CreateInstanceOf<TestMaterial>(false);
+		SharedPtr<TestMaterial> material2 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create);
 		EXPECT_NE(material2.Get(), nullptr);
 		EXPECT_NE(material2->m_Color, nullptr);
 		EXPECT_NE(material2->m_Size, nullptr);
 		material2 = nullptr;
 
-		// Invalid color uniform, create if invalid
-		MockRenderBackend::s_InvalidColorUniform = true;
+		// Valid uniforms, ignore if invalid
+		MockRenderBackend::s_InvalidColorUniform = false;
 		MockRenderBackend::s_InvalidSizeUniform = false;
-		SharedPtr<TestMaterial> material3 = Material::CreateInstanceOf<TestMaterial>(true);
+		SharedPtr<TestMaterial> material3 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Ignore);
 		EXPECT_NE(material3.Get(), nullptr);
 		EXPECT_NE(material3->m_Color, nullptr);
 		EXPECT_NE(material3->m_Size, nullptr);
@@ -265,11 +265,25 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		// Invalid color uniform, ignore if invalid
 		MockRenderBackend::s_InvalidColorUniform = true;
 		MockRenderBackend::s_InvalidSizeUniform = false;
-		SharedPtr<TestMaterial> material4 = Material::CreateInstanceOf<TestMaterial>(false);
+		SharedPtr<TestMaterial> material4 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Ignore);
 		EXPECT_NE(material4.Get(), nullptr);
 		EXPECT_EQ(material4->m_Color, nullptr);
 		EXPECT_NE(material4->m_Size, nullptr);
 		material4 = nullptr;
+
+		// Valid color uniform, throw if invalid
+		MockRenderBackend::s_InvalidColorUniform = false;
+		MockRenderBackend::s_InvalidSizeUniform = false;
+		SharedPtr<TestMaterial> material5 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw);
+		EXPECT_NE(material5.Get(), nullptr);
+		EXPECT_NE(material5->m_Color, nullptr);
+		EXPECT_NE(material5->m_Size, nullptr);
+		material5 = nullptr;
+
+		// Invalid color uniform, throw if invalid
+		//MockRenderBackend::s_InvalidColorUniform = true;
+		//MockRenderBackend::s_InvalidSizeUniform = false;
+		//EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), std::invalid_argument);
 
 		EndTest();
 	}

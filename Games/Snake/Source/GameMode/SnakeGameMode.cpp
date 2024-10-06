@@ -19,7 +19,7 @@ using namespace TGL;
 SnakeGameMode::SnakeGameMode()
 {
 	SpawnEntity<Camera>(true);
-
+	
 	auto textureParams = TextureParameters();
 	textureParams.Filter = TextureFilterMode::Nearest;
 	textureParams.GenerateMipmaps = false;

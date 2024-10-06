@@ -12,12 +12,12 @@ TextureSliceInfo::TextureSliceInfo(const glm::uvec2& resolution, const glm::uvec
 TextureSlice::TextureSlice(SharedPtr<Texture> texture, const u32 index)
 	: m_Texture(std::move(texture)), m_Index(index)
 {
-	ASSERT_SPAWNER_USAGE_CONSTRUCTOR(AssetManager, TextureSlice);
+	ASSERT_ASSET_FACTORY_CONSTRUCTOR(TextureSlice);
 }
 
 TextureSlice::~TextureSlice()
 {
-	ASSERT_SPAWNER_USAGE_DESTRUCTOR(TGL::SharedPtrSpawnerUtil, Asset);
+	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 }
 
 SharedPtr<Texture> TextureSlice::GetTexture() const
