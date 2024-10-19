@@ -1,8 +1,8 @@
 # Configuration ---------------------------------------------------------------
 
-projectName = "AnimationPlayground"
+projectName = "Fantasyland"
 
-isGame = False # If set to False, the project will be created in the 'Playgrounds' folder
+isGame = True # If set to False, the project will be created in the 'Playgrounds' folder
 
 # Includes --------------------------------------------------------------------
 
@@ -29,6 +29,10 @@ project "{projectName}"
         "Source/**.cpp",
         "Source/**.hpp",
         "Source/**.h"
+    }}
+    
+    defines {{
+        "GLM_ENABLE_EXPERIMENTAL"
     }}
     
     links {{ "Engine" }}

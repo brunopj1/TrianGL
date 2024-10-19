@@ -17,6 +17,10 @@ project "ParticlePlayground"
         "Source/**.hpp",
         "Source/**.h"
     }
+
+    defines {
+        "GLM_ENABLE_EXPERIMENTAL"
+    }
     
     links { "Engine" }
 
