@@ -42,12 +42,12 @@ size_t Texture::GetSliceCount() const
 	return m_Slices.size();
 }
 
-SharedPtr<TextureSlice> Texture::GetSlice(const u32 index)
+SharedPtr<TextureSlice> Texture::GetSlice(const u32 index) const
 {
 	if (index >= m_Slices.size())
 	{
 		throw std::runtime_error("Invalid slice index");
-	}
+	} 
 
 	AssetManager& assetManager = AssetManager::Get();
 	return assetManager.CreateTextureSlice(ToSharedPtr(), index);
@@ -82,11 +82,16 @@ SharedPtr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution,
 	return GetSlice(index);
 }
 
-u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::uvec2& spacing)
 {
 	if (resolution.x <= 0 || resolution.y <= 0 || resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
 	{
 		throw std::invalid_argument("Invalid resolution");
+	}
+
+	if (offset.x < 0 || offset.y < 0 || offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
+	{
+		throw std::invalid_argument("Invalid offset");
 	}
 
 	if (spacing.x < 0 || spacing.y < 0 || spacing.x >= resolution.x || spacing.y >= resolution.y)
@@ -94,13 +99,7 @@ u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& pad
 		throw std::invalid_argument("Invalid spacing");
 	}
 
-	const glm::uvec2 totalPadding = padding * 2u;
-	if (padding.x < 0 || padding.y < 0 || totalPadding.x >= m_Resolution.x || totalPadding.y >= m_Resolution.y)
-	{
-		throw std::invalid_argument("Invalid padding");
-	}
-
-	const glm::uvec2 effectiveContentResolution = m_Resolution - totalPadding + spacing;
+	const glm::uvec2 effectiveContentResolution = m_Resolution - offset + spacing;
 	const glm::uvec2 effectiveSliceResolution = resolution + spacing;
 
 	const glm::uvec2 sliceCount = effectiveContentResolution / effectiveSliceResolution;
@@ -113,17 +112,17 @@ u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& pad
 	{
 		for (u32 x = 0; x < sliceCount.x; x++)
 		{
-			const glm::uvec2 offset = padding + effectiveSliceResolution * glm::uvec2(x, y);
-			CreateSliceInternal(resolution, offset);
+			const glm::uvec2 sliceOffset = offset + effectiveSliceResolution * glm::uvec2(x, y);
+			CreateSliceInternal(resolution, sliceOffset);
 		}
 	}
 
 	return sliceCount.x * sliceCount.y;
 }
 
-std::vector<SharedPtr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding, const glm::uvec2& spacing)
+std::vector<SharedPtr<TextureSlice>> Texture::CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::uvec2& spacing)
 {
-	const u32 sliceCount = CreateSliceGrid(resolution, padding, spacing);
+	const u32 sliceCount = CreateSliceGrid(resolution, offset, spacing);
 
 	std::vector<SharedPtr<TextureSlice>> slices;
 	slices.reserve(sliceCount);

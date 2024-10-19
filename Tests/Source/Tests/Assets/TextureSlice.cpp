@@ -72,7 +72,7 @@ BEGIN_GAME_TEST(TextureSlice, CreateSliceGrid)
 		EXPECT_THROW(texture->CreateSliceGrid({4, 4}, {4, 4}, {-4, 4}), std::invalid_argument);
 		EXPECT_THROW(texture->CreateSliceGrid({4, 4}, {4, 4}, {44, 4}), std::invalid_argument);
 
-		EXPECT_THROW(texture->CreateSliceGrid({10, 10}, {4, 4}, {4, 4}), std::invalid_argument);
+		EXPECT_THROW(texture->CreateSliceGrid({10, 10}, {8, 8}, {4, 4}), std::invalid_argument);
 
 		EXPECT_EQ(texture->GetSliceCount(), 25);
 

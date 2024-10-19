@@ -67,13 +67,13 @@ namespace TGL
 
 	public:
 		size_t GetSliceCount() const;
-		SharedPtr<TextureSlice> GetSlice(u32 index);
+		SharedPtr<TextureSlice> GetSlice(u32 index) const;
 
 		u32 CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset); // Returns the slice index
 		SharedPtr<TextureSlice> CreateAndGetSlice(const glm::uvec2& resolution, const glm::uvec2& offset);
 
-		u32 CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0}); // Returns the slice index
-		std::vector<SharedPtr<TextureSlice>> CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& padding = {0, 0}, const glm::uvec2& spacing = {0, 0});
+		u32 CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& offset = {0, 0}, const glm::uvec2& spacing = {0, 0}); // Returns the slice index
+		std::vector<SharedPtr<TextureSlice>> CreateAndGetSliceGrid(const glm::uvec2& resolution, const glm::uvec2& offset = {0, 0}, const glm::uvec2& spacing = {0, 0});
 
 	private:
 		void CreateSliceInternal(const glm::uvec2& resolution, const glm::uvec2& offset);

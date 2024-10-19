@@ -9,9 +9,7 @@ using namespace TGL;
 // NOLINTBEGIN(CppMemberFunctionMayBeStatic)
 
 void EntityManager::Init()
-{
-	m_NextId = 1;
-}
+{}
 
 void EntityManager::Terminate()
 {
@@ -21,6 +19,11 @@ void EntityManager::Terminate()
 	}
 
 	DestroyGameMode();
+}
+
+u64 EntityManager::GetNextId()
+{
+	return m_NextId++;
 }
 
 void EntityManager::Update(const f32 deltaTime)

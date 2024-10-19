@@ -35,7 +35,7 @@ namespace TGL
 		DECLARE_ENTITY_FACTORY_VAR(Component);
 
 	protected:
-		u64 m_NextId;
+		u64 m_NextId = 1;
 
 	protected:
 		GameMode* m_GameMode = nullptr;
@@ -55,6 +55,9 @@ namespace TGL
 	protected:
 		MOCKABLE_METHOD void Init();
 		MOCKABLE_METHOD void Terminate();
+
+	protected:
+		MOCKABLE_METHOD u64 GetNextId();
 
 	protected:
 		MOCKABLE_METHOD void Update(f32 deltaTime);
@@ -159,9 +162,7 @@ namespace TGL
 
 		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(GameMode);
 
-		instance->m_Id = m_NextId++;
-
-		m_GameMode = instance;
+		// m_GameMode is updated inside the GameMode constructor in order to initialize the variable ASAP
 
 		StoreObjectCallbacks(instance);
 
@@ -181,8 +182,6 @@ namespace TGL
 
 		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(Entity);
 
-		instance->m_Id = m_NextId++;
-
 		m_Entities.emplace(instance->m_Id, instance);
 
 		StoreObjectCallbacks(instance);
@@ -199,8 +198,6 @@ namespace TGL
 		T* instance = new T(std::forward<Args>(args)...);
 
 		ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(Component);
-
-		instance->m_Id = m_NextId++;
 
 		m_Components.emplace(instance->m_Id, instance);
 

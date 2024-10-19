@@ -276,7 +276,7 @@ namespace TGL
 		ReferenceCounter* m_ReferenceCounter = nullptr;
 
 	protected:
-		SharedPtr<T> ToSharedPtr()
+		SharedPtr<T> ToSharedPtr() const
 		{
 			return SharedPtr<T>(m_Pointer, m_ReferenceCounter);
 		}

@@ -7,11 +7,16 @@ GameMode::GameMode(const i32 orderOfExecution)
 	: GameObject(true, orderOfExecution)
 {
 	ASSERT_ENTITY_FACTORY_CONSTRUCTOR(GameMode);
+
+	EntityManager& entityManager = EntityManager::Get();
+	entityManager.m_GameMode = this;
 }
 
 GameMode::~GameMode()
 {
 	ASSERT_ENTITY_FACTORY_DESTRUCTOR(GameMode);
+
+	// EntityManager::m_GameMode is updated after the virtual destructor completes
 }
 
 void GameMode::OnEarlyUpdate(f32 deltaTime) {}

@@ -10,13 +10,13 @@ namespace TGL
 	private:
 		friend class EntityManager;
 
-		template <LazyPointerValue T>
-		friend class LazyPtr;
-
 	private:
 		u64 m_Id = 0;
 		bool m_ShouldUpdate;
 		i32 m_OrderOfExecution;
+
+	public:
+		u64 GetId() const;
 
 	protected:
 		GameObject(bool shouldUpdate, i32 orderOfExecution);

@@ -259,6 +259,48 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithLoop, MockServiceBuilder)
 }
 END_GAME_TEST()
 
+
+BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithDurationZero, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		static Animator* animator = nullptr;
+
+		if (frame == 1)
+		{
+			TestEntity* entity = SpawnEntity<TestEntity>();
+			animator = entity->AttachComponent<Animator>();
+
+			SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
+			SharedPtr<DefaultSpriteMaterial> material = spriteRenderer->UseDefaultMaterial();
+			const SharedPtr<Animation> animation = Animation::Create();
+
+			animator->SetAnimation(animation);
+			material->Sprite->Value = animator->GetAnimationSprite();
+			animator->SetLoop(true);
+			animator->Play();
+		}
+
+		if (frame == 1)
+		{
+			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Playing);
+			EXPECT_NEAR(animator->GetTime(), 0.0f, 0.001f);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(animator->GetStatus(), AnimatorStatus::Stopped);
+			EXPECT_NEAR(animator->GetTime(), 0.0f, 0.001f);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
 BEGIN_GAME_TEST(Animator, JumpToTime)
 {
 	void OnUpdate(f32 deltaTime) override

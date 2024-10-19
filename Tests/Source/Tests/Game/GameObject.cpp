@@ -50,15 +50,65 @@ BEGIN_GAME_TEST(GameObject, Constructor)
 		EXPECT_NE(entity3, nullptr);
 
 		EXPECT_THROW(SpawnEntity<ExceptionEntity>(true), std::exception);
-		
+
 		ExceptionEntity* entity4 = SpawnEntity<ExceptionEntity>(false);
 		EXPECT_NE(entity4, nullptr);
-		
+
 		EndTest();
 	}
 }
 END_GAME_TEST()
 
+BEGIN_GAME_TEST(GameObject, Id)
+{
+	class SingleEntity final : public Entity
+	{
+	public:
+		SingleEntity()
+			: Entity(false) {}
+	};
+
+	class NestedEntity final : public Entity
+	{
+	public:
+		SingleEntity* ChildEntity = nullptr;
+
+	public:
+		NestedEntity()
+			: Entity(false)
+		{
+			ChildEntity = SpawnEntity<SingleEntity>();
+		}
+	};
+
+public:
+	GameObject_Id_TestGameMode()
+	{
+		EXPECT_EQ(GetId(), 1);
+	}
+
+protected:
+	void OnUpdate(f32 deltaTime) override
+	{
+		EXPECT_EQ(GetId(), 1);
+
+		const SingleEntity* entity1 = SpawnEntity<SingleEntity>();
+		EXPECT_EQ(entity1->GetId(), 2);
+
+		const SingleEntity* entity2 = SpawnEntity<SingleEntity>();
+		EXPECT_EQ(entity2->GetId(), 3);
+
+		const NestedEntity* entity3 = SpawnEntity<NestedEntity>();
+		EXPECT_EQ(entity3->GetId(), 4);
+		EXPECT_EQ(entity3->ChildEntity->GetId(), 5);
+
+		const SingleEntity* entity4 = SpawnEntity<SingleEntity>();
+		EXPECT_EQ(entity4->GetId(), 6);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
 
 BEGIN_GAME_TEST(GameObject, Start)
 {

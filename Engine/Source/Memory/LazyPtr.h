@@ -19,7 +19,7 @@ namespace TGL
 
 	public:
 		LazyPtr(T* ptr)
-			: m_Id(ptr ? ptr->m_Id : 0) {}
+			: m_Id(ptr ? ptr->GetId() : 0) {}
 
 		LazyPtr()
 			: m_Id(0) {}
@@ -63,7 +63,7 @@ namespace TGL
 
 		LazyPtr& operator=(const T* ptr)
 		{
-			m_Id = ptr != nullptr ? ptr->m_Id : 0;
+			m_Id = ptr != nullptr ? ptr->GetId() : 0;
 			return *this;
 		}
 
