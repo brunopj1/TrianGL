@@ -1,5 +1,5 @@
 #include "Core/Application.h"
-#include "Util/MemoryLeakDetection.h"
+#include "Core/MemoryLeakDetection.h"
 #include <GameMode/AudioPlaygroundGameMode.h>
 
 i32 main()

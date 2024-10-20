@@ -38,7 +38,7 @@
 #define ASSERT_ASSET_FACTORY_DESTRUCTOR() assert(AssetFactoryUtil::s_AssetDestructorUsageDepth-- > 0 && "Forbidden direct call to an Asset destructor")
 
 #ifdef DEBUG
-#define ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(type)                                                                                    \
+#define ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(type)                                                                                            \
 	assert(s_##type##ConstructorUsageDepth == expectedConstructorUsageDepth && "Something went wrong in an Asset constructor of type:" #type); \
 	assert(AssetFactoryUtil::s_AssetDestructorUsageDepth-- == expectedDestructorUsageDepth && "Something went wrong in an Asset constructor of type:" #type)
 #else

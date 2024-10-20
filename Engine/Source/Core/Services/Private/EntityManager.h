@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "Internal/Macros/EntityFactoryMacros.h"
-#include "Internal/Macros/TestMacros.h"
+#include "Core/Internal/Macros/EntityFactoryMacros.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
+#include <Core/Internal/Concepts/EntitySystemConcepts.h>
+#include <Core/Internal/Concepts/SmartPointerConcepts.h>
 #include <Core/Service.h>
-#include <Internal/Concepts/EntitySystemConcepts.h>
-#include <Internal/Concepts/SmartPointerConcepts.h>
 #include <ranges>
 #include <unordered_map>
 #include <vector>

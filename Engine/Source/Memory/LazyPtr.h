@@ -1,9 +1,9 @@
 ﻿#pragma once
 
+#include <Core/Internal/Concepts/SmartPointerConcepts.h>
 #include <Core/Services/Private/EntityManager.h>
 #include <Game/Component.h>
 #include <Game/Entity.h>
-#include <Internal/Concepts/SmartPointerConcepts.h>
 
 namespace TGL
 {

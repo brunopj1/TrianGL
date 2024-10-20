@@ -57,8 +57,8 @@ project "{projectName}"
 
 mainSourceTemplate = f"""
 #include "Core/Application.h"
+#include "Core/MemoryLeakDetection.h"
 #include <GameMode/{projectName}GameMode.h>
-#include "Util/MemoryLeakDetection.h"
 
 i32 main()
 {{
@@ -79,7 +79,7 @@ gamemodeHeaderTemplate = f"""
 #include "Game/GameMode.h"
 #include "Core/DataTypes.h"
 
-class {projectName}GameMode : public TGL::GameMode
+class {projectName}GameMode final : public TGL::GameMode
 {{
 public:
     {projectName}GameMode();
@@ -95,7 +95,7 @@ private:
 gamemodeSourceTemplate = f"""
 #include "{projectName}GameMode.h"
 
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
 
 using namespace TGL;
 

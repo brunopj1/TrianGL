@@ -1,4 +1,4 @@
-﻿#include <Implementations/Assets/DefaultSpriteMaterial.h>
+﻿#include <Implementations/Materials/DefaultSpriteMaterial.h>
 
 using namespace TGL;
 

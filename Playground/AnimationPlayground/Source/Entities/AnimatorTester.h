@@ -2,7 +2,7 @@
 
 #include "Core/DataTypes.h"
 #include "Game/Entity.h"
-#include "Implementations/Components/Animator.h"
+#include "Rendering/Animator.h"
 #include <vector>
 
 class AnimatorTester final : public TGL::Entity

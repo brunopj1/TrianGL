@@ -2,7 +2,7 @@
 
 #include "AnimationTester.h"
 #include "Assets/Animation.h"
-#include "Implementations/Components/SpriteRenderer.h"
+#include "Rendering/SpriteRenderer.h"
 #include "WindowConstants.h"
 #include <format>
 

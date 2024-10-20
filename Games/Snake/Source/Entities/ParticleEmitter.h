@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Implementations/Components/ParticleSystem.h"
+#include "Rendering/ParticleSystem.h"
 #include "Util/RandomNumberGenerator.h"
 
 enum class ParticleType

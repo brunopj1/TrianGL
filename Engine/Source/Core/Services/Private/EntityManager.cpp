@@ -2,7 +2,7 @@
 #include <Game/Component.h>
 #include <Game/Entity.h>
 #include <Game/GameMode.h>
-#include <Implementations/Components/SpriteRenderer.h>
+#include <Rendering/SpriteRenderer.h>
 
 using namespace TGL;
 
@@ -209,7 +209,7 @@ void EntityManager::DestroyComponent(Component* component)
 	PREPARE_ENTITY_FACTORY_DESTRUCTOR(Component);
 
 	delete component;
-	
+
 	ASSERT_POST_ENTITY_FACTORY_DESTRUCTOR(Component);
 }
 

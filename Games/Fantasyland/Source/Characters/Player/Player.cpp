@@ -1,7 +1,6 @@
 ﻿#include "Player.h"
 
 #include "Core/Services/Public/InputSystem.h"
-#include <iostream>
 
 using namespace TGL;
 

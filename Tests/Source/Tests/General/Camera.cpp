@@ -1,4 +1,4 @@
-﻿#include "Implementations/Entities/Camera.h"
+﻿#include "General/Camera.h"
 
 #include "Core/Services/Private/EntityManager.h"
 #include "Util/GameTestAbstractions.h"

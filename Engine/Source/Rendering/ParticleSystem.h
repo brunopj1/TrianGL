@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Implementations/Assets/DefaultParticleMaterial.h"
+#include "Implementations/Materials/DefaultParticleMaterial.h"
 #include <Game/Component.h>
 #include <Game/Internal/Renderable.h>
 #include <Memory/SharedPtr.h>

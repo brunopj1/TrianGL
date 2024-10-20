@@ -10,7 +10,7 @@ AnimationFrame::AnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, c
 	: m_Animation(animation), m_Sprite(std::move(sprite)), m_Duration(duration)
 {
 	ASSERT_ASSET_FACTORY_CONSTRUCTOR(AnimationFrame);
-	
+
 	if (m_Sprite == nullptr)
 	{
 		throw std::invalid_argument("The sprite cannot be null");

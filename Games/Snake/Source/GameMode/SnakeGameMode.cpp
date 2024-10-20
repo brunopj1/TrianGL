@@ -2,11 +2,10 @@
 
 #include "Assets/Material.h"
 #include "Core/Services/Public/InputSystem.h"
-#include "Core/Services/Public/Window.h"
 #include "Entities/Apple.h"
 #include "Entities/Snake.h"
-#include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
+#include "Rendering/SpriteRenderer.h"
 
 #ifdef IMGUI
 #include <imgui.h>
@@ -19,7 +18,7 @@ using namespace TGL;
 SnakeGameMode::SnakeGameMode()
 {
 	SpawnEntity<Camera>(true);
-	
+
 	auto textureParams = TextureParameters();
 	textureParams.Filter = TextureFilterMode::Nearest;
 	textureParams.GenerateMipmaps = false;

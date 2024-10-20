@@ -2,7 +2,7 @@
 
 #include "Entities/AudioPlayerTester.h"
 #include "Entities/AudioTester.h"
-#include "Implementations/Entities/Camera.h"
+#include <General/Camera.h>
 
 using namespace TGL;
 

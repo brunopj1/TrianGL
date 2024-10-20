@@ -4,8 +4,8 @@
 #include <Core/Services/Public/Window.h>
 #include <Exceptions/OpenGL/OpenGlException.h>
 #include <Game/GameMode.h>
-#include <Implementations/Components/SpriteRenderer.h>
-#include <Implementations/Entities/Camera.h>
+#include <General/Camera.h>
+#include <Rendering/SpriteRenderer.h>
 
 using namespace TGL;
 

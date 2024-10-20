@@ -1,6 +1,6 @@
 ﻿#include "Assets/Material.h"
 #include "Core/Services/Backends/RenderBackend.h"
-#include <Implementations/Components/ParticleSystem.h>
+#include <Rendering/ParticleSystem.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;

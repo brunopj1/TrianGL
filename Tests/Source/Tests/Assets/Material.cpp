@@ -1,7 +1,7 @@
 ﻿#include "Assets/Material.h"
 
-#include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
+#include "Rendering/SpriteRenderer.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;
@@ -281,9 +281,9 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material5 = nullptr;
 
 		// Invalid color uniform, throw if invalid
-		//MockRenderBackend::s_InvalidColorUniform = true;
-		//MockRenderBackend::s_InvalidSizeUniform = false;
-		//EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), std::invalid_argument);
+		// MockRenderBackend::s_InvalidColorUniform = true;
+		// MockRenderBackend::s_InvalidSizeUniform = false;
+		// EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), std::invalid_argument);
 
 		EndTest();
 	}

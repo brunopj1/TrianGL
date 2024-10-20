@@ -2,8 +2,8 @@
 
 #include "Assets/Texture.h"
 #include "Core/DataTypes.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include "Core/Service.h"
-#include "Internal/Macros/TestMacros.h"
 #include "glm/mat2x2.hpp"
 #include "glm/mat3x3.hpp"
 #include "glm/mat4x4.hpp"

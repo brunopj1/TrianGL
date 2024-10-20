@@ -1,8 +1,8 @@
 ﻿#include "Core/Services/Backends/RenderBackend.h"
 #include <Assets/Material.h>
 #include <Game/Entity.h>
-#include <Implementations/Assets/DefaultSpriteMaterial.h>
-#include <Implementations/Components/SpriteRenderer.h>
+#include <Implementations/Materials/DefaultSpriteMaterial.h>
+#include <Rendering/SpriteRenderer.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 using namespace TGL;

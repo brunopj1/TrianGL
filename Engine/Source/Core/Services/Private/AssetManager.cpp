@@ -140,7 +140,7 @@ SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> text
 	SharedPtr<TextureSlice> instance = new TextureSlice(std::move(texture), index);
 
 	ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(TextureSlice);
-	
+
 	return instance;
 }
 SharedPtr<Animation> AssetManager::CreateAnimation()
@@ -161,8 +161,8 @@ SharedPtr<AnimationFrame> AssetManager::CreateAnimationFrame(Animation* animatio
 
 	ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(AnimationFrame);
 
-	return		instance;
-} 
+	return instance;
+}
 
 SharedPtr<AnimationSprite> AssetManager::CreateAnimationSprite()
 {
@@ -171,7 +171,7 @@ SharedPtr<AnimationSprite> AssetManager::CreateAnimationSprite()
 	SharedPtr<AnimationSprite> instance = new AnimationSprite();
 
 	ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(AnimationSprite);
-	
+
 	return instance;
 }
 
@@ -202,7 +202,7 @@ void AssetManager::UnloadMaterialUniforms(const Material* material)
 		PREPARE_ASSET_FACTORY_DESTRUCTOR();
 
 		delete uniform;
-		
+
 		ASSERT_POST_ASSET_FACTORY_DESTRUCTOR();
 	}
 }

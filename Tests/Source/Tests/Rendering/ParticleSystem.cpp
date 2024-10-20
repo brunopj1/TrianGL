@@ -1,6 +1,6 @@
-﻿#include "Implementations/Components/ParticleSystem.h"
+﻿#include "Rendering/ParticleSystem.h"
 
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
 #include "Util/GameTestAbstractions.h"
 #include "Util/RandomNumberGenerator.h"
 

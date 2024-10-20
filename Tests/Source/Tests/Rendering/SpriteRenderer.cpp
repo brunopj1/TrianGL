@@ -1,6 +1,6 @@
-﻿#include "Implementations/Components/SpriteRenderer.h"
+﻿#include "Rendering/SpriteRenderer.h"
 
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
 #include "Util/GameTestAbstractions.h"
 #include <algorithm>
 

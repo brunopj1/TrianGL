@@ -2,8 +2,8 @@
 
 #include "Assets/Internal/Sprite.h"
 #include "Game/Entity.h"
-#include "Implementations/Components/Animator.h"
 #include "Memory/SharedPtr.h"
+#include "Rendering/Animator.h"
 #include <vector>
 
 class AnimationTester final : public TGL::Entity

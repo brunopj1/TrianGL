@@ -2,8 +2,8 @@
 
 #include "Core/DataTypes.h"
 #include "Core/InputCodes.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include "Core/Service.h"
-#include "Internal/Macros/TestMacros.h"
 #include "glm/vec2.hpp"
 #include <string>
 

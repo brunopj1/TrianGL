@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Internal/Macros/TestMacros.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include <Core/DataTypes.h>
 #include <Core/Service.h>
 #include <glm/vec2.hpp>

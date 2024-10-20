@@ -1,6 +1,6 @@
 ﻿#include "Assets/Material.h"
-#include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Entities/Camera.h"
+#include "General/Camera.h"
+#include "Rendering/SpriteRenderer.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;

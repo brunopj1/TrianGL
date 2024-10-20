@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Implementations/Components/ParticleSystem.h"
+#include "Rendering/ParticleSystem.h"
 #include "Util/RandomNumberGenerator.h"
 
 class MouseParticleEmitter final : public TGL::Entity

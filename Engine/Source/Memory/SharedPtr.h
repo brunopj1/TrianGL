@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "Internal/Concepts/SmartPointerConcepts.h"
-#include "Internal/Macros/AssetFactoryMacros.h"
-#include "Internal/Macros/ClassMacros.h"
+#include "Core/Internal/Concepts/SmartPointerConcepts.h"
+#include "Core/Internal/Macros/AssetFactoryMacros.h"
+#include "Core/Internal/Macros/ClassMacros.h"
 #include <Core/DataTypes.h>
 #include <cstddef>
 #include <type_traits>
@@ -25,7 +25,7 @@ namespace TGL
 	{
 	private:
 		friend class AssetManager;
-	
+
 		template <typename T>
 		friend class SharedPtr;
 
@@ -48,7 +48,7 @@ namespace TGL
 	public:
 		DELETE_COPY_AND_MOVE_CONSTRUCTORS(AssetFactoryUtil);
 	};
-	
+
 	// TODO use the 'SharedPointerValue' concept here
 	template <typename T>
 	class SharedPtr final

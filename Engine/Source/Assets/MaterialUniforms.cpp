@@ -1,6 +1,6 @@
 ﻿#include "Core/DataTypes.h"
 #include "Core/Services/Backends/RenderBackend.h"
-#include "Implementations/Components/Animator.h"
+#include "Rendering/Animator.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Core/Services/Private/AssetManager.h>

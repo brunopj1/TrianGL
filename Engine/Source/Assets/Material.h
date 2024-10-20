@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include "Core/DataTypes.h"
-#include "Internal/Macros/ClassMacros.h"
+#include "Core/Internal/Macros/ClassMacros.h"
 #include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
+#include <Core/Internal/Concepts/MaterialConcepts.h>
 #include <Core/Services/Private/AssetManager.h>
-#include <Internal/Concepts/MaterialConcepts.h>
 #include <Memory/SharedPtr.h>
 #include <string>
 #include <vector>

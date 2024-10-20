@@ -1,7 +1,7 @@
 ﻿#include "Core/Services/Backends/AudioBackend.h"
 #include <Assets/Audio.h>
 #include <Core/Services/Private/AssetManager.h>
-#include <Implementations/Components/AudioPlayer.h>
+#include <Rendering/AudioPlayer.h>
 #include <utility>
 
 using namespace TGL;

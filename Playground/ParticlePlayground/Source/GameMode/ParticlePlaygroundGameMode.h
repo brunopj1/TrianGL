@@ -2,9 +2,9 @@
 
 #include "Entities/MouseParticleEmitter.h"
 #include "Game/GameMode.h"
-#include "Implementations/Entities/Camera.h"
+#include <General/Camera.h>
 
-class ParticlePlaygroundGameMode : public TGL::GameMode
+class ParticlePlaygroundGameMode final : public TGL::GameMode
 {
 private:
 	MouseParticleEmitter* m_ParticleEmitter;

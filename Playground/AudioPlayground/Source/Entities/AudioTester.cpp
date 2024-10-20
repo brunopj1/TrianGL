@@ -1,6 +1,6 @@
 ﻿#include "AudioTester.h"
 
-#include "Implementations/Components/AudioPlayer.h"
+#include "Rendering/AudioPlayer.h"
 #include "WindowConstants.h"
 
 #ifdef IMGUI

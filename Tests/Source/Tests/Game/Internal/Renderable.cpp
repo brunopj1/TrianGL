@@ -1,4 +1,4 @@
-﻿#include "Implementations/Components/SpriteRenderer.h"
+﻿#include "Rendering/SpriteRenderer.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;

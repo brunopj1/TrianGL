@@ -2,11 +2,11 @@
 
 #include "Core/Services/Public/Window.h"
 #include "GameMode/RenderingOrder.h"
-#include "Implementations/Components/SpriteRenderer.h"
-#include "Implementations/Entities/Camera.h"
 #include "Materials/GrassMaterial.h"
+#include "Rendering/SpriteRenderer.h"
 #include "Util/RandomNumberGenerator.h"
 #include "glm/glm.hpp"
+#include <General/Camera.h>
 #include <stdexcept>
 
 using namespace TGL;

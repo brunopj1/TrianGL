@@ -32,7 +32,7 @@
 #define ASSERT_ENTITY_FACTORY_DESTRUCTOR(type) assert(EntityManager::s_##type##DestructorUsageDepth-- > 0 && "Forbidden direct call to a GameObject destructor of type:" #type)
 
 #ifdef DEBUG
-#define ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(type)                                                                                   \
+#define ASSERT_POST_ENTITY_FACTORY_CONSTRUCTOR(type)                                                                                               \
 	assert(s_##type##ConstructorUsageDepth == expectedConstructorUsageDepth && "Something went wrong in a GameObject constructor of type:" #type); \
 	assert(s_##type##DestructorUsageDepth-- == expectedDestructorUsageDepth && "Something went wrong in a GameObject constructor of type:" #type)
 #else

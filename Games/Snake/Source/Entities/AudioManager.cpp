@@ -1,6 +1,6 @@
 ﻿#include "AudioManager.h"
 
-#include "Implementations/Components/AudioPlayer.h"
+#include "Rendering/AudioPlayer.h"
 
 AudioManager::AudioManager()
 	: Entity(false)

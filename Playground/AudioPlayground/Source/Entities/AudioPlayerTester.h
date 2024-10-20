@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Implementations/Components/AudioPlayer.h"
+#include "Rendering/AudioPlayer.h"
 
 class AudioPlayerTester final : public TGL::Entity
 {

@@ -4,7 +4,7 @@
 #include <Core/Services/Public/Window.h>
 #include <Events/WindowEvents.h>
 #include <Exceptions/Core/FailedToInitializeEngineException.h>
-#include <Implementations/Entities/Camera.h>
+#include <General/Camera.h>
 #include <format>
 #include <stdexcept>
 #include <utility>

@@ -2,7 +2,7 @@
 #include <Assets/Audio.h>
 #include <Core/Services/Private/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
-#include <Implementations/Components/AudioPlayer.h>
+#include <Rendering/AudioPlayer.h>
 
 using namespace TGL;
 

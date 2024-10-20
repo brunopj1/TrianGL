@@ -3,8 +3,8 @@
 #include "Assets/Texture.h"
 #include "GameMode/RenderingOrder.h"
 #include "Grid.h"
-#include "Implementations/Assets/DefaultSpriteMaterial.h"
-#include "Implementations/Components/SpriteRenderer.h"
+#include "Implementations/Materials/DefaultSpriteMaterial.h"
+#include "Rendering/SpriteRenderer.h"
 
 using namespace TGL;
 

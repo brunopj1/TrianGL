@@ -47,7 +47,7 @@ SharedPtr<TextureSlice> Texture::GetSlice(const u32 index) const
 	if (index >= m_Slices.size())
 	{
 		throw std::runtime_error("Invalid slice index");
-	} 
+	}
 
 	AssetManager& assetManager = AssetManager::Get();
 	return assetManager.CreateTextureSlice(ToSharedPtr(), index);

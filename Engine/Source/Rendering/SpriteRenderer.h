@@ -2,7 +2,7 @@
 
 #include <Game/Component.h>
 #include <Game/Internal/Renderable.h>
-#include <Implementations/Assets/DefaultSpriteMaterial.h>
+#include <Implementations/Materials/DefaultSpriteMaterial.h>
 #include <Memory/SharedPtr.h>
 
 namespace TGL

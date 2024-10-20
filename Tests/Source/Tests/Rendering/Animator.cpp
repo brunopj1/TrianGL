@@ -1,7 +1,7 @@
-﻿#include "Implementations/Components/Animator.h"
+﻿#include "Rendering/Animator.h"
 
 #include "Assets/Animation.h"
-#include "Implementations/Components/SpriteRenderer.h"
+#include "Rendering/SpriteRenderer.h"
 #include "Util/GameTestAbstractions.h"
 
 using namespace TGL;
@@ -258,7 +258,6 @@ BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithLoop, MockServiceBuilder)
 	}
 }
 END_GAME_TEST()
-
 
 BEGIN_GAME_TEST_MOCKED(Animator, PlaybackWithDurationZero, MockServiceBuilder)
 {

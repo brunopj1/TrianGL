@@ -3,7 +3,7 @@
 #include "Assets/Texture.h"
 #include "Entities/AnimationTester.h"
 #include "Entities/AnimatorTester.h"
-#include "Implementations/Entities/Camera.h"
+#include <General/Camera.h>
 
 using namespace TGL;
 

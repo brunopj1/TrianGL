@@ -1,8 +1,8 @@
 ﻿#include "SnakeBody.h"
 
 #include "GameMode/RenderingOrder.h"
-#include "Implementations/Assets/DefaultSpriteMaterial.h"
-#include "Implementations/Components/SpriteRenderer.h"
+#include "Implementations/Materials/DefaultSpriteMaterial.h"
+#include "Rendering/SpriteRenderer.h"
 #include <utility>
 
 using namespace TGL;

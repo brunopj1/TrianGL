@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "Core/DataTypes.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include "Core/Service.h"
-#include "Internal/Macros/TestMacros.h"
 #include <string>
 
 // Forward declarations

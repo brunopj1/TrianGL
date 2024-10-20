@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "Assets/MaterialUniforms.h"
-#include "Internal/Macros/AssetFactoryMacros.h"
+#include "Core/Internal/Macros/AssetFactoryMacros.h"
 #include <Assets/Internal/Shader.h>
+#include <Core/Internal/Concepts/MaterialConcepts.h>
 #include <Core/Service.h>
-#include <Internal/Concepts/MaterialConcepts.h>
 #include <Memory/SharedPtr.h>
 #include <memory>
 #include <stdexcept>

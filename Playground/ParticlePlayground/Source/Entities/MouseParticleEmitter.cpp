@@ -2,8 +2,8 @@
 
 #include "Assets/Material.h"
 #include "Core/Services/Public/InputSystem.h"
-#include "Implementations/Entities/Camera.h"
 #include "glm/ext/scalar_constants.hpp"
+#include <General/Camera.h>
 
 #ifdef IMGUI
 #include <imgui.h>
