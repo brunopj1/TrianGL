@@ -143,6 +143,7 @@ SharedPtr<TextureSlice> AssetManager::CreateTextureSlice(SharedPtr<Texture> text
 
 	return instance;
 }
+
 SharedPtr<Animation> AssetManager::CreateAnimation()
 {
 	PREPARE_ASSET_FACTORY_CONSTRUCTOR(Animation);
@@ -153,6 +154,7 @@ SharedPtr<Animation> AssetManager::CreateAnimation()
 
 	return instance;
 }
+
 SharedPtr<AnimationFrame> AssetManager::CreateAnimationFrame(Animation* animation, SharedPtr<Sprite> sprite, const f32 duration)
 {
 	PREPARE_ASSET_FACTORY_CONSTRUCTOR(AnimationFrame);

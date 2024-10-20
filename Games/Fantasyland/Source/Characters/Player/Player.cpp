@@ -16,6 +16,10 @@ Player::Player(AssetCollection& assetCollection)
 
 	m_Animator->SetAnimation(m_AssetCollection->GetPlayerIdleAnimation(m_LookDirection));
 	m_Animator->Play();
+	m_Animator->ApplyCurrentFrame();
+
+	const glm::vec2 idealScale = material->Sprite->Value->CalculateIdealScale(false);
+	GetTransform().SetScale(idealScale);
 }
 
 void Player::OnUpdate(const f32 deltaTime)

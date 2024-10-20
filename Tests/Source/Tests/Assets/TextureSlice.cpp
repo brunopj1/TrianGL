@@ -81,7 +81,7 @@ BEGIN_GAME_TEST(TextureSlice, CreateSliceGrid)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST(TextureSlice, SliceInfo)
+BEGIN_GAME_TEST(TextureSlice, GetTexture)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
@@ -92,7 +92,48 @@ BEGIN_GAME_TEST(TextureSlice, SliceInfo)
 		EXPECT_NE(slice.Get(), nullptr);
 
 		EXPECT_EQ(slice->GetTexture(), texture);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST(TextureSlice, GetResolution)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		EXPECT_NE(texture.Get(), nullptr);
+
+		const SharedPtr<TextureSlice> slice = texture->CreateAndGetSlice({4, 4}, {0, 0});
+		EXPECT_NE(slice.Get(), nullptr);
+
 		EXPECT_EQ(slice->GetResolution(), glm::uvec2(4, 4));
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST(TextureSlice, GetAspectRatio)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		EXPECT_NE(texture.Get(), nullptr);
+
+		const SharedPtr<TextureSlice> slice1 = texture->CreateAndGetSlice({4, 4}, {0, 0});
+		EXPECT_NE(slice1.Get(), nullptr);
+
+		const SharedPtr<TextureSlice> slice2 = texture->CreateAndGetSlice({2, 4}, {0, 0});
+		EXPECT_NE(slice2.Get(), nullptr);
+
+		const SharedPtr<TextureSlice> slice3 = texture->CreateAndGetSlice({4, 2}, {0, 0});
+		EXPECT_NE(slice3.Get(), nullptr);
+
+		EXPECT_EQ(slice1->GetAspectRatio(), 1);
+		EXPECT_EQ(slice2->GetAspectRatio(), 0.5f);
+		EXPECT_EQ(slice3->GetAspectRatio(), 2);
 
 		EndTest();
 	}

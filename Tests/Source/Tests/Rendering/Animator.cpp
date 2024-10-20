@@ -19,18 +19,10 @@ namespace
 	};
 }
 
-// Mock Services
+// Helper functions
 
 namespace
 {
-	class MockClock final : public Clock
-	{
-		std::chrono::steady_clock::time_point CalculateCurrentTime() const override
-		{
-			return m_LastFrameTime + std::chrono::milliseconds(150);
-		}
-	};
-
 	SharedPtr<Animation> CreateAnimation()
 	{
 		SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
@@ -44,6 +36,19 @@ namespace
 
 		return animation;
 	}
+}
+
+// Mock Services
+
+namespace
+{
+	class MockClock final : public Clock
+	{
+		std::chrono::steady_clock::time_point CalculateCurrentTime() const override
+		{
+			return m_LastFrameTime + std::chrono::milliseconds(150);
+		}
+	};
 
 	void MockServiceBuilder(ServiceCollection& collection)
 	{

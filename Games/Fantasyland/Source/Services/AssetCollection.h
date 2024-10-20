@@ -11,8 +11,6 @@ class AssetCollection final
 {
 private:
 	TGL::SharedPtr<TGL::Texture> m_CharactersSpriteSheet;
-
-private:
 	std::unordered_map<glm::ivec2, TGL::SharedPtr<TGL::Animation>> m_PlayerIdleAnimations;
 	std::unordered_map<glm::ivec2, TGL::SharedPtr<TGL::Animation>> m_PlayerWalkAnimations;
 

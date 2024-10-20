@@ -16,12 +16,19 @@ namespace TGL
 		Sprite() = default;
 		virtual ~Sprite() = default;
 
-	private:
-		virtual bool Bind(u8 slot) const = 0;
-		static void Unbind(u8 slot);
+	public:
+		virtual const glm::uvec2& GetResolution() const = 0;
+		f32 GetAspectRatio() const;
+
+	public:
+		glm::vec2 CalculateIdealScale() const;
+		glm::vec2 CalculateIdealScale(bool keepWidth) const;
 
 	private:
 		virtual const glm::mat4& GetMatrix() const = 0;
-		virtual const glm::uvec2& GetResolution() const = 0;
+
+	private:
+		virtual bool Bind(u8 slot) const = 0;
+		static void Unbind(u8 slot);
 	};
 }

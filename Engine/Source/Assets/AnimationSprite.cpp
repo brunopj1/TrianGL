@@ -13,9 +13,20 @@ AnimationSprite::~AnimationSprite()
 {
 	ASSERT_ASSET_FACTORY_DESTRUCTOR();
 }
+
 SharedPtr<Sprite> AnimationSprite::GetCurrentSprite() const
 {
 	return m_CurrentSprite;
+}
+
+const glm::uvec2& AnimationSprite::GetResolution() const
+{
+	if (m_CurrentSprite == nullptr)
+	{
+		return s_DefaultResolution;
+	}
+
+	return m_CurrentSprite->GetResolution();
 }
 
 bool AnimationSprite::Bind(const u8 slot) const
@@ -36,14 +47,4 @@ const glm::mat4& AnimationSprite::GetMatrix() const
 	}
 
 	return m_CurrentSprite->GetMatrix();
-}
-
-const glm::uvec2& AnimationSprite::GetResolution() const
-{
-	if (m_CurrentSprite == nullptr)
-	{
-		return s_DefaultResolution;
-	}
-
-	return m_CurrentSprite->GetResolution();
 }

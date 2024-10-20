@@ -24,12 +24,10 @@ namespace TGL
 
 	public:
 		SharedPtr<Sprite> GetCurrentSprite() const;
+		const glm::uvec2& GetResolution() const override;
 
 	private:
 		bool Bind(u8 slot) const override;
-
-	private:
 		const glm::mat4& GetMatrix() const override;
-		const glm::uvec2& GetResolution() const override;
 	};
 }

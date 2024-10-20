@@ -45,3 +45,17 @@ BEGIN_GAME_TEST(Texture, GetResolution)
 	}
 }
 END_GAME_TEST()
+
+BEGIN_GAME_TEST(Texture, GetAspectRatio)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const SharedPtr<Texture> texture = Texture::Load("Assets/Textures/smile.png");
+		EXPECT_NE(texture.Get(), nullptr);
+
+		EXPECT_EQ(texture->GetAspectRatio(), 1.0f);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
