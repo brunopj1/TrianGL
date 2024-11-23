@@ -1,13 +1,13 @@
 ﻿#pragma once
 
 #include "Game/Entity.h"
-#include "Rendering/ParticleSystem.h"
+#include "Implementations/ParticleSystems/DefaultParticleSystem.h"
 #include "Util/RandomNumberGenerator.h"
 
 class MouseParticleEmitter final : public TGL::Entity
 {
 private:
-	TGL::ParticleSystem* m_ParticleSystem;
+	TGL::DefaultParticleSystem* m_ParticleSystem;
 	TGL::SharedPtr<TGL::DefaultParticleMaterial> m_Material;
 	TGL::SharedPtr<TGL::Texture> m_Texture;
 	i32 m_SelectedTexture = 0;

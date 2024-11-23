@@ -163,6 +163,12 @@ void RenderBackend::SetUniformMatrix3f(int location, const glm::mat3& value) {}
 void RenderBackend::SetUniformMatrix4f(int location, const glm::mat4& value) {}
 
 // NOLINTEND(CppInconsistentNaming)
+
+u8 RenderBackend::GetDataTypeSize(const VertexAttributeDataType dataType)
+{
+	return 0;
+}
+
 // NOLINTEND(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 #endif

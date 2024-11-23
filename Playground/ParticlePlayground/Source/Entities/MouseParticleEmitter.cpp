@@ -14,7 +14,7 @@ using namespace TGL;
 MouseParticleEmitter::MouseParticleEmitter()
 	: Entity(true)
 {
-	m_ParticleSystem = AttachComponent<ParticleSystem>(3000);
+	m_ParticleSystem = AttachComponent<DefaultParticleSystem>(3000);
 	m_Material = m_ParticleSystem->UseDefaultMaterial();
 	m_Material->FadeDuration->Value = 1.0f;
 

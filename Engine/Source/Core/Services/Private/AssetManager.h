@@ -41,9 +41,11 @@ namespace TGL
 		friend class TextureSlice;
 
 		friend class SpriteRenderer;
-		friend class ParticleSystem;
 		friend class AudioPlayer;
 		friend class Animator;
+		
+		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
+		friend class ParticleSystem;
 
 		friend class ReferenceCounter;
 

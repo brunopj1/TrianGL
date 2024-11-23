@@ -1,6 +1,7 @@
 ﻿#include "Rendering/ParticleSystem.h"
 
 #include "General/Camera.h"
+#include "Implementations/ParticleSystems/DefaultParticleSystem.h"
 #include "Util/GameTestAbstractions.h"
 #include "Util/RandomNumberGenerator.h"
 
@@ -89,6 +90,49 @@ namespace TGL
 			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag")
 		{}
 	};
+
+	struct TestCpuParticle
+	{
+		f32 Lifetime;
+	};
+
+	struct TestGpuParticle
+	{
+		static std::vector<ParticleDataInfo> GetParticleStructure()
+		{
+			return {};
+		}
+	};
+
+	struct TestParticleSpawnData
+	{
+		f32 Lifetime;
+	};
+	
+	class TestParticleSystem final : public ParticleSystem<TestCpuParticle, TestGpuParticle, TestParticleSpawnData>
+	{
+	public:
+		u32 m_SetupCallCount;
+		u32 m_UpdateCallCount;
+		
+	protected:
+		void SetupParticle(const TestParticleSpawnData& spawnData, TestCpuParticle& cpuParticle, TestGpuParticle& gpuParticle) override
+		{
+			m_SetupCallCount++;
+			cpuParticle.Lifetime = spawnData.Lifetime;
+		}
+		
+		void UpdateParticle(TestCpuParticle& cpuParticle, TestGpuParticle& gpuParticle, const f32 deltaTime) override
+		{
+			m_UpdateCallCount++;
+			cpuParticle.Lifetime -= deltaTime;
+		}
+		
+		bool IsParticleAlive(const TestCpuParticle& cpuParticle, const TestGpuParticle& gpuParticle) const override
+		{
+			return cpuParticle.Lifetime > 0.0f;
+		}
+	};
 }
 
 // Tests
@@ -99,47 +143,21 @@ BEGIN_GAME_TEST(ParticleSystem, Constructor)
 	{
 		TestEntity* entity = SpawnEntity<TestEntity>();
 
-		const ParticleSystem* particleSystem1 = entity->AttachComponent<ParticleSystem>();
+		const DefaultParticleSystem* particleSystem1 = entity->AttachComponent<DefaultParticleSystem>();
 		EXPECT_EQ(particleSystem1->GetMaxParticles(), 1000);
 		EXPECT_EQ(particleSystem1->GetParticleCount(), 0);
 		EXPECT_EQ(particleSystem1->GetMaterial(), nullptr);
 
-		const ParticleSystem* particleSystem2 = entity->AttachComponent<ParticleSystem>(543);
+		const DefaultParticleSystem* particleSystem2 = entity->AttachComponent<DefaultParticleSystem>(543);
 		EXPECT_EQ(particleSystem2->GetMaxParticles(), 543);
 		EXPECT_EQ(particleSystem2->GetParticleCount(), 0);
 		EXPECT_EQ(particleSystem2->GetMaterial(), nullptr);
 
 		const SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
-		const ParticleSystem* particleSystem3 = entity->AttachComponent<ParticleSystem>(5123, material);
+		const DefaultParticleSystem* particleSystem3 = entity->AttachComponent<DefaultParticleSystem>(5123, material);
 		EXPECT_EQ(particleSystem3->GetMaxParticles(), 5123);
 		EXPECT_EQ(particleSystem3->GetParticleCount(), 0);
 		EXPECT_EQ(particleSystem3->GetMaterial(), material);
-
-		EndTest();
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST(ParticleSystem, Material)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		TestEntity* entity = SpawnEntity<TestEntity>();
-		ParticleSystem* particleSystem = entity->AttachComponent<ParticleSystem>();
-		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
-
-		const SharedPtr<DefaultParticleMaterial> defaultMaterial = particleSystem->UseDefaultMaterial();
-		EXPECT_EQ(particleSystem->GetMaterial(), defaultMaterial);
-
-		particleSystem->SetMaterial(nullptr);
-		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
-
-		// const SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
-		// particleSystem->SetMaterial(material);
-		// EXPECT_EQ(particleSystem->GetMaterial(), material);
-
-		particleSystem->SetMaterial(nullptr);
-		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
 
 		EndTest();
 	}
@@ -151,7 +169,7 @@ BEGIN_GAME_TEST(ParticleSystem, Emit)
 	void OnUpdate(f32 deltaTime) override
 	{
 		TestEntity* entity = SpawnEntity<TestEntity>();
-		ParticleSystem* particleSystem = entity->AttachComponent<ParticleSystem>();
+		DefaultParticleSystem* particleSystem = entity->AttachComponent<DefaultParticleSystem>();
 		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
 
 		ParticleSpawnData spawnData;
@@ -178,12 +196,33 @@ BEGIN_GAME_TEST(ParticleSystem, Emit)
 }
 END_GAME_TEST()
 
+BEGIN_GAME_TEST(ParticleSystem, EmitDead)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		TestEntity* entity = SpawnEntity<TestEntity>();
+		DefaultParticleSystem* particleSystem = entity->AttachComponent<DefaultParticleSystem>();
+		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
+
+		const bool success1 = particleSystem->Emit({.Duration = 0.0f});
+		EXPECT_FALSE(success1);
+		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
+		
+		const bool success2 = particleSystem->Emit({.Duration = -1.0f});
+		EXPECT_FALSE(success2);
+		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
+
 BEGIN_GAME_TEST(ParticleSystem, MaxParticles)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
 		TestEntity* entity = SpawnEntity<TestEntity>();
-		ParticleSystem* particleSystem = entity->AttachComponent<ParticleSystem>(10);
+		DefaultParticleSystem* particleSystem = entity->AttachComponent<DefaultParticleSystem>(10);
 
 		for (u32 i = 0; i < 10; i++)
 		{
@@ -207,7 +246,7 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, Lifetime, MockServiceBuilder)
 		const u32 frame = clock.GetFrameCount();
 		const f32 time = clock.GetTotalTime();
 
-		static ParticleSystem* particleSystem = nullptr;
+		static DefaultParticleSystem* particleSystem = nullptr;
 		static f32 spawnTime = 0.0f;
 
 		if (frame == 1)
@@ -215,7 +254,7 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, Lifetime, MockServiceBuilder)
 			EXPECT_NEAR(time, 0.750f, 0.001f);
 
 			TestEntity* entity = SpawnEntity<TestEntity>();
-			particleSystem = entity->AttachComponent<ParticleSystem>(100);
+			particleSystem = entity->AttachComponent<DefaultParticleSystem>(20);
 			EXPECT_EQ(particleSystem->GetParticleCount(), 0);
 
 			for (u32 i = 0; i < 10; i++)
@@ -252,6 +291,84 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, Lifetime, MockServiceBuilder)
 }
 END_GAME_TEST()
 
+BEGIN_GAME_TEST_MOCKED(ParticleSystem, SetupAndUpdate, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		static TestParticleSystem* particleSystem = nullptr;
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			TestEntity* entity = SpawnEntity<TestEntity>();
+			particleSystem = entity->AttachComponent<TestParticleSystem>();
+			
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 0);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 0);
+
+			particleSystem->Emit({.Lifetime = 1.0f});
+			particleSystem->Emit({.Lifetime = 2.0f});
+			
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 2);
+		}
+
+		if (frame == 3)
+		{
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 4);
+		}
+
+		if (frame == 4)
+		{
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 5);
+		}
+
+		if (frame == 5)
+		{
+			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
+			EXPECT_EQ(particleSystem->m_UpdateCallCount, 5);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST(ParticleSystem, Material)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		TestEntity* entity = SpawnEntity<TestEntity>();
+		DefaultParticleSystem* particleSystem = entity->AttachComponent<DefaultParticleSystem>();
+		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
+
+		const SharedPtr<DefaultParticleMaterial> defaultMaterial = particleSystem->UseDefaultMaterial();
+		EXPECT_EQ(particleSystem->GetMaterial(), defaultMaterial);
+
+		particleSystem->SetMaterial(nullptr);
+		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
+
+		const SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
+		particleSystem->SetMaterial(material);
+		EXPECT_EQ(particleSystem->GetMaterial(), material);
+
+		particleSystem->SetMaterial(nullptr);
+		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
+
 BEGIN_GAME_TEST_MOCKED(ParticleSystem, Render, MockServiceBuilder)
 {
 	void OnUpdate(f32 deltaTime) override
@@ -264,7 +381,7 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, Render, MockServiceBuilder)
 			SpawnEntity<Camera>(true);
 
 			Entity* entity = SpawnEntity<TestEntity>();
-			ParticleSystem* particleSystem = entity->AttachComponent<ParticleSystem>(100);
+			DefaultParticleSystem* particleSystem = entity->AttachComponent<DefaultParticleSystem>(100);
 
 			for (u32 i = 0; i < 10; i++)
 			{

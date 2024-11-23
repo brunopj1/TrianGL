@@ -10,6 +10,8 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Update the Particle System wiki (DefaultParticleSystem and material, user-defined particle systems)
+- Mention the sprite methods to calculate the ideal scale in the wiki
 - Refactor the new way of modifying the execution order in the wiki
 - Mention the animations and animators in the wiki
 - Mention the custom datatypes in the wiki (and use them in every code snippet)

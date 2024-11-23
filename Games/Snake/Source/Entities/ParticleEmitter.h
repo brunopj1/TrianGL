@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Rendering/ParticleSystem.h"
+#include "Implementations/ParticleSystems/DefaultParticleSystem.h"
 #include "Util/RandomNumberGenerator.h"
 
-enum class ParticleType
+enum class ParticleType : u8
 {
 	Grow,
 	Damage
@@ -12,7 +12,7 @@ enum class ParticleType
 class ParticleEmitter final : public TGL::Entity
 {
 public:
-	TGL::ParticleSystem* m_ParticleSystem;
+	TGL::DefaultParticleSystem* m_ParticleSystem;
 	TGL::RandomNumberGenerator m_Random;
 
 public:

@@ -6,7 +6,7 @@
 ParticleEmitter::ParticleEmitter()
 	: Entity(false)
 {
-	m_ParticleSystem = AttachComponent<TGL::ParticleSystem>(1000);
+	m_ParticleSystem = AttachComponent<TGL::DefaultParticleSystem>(1000);
 	m_ParticleSystem->SetZIndex(static_cast<i32>(RenderingOrder::Particles));
 
 	const auto material = m_ParticleSystem->UseDefaultMaterial();

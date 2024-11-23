@@ -18,6 +18,8 @@ namespace TGL
 	private:
 		friend class AssetManager;
 		friend class SpriteRenderer;
+		
+		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 
 	private:

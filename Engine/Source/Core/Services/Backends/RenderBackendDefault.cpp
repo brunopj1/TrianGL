@@ -515,6 +515,28 @@ void RenderBackend::SetUniformMatrix4f(const i32 location, const glm::mat4& valu
 }
 
 // NOLINTEND(CppInconsistentNaming)
+
+u8 RenderBackend::GetDataTypeSize(const VertexAttributeDataType dataType)
+{
+	switch (dataType)
+	{
+		case VertexAttributeDataType::I8:
+		case VertexAttributeDataType::U8:
+			return 1;
+		case VertexAttributeDataType::I16:
+		case VertexAttributeDataType::U16:
+			return 2;
+		case VertexAttributeDataType::I32:
+		case VertexAttributeDataType::U32:
+		case VertexAttributeDataType::F32:
+			return 4;
+		case VertexAttributeDataType::F64:
+			return 8;
+	}
+
+	return 0;
+}
+
 // NOLINTEND(CppMemberFunctionMayBeStatic)
 
 #endif

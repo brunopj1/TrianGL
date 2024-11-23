@@ -3,6 +3,7 @@
 #include "Assets/Texture.h"
 #include "Core/DataTypes.h"
 #include "Core/Internal/Macros/TestMacros.h"
+#include "Core/Internal/Concepts/ParticleSystemConcepts.h"
 #include "Core/Service.h"
 #include "glm/mat2x2.hpp"
 #include "glm/mat3x3.hpp"
@@ -92,6 +93,8 @@ namespace TGL
 		friend class SpriteUniform;
 		friend class Shader;
 		friend class SpriteRenderer;
+
+		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 
 		template <typename T>
@@ -199,5 +202,8 @@ namespace TGL
 		MOCKABLE_METHOD void SetUniformMatrix3f(i32 location, const glm::mat3& value);
 		MOCKABLE_METHOD void SetUniformMatrix4f(i32 location, const glm::mat4& value);
 		// NOLINTEND(CppInconsistentNaming)
+
+	protected:
+		MOCKABLE_METHOD u8 GetDataTypeSize(VertexAttributeDataType dataType);
 	};
 }
