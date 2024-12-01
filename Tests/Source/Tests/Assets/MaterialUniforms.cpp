@@ -33,8 +33,7 @@ namespace
 	class MockRenderBackend final : public RenderBackend
 	{
 	public:
-		static inline i32 s_UniformSize;
-		static inline UniformDataType s_UniformDataType;
+		static inline ShaderDataType s_ShaderDataType;
 		static inline u32 s_SetUniformCalls;
 
 	public:
@@ -48,10 +47,7 @@ namespace
 		{
 			std::vector<ShaderUniformInfo> uniforms;
 
-			uniforms.push_back({.Name = "uTestUniform",
-								.Location = 1,
-								.DataType = s_UniformDataType,
-								.Size = s_UniformSize});
+			uniforms.emplace_back("uTestUniform", s_ShaderDataType, 1);
 
 			return uniforms;
 		}
@@ -61,120 +57,105 @@ namespace
 		{
 			RenderBackend::SetUniform1i(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::I32;
-			s_UniformSize = 1;
+			s_ShaderDataType = ShaderDataType::INT;
 		}
 
 		void SetUniform2i(const i32 location, const glm::ivec2& value) override
 		{
 			RenderBackend::SetUniform2i(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::I32;
-			s_UniformSize = 2;
+			s_ShaderDataType = ShaderDataType::IVEC2;
 		}
 
 		void SetUniform3i(const i32 location, const glm::ivec3& value) override
 		{
 			RenderBackend::SetUniform3i(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::I32;
-			s_UniformSize = 3;
+			s_ShaderDataType = ShaderDataType::IVEC3;
 		}
 
 		void SetUniform4i(const i32 location, const glm::ivec4& value) override
 		{
 			RenderBackend::SetUniform4i(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::I32;
-			s_UniformSize = 4;
+			s_ShaderDataType = ShaderDataType::IVEC4;
 		}
 
 		void SetUniform1ui(const i32 location, const u32 value) override
 		{
 			RenderBackend::SetUniform1ui(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::U32;
-			s_UniformSize = 1;
+			s_ShaderDataType = ShaderDataType::UINT;
 		}
 
 		void SetUniform2ui(const i32 location, const glm::uvec2& value) override
 		{
 			RenderBackend::SetUniform2ui(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::U32;
-			s_UniformSize = 2;
+			s_ShaderDataType = ShaderDataType::UVEC2;
 		}
 
 		void SetUniform3ui(const i32 location, const glm::uvec3& value) override
 		{
 			RenderBackend::SetUniform3ui(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::U32;
-			s_UniformSize = 3;
+			s_ShaderDataType = ShaderDataType::UVEC3;
 		}
 
 		void SetUniform4ui(const i32 location, const glm::uvec4& value) override
 		{
 			RenderBackend::SetUniform4ui(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::U32;
-			s_UniformSize = 4;
+			s_ShaderDataType = ShaderDataType::UVEC4;
 		}
 
 		void SetUniform1f(const i32 location, const f32 value) override
 		{
 			RenderBackend::SetUniform1f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = 1;
+			s_ShaderDataType = ShaderDataType::FLOAT;
 		}
 
 		void SetUniform2f(const i32 location, const glm::vec2& value) override
 		{
 			RenderBackend::SetUniform2f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = 2;
+			s_ShaderDataType = ShaderDataType::FVEC2;
 		}
 
 		void SetUniform3f(const i32 location, const glm::vec3& value) override
 		{
 			RenderBackend::SetUniform3f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = 3;
+			s_ShaderDataType = ShaderDataType::FVEC3;
 		}
 
 		void SetUniform4f(const i32 location, const glm::vec4& value) override
 		{
 			RenderBackend::SetUniform4f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = 4;
+			s_ShaderDataType = ShaderDataType::FVEC4;
 		}
 
 		void SetUniformMatrix2f(const i32 location, const glm::mat2& value) override
 		{
 			RenderBackend::SetUniformMatrix2f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = -2;
+			s_ShaderDataType = ShaderDataType::MAT2;
 		}
 
 		void SetUniformMatrix3f(const i32 location, const glm::mat3& value) override
 		{
 			RenderBackend::SetUniformMatrix3f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = -3;
+			s_ShaderDataType = ShaderDataType::MAT3;
 		}
 
 		void SetUniformMatrix4f(const i32 location, const glm::mat4& value) override
 		{
 			RenderBackend::SetUniformMatrix4f(location, value);
 			s_SetUniformCalls++;
-			s_UniformDataType = UniformDataType::F32;
-			s_UniformSize = -4;
+			s_ShaderDataType = ShaderDataType::MAT4;
 		}
 	};
 
@@ -187,15 +168,14 @@ namespace
 // Helper functions
 
 template <typename T>
-T* SetupUniformTest(const UniformDataType dataType, const u32 size)
+T* SetupUniformTest(const ShaderDataType dataType)
 {
 	Camera* _ = Entity::SpawnEntity<Camera>(true);
 
 	TestEntity* entity = Entity::SpawnEntity<TestEntity>();
 	SpriteRenderer* spriteRenderer = entity->AttachComponent<SpriteRenderer>();
 
-	MockRenderBackend::s_UniformSize = size;
-	MockRenderBackend::s_UniformDataType = dataType;
+	MockRenderBackend::s_ShaderDataType = dataType;
 
 	SharedPtr<TestMaterial> material = Material::CreateInstanceOf<TestMaterial>();
 	spriteRenderer->SetMaterial(material);
@@ -215,7 +195,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, IntUniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			IntUniform* uniform = SetupUniformTest<IntUniform>(UniformDataType::I32, 1);
+			IntUniform* uniform = SetupUniformTest<IntUniform>(ShaderDataType::INT);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123;
@@ -227,104 +207,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, IntUniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int2Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Int2Uniform* uniform = SetupUniformTest<Int2Uniform>(UniformDataType::I32, 2);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int3Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Int3Uniform* uniform = SetupUniformTest<Int3Uniform>(UniformDataType::I32, 3);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456, 789};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-			EXPECT_EQ(uniform->Value.z, 789);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Int4Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Int4Uniform* uniform = SetupUniformTest<Int4Uniform>(UniformDataType::I32, 4);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456, 789, -321};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-			EXPECT_EQ(uniform->Value.z, 789);
-			EXPECT_EQ(uniform->Value.w, -321);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::I32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::INT);
 
 			EndTest();
 		}
@@ -341,7 +224,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, UintUniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			UintUniform* uniform = SetupUniformTest<UintUniform>(UniformDataType::U32, 1);
+			UintUniform* uniform = SetupUniformTest<UintUniform>(ShaderDataType::UINT);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123;
@@ -353,104 +236,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, UintUniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint2Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Uint2Uniform* uniform = SetupUniformTest<Uint2Uniform>(UniformDataType::U32, 2);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint3Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Uint3Uniform* uniform = SetupUniformTest<Uint3Uniform>(UniformDataType::U32, 3);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456, 789};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-			EXPECT_EQ(uniform->Value.z, 789);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
-
-			EndTest();
-		}
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Uint4Uniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		const Clock& clock = Clock::Get();
-		const u32 frame = clock.GetFrameCount();
-
-		if (frame == 1)
-		{
-			Uint4Uniform* uniform = SetupUniformTest<Uint4Uniform>(UniformDataType::U32, 4);
-			EXPECT_NE(uniform, nullptr);
-
-			uniform->Value = {123, 456, 789, 321};
-			EXPECT_EQ(uniform->Value.x, 123);
-			EXPECT_EQ(uniform->Value.y, 456);
-			EXPECT_EQ(uniform->Value.z, 789);
-			EXPECT_EQ(uniform->Value.w, 321);
-
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
-		}
-
-		if (frame == 2)
-		{
-			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::U32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::UINT);
 
 			EndTest();
 		}
@@ -467,7 +253,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, FloatUniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			FloatUniform* uniform = SetupUniformTest<FloatUniform>(UniformDataType::F32, 1);
+			FloatUniform* uniform = SetupUniformTest<FloatUniform>(ShaderDataType::FLOAT);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = 123.0f;
@@ -479,8 +265,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, FloatUniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::FLOAT);
 
 			EndTest();
 		}
@@ -488,7 +273,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, FloatUniform, MockServiceBuilder)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float2Uniform, MockServiceBuilder)
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, IVec2Uniform, MockServiceBuilder)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
@@ -497,7 +282,193 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float2Uniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			Float2Uniform* uniform = SetupUniformTest<Float2Uniform>(UniformDataType::F32, 2);
+			IVec2Uniform* uniform = SetupUniformTest<IVec2Uniform>(ShaderDataType::IVEC2);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::IVEC2);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, IVec3Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			IVec3Uniform* uniform = SetupUniformTest<IVec3Uniform>(ShaderDataType::IVEC3);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456, 789};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::IVEC3);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, IVec4Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			IVec4Uniform* uniform = SetupUniformTest<IVec4Uniform>(ShaderDataType::IVEC4);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456, 789, -321};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.w, -321);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::IVEC4);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, UVec2Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			UVec2Uniform* uniform = SetupUniformTest<UVec2Uniform>(ShaderDataType::UVEC2);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::UVEC2);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, UVec3Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			UVec3Uniform* uniform = SetupUniformTest<UVec3Uniform>(ShaderDataType::UVEC3);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456, 789};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::UVEC3);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, UVec4Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			UVec4Uniform* uniform = SetupUniformTest<UVec4Uniform>(ShaderDataType::UVEC4);
+			EXPECT_NE(uniform, nullptr);
+
+			uniform->Value = {123, 456, 789, 321};
+			EXPECT_EQ(uniform->Value.x, 123);
+			EXPECT_EQ(uniform->Value.y, 456);
+			EXPECT_EQ(uniform->Value.z, 789);
+			EXPECT_EQ(uniform->Value.w, 321);
+
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
+		}
+
+		if (frame == 2)
+		{
+			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::UVEC4);
+
+			EndTest();
+		}
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, FVec2Uniform, MockServiceBuilder)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		const Clock& clock = Clock::Get();
+		const u32 frame = clock.GetFrameCount();
+
+		if (frame == 1)
+		{
+			FVec2Uniform* uniform = SetupUniformTest<FVec2Uniform>(ShaderDataType::FVEC2);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123.0f, 456.0f};
@@ -510,8 +481,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float2Uniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 2);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::FVEC2);
 
 			EndTest();
 		}
@@ -519,7 +489,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float2Uniform, MockServiceBuilder)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float3Uniform, MockServiceBuilder)
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, FVec3Uniform, MockServiceBuilder)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
@@ -528,7 +498,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float3Uniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			Float3Uniform* uniform = SetupUniformTest<Float3Uniform>(UniformDataType::F32, 3);
+			FVec3Uniform* uniform = SetupUniformTest<FVec3Uniform>(ShaderDataType::FVEC3);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123.0f, 456.0f, 789.0f};
@@ -542,8 +512,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float3Uniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 3);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::FVEC3);
 
 			EndTest();
 		}
@@ -551,7 +520,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float3Uniform, MockServiceBuilder)
 }
 END_GAME_TEST()
 
-BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float4Uniform, MockServiceBuilder)
+BEGIN_GAME_TEST_MOCKED(MaterialUniform, FVec4Uniform, MockServiceBuilder)
 {
 	void OnUpdate(f32 deltaTime) override
 	{
@@ -560,7 +529,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float4Uniform, MockServiceBuilder)
 
 		if (frame == 1)
 		{
-			Float4Uniform* uniform = SetupUniformTest<Float4Uniform>(UniformDataType::F32, 4);
+			FVec4Uniform* uniform = SetupUniformTest<FVec4Uniform>(ShaderDataType::FVEC4);
 			EXPECT_NE(uniform, nullptr);
 
 			uniform->Value = {123, 456, 789, -321};
@@ -575,8 +544,7 @@ BEGIN_GAME_TEST_MOCKED(MaterialUniform, Float4Uniform, MockServiceBuilder)
 		if (frame == 2)
 		{
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 1);
-			EXPECT_EQ(MockRenderBackend::s_UniformDataType, UniformDataType::F32);
-			EXPECT_EQ(MockRenderBackend::s_UniformSize, 4);
+			EXPECT_EQ(MockRenderBackend::s_ShaderDataType, ShaderDataType::FVEC4);
 
 			EndTest();
 		}

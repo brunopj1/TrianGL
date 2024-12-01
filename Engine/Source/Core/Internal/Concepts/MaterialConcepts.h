@@ -20,5 +20,5 @@ namespace TGL
 	concept SpawnableMaterialUniform =
 		!std::is_same_v<MaterialUniform, T> &&
 		std::is_base_of_v<MaterialUniform, T> &&
-		std::is_constructible_v<T, const Shader*, const std::string&>;
+		std::is_constructible_v<T, const Shader*, const std::vector<MaterialUniform*>&, const std::string&>;
 }

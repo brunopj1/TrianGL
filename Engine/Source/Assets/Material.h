@@ -2,7 +2,6 @@
 
 #include "Core/DataTypes.h"
 #include "Core/Internal/Macros/ClassMacros.h"
-#include <Assets/Internal/Shader.h>
 #include <Assets/MaterialUniforms.h>
 #include <Core/Internal/Concepts/MaterialConcepts.h>
 #include <Core/Services/Private/AssetManager.h>
@@ -10,15 +9,18 @@
 #include <string>
 #include <vector>
 
-// Forward declarations
 namespace TGL
 {
+	// Forward declarations
+	struct ParticleDataInfo;
+
 	class Material
 	{
 	private:
 		friend class AssetManager;
+		friend class MaterialUniform;
 		friend class SpriteRenderer;
-		
+
 		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 
@@ -52,6 +54,10 @@ namespace TGL
 	public:
 		template <SpawnableMaterialUniform T>
 		T* AddUniform(const std::string& name, OnInvalidUniform onInvalid = OnInvalidUniform::Create);
+
+	private:
+		bool CheckQuadCompatibility() const;
+		bool CheckParticleCompatibility(const std::vector<ParticleDataInfo>& particleAttributes) const;
 
 	private:
 		void Use(const glm::mat4& modelMatrix);

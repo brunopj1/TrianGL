@@ -10,6 +10,8 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Github wiki
 
+- Rename the uniforms in the wiki (Float4 -> FVec4)
+- Mention that the shader attributes and uniforms are validated, and will throw an exception if they do not match the mesh
 - Update the Particle System wiki (DefaultParticleSystem and material, user-defined particle systems)
 - Mention the sprite methods to calculate the ideal scale in the wiki
 - Refactor the new way of modifying the execution order in the wiki
@@ -43,10 +45,9 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 
 ## Particles
 
-- Separate the materials into SpriteMaterial and ParticleMaterial
-- Add custom particle systems with user defined data (and opt-out cpu update)
 - Allow resizing the particle system
-- Add multi threading to the update loop
+- Add an option to run the update loop using multi threading
+- Add an option to run the update loop in the GPU (compute shader)
 
 ## Audio
 

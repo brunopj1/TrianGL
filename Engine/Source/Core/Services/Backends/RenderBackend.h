@@ -1,9 +1,10 @@
 ﻿#pragma once
 
+#include "Assets/Internal/ShaderInfo.h"
 #include "Assets/Texture.h"
 #include "Core/DataTypes.h"
-#include "Core/Internal/Macros/TestMacros.h"
 #include "Core/Internal/Concepts/ParticleSystemConcepts.h"
+#include "Core/Internal/Macros/TestMacros.h"
 #include "Core/Service.h"
 #include "glm/mat2x2.hpp"
 #include "glm/mat3x3.hpp"
@@ -18,6 +19,9 @@ struct GLFWwindow; // NOLINT(CppInconsistentNaming, IdentifierTypo)
 
 namespace TGL
 {
+	// Forward declarations
+	enum class ParticleDataType : u16;
+
 	// clang-format off
     
     enum class BufferType : u16
@@ -41,9 +45,15 @@ namespace TGL
         U16 = 0x1403, // GL_UNSIGNED_SHORT
         I32 = 0x1404, // GL_INT
         U32 = 0x1405, // GL_UNSIGNED_INT
-        F32 = 0x1406, // GL_FLOAT
-        F64 = 0x140A  // GL_DOUBLE
+        F32 = 0x1406  // GL_FLOAT
     };
+
+	struct VertexAttributeInfo
+	{
+		VertexAttributeDataType DataType;
+		u8 DataSize;
+		u8 ByteSize;
+	};
 
     enum class ShaderType : u16
     {
@@ -55,28 +65,7 @@ namespace TGL
         Compute  = 0x91B9  // GL_COMPUTE_SHADER
     };
 
-	enum class UniformDataType : u16
-	{
-		I8  = 0x1400,      // GL_BYTE
-		U8  = 0x1401,      // GL_UNSIGNED_BYTE
-		I16 = 0x1402,      // GL_SHORT
-		U16 = 0x1403,      // GL_UNSIGNED_SHORT
-		I32 = 0x1404,      // GL_INT
-		U32 = 0x1405,      // GL_UNSIGNED_INT
-		F32 = 0x1406,      // GL_FLOAT
-		F64 = 0x140A,      // GL_DOUBLE
-		Sampler2D = 0x8B5E // GL_SAMPLER_2D
-	};
-
 	// clang-format on
-
-	struct ShaderUniformInfo final
-	{
-		std::string Name;
-		i32 Location;
-		UniformDataType DataType;
-		i32 Size;
-	};
 
 	class RenderBackend : public Service<RenderBackend> // NOLINT(CppClassCanBeFinal)
 	{
@@ -85,19 +74,19 @@ namespace TGL
 		friend class ServiceCollection;
 		friend struct ServiceDeleter<RenderBackend>;
 
-		friend class AssetManager;
 		friend class Window;
 		friend class Texture;
 		friend class Sprite;
 		friend class TextureSlice;
 		friend class SpriteUniform;
 		friend class Shader;
+		friend class Quad;
 		friend class SpriteRenderer;
 
 		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 
-		template <typename T>
+		template <typename T, ShaderDataType DataType>
 		friend class MaterialUniformImpl;
 
 	protected:
@@ -180,6 +169,7 @@ namespace TGL
 		MOCKABLE_METHOD void AttachShader(u32 programId, u32 shaderId);
 		MOCKABLE_METHOD bool LinkProgram(u32 programId, std::string& errorLog);
 
+		MOCKABLE_METHOD std::vector<ShaderAttributeInfo> GetShaderAttributes(u32 programId);
 		MOCKABLE_METHOD std::vector<ShaderUniformInfo> GetShaderUniforms(u32 programId);
 
 		MOCKABLE_METHOD void UseProgram(u32 programId);
@@ -202,8 +192,5 @@ namespace TGL
 		MOCKABLE_METHOD void SetUniformMatrix3f(i32 location, const glm::mat3& value);
 		MOCKABLE_METHOD void SetUniformMatrix4f(i32 location, const glm::mat4& value);
 		// NOLINTEND(CppInconsistentNaming)
-
-	protected:
-		MOCKABLE_METHOD u8 GetDataTypeSize(VertexAttributeDataType dataType);
 	};
 }

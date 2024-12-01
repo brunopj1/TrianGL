@@ -1,6 +1,8 @@
 ﻿#include "Rendering/SpriteRenderer.h"
 
+#include "Exceptions/Assets/IncompatibleMaterialException.h"
 #include "General/Camera.h"
+#include "Implementations/Materials/DefaultParticleMaterial.h"
 #include "Util/GameTestAbstractions.h"
 #include <algorithm>
 
@@ -118,6 +120,9 @@ BEGIN_GAME_TEST(SpriteRenderer, Material)
 
 		spriteRenderer->SetMaterial(nullptr);
 		EXPECT_EQ(spriteRenderer->GetMaterial(), nullptr);
+
+		const SharedPtr<Material> particleMaterial = Material::CreateInstanceOf<DefaultParticleMaterial>();
+		EXPECT_THROW(spriteRenderer->SetMaterial(particleMaterial), IncompatibleMaterialException);
 
 		EndTest();
 	}

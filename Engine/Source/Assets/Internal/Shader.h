@@ -21,7 +21,8 @@ namespace TGL
 		std::string m_VertexShader;
 		std::string m_FragmentShader;
 
-		std::unordered_map<std::string, i32> m_UniformLocations;
+		std::vector<ShaderAttributeInfo> m_Attributes;
+		std::unordered_map<std::string, ShaderUniformInfo> m_Uniforms;
 
 	private:
 		i32 m_ProgramId = 0;
@@ -30,8 +31,10 @@ namespace TGL
 		Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
 		~Shader() = default;
 
-	public: // Public for testing
+	private:
+		const std::vector<ShaderAttributeInfo>& GetAttributes() const;
 		i32 GetUniformLocation(const std::string& name) const;
+		ShaderDataType GetUniformDataType(const std::string& name) const;
 
 	private:
 		void Init();
@@ -43,6 +46,7 @@ namespace TGL
 		static std::string ReadShaderFile(const std::string& filePath);
 
 	private:
+		void LoadAttributes(RenderBackend& renderBackend);
 		void LoadUniformLocations(RenderBackend& renderBackend);
 
 	private:

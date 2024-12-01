@@ -1,4 +1,5 @@
-﻿#include <Assets/Internal/Shader.h>
+﻿#include "Rendering/ParticleSystem.h"
+#include <Assets/Internal/Shader.h>
 #include <Assets/Material.h>
 #include <Assets/MaterialUniforms.h>
 #include <Core/Services/Private/AssetManager.h>
@@ -26,6 +27,60 @@ Material::~Material()
 }
 
 void Material::OnRenderSetup() {}
+
+bool Material::CheckQuadCompatibility() const
+{
+	const AssetManager& assetManager = AssetManager::Get();
+	const Quad& quad = assetManager.GetQuad();
+	const auto& quadAttributes = quad.GetShaderAttributes();
+	const auto& shaderAttributes = m_Shader->GetAttributes();
+
+	if (shaderAttributes.size() != quadAttributes.size())
+	{
+		return false;
+	}
+
+	for (i32 i = 0; i < quadAttributes.size(); i++)
+	{
+		if (shaderAttributes[i].DataType != quadAttributes[i])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Material::CheckParticleCompatibility(const std::vector<ParticleDataInfo>& particleAttributes) const
+{
+	const AssetManager& assetManager = AssetManager::Get();
+	const Quad& quad = assetManager.GetQuad();
+	const auto& quadAttributes = quad.GetShaderAttributes();
+	const auto& shaderAttributes = m_Shader->GetAttributes();
+
+	if (shaderAttributes.size() != quadAttributes.size() + particleAttributes.size())
+	{
+		return false;
+	}
+
+	for (i32 i = 0; i < quadAttributes.size(); i++)
+	{
+		if (shaderAttributes[i].DataType != quadAttributes[i])
+		{
+			return false;
+		}
+	}
+
+	for (i32 i = 0, off = quadAttributes.size(); i < particleAttributes.size(); i++)
+	{
+		if (shaderAttributes[off + i].DataType != static_cast<ShaderDataType>(particleAttributes[i].DataType))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
 
 void Material::Use(const glm::mat4& modelMatrix)
 {

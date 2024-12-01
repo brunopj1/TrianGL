@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Assets/Internal/Quad.h"
 #include "Assets/MaterialUniforms.h"
 #include "Core/Internal/Macros/AssetFactoryMacros.h"
 #include <Assets/Internal/Shader.h>
@@ -37,13 +38,14 @@ namespace TGL
 		friend class Audio;
 		friend class Material;
 		friend class MaterialUniform;
+		friend class Shader;
 		friend class Texture;
 		friend class TextureSlice;
 
 		friend class SpriteRenderer;
 		friend class AudioPlayer;
 		friend class Animator;
-		
+
 		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 
@@ -63,16 +65,13 @@ namespace TGL
 		DECLARE_ASSET_FACTORY_VAR(TextureSlice);
 
 	protected:
-		u32 m_QuadVao = 0;
-		u32 m_QuadVbo = 0;
-		u32 m_QuadEbo = 0;
-
+		Quad m_Quad;
 		std::unordered_map<Shader*, u32, ShaderHash, ShaderEqual> m_Shaders;
-
 		SoLoud::Soloud* m_SoloudEngine = nullptr;
 
 	protected:
-		AssetManager() = default;
+		// This constructor is not implicitly deleted, but for some reason my IDE thinks it is
+		AssetManager() = default; // NOLINT(CppDefaultedSpecialMemberFunctionIsImplicitlyDeleted)
 		MOCKABLE_DESTRUCTOR ~AssetManager() = default;
 
 	protected:
@@ -80,13 +79,7 @@ namespace TGL
 		MOCKABLE_METHOD void Terminate();
 
 	protected:
-		MOCKABLE_METHOD void InitQuad();
-		MOCKABLE_METHOD void SetupQuadVertexAttributes() const;
-		MOCKABLE_METHOD void TerminateQuad();
-
-		MOCKABLE_METHOD u32 GetQuadVao() const;
-		MOCKABLE_METHOD u32 GetQuadVbo() const;
-		MOCKABLE_METHOD u32 GetQuadEbo() const;
+		MOCKABLE_METHOD const Quad& GetQuad() const;
 
 	protected:
 		MOCKABLE_METHOD SharedPtr<Texture> LoadTexture(const std::string& filePath, const TextureParameters& parameters);
@@ -139,7 +132,7 @@ namespace TGL
 
 		PREPARE_ASSET_FACTORY_CONSTRUCTOR(MaterialUniform);
 
-		T* instance = new T(shader, name);
+		T* instance = new T(shader, validUniforms, name);
 
 		ASSERT_POST_ASSET_FACTORY_CONSTRUCTOR(MaterialUniform);
 

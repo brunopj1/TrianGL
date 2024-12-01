@@ -92,137 +92,137 @@ f64 RandomNumberGenerator::GetDouble(const f64 min, const f64 max)
 	return min + m_Seed / static_cast<f64>(UINT_MAX) * (max - min);
 }
 
-glm::ivec2 RandomNumberGenerator::GetInt2()
+glm::ivec2 RandomNumberGenerator::GetIVec2()
 {
 	return {GetInt(), GetInt()};
 }
 
-glm::ivec2 RandomNumberGenerator::GetInt2(const i32 min, const i32 max)
+glm::ivec2 RandomNumberGenerator::GetIVec2(const i32 min, const i32 max)
 {
 	return {GetInt(min, max), GetInt(min, max)};
 }
 
-glm::ivec2 RandomNumberGenerator::GetInt2(const glm::ivec2& min, const glm::ivec2& max)
+glm::ivec2 RandomNumberGenerator::GetIVec2(const glm::ivec2& min, const glm::ivec2& max)
 {
 	return {GetInt(min.x, max.x), GetInt(min.y, max.y)};
 }
 
-glm::ivec3 RandomNumberGenerator::GetInt3()
+glm::ivec3 RandomNumberGenerator::GetIVec3()
 {
 	return {GetInt(), GetInt(), GetInt()};
 }
 
-glm::ivec3 RandomNumberGenerator::GetInt3(const i32 min, const i32 max)
+glm::ivec3 RandomNumberGenerator::GetIVec3(const i32 min, const i32 max)
 {
 	return {GetInt(min, max), GetInt(min, max), GetInt(min, max)};
 }
 
-glm::ivec3 RandomNumberGenerator::GetInt3(const glm::ivec3& min, const glm::ivec3& max)
+glm::ivec3 RandomNumberGenerator::GetIVec3(const glm::ivec3& min, const glm::ivec3& max)
 {
 	return {GetInt(min.x, max.x), GetInt(min.y, max.y), GetInt(min.z, max.z)};
 }
 
-glm::ivec4 RandomNumberGenerator::GetInt4()
+glm::ivec4 RandomNumberGenerator::GetVec4()
 {
 	return {GetInt(), GetInt(), GetInt(), GetInt()};
 }
 
-glm::ivec4 RandomNumberGenerator::GetInt4(const i32 min, const i32 max)
+glm::ivec4 RandomNumberGenerator::GetVec4(const i32 min, const i32 max)
 {
 	return {GetInt(min, max), GetInt(min, max), GetInt(min, max), GetInt(min, max)};
 }
 
-glm::ivec4 RandomNumberGenerator::GetInt4(const glm::ivec4& min, const glm::ivec4& max)
+glm::ivec4 RandomNumberGenerator::GetVec4(const glm::ivec4& min, const glm::ivec4& max)
 {
 	return {GetInt(min.x, max.x), GetInt(min.y, max.y), GetInt(min.z, max.z), GetInt(min.w, max.w)};
 }
 
-glm::uvec2 RandomNumberGenerator::GetUint2()
+glm::uvec2 RandomNumberGenerator::GetUVec2()
 {
 	return {GetUint(), GetUint()};
 }
 
-glm::uvec2 RandomNumberGenerator::GetUint2(const u32 min, const u32 max)
+glm::uvec2 RandomNumberGenerator::GetUVec2(const u32 min, const u32 max)
 {
 	return {GetUint(min, max), GetUint(min, max)};
 }
 
-glm::uvec2 RandomNumberGenerator::GetUint2(const glm::uvec2& min, const glm::uvec2& max)
+glm::uvec2 RandomNumberGenerator::GetUVec2(const glm::uvec2& min, const glm::uvec2& max)
 {
 	return {GetUint(min.x, max.x), GetUint(min.y, max.y)};
 }
 
-glm::uvec3 RandomNumberGenerator::GetUint3()
+glm::uvec3 RandomNumberGenerator::GetUVec3()
 {
 	return {GetUint(), GetUint(), GetUint()};
 }
 
-glm::uvec3 RandomNumberGenerator::GetUint3(const u32 min, const u32 max)
+glm::uvec3 RandomNumberGenerator::GetUVec3(const u32 min, const u32 max)
 {
 	return {GetUint(min, max), GetUint(min, max), GetUint(min, max)};
 }
 
-glm::uvec3 RandomNumberGenerator::GetUint3(const glm::uvec3& min, const glm::uvec3& max)
+glm::uvec3 RandomNumberGenerator::GetUVec3(const glm::uvec3& min, const glm::uvec3& max)
 {
 	return {GetUint(min.x, max.x), GetUint(min.y, max.y), GetUint(min.z, max.z)};
 }
 
-glm::uvec4 RandomNumberGenerator::GetUint4()
+glm::uvec4 RandomNumberGenerator::GetUVec4()
 {
 	return {GetUint(), GetUint(), GetUint(), GetUint()};
 }
 
-glm::uvec4 RandomNumberGenerator::GetUint4(const u32 min, const u32 max)
+glm::uvec4 RandomNumberGenerator::GetUVec4(const u32 min, const u32 max)
 {
 	return {GetUint(min, max), GetUint(min, max), GetUint(min, max), GetUint(min, max)};
 }
 
-glm::uvec4 RandomNumberGenerator::GetUint4(const glm::uvec4& min, const glm::uvec4& max)
+glm::uvec4 RandomNumberGenerator::GetUVec4(const glm::uvec4& min, const glm::uvec4& max)
 {
 	return {GetUint(min.x, max.x), GetUint(min.y, max.y), GetUint(min.z, max.z), GetUint(min.w, max.w)};
 }
 
-glm::vec2 RandomNumberGenerator::GetFloat2()
+glm::vec2 RandomNumberGenerator::GetFVec2()
 {
 	return {GetFloat(), GetFloat()};
 }
 
-glm::vec2 RandomNumberGenerator::GetFloat2(const f32 min, const f32 max)
+glm::vec2 RandomNumberGenerator::GetFVec2(const f32 min, const f32 max)
 {
 	return {GetFloat(min, max), GetFloat(min, max)};
 }
 
-glm::vec2 RandomNumberGenerator::GetFloat2(const glm::vec2& min, const glm::vec2& max)
+glm::vec2 RandomNumberGenerator::GetFVec2(const glm::vec2& min, const glm::vec2& max)
 {
 	return {GetFloat(min.x, max.x), GetFloat(min.y, max.y)};
 }
 
-glm::vec3 RandomNumberGenerator::GetFloat3()
+glm::vec3 RandomNumberGenerator::GetFVec3()
 {
 	return {GetFloat(), GetFloat(), GetFloat()};
 }
 
-glm::vec3 RandomNumberGenerator::GetFloat3(const f32 min, const f32 max)
+glm::vec3 RandomNumberGenerator::GetFVec3(const f32 min, const f32 max)
 {
 	return {GetFloat(min, max), GetFloat(min, max), GetFloat(min, max)};
 }
 
-glm::vec3 RandomNumberGenerator::GetFloat3(const glm::vec3& min, const glm::vec3& max)
+glm::vec3 RandomNumberGenerator::GetFVec3(const glm::vec3& min, const glm::vec3& max)
 {
 	return {GetFloat(min.x, max.x), GetFloat(min.y, max.y), GetFloat(min.z, max.z)};
 }
 
-glm::vec4 RandomNumberGenerator::GetFloat4()
+glm::vec4 RandomNumberGenerator::GetFVec4()
 {
 	return {GetFloat(), GetFloat(), GetFloat(), GetFloat()};
 }
 
-glm::vec4 RandomNumberGenerator::GetFloat4(const f32 min, const f32 max)
+glm::vec4 RandomNumberGenerator::GetFVec4(const f32 min, const f32 max)
 {
 	return {GetFloat(min, max), GetFloat(min, max), GetFloat(min, max), GetFloat(min, max)};
 }
 
-glm::vec4 RandomNumberGenerator::GetFloat4(const glm::vec4& min, const glm::vec4& max)
+glm::vec4 RandomNumberGenerator::GetFVec4(const glm::vec4& min, const glm::vec4& max)
 {
 	return {GetFloat(min.x, max.x), GetFloat(min.y, max.y), GetFloat(min.z, max.z), GetFloat(min.w, max.w)};
 }

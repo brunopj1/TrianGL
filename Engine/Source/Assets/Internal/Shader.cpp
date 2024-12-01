@@ -1,5 +1,6 @@
 ﻿#include "Core/DataTypes.h"
 #include "Core/Services/Backends/RenderBackend.h"
+#include "Core/Services/Private/AssetManager.h"
 #include "Exceptions/OpenGL/ShaderLinkingException.h"
 #include <Assets/Internal/Shader.h>
 #include <Exceptions/Common/FileNotFoundException.h>
@@ -17,10 +18,21 @@ Shader::Shader(std::string vertexShaderPath, std::string fragmentShaderPath)
 	// These methods are called by the TGL::AssetManager
 }
 
+const std::vector<ShaderAttributeInfo>& Shader::GetAttributes() const
+{
+	return m_Attributes;
+}
+
 i32 Shader::GetUniformLocation(const std::string& name) const
 {
-	const auto it = m_UniformLocations.find(name);
-	return it != m_UniformLocations.end() ? it->second : -1;
+	const auto it = m_Uniforms.find(name);
+	return it != m_Uniforms.end() ? it->second.Location : -1;
+}
+
+ShaderDataType Shader::GetUniformDataType(const std::string& name) const
+{
+	const auto it = m_Uniforms.find(name);
+	return it != m_Uniforms.end() ? it->second.DataType : ShaderDataType::INVALID;
 }
 
 void Shader::Init()
@@ -32,6 +44,7 @@ void Shader::Init()
 
 	LinkProgram(renderBackend, vertexShaderId, fragmentShaderId);
 
+	LoadAttributes(renderBackend);
 	LoadUniformLocations(renderBackend);
 }
 
@@ -98,13 +111,18 @@ std::string Shader::ReadShaderFile(const std::string& filePath)
 	return stringStream.str();
 }
 
+void Shader::LoadAttributes(RenderBackend& renderBackend)
+{
+	m_Attributes = renderBackend.GetShaderAttributes(m_ProgramId);
+}
+
 void Shader::LoadUniformLocations(RenderBackend& renderBackend)
 {
 	const auto uniforms = renderBackend.GetShaderUniforms(m_ProgramId);
 
 	for (const auto& uniform : uniforms)
 	{
-		m_UniformLocations[uniform.Name] = uniform.Location;
+		m_Uniforms[uniform.Name] = uniform;
 	}
 }
 

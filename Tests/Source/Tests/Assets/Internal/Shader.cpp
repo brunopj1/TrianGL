@@ -76,17 +76,9 @@ namespace
 		{
 			std::vector<ShaderUniformInfo> uniforms;
 
-			uniforms.push_back({.Name = "uPosition",
-								.Location = 1,
-								.DataType = UniformDataType::F32,
-								.Size = 2});
+			uniforms.emplace_back("uPosition", ShaderDataType::FLOAT, 1);
 
-			uniforms.push_back({
-				.Name = "uSize",
-				.Location = 2,
-				.DataType = UniformDataType::I32,
-				.Size = 2,
-			});
+			uniforms.emplace_back("uSize", ShaderDataType::INT, 2);
 
 			return uniforms;
 		}
@@ -178,33 +170,6 @@ BEGIN_GAME_TEST_MOCKED(Shader, InstanceReused, MockServiceBuilder)
 		EXPECT_EQ(assetManager->GetShaderCount(), 0);
 
 		// NOLINTEND(CppEntityAssignedButNoRead)
-
-		EndTest();
-	}
-}
-END_GAME_TEST()
-
-BEGIN_GAME_TEST_MOCKED(Shader, GetUniform, MockServiceBuilder)
-{
-	void OnUpdate(f32 deltaTime) override
-	{
-		MockAssetManager* assetManager = dynamic_cast<MockAssetManager*>(&AssetManager::Get());
-		EXPECT_NE(assetManager, nullptr);
-
-		const std::string vertexPath = "Assets/Shaders/test.vert";
-		const std::string fragmentPath = "Assets/Shaders/test.frag";
-
-		const Shader* shader = assetManager->LoadShader(vertexPath, fragmentPath);
-		EXPECT_NE(shader, nullptr);
-
-		i32 uniformLocation = shader->GetUniformLocation("uPosition");
-		EXPECT_EQ(uniformLocation, 1);
-
-		uniformLocation = shader->GetUniformLocation("uSize");
-		EXPECT_EQ(uniformLocation, 2);
-
-		uniformLocation = shader->GetUniformLocation("uInvalid");
-		EXPECT_EQ(uniformLocation, -1);
 
 		EndTest();
 	}

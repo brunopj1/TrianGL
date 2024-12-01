@@ -8,7 +8,7 @@ namespace TGL
 	{
 	public:
 		SpriteUniform* const Sprite = AddUniform<SpriteUniform>("uSprite");
-		Float4Uniform* const Color = AddUniform<Float4Uniform>("uColor");
+		FVec4Uniform* const Color = AddUniform<FVec4Uniform>("uColor");
 
 	private:
 		IntUniform* const IsSpriteValid = AddUniform<IntUniform>("uIsSpriteValid");

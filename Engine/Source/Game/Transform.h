@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Core/Internal/Concepts/ParticleSystemConcepts.h"
 #include "Core/DataTypes.h"
+#include "Core/Internal/Concepts/ParticleSystemConcepts.h"
 #include <glm/mat4x4.hpp>
 #include <glm/vec2.hpp>
 
@@ -11,7 +11,7 @@ namespace TGL
 	{
 	private:
 		friend class SpriteRenderer;
-		
+
 		template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 		friend class ParticleSystem;
 

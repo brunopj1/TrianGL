@@ -23,7 +23,7 @@ namespace TGL
 		// TODO when available, use reflection to get this data
 		static std::vector<ParticleDataInfo> GetParticleStructure();
 	};
-	
+
 	struct ParticleSpawnData final
 	{
 		glm::vec2 Position = {0.0f, 0.0f};
@@ -42,13 +42,13 @@ namespace TGL
 
 		f32 Duration = 1.0f;
 	};
-	
+
 	class DefaultParticleSystem : public ParticleSystem<CpuParticleData, GpuParticleData, ParticleSpawnData> // NOLINT(CppClassCanBeFinal)
 	{
 	public:
 		DefaultParticleSystem(u32 maxParticles = 1000, SharedPtr<Material> material = nullptr);
 		~DefaultParticleSystem() override = default;
-		
+
 	public:
 		SharedPtr<DefaultParticleMaterial> UseDefaultMaterial();
 
@@ -59,4 +59,3 @@ namespace TGL
 	};
 
 }
-

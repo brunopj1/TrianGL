@@ -5,11 +5,11 @@ using namespace TGL;
 std::vector<ParticleDataInfo> GpuParticleData::GetParticleStructure()
 {
 	return {
-			{ParticleDataType::F32, 2, false}, // Position
-			{ParticleDataType::F32, 4, false}, // Color
-			{ParticleDataType::F32, 1, false}, // Scale
-			{ParticleDataType::F32, 1, false}, // Rotation
-			{ParticleDataType::F32, 1, false}  // RemainingDuration
+		{ParticleDataType::FVEC2, false}, // Position
+		{ParticleDataType::FVEC4, false}, // Color
+		{ParticleDataType::FLOAT, false}, // Scale
+		{ParticleDataType::FLOAT, false}, // Rotation
+		{ParticleDataType::FLOAT, false} // RemainingDuration
 	};
 }
 
@@ -69,4 +69,3 @@ bool DefaultParticleSystem::IsParticleAlive(const CpuParticleData& cpuParticle, 
 {
 	return cpuParticle.RemainingDuration > 0.0f;
 }
-

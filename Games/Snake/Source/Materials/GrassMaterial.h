@@ -6,7 +6,7 @@ class GrassMaterial final : public TGL::Material
 {
 public:
 	TGL::FloatUniform* const Seed = AddUniform<TGL::FloatUniform>("uSeed");
-	TGL::Uint2Uniform* const GridSize = AddUniform<TGL::Uint2Uniform>("uGridSize");
+	TGL::UVec2Uniform* const GridSize = AddUniform<TGL::UVec2Uniform>("uGridSize");
 	TGL::SpriteUniform* const SpriteSheet = AddUniform<TGL::SpriteUniform>("uSpriteSheet");
 	TGL::SpriteUniform* const SpriteGrassNormal = AddUniform<TGL::SpriteUniform>("uSpriteGrassNormal");
 	TGL::SpriteUniform* const SpriteGrassTall = AddUniform<TGL::SpriteUniform>("uSpriteGrassTall");

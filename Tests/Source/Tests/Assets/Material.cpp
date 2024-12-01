@@ -24,14 +24,14 @@ namespace
 		static constexpr glm::vec4 default_color = glm::vec4(0.1f, 0.2f, 0.3f, 1.0f);
 
 		IntUniform* const m_Size;
-		Float4Uniform* const m_Color;
+		FVec4Uniform* const m_Color;
 
 		u32 m_OnRenderSetupCalls = 0;
 
 		TestMaterial(const i32 size, const glm::vec4& color)
 			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag"),
 			  m_Size(AddUniform<IntUniform>("uSize")),
-			  m_Color(AddUniform<Float4Uniform>("uColor"))
+			  m_Color(AddUniform<FVec4Uniform>("uColor"))
 		{
 			m_Size->Value = size;
 			m_Color->Value = color;
@@ -52,13 +52,20 @@ namespace
 		TestMaterial(const OnInvalidUniform ifInvalid)
 			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag"),
 			  m_Size(AddUniform<IntUniform>("uSize", ifInvalid)),
-			  m_Color(AddUniform<Float4Uniform>("uColor", ifInvalid))
+			  m_Color(AddUniform<FVec4Uniform>("uColor", ifInvalid))
 		{}
 
 		void OnRenderSetup() override
 		{
 			m_OnRenderSetupCalls++;
 		}
+	};
+
+	class InvalidTestMaterial final : public Material
+	{
+	public:
+		InvalidTestMaterial()
+			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag") {}
 	};
 }
 
@@ -69,33 +76,29 @@ namespace
 	class MockRenderBackend final : public RenderBackend
 	{
 	public:
-		static inline bool s_InvalidColorUniform = false;
-		static inline bool s_InvalidSizeUniform = false;
+		static inline bool s_MissingColorUniform = false;
+		static inline bool s_MissingSizeUniform = false;
 
 		static inline u32 s_SetUniformCalls = 0;
 
-		std::vector<ShaderUniformInfo> GetShaderUniforms(u32 programId) override
+		std::vector<ShaderUniformInfo> GetShaderUniforms(const u32 programId) override
 		{
-			std::vector<ShaderUniformInfo> uniforms;
+			std::vector<ShaderUniformInfo> uniforms = RenderBackend::GetShaderUniforms(programId);
 
-			if (!s_InvalidColorUniform)
+			if (s_MissingColorUniform)
 			{
-				uniforms.push_back({.Name = "uColor",
-									.Location = 1,
-									.DataType = UniformDataType::F32,
-									.Size = 4});
+				std::erase_if(uniforms, [](const ShaderUniformInfo& item)
+							  { return item.Name == "uColor"; });
 			}
 
-			if (!s_InvalidSizeUniform)
+			if (s_MissingSizeUniform)
 			{
-				uniforms.push_back({.Name = "uSize",
-									.Location = 2,
-									.DataType = UniformDataType::I32,
-									.Size = 1});
+				std::erase_if(uniforms, [](const ShaderUniformInfo& item)
+							  { return item.Name == "uSize"; });
 			}
 
-			s_InvalidColorUniform = false;
-			s_InvalidSizeUniform = false;
+			s_MissingColorUniform = false;
+			s_MissingSizeUniform = false;
 
 			return uniforms;
 		}
@@ -236,8 +239,8 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 	void OnUpdate(f32 deltaTime) override
 	{
 		// Valid uniforms, create if invalid
-		MockRenderBackend::s_InvalidColorUniform = false;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = false;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		SharedPtr<TestMaterial> material1 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create);
 		EXPECT_NE(material1.Get(), nullptr);
 		EXPECT_NE(material1->m_Color, nullptr);
@@ -245,8 +248,8 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material1 = nullptr;
 
 		// Invalid color uniform, create if invalid
-		MockRenderBackend::s_InvalidColorUniform = true;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = true;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		SharedPtr<TestMaterial> material2 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create);
 		EXPECT_NE(material2.Get(), nullptr);
 		EXPECT_NE(material2->m_Color, nullptr);
@@ -254,8 +257,8 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material2 = nullptr;
 
 		// Valid uniforms, ignore if invalid
-		MockRenderBackend::s_InvalidColorUniform = false;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = false;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		SharedPtr<TestMaterial> material3 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Ignore);
 		EXPECT_NE(material3.Get(), nullptr);
 		EXPECT_NE(material3->m_Color, nullptr);
@@ -263,8 +266,8 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material3 = nullptr;
 
 		// Invalid color uniform, ignore if invalid
-		MockRenderBackend::s_InvalidColorUniform = true;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = true;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		SharedPtr<TestMaterial> material4 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Ignore);
 		EXPECT_NE(material4.Get(), nullptr);
 		EXPECT_EQ(material4->m_Color, nullptr);
@@ -272,8 +275,8 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material4 = nullptr;
 
 		// Valid color uniform, throw if invalid
-		MockRenderBackend::s_InvalidColorUniform = false;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = false;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		SharedPtr<TestMaterial> material5 = Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw);
 		EXPECT_NE(material5.Get(), nullptr);
 		EXPECT_NE(material5->m_Color, nullptr);
@@ -281,9 +284,34 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		material5 = nullptr;
 
 		// Invalid color uniform, throw if invalid
-		MockRenderBackend::s_InvalidColorUniform = true;
-		MockRenderBackend::s_InvalidSizeUniform = false;
+		MockRenderBackend::s_MissingColorUniform = true;
+		MockRenderBackend::s_MissingSizeUniform = false;
 		EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), std::invalid_argument);
+
+		EndTest();
+	}
+}
+END_GAME_TEST()
+
+BEGIN_GAME_TEST(Material, UniformValidation)
+{
+	void OnUpdate(f32 deltaTime) override
+	{
+		SharedPtr<InvalidTestMaterial> material = Material::CreateInstanceOf<InvalidTestMaterial>();
+
+		// Unknown uniform
+		const IntUniform* uniform1 = material->AddUniform<IntUniform>("uUnknown", OnInvalidUniform::Ignore);
+		EXPECT_EQ(uniform1, nullptr);
+
+		// Invalid data type
+		const UintUniform* uniform2 = material->AddUniform<UintUniform>("uSize", OnInvalidUniform::Ignore);
+		EXPECT_EQ(uniform2, nullptr);
+
+		// Duplicate
+		const FVec4Uniform* uniform3 = material->AddUniform<FVec4Uniform>("uColor", OnInvalidUniform::Ignore);
+		const FVec4Uniform* uniform4 = material->AddUniform<FVec4Uniform>("uColor", OnInvalidUniform::Ignore);
+		EXPECT_NE(uniform3, nullptr);
+		EXPECT_EQ(uniform4, nullptr);
 
 		EndTest();
 	}
@@ -351,10 +379,10 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 			TestEntity* entity = SpawnEntity<TestEntity>();
 			spriteRenderer = entity->AttachComponent<SpriteRenderer>();
 
-			MockRenderBackend::s_InvalidColorUniform = false;
-			MockRenderBackend::s_InvalidSizeUniform = false;
+			MockRenderBackend::s_MissingColorUniform = false;
+			MockRenderBackend::s_MissingSizeUniform = false;
 
-			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(true));
+			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create));
 
 			EXPECT_EQ(MockRenderBackend::s_SetUniformCalls, 0);
 		}
@@ -365,10 +393,10 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 
 			spriteRenderer->SetMaterial(nullptr);
 
-			MockRenderBackend::s_InvalidColorUniform = true;
-			MockRenderBackend::s_InvalidSizeUniform = false;
+			MockRenderBackend::s_MissingColorUniform = true;
+			MockRenderBackend::s_MissingSizeUniform = false;
 
-			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(true));
+			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create));
 		}
 
 		if (frame == 3)
@@ -377,10 +405,10 @@ BEGIN_GAME_TEST_MOCKED(Material, SmartUniformBinding, MockServiceBuilder)
 
 			spriteRenderer->SetMaterial(nullptr);
 
-			MockRenderBackend::s_InvalidColorUniform = true;
-			MockRenderBackend::s_InvalidSizeUniform = true;
+			MockRenderBackend::s_MissingColorUniform = true;
+			MockRenderBackend::s_MissingSizeUniform = true;
 
-			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(true));
+			spriteRenderer->SetMaterial(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Create));
 		}
 
 		if (frame == 4)

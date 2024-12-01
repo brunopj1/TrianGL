@@ -1,4 +1,5 @@
-﻿#ifndef TESTING
+﻿#include "Rendering/ParticleSystem.h"
+#ifndef TESTING
 
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #define GLFW_INCLUDE_NONE
@@ -405,6 +406,33 @@ bool RenderBackend::LinkProgram(const u32 programId, std::string& errorLog)
 	return true;
 }
 
+std::vector<ShaderAttributeInfo> RenderBackend::GetShaderAttributes(const u32 programId)
+{
+	i32 attributeCount = 0;
+	glGetProgramiv(programId, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+
+	std::vector<ShaderAttributeInfo> attributes(attributeCount);
+
+	constexpr u32 bufSize = 1024;
+	char name[bufSize];
+	i32 nameLength;
+
+	u32 attributeDataType;
+	i32 attributeSize;
+
+	for (i32 i = 0; i < attributeCount; i++)
+	{
+		glGetActiveAttrib(programId, i, bufSize, &nameLength, &attributeSize, &attributeDataType, name);
+		const i32 attributeLocation = glGetAttribLocation(programId, name);
+
+		ShaderAttributeInfo& attribute = attributes[attributeLocation];
+		attribute.Name = name;
+		attribute.DataType = static_cast<ShaderDataType>(attributeDataType);
+	}
+
+	return attributes;
+}
+
 std::vector<ShaderUniformInfo> RenderBackend::GetShaderUniforms(const u32 programId)
 {
 	i32 uniformCount = 0;
@@ -424,9 +452,8 @@ std::vector<ShaderUniformInfo> RenderBackend::GetShaderUniforms(const u32 progra
 		ShaderUniformInfo& uniform = uniforms[i];
 		glGetActiveUniform(programId, i, bufSize, &nameLength, &uniformSize, &uniformDataType, name);
 		uniform.Name = name;
+		uniform.DataType = static_cast<ShaderDataType>(uniformDataType);
 		uniform.Location = glGetUniformLocation(programId, name);
-		uniform.DataType = static_cast<UniformDataType>(uniformDataType);
-		uniform.Size = uniformSize;
 	}
 
 	return uniforms;
@@ -515,28 +542,6 @@ void RenderBackend::SetUniformMatrix4f(const i32 location, const glm::mat4& valu
 }
 
 // NOLINTEND(CppInconsistentNaming)
-
-u8 RenderBackend::GetDataTypeSize(const VertexAttributeDataType dataType)
-{
-	switch (dataType)
-	{
-		case VertexAttributeDataType::I8:
-		case VertexAttributeDataType::U8:
-			return 1;
-		case VertexAttributeDataType::I16:
-		case VertexAttributeDataType::U16:
-			return 2;
-		case VertexAttributeDataType::I32:
-		case VertexAttributeDataType::U32:
-		case VertexAttributeDataType::F32:
-			return 4;
-		case VertexAttributeDataType::F64:
-			return 8;
-	}
-
-	return 0;
-}
-
 // NOLINTEND(CppMemberFunctionMayBeStatic)
 
 #endif

@@ -1,8 +1,66 @@
-﻿#ifdef TESTING
+﻿#include <ranges>
+#ifdef TESTING
 
 #include "RenderBackend.h"
+#include <regex>
+#include <unordered_map>
 
 using namespace TGL;
+
+// Variables
+
+namespace
+{
+	std::vector<ShaderAttributeInfo> g_CurrentShaderAttributes;
+	std::unordered_map<std::string, ShaderUniformInfo> g_CurrentShaderUniforms;
+}
+
+// Helper functions
+
+namespace
+{
+	void ExtractShaderAttributes(const std::string& shaderSource)
+	{
+		static std::regex regex(R"regex(layout\s*\(\s*location\s*=\s*\d+\s*\)\s*in\s+([^\s]+)\s+([^\s;]+)\s*;)regex");
+
+		std::smatch res;
+
+		std::string::const_iterator searchStart(shaderSource.cbegin());
+		while (regex_search(searchStart, shaderSource.cend(), res, regex))
+		{
+			std::string name = res[2];
+			ShaderDataType dataType = GetShaderDataTypeFromName(res[1]);
+
+			g_CurrentShaderAttributes.emplace_back(name, dataType);
+
+			searchStart = res.suffix().first;
+		}
+	}
+
+	void ExtractShaderUniforms(const std::string& shaderSource)
+	{
+		static std::regex regex(R"regex(uniform\s+([^\s]+)\s+([^\s;]+)\s*;)regex");
+
+		std::smatch res;
+
+		std::string::const_iterator searchStart(shaderSource.cbegin());
+		while (regex_search(searchStart, shaderSource.cend(), res, regex))
+		{
+			std::string name = res[2];
+			const ShaderDataType dataType = GetShaderDataTypeFromName(res[1]);
+			const i32 location = g_CurrentShaderUniforms.size() + 1;
+
+			if (!g_CurrentShaderUniforms.contains(name))
+			{
+				g_CurrentShaderUniforms[name] = {name, dataType, location};
+			}
+
+			searchStart = res.suffix().first;
+		}
+	}
+}
+
+// Class methods
 
 // NOLINTBEGIN(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
@@ -112,6 +170,8 @@ void RenderBackend::DeleteShader(u32 shaderId) {}
 
 bool RenderBackend::CompileShader(u32 shaderId, const std::string& shaderSource, std::string& errorLog)
 {
+	ExtractShaderAttributes(shaderSource);
+	ExtractShaderUniforms(shaderSource);
 	return true;
 }
 
@@ -123,9 +183,22 @@ bool RenderBackend::LinkProgram(u32 programId, std::string& errorLog)
 	return true;
 }
 
+std::vector<ShaderAttributeInfo> RenderBackend::GetShaderAttributes(u32 programId)
+{
+	std::vector<ShaderAttributeInfo> shaderAttributes = g_CurrentShaderAttributes;
+	g_CurrentShaderAttributes.clear();
+	return shaderAttributes;
+}
+
 std::vector<ShaderUniformInfo> RenderBackend::GetShaderUniforms(u32 programId)
 {
-	return {};
+	std::vector<ShaderUniformInfo> shaderUniforms;
+	for (auto& uniform : g_CurrentShaderUniforms | std::views::values)
+	{
+		shaderUniforms.push_back(uniform);
+	}
+	g_CurrentShaderUniforms.clear();
+	return shaderUniforms;
 }
 
 void RenderBackend::UseProgram(u32 programId) {}
@@ -163,12 +236,6 @@ void RenderBackend::SetUniformMatrix3f(int location, const glm::mat3& value) {}
 void RenderBackend::SetUniformMatrix4f(int location, const glm::mat4& value) {}
 
 // NOLINTEND(CppInconsistentNaming)
-
-u8 RenderBackend::GetDataTypeSize(const VertexAttributeDataType dataType)
-{
-	return 0;
-}
-
 // NOLINTEND(CppMemberFunctionMayBeStatic, CppParameterNeverUsed)
 
 #endif

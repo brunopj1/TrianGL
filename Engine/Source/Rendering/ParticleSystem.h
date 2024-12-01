@@ -1,32 +1,45 @@
 ﻿#pragma once
 
 #include "Core/Internal/Concepts/ParticleSystemConcepts.h"
+#include "Exceptions/Assets/IncompatibleMaterialException.h"
 #include "Implementations/Materials/DefaultParticleMaterial.h"
 #include <Core/Services/Backends/RenderBackend.h>
 #include <Game/Component.h>
 #include <Game/Internal/Renderable.h>
 #include <Memory/SharedPtr.h>
+#include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace TGL
 {
+	// NOLINTBEGIN(CppInconsistentNaming)
+	// clang-format off
+
 	enum class ParticleDataType : u16
 	{
-		I8 = 0x1400, // GL_BYTE
-		U8 = 0x1401, // GL_UNSIGNED_BYTE
-		I16 = 0x1402, // GL_SHORT
-		U16 = 0x1403, // GL_UNSIGNED_SHORT
-		I32 = 0x1404, // GL_INT
-		U32 = 0x1405, // GL_UNSIGNED_INT
-		F32 = 0x1406, // GL_FLOAT
-		F64 = 0x140A // GL_DOUBLE
+		INT   = 0x1404, // GL_INT
+		UINT  = 0x1405, // GL_UNSIGNED_INT
+		FLOAT = 0x1406, // GL_FLOAT
+		IVEC2 = 0x8B53, // GL_INT_VEC2
+		IVEC3 = 0x8B54, // GL_INT_VEC3
+		IVEC4 = 0x8B55, // GL_INT_VEC4
+		UVEC2 = 0x8DC6, // GL_UNSIGNED_INT_VEC2
+		UVEC3 = 0x8DC7, // GL_UNSIGNED_INT_VEC3
+		UVEC4 = 0x8DC8, // GL_UNSIGNED_INT_VEC4
+		FVEC2 = 0x8B50, // GL_FLOAT_VEC2
+		FVEC3 = 0x8B51, // GL_FLOAT_VEC3
+		FVEC4 = 0x8B52  // GL_FLOAT_VEC4
 	};
+
+	// clang-format on
+	// NOLINTEND(CppInconsistentNaming)
 
 	struct ParticleDataInfo final
 	{
 		ParticleDataType DataType;
-		u8 Size;
 		bool Normalized;
+
+		VertexAttributeInfo ConvertToVertexAttribute() const;
 	};
 
 	template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
@@ -75,11 +88,12 @@ namespace TGL
 
 	private:
 		void Init();
-
 		void Terminate();
 
 	private:
 		bool UpdateIndices();
+
+	private:
 	};
 
 	// Template definitions
@@ -131,6 +145,11 @@ namespace TGL
 	template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
 	void ParticleSystem<CpuParticle, GpuParticle, ParticleSpawnData>::SetMaterial(SharedPtr<Material> material)
 	{
+		if (material != nullptr && !material->CheckParticleCompatibility(GpuParticle::GetParticleStructure()))
+		{
+			throw IncompatibleMaterialException(false);
+		}
+
 		m_Material = std::move(material);
 	}
 
@@ -174,10 +193,7 @@ namespace TGL
 
 			if (!IsParticleAlive(cpuParticle, gpuParticle))
 			{
-				if (i < m_NextUnusedIndex)
-				{
-					m_NextUnusedIndex = i;
-				}
+				m_NextUnusedIndex = std::min(i, m_NextUnusedIndex);
 			}
 		}
 
@@ -220,7 +236,8 @@ namespace TGL
 
 		RenderBackend& renderBackend = RenderBackend::Get();
 		const AssetManager& assetManager = AssetManager::Get();
-		renderBackend.DrawElementsInstanced(m_ParticleVao, assetManager.GetQuadEbo(), 6, m_LastUsedIndex + 1);
+		const Quad& quad = assetManager.GetQuad();
+		renderBackend.DrawElementsInstanced(m_ParticleVao, quad.GetEbo(), 6, m_LastUsedIndex + 1);
 	}
 
 	template <ValidCpuParticleData CpuParticle, ValidGpuParticleData GpuParticle, typename ParticleSpawnData>
@@ -234,11 +251,12 @@ namespace TGL
 		renderBackend.GenerateVertexArray(m_ParticleVao);
 
 		const AssetManager& assetManager = AssetManager::Get();
+		const Quad& quad = assetManager.GetQuad();
 
 		// Bind the quad EBO and VBO and setup the attributes
-		renderBackend.BindBuffer(assetManager.GetQuadEbo(), BufferType::ElementArrayBuffer);
-		renderBackend.BindBuffer(assetManager.GetQuadVbo(), BufferType::ArrayBuffer);
-		assetManager.SetupQuadVertexAttributes();
+		renderBackend.BindBuffer(quad.GetEbo(), BufferType::ElementArrayBuffer);
+		renderBackend.BindBuffer(quad.GetVbo(), BufferType::ArrayBuffer);
+		quad.SetupQuadVertexAttributes();
 
 		renderBackend.GenerateBuffer(m_ParticleVbo, BufferType::ArrayBuffer);
 		renderBackend.SetBufferData(m_ParticleVbo, BufferType::ArrayBuffer, BufferDrawType::StreamDraw, m_MaxParticles * sizeof(GpuParticle), nullptr);
@@ -249,13 +267,12 @@ namespace TGL
 
 		for (const auto& particleData : particleStructure)
 		{
-			const auto dataType = static_cast<VertexAttributeDataType>(particleData.DataType);
-			const u8 byteSize = renderBackend.GetDataTypeSize(dataType);
+			VertexAttributeInfo vertexAttributeInfo = particleData.ConvertToVertexAttribute();
 
-			renderBackend.SetVertexAttributePointerForInstancing(index, particleData.Size, dataType, particleData.Normalized, sizeof(GpuParticle), offset);
+			renderBackend.SetVertexAttributePointerForInstancing(index, vertexAttributeInfo.DataSize, vertexAttributeInfo.DataType, particleData.Normalized, sizeof(GpuParticle), offset);
 
 			index++;
-			offset += particleData.Size * byteSize;
+			offset += vertexAttributeInfo.ByteSize;
 		}
 
 		renderBackend.UnbindVertexArray();

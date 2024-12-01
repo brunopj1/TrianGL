@@ -36,41 +36,41 @@ namespace TGL
 		f64 GetDouble();
 		f64 GetDouble(f64 min, f64 max);
 
-		glm::ivec2 GetInt2();
-		glm::ivec2 GetInt2(i32 min, i32 max);
-		glm::ivec2 GetInt2(const glm::ivec2& min, const glm::ivec2& max);
+		glm::ivec2 GetIVec2();
+		glm::ivec2 GetIVec2(i32 min, i32 max);
+		glm::ivec2 GetIVec2(const glm::ivec2& min, const glm::ivec2& max);
 
-		glm::ivec3 GetInt3();
-		glm::ivec3 GetInt3(i32 min, i32 max);
-		glm::ivec3 GetInt3(const glm::ivec3& min, const glm::ivec3& max);
+		glm::ivec3 GetIVec3();
+		glm::ivec3 GetIVec3(i32 min, i32 max);
+		glm::ivec3 GetIVec3(const glm::ivec3& min, const glm::ivec3& max);
 
-		glm::ivec4 GetInt4();
-		glm::ivec4 GetInt4(i32 min, i32 max);
-		glm::ivec4 GetInt4(const glm::ivec4& min, const glm::ivec4& max);
+		glm::ivec4 GetVec4();
+		glm::ivec4 GetVec4(i32 min, i32 max);
+		glm::ivec4 GetVec4(const glm::ivec4& min, const glm::ivec4& max);
 
-		glm::uvec2 GetUint2();
-		glm::uvec2 GetUint2(u32 min, u32 max);
-		glm::uvec2 GetUint2(const glm::uvec2& min, const glm::uvec2& max);
+		glm::uvec2 GetUVec2();
+		glm::uvec2 GetUVec2(u32 min, u32 max);
+		glm::uvec2 GetUVec2(const glm::uvec2& min, const glm::uvec2& max);
 
-		glm::uvec3 GetUint3();
-		glm::uvec3 GetUint3(u32 min, u32 max);
-		glm::uvec3 GetUint3(const glm::uvec3& min, const glm::uvec3& max);
+		glm::uvec3 GetUVec3();
+		glm::uvec3 GetUVec3(u32 min, u32 max);
+		glm::uvec3 GetUVec3(const glm::uvec3& min, const glm::uvec3& max);
 
-		glm::uvec4 GetUint4();
-		glm::uvec4 GetUint4(u32 min, u32 max);
-		glm::uvec4 GetUint4(const glm::uvec4& min, const glm::uvec4& max);
+		glm::uvec4 GetUVec4();
+		glm::uvec4 GetUVec4(u32 min, u32 max);
+		glm::uvec4 GetUVec4(const glm::uvec4& min, const glm::uvec4& max);
 
-		glm::vec2 GetFloat2();
-		glm::vec2 GetFloat2(f32 min, f32 max);
-		glm::vec2 GetFloat2(const glm::vec2& min, const glm::vec2& max);
+		glm::vec2 GetFVec2();
+		glm::vec2 GetFVec2(f32 min, f32 max);
+		glm::vec2 GetFVec2(const glm::vec2& min, const glm::vec2& max);
 
-		glm::vec3 GetFloat3();
-		glm::vec3 GetFloat3(f32 min, f32 max);
-		glm::vec3 GetFloat3(const glm::vec3& min, const glm::vec3& max);
+		glm::vec3 GetFVec3();
+		glm::vec3 GetFVec3(f32 min, f32 max);
+		glm::vec3 GetFVec3(const glm::vec3& min, const glm::vec3& max);
 
-		glm::vec4 GetFloat4();
-		glm::vec4 GetFloat4(f32 min, f32 max);
-		glm::vec4 GetFloat4(const glm::vec4& min, const glm::vec4& max);
+		glm::vec4 GetFVec4();
+		glm::vec4 GetFVec4(f32 min, f32 max);
+		glm::vec4 GetFVec4(const glm::vec4& min, const glm::vec4& max);
 
 	private:
 		void UpdateSeed();

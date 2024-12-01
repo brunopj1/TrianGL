@@ -36,13 +36,13 @@ void AssetManager::Init()
 	audioBackend.SetupSoloudSettings(m_SoloudEngine);
 
 	// Quad asset
-	InitQuad();
+	m_Quad.Init();
 }
 
 void AssetManager::Terminate()
 {
 	// Quad asset
-	TerminateQuad();
+	m_Quad.Terminate();
 
 	// SoLoud
 	AudioBackend& audioBackend = AudioBackend::Get();
@@ -50,74 +50,9 @@ void AssetManager::Terminate()
 	m_SoloudEngine = nullptr;
 }
 
-void AssetManager::InitQuad()
+const Quad& AssetManager::GetQuad() const
 {
-	// clang-format off
-
-    constexpr f32 vertices[] = {
-        // Positions     // Tex Coords
-        -0.5f, -0.5f,    0.0f, 0.0f,    // Bottom Left
-         0.5f, -0.5f,    1.0f, 0.0f,    // Bottom Right
-        -0.5f,  0.5f,    0.0f, 1.0f,    // Top Left
-         0.5f,  0.5f,    1.0f, 1.0f     // Top Right
-    };
-
-    constexpr u32 indices[] = {
-        0, 1, 2, // Bottom Left Triangle
-        1, 3, 2  // Top Right Triangle
-    };
-
-	// clang-format on
-
-	RenderBackend& renderBackend = RenderBackend::Get();
-
-	renderBackend.GenerateVertexArray(m_QuadVao);
-
-	renderBackend.GenerateBuffer(m_QuadVbo, BufferType::ArrayBuffer);
-	renderBackend.SetBufferData(m_QuadVbo, BufferType::ArrayBuffer, BufferDrawType::StaticDraw, sizeof(vertices), vertices);
-
-	renderBackend.GenerateBuffer(m_QuadEbo, BufferType::ElementArrayBuffer);
-	renderBackend.SetBufferData(m_QuadEbo, BufferType::ElementArrayBuffer, BufferDrawType::StaticDraw, sizeof(indices), indices);
-
-	SetupQuadVertexAttributes();
-
-	renderBackend.UnbindVertexArray();
-}
-
-void AssetManager::SetupQuadVertexAttributes() const
-{
-	RenderBackend& renderBackend = RenderBackend::Get();
-	renderBackend.SetVertexAttributePointer(0, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 0);
-	renderBackend.SetVertexAttributePointer(1, 2, VertexAttributeDataType::F32, false, 4 * sizeof(f32), 2 * sizeof(f32));
-}
-
-void AssetManager::TerminateQuad()
-{
-	RenderBackend& renderBackend = RenderBackend::Get();
-
-	renderBackend.DeleteBuffer(m_QuadVbo);
-	m_QuadVbo = 0;
-
-	renderBackend.DeleteBuffer(m_QuadEbo);
-	m_QuadEbo = 0;
-
-	renderBackend.DeleteVertexArray(m_QuadVao);
-	m_QuadVao = 0;
-}
-
-u32 AssetManager::GetQuadVao() const
-{
-	return m_QuadVao;
-}
-
-u32 AssetManager::GetQuadVbo() const
-{
-	return m_QuadVbo;
-}
-
-u32 AssetManager::GetQuadEbo() const
-{
-	return m_QuadEbo;
+	return m_Quad;
 }
 
 SharedPtr<Texture> AssetManager::LoadTexture(const std::string& filePath, const TextureParameters& parameters)

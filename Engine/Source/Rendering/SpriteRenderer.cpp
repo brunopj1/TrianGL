@@ -1,4 +1,5 @@
 ﻿#include "Core/Services/Backends/RenderBackend.h"
+#include "Exceptions/Assets/IncompatibleMaterialException.h"
 #include <Assets/Material.h>
 #include <Game/Entity.h>
 #include <Implementations/Materials/DefaultSpriteMaterial.h>
@@ -17,13 +18,18 @@ SharedPtr<Material> SpriteRenderer::GetMaterial() const
 
 void SpriteRenderer::SetMaterial(SharedPtr<Material> material)
 {
+	if (material != nullptr && !material->CheckQuadCompatibility())
+	{
+		throw IncompatibleMaterialException(true);
+	}
+
 	m_Material = std::move(material);
 }
 
 SharedPtr<DefaultSpriteMaterial> SpriteRenderer::UseDefaultMaterial()
 {
 	auto defaultMaterial = Material::CreateInstanceOf<DefaultSpriteMaterial>();
-	m_Material = defaultMaterial;
+	SetMaterial(defaultMaterial);
 	return defaultMaterial;
 }
 
@@ -69,5 +75,6 @@ void SpriteRenderer::Render()
 
 	RenderBackend& renderBackend = RenderBackend::Get();
 	const AssetManager& assetManager = AssetManager::Get();
-	renderBackend.DrawElements(assetManager.GetQuadVao(), assetManager.GetQuadEbo(), 6);
+	const Quad& quad = assetManager.GetQuad();
+	renderBackend.DrawElements(quad.GetVao(), quad.GetEbo(), 6);
 }

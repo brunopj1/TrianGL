@@ -1,6 +1,7 @@
 ﻿#include "Rendering/ParticleSystem.h"
 
 #include "General/Camera.h"
+#include "Implementations/Materials/DefaultSpriteMaterial.h"
 #include "Implementations/ParticleSystems/DefaultParticleSystem.h"
 #include "Util/GameTestAbstractions.h"
 #include "Util/RandomNumberGenerator.h"
@@ -87,7 +88,7 @@ namespace TGL
 	{
 	public:
 		TestMaterial()
-			: Material("Assets/Shaders/test.vert", "Assets/Shaders/test.frag")
+			: Material("Assets/Shaders/default_particle_test.vert", "Assets/Shaders/default_particle_test.frag")
 		{}
 	};
 
@@ -108,26 +109,26 @@ namespace TGL
 	{
 		f32 Lifetime;
 	};
-	
+
 	class TestParticleSystem final : public ParticleSystem<TestCpuParticle, TestGpuParticle, TestParticleSpawnData>
 	{
 	public:
 		u32 m_SetupCallCount;
 		u32 m_UpdateCallCount;
-		
+
 	protected:
 		void SetupParticle(const TestParticleSpawnData& spawnData, TestCpuParticle& cpuParticle, TestGpuParticle& gpuParticle) override
 		{
 			m_SetupCallCount++;
 			cpuParticle.Lifetime = spawnData.Lifetime;
 		}
-		
+
 		void UpdateParticle(TestCpuParticle& cpuParticle, TestGpuParticle& gpuParticle, const f32 deltaTime) override
 		{
 			m_UpdateCallCount++;
 			cpuParticle.Lifetime -= deltaTime;
 		}
-		
+
 		bool IsParticleAlive(const TestCpuParticle& cpuParticle, const TestGpuParticle& gpuParticle) const override
 		{
 			return cpuParticle.Lifetime > 0.0f;
@@ -183,8 +184,8 @@ BEGIN_GAME_TEST(ParticleSystem, Emit)
 		RandomNumberGenerator rng;
 		for (u32 i = 0; i < 200; i++)
 		{
-			spawnData.Position = rng.GetFloat2(-10.0f, 10.0f);
-			spawnData.Velocity = rng.GetFloat2(-2.0f, 2.0f);
+			spawnData.Position = rng.GetFVec2(-10.0f, 10.0f);
+			spawnData.Velocity = rng.GetFVec2(-2.0f, 2.0f);
 			spawnData.Duration = rng.GetFloat(3.0f, 7.0f);
 
 			particleSystem->Emit(spawnData);
@@ -207,7 +208,7 @@ BEGIN_GAME_TEST(ParticleSystem, EmitDead)
 		const bool success1 = particleSystem->Emit({.Duration = 0.0f});
 		EXPECT_FALSE(success1);
 		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
-		
+
 		const bool success2 = particleSystem->Emit({.Duration = -1.0f});
 		EXPECT_FALSE(success2);
 		EXPECT_EQ(particleSystem->GetParticleCount(), 0);
@@ -303,13 +304,13 @@ BEGIN_GAME_TEST_MOCKED(ParticleSystem, SetupAndUpdate, MockServiceBuilder)
 		{
 			TestEntity* entity = SpawnEntity<TestEntity>();
 			particleSystem = entity->AttachComponent<TestParticleSystem>();
-			
+
 			EXPECT_EQ(particleSystem->m_SetupCallCount, 0);
 			EXPECT_EQ(particleSystem->m_UpdateCallCount, 0);
 
 			particleSystem->Emit({.Lifetime = 1.0f});
 			particleSystem->Emit({.Lifetime = 2.0f});
-			
+
 			EXPECT_EQ(particleSystem->m_SetupCallCount, 2);
 			EXPECT_EQ(particleSystem->m_UpdateCallCount, 0);
 		}
@@ -363,6 +364,9 @@ BEGIN_GAME_TEST(ParticleSystem, Material)
 
 		particleSystem->SetMaterial(nullptr);
 		EXPECT_EQ(particleSystem->GetMaterial(), nullptr);
+
+		const SharedPtr<Material> spriteMaterial = Material::CreateInstanceOf<DefaultSpriteMaterial>();
+		EXPECT_THROW(particleSystem->SetMaterial(spriteMaterial), IncompatibleMaterialException);
 
 		EndTest();
 	}
