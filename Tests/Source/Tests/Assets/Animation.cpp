@@ -39,11 +39,11 @@ BEGIN_GAME_TEST(Animation, Frames)
 		EXPECT_THROW(animation->AddFrame(texture->GetSlice(2), 0.0f), std::invalid_argument);
 		EXPECT_THROW(animation->AddFrame(texture->GetSlice(2), -0.1f), std::invalid_argument);
 
-		EXPECT_THROW(animation->AddFrame(texture->GetSlice(2), 0.5f, 3), std::invalid_argument);
+		EXPECT_THROW(animation->AddFrame(texture->GetSlice(2), 0.5f, 3), std::out_of_range);
 
 		EXPECT_EQ(animation->GetFrameCount(), 2);
 
-		EXPECT_THROW(animation->GetFrame(3), std::invalid_argument);
+		EXPECT_THROW(animation->GetFrame(3), std::out_of_range);
 
 		EndTest();
 	}

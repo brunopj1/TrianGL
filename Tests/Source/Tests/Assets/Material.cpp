@@ -286,7 +286,7 @@ BEGIN_GAME_TEST_MOCKED(Material, AddUniform, MockServiceBuilder)
 		// Invalid color uniform, throw if invalid
 		MockRenderBackend::s_MissingColorUniform = true;
 		MockRenderBackend::s_MissingSizeUniform = false;
-		EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), std::invalid_argument);
+		EXPECT_THROW(Material::CreateInstanceOf<TestMaterial>(OnInvalidUniform::Throw), InvalidMaterialUniformException);
 
 		EndTest();
 	}
