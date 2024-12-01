@@ -46,7 +46,7 @@ SharedPtr<TextureSlice> Texture::GetSlice(const u32 index) const
 {
 	if (index >= m_Slices.size())
 	{
-		throw std::runtime_error("Invalid slice index");
+		throw std::out_of_range("Invalid slice index");
 	}
 
 	AssetManager& assetManager = AssetManager::Get();
@@ -55,20 +55,25 @@ SharedPtr<TextureSlice> Texture::GetSlice(const u32 index) const
 
 u32 Texture::CreateSlice(const glm::uvec2& resolution, const glm::uvec2& offset)
 {
-	if (resolution.x <= 0 || resolution.y <= 0 || resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
+	if (resolution.x == 0 || resolution.y == 0)
 	{
-		throw std::invalid_argument("Invalid resolution");
+		throw std::invalid_argument("The resolution must be greater than zero");
 	}
 
-	if (offset.x < 0 || offset.y < 0 || offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
+	if (resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
 	{
-		throw std::invalid_argument("Invalid offset");
+		throw std::invalid_argument("The resolution cannot be greater than the texture's resolution");
+	}
+
+	if (offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
+	{
+		throw std::invalid_argument("The offset cannot be greater than the texture's resolution");
 	}
 
 	const glm::uvec2 corner = offset + resolution;
 	if (corner.x > m_Resolution.x || corner.y > m_Resolution.y)
 	{
-		throw std::invalid_argument("Invalid bounds");
+		throw std::invalid_argument("The slice must be fully contained within the texture");
 	}
 
 	CreateSliceInternal(resolution, offset);
@@ -84,19 +89,24 @@ SharedPtr<TextureSlice> Texture::CreateAndGetSlice(const glm::uvec2& resolution,
 
 u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& offset, const glm::uvec2& spacing)
 {
-	if (resolution.x <= 0 || resolution.y <= 0 || resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
+	if (resolution.x == 0 || resolution.y == 0)
 	{
-		throw std::invalid_argument("Invalid resolution");
+		throw std::invalid_argument("The resolution must be greater than zero");
 	}
 
-	if (offset.x < 0 || offset.y < 0 || offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
+	if (resolution.x > m_Resolution.x || resolution.y > m_Resolution.y)
 	{
-		throw std::invalid_argument("Invalid offset");
+		throw std::invalid_argument("The resolution cannot be greater than the texture's resolution");
 	}
 
-	if (spacing.x < 0 || spacing.y < 0 || spacing.x >= resolution.x || spacing.y >= resolution.y)
+	if (offset.x >= m_Resolution.x || offset.y >= m_Resolution.y)
 	{
-		throw std::invalid_argument("Invalid spacing");
+		throw std::invalid_argument("The offset cannot be greater than the texture's resolution");
+	}
+
+	if (spacing.x >= resolution.x || spacing.y >= resolution.y)
+	{
+		throw std::invalid_argument("The spacing cannot be greater than the texture's resolution");
 	}
 
 	const glm::uvec2 effectiveContentResolution = m_Resolution - offset + spacing;
@@ -105,7 +115,7 @@ u32 Texture::CreateSliceGrid(const glm::uvec2& resolution, const glm::uvec2& off
 	const glm::uvec2 sliceCount = effectiveContentResolution / effectiveSliceResolution;
 	if (sliceCount.x == 0 || sliceCount.y == 0)
 	{
-		throw std::invalid_argument("Invalid bounds");
+		throw std::invalid_argument("No slice could be created given the specified parameters");
 	}
 
 	for (u32 y = 0; y < sliceCount.y; y++)

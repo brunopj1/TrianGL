@@ -49,7 +49,7 @@ void Camera::SetHorizontalSize(const f32 size)
 {
 	if (size <= 0.0f)
 	{
-		throw std::invalid_argument("The size must be greater than 0");
+		throw std::invalid_argument("The size must be greater than zero");
 	}
 
 	m_HorizontalSize = size;
@@ -64,7 +64,7 @@ void Camera::SetVerticalSize(const f32 size)
 {
 	if (size <= 0.0f)
 	{
-		throw std::invalid_argument("The size must be greater than 0");
+		throw std::invalid_argument("The size must be greater than zero");
 	}
 
 	m_HorizontalSize = size * m_AspectRatio;
@@ -131,7 +131,7 @@ void Camera::SetAspectRatio(const f32 aspectRatio)
 {
 	if (aspectRatio <= 0.0f)
 	{
-		throw std::invalid_argument("The aspect ratio must be greater than 0");
+		throw std::invalid_argument("The aspect ratio must be greater than zero");
 	}
 
 	m_AspectRatio = aspectRatio;

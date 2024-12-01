@@ -64,7 +64,7 @@ SharedPtr<AnimationFrame> Animation::AddFrame(SharedPtr<Sprite> sprite, const f3
 
 	if (index > frameCount)
 	{
-		throw std::invalid_argument("Index out of range");
+		throw std::out_of_range("Invalid frame index");
 	}
 
 	const u32 normalizedIndex = index < 0 ? frameCount : index;
@@ -85,7 +85,7 @@ SharedPtr<AnimationFrame> Animation::GetFrame(const u32 index) const
 
 	if (index >= frameCount)
 	{
-		throw std::invalid_argument("Index out of range");
+		throw std::out_of_range("Invalid frame index");
 	}
 
 	return m_Frames[index];

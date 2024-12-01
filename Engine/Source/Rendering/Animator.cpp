@@ -91,12 +91,12 @@ void Animator::JumpToTime(const f32 time)
 
 	if (time < 0.0f)
 	{
-		throw std::invalid_argument("The time must be greater than or equal to zero");
+		throw std::invalid_argument("The time cannot be negative");
 	}
 
 	if (time > m_Animation->GetDuration())
 	{
-		throw std::invalid_argument("The time must be less than the animation duration");
+		throw std::invalid_argument("The time must be less than the animation's duration");
 	}
 
 	m_CurrentTime = time;

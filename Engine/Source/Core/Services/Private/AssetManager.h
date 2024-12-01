@@ -7,8 +7,7 @@
 #include <Core/Internal/Concepts/MaterialConcepts.h>
 #include <Core/Service.h>
 #include <Memory/SharedPtr.h>
-#include <memory>
-#include <stdexcept>
+#include "Exceptions/Assets/InvalidMaterialUniformException.h"
 #include <string>
 #include <unordered_map>
 
@@ -163,7 +162,7 @@ namespace TGL
 
 			if (onInvalid == OnInvalidUniform::Throw)
 			{
-				throw std::invalid_argument("The uniform is invalid");
+				throw InvalidMaterialUniformException(name);
 			}
 		}
 
