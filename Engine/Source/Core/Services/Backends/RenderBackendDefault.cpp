@@ -1,5 +1,4 @@
-﻿#include "Rendering/ParticleSystem.h"
-#ifndef TESTING
+﻿#ifndef TESTING
 
 #define GLAD_GL_IMPLEMENTATION // NOLINT(clang-diagnostic-unused-macros)
 #define GLFW_INCLUDE_NONE

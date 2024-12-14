@@ -1,4 +1,5 @@
 ﻿#include <gtest/gtest.h>
+#include <iostream>
 
 #ifndef TESTING
 static_assert(false, "The unit tests are only available in the Testing configuration.");

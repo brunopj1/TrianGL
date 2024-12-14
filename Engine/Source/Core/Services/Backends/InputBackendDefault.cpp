@@ -101,7 +101,7 @@ void InputBackend::SetMouseInputMode(GLFWwindow* windowPtr, const MouseMode mode
 
 glm::ivec2 InputBackend::GetMousePosition(GLFWwindow* windowPtr)
 {
-	double x, y;
+	f64 x, y;
 	glfwGetCursorPos(windowPtr, &x, &y);
 	return {static_cast<i32>(x), static_cast<i32>(y)};
 }

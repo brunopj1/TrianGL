@@ -1,5 +1,6 @@
 ﻿#include "TextureSlice.h"
 
+#include "Core/Internal/Macros/AssetFactoryMacros.h"
 #include "Core/Services/Backends/RenderBackend.h"
 #include "Core/Services/Private/AssetManager.h"
 #include "Texture.h"

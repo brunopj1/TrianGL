@@ -11,6 +11,10 @@
 
 namespace TGL
 {
+	// Forward declarations
+	template <typename U>
+	class SharedFromThis;
+	
 	class ReferenceCounter final
 	{
 	private:

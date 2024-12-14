@@ -1,17 +1,5 @@
 # Build folders
-Bin/
-Obj/
-
-# CMake files
-**.cmake
-**/CMakeLists.txt
-
-# Visual Studio files
-**/*.sln
-**/*.sln.DotSettings.user
-**/*.vcxproj
-**/*.vcxproj.user
-**/*.vcxproj.filters
+cmake-*
 
 # IDE folders
 .vs/

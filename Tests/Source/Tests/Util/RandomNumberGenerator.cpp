@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 #include <limits>
 
-template <typename T, u32 Size>
+template <typename T, u8 Size>
 void AssertVectorRange(const glm::vec<Size, T>& vec, const T min, const T max)
 {
 	if constexpr (Size >= 1)
@@ -129,13 +129,13 @@ TEST(RandomNumberGenerator, GetIVec2)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetIVec2();
-	AssertVectorRange(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
+	AssertVectorRange<i32, 2>(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
 
 	const glm::vec<2, int> v2 = rng.GetIVec2(0, 10);
-	AssertVectorRange(v2, 0, 10);
+	AssertVectorRange<i32, 2>(v2, 0, 10);
 
 	const auto v3 = rng.GetIVec2({0, 0}, {10, 10});
-	AssertVectorRange(v3, 0, 10);
+	AssertVectorRange<i32, 2>(v3, 0, 10);
 
 	EXPECT_THROW(rng.GetIVec2(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetIVec2({10, 10}, {0, 0}), std::invalid_argument);
@@ -146,13 +146,13 @@ TEST(RandomNumberGenerator, GetIVec3)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetIVec3();
-	AssertVectorRange(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
+	AssertVectorRange<i32, 3>(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
 
 	const auto v2 = rng.GetIVec3(0, 10);
-	AssertVectorRange(v2, 0, 10);
+	AssertVectorRange<i32, 3>(v2, 0, 10);
 
 	const auto v3 = rng.GetIVec3({0, 0, 0}, {10, 10, 10});
-	AssertVectorRange(v3, 0, 10);
+	AssertVectorRange<i32, 3>(v3, 0, 10);
 
 	EXPECT_THROW(rng.GetIVec3(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetIVec3({10, 10, 10}, {0, 0, 0}), std::invalid_argument);
@@ -163,13 +163,13 @@ TEST(RandomNumberGenerator, GetIVec4)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetVec4();
-	AssertVectorRange(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
+	AssertVectorRange<i32, 4>(v1, std::numeric_limits<i32>::min(), std::numeric_limits<i32>::max());
 
 	const auto v2 = rng.GetVec4(0, 10);
-	AssertVectorRange(v2, 0, 10);
+	AssertVectorRange<i32, 4>(v2, 0, 10);
 
 	const auto v3 = rng.GetVec4({0, 0, 0, 0}, {10, 10, 10, 10});
-	AssertVectorRange(v3, 0, 10);
+	AssertVectorRange<i32, 4>(v3, 0, 10);
 
 	EXPECT_THROW(rng.GetVec4(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetVec4({10, 10, 10, 10}, {0, 0, 0, 0}), std::invalid_argument);
@@ -180,13 +180,13 @@ TEST(RandomNumberGenerator, GetUVec2)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetUVec2();
-	AssertVectorRange(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
+	AssertVectorRange<u32, 2>(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
 
 	const auto v2 = rng.GetUVec2(0, 10);
-	AssertVectorRange(v2, 0u, 10u);
+	AssertVectorRange<u32, 2>(v2, 0u, 10u);
 
 	const auto v3 = rng.GetUVec2({0, 0}, {10, 10});
-	AssertVectorRange(v3, 0u, 10u);
+	AssertVectorRange<u32, 2>(v3, 0u, 10u);
 
 	EXPECT_THROW(rng.GetUVec2(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetUVec2({10, 10}, {0, 0}), std::invalid_argument);
@@ -197,13 +197,13 @@ TEST(RandomNumberGenerator, GetUVec3)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetUVec3();
-	AssertVectorRange(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
+	AssertVectorRange<u32, 3>(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
 
 	const auto v2 = rng.GetUVec3(0, 10);
-	AssertVectorRange(v2, 0u, 10u);
+	AssertVectorRange<u32, 3>(v2, 0u, 10u);
 
 	const auto v3 = rng.GetUVec3({0, 0, 0}, {10, 10, 10});
-	AssertVectorRange(v3, 0u, 10u);
+	AssertVectorRange<u32, 3>(v3, 0u, 10u);
 
 	EXPECT_THROW(rng.GetUVec3(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetUVec3({10, 10, 10}, {0, 0, 0}), std::invalid_argument);
@@ -214,13 +214,13 @@ TEST(RandomNumberGenerator, GetUVec4)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetUVec4();
-	AssertVectorRange(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
+	AssertVectorRange<u32, 4>(v1, std::numeric_limits<u32>::min(), std::numeric_limits<u32>::max());
 
 	const auto v2 = rng.GetUVec4(0, 10);
-	AssertVectorRange(v2, 0u, 10u);
+	AssertVectorRange<u32, 4>(v2, 0u, 10u);
 
 	const auto v3 = rng.GetUVec4({0, 0, 0, 0}, {10, 10, 10, 10});
-	AssertVectorRange(v3, 0u, 10u);
+	AssertVectorRange<u32, 4>(v3, 0u, 10u);
 
 	EXPECT_THROW(rng.GetUVec4(10, 0), std::invalid_argument);
 	EXPECT_THROW(rng.GetUVec4({10, 10, 10, 10}, {0, 0, 0, 0}), std::invalid_argument);
@@ -231,13 +231,13 @@ TEST(RandomNumberGenerator, GetFVec2)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetFVec2();
-	AssertVectorRange(v1, 0.0f, 1.0f);
+	AssertVectorRange<f32, 2>(v1, 0.0f, 1.0f);
 
 	const auto v2 = rng.GetFVec2(0.0f, 10.0f);
-	AssertVectorRange(v2, 0.0f, 10.0f);
+	AssertVectorRange<f32, 2>(v2, 0.0f, 10.0f);
 
 	const auto v3 = rng.GetFVec2({0.0f, 0.0f}, {10.0f, 10.0f});
-	AssertVectorRange(v3, 0.0f, 10.0f);
+	AssertVectorRange<f32, 2>(v3, 0.0f, 10.0f);
 
 	EXPECT_THROW(rng.GetFVec2(10.0f, 0.0f), std::invalid_argument);
 	EXPECT_THROW(rng.GetFVec2({10.0f, 10.0f}, {0.0f, 0.0f}), std::invalid_argument);
@@ -248,13 +248,13 @@ TEST(RandomNumberGenerator, GetFVec3)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetFVec3();
-	AssertVectorRange(v1, 0.0f, 1.0f);
+	AssertVectorRange<f32, 3>(v1, 0.0f, 1.0f);
 
 	const auto v2 = rng.GetFVec3(0.0f, 10.0f);
-	AssertVectorRange(v2, 0.0f, 10.0f);
+	AssertVectorRange<f32, 3>(v2, 0.0f, 10.0f);
 
 	const auto v3 = rng.GetFVec3({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
-	AssertVectorRange(v3, 0.0f, 10.0f);
+	AssertVectorRange<f32, 3>(v3, 0.0f, 10.0f);
 
 	EXPECT_THROW(rng.GetFVec3(10.0f, 0.0f), std::invalid_argument);
 	EXPECT_THROW(rng.GetFVec3({10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f}), std::invalid_argument);
@@ -265,13 +265,13 @@ TEST(RandomNumberGenerator, GetFVec4)
 	TGL::RandomNumberGenerator rng;
 
 	const auto v1 = rng.GetFVec4();
-	AssertVectorRange(v1, 0.0f, 1.0f);
+	AssertVectorRange<f32, 4>(v1, 0.0f, 1.0f);
 
 	const auto v2 = rng.GetFVec4(0.0f, 10.0f);
-	AssertVectorRange(v2, 0.0f, 10.0f);
+	AssertVectorRange<f32, 4>(v2, 0.0f, 10.0f);
 
 	const auto v3 = rng.GetFVec4({0.0f, 0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f, 10.0f});
-	AssertVectorRange(v3, 0.0f, 10.0f);
+	AssertVectorRange<f32, 4>(v3, 0.0f, 10.0f);
 
 	EXPECT_THROW(rng.GetFVec4(10.0f, 0.0f), std::invalid_argument);
 	EXPECT_THROW(rng.GetFVec4({10.0f, 10.0f, 10.0f, 10.0f}, {0.0f, 0.0f, 0.0f, 0.0f}), std::invalid_argument);
