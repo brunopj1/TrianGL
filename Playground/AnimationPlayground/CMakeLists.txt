@@ -25,16 +25,6 @@ target_link_libraries(AnimationPlayground PRIVATE Engine)
 
 # Copy assets to the binary directory
 
-add_custom_command(
-        TARGET AnimationPlayground
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/Assets" "${CMAKE_BINARY_DIR}/Assets"
-        COMMENT "Copying the game assets to build directory..."
-)
-
-# Copy assets to the binary directory
-
 get_target_property(ENGINE_SOURCE_DIR Engine SOURCE_DIR)
 
 add_custom_command(
