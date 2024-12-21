@@ -1,0 +1,15 @@
+﻿buildType:
+  default: debug
+  choices:
+    debug:
+      short: Debug
+      long: Debug build with debug information.
+      buildType: Debug
+    release:
+      short: Release
+      long: Release build with optimizations.
+      buildType: Release
+    testing:
+      short: Testing
+      long: Testing build with coverage.
+      buildType: Testing
