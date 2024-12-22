@@ -51,3 +51,10 @@ jobs:
           cd cmake-build-testing
           cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Testing -G Ninja ..
           cmake --build . --config Testing
+          
+      # Check the test coverage
+      - name: Check Test Coverage
+        uses: threeal/gcovr-action@v1.1.0
+        with:
+          gcov-executable: llvm-cov gcov
+          fail-under-line: 90
