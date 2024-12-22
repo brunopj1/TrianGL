@@ -54,7 +54,9 @@ jobs:
       
       # Running the unit tests
       - name: Configure and Build (Testing)
-        run: ./cmake-build-testing/Tests/Tests
+        run: |
+          cd cmake-build-testing/Tests/
+          ./Tests
       
       # Check the test coverage
       - name: Check Test Coverage
