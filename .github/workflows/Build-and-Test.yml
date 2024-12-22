@@ -31,6 +31,7 @@ jobs:
       # Build project
       - name: Configure and Build (Debug)
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B cmake-build-debug
+          mkdir cmake-build-debug
           cd cmake-build-debug
-          cmake --build build
+          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+          cmake --build . --config Debug
