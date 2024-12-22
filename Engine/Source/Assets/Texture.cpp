@@ -1,6 +1,6 @@
 ﻿#include "Core/DataTypes.h"
 #include "Core/Services/Backends/RenderBackend.h"
-#include <ASsets/Texture.h>
+#include <Assets/Texture.h>
 #include <Core/Services/Private/AssetManager.h>
 #include <Exceptions/Common/FileNotFoundException.h>
 #include <glm/gtc/matrix_transform.hpp>

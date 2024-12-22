@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Assets/Animation.h"
 #include "Assets/AnimationSprite.h"
 #include "Game/Component.h"
 #include "Memory/SharedPtr.h"

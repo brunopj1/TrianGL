@@ -20,6 +20,18 @@ For a detailed list of implemented and upcoming features check the [FEATURES.md]
 - Explain the existing entities and components (Camera, etc...)
 - Mention the Util classes (Random only for now)
 
+## Github Readme
+
+- Mention how to build using cmake
+- Mention that for now multi-config generators are not supported
+
+## CMake
+
+- Support for Visual Studio
+- Support for other multi config generators
+- Try linking libraries as shared libs
+- Check other cmake common practices (install, clean, etc)
+
 ## Modern C++
 
 - Use C++20 modules instead of regular headers and source files
