@@ -2,6 +2,8 @@
 
 set_target_properties(SoLoud PROPERTIES LINKER_LANGUAGE CXX)
 
+target_compile_options(SoLoud PRIVATE -Wno-unused-value)
+
 # Include directories
 
 target_include_directories(SoLoud PUBLIC
@@ -101,3 +103,5 @@ target_sources(SoLoud PRIVATE
 # Macro Definitions
 
 target_compile_definitions(SoLoud PRIVATE WITH_MINIAUDIO)
+
+target_compile_definitions(SoLoud PRIVATE _CRT_SECURE_NO_WARNINGS)

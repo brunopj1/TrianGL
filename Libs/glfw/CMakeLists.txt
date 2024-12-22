@@ -70,3 +70,5 @@ if (WIN32)
 elseif (UNIX)
     target_compile_definitions(GLFW PRIVATE _GLFW_X11)
 endif ()
+
+target_compile_definitions(GLFW PRIVATE _CRT_SECURE_NO_WARNINGS)
