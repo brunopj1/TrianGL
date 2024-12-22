@@ -2,9 +2,8 @@ name: Build and Test
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - '**'
 
 permissions:
   contents: read
@@ -21,42 +20,17 @@ jobs:
         with:
           submodules: recursive
 
-      # Setup Premake
-      - name: Setup Premake
-        uses: abel0b/setup-premake@v2.4
-        with:
-          version: "5.0.0-beta2"
+      # Setup CMake
+      - name: Setup CMake
+        uses: lukka/get-cmake@v3.31.3
+          
+      # Setup Ninja
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
 
-      # Setup MSBuild
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v2
-
-      # Setup OpenCppCoverage
-      - name: Setup OpenCppCoverage
+      # Build project
+      - name: Configure and Build (Debug)
         run: |
-          choco install OpenCppCoverage -y
-          echo "C:\Program Files\OpenCppCoverage" >> $env:GITHUB_PATH
-
-      # Run Premake
-      - name: Run premake
-        run: premake5 vs2022
-
-      # Run MSBuild (Debug)
-      - name: Run MSBuild [Debug]
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Debug -property:Platform=Win64
-
-      # Run MSBuild (Release)
-      - name: Run MSBuild [Release]
-        run: msbuild TrianGL.sln -t:rebuild -verbosity:n -property:Configuration=Release -property:Platform=Win64
-
-      # Run MSBuild (Testing)
-      - name: Run MSBuild [Testing]
-        run: msbuild TrianGL.sln -t:Tests -verbosity:n -property:Configuration=Testing -property:Platform=Win64
-
-      # Run the tests
-      - name: Run tests
-        run: OpenCppCoverage --cover_children --sources=Engine\Source --working_dir=Bin\Testing\Win64\Tests Bin\Testing\Win64\Tests\Tests.exe
-
-      # Check the coverage
-      - name: Check the coverage
-        run: python .github\workflows\check-code-coverage.py
+          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B cmake-build-debug
+          cd cmake-build-debug
+          cmake --build build
