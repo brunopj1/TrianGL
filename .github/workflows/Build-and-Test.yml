@@ -28,23 +28,23 @@ jobs:
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
 
-      ## Build project [Debug]
-      #- name: Configure and Build (Debug)
-      #  run: |
-      #    mkdir cmake-build-debug
-      #    cd cmake-build-debug
-      #    cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-      #    cmake --build . --config Debug
+      # Build project (Debug)
+      - name: Configure and Build (Debug)
+        run: |
+          mkdir cmake-build-debug
+          cd cmake-build-debug
+          cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+          cmake --build . --config Debug
 
-      ## Build project [Release]
-      #- name: Configure and Build (Release)
-      #  run: |
-      #    mkdir cmake-build-release
-      #    cd cmake-build-release
-      #    cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -G Ninja ..
-      #    cmake --build . --config Release
+      # Build project (Release)
+      - name: Configure and Build (Release)
+        run: |
+          mkdir cmake-build-release
+          cd cmake-build-release
+          cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+          cmake --build . --config Release
 
-      # Build project [Testing]
+      # Build project (Testing)
       - name: Configure and Build (Testing)
         run: |
           mkdir cmake-build-testing
