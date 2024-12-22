@@ -4,7 +4,7 @@
 
 - [X] Github Actions pipeline (build + test)
 - [X] Unit tests project
-- [ ] Unit tests coverage
+- [X] Unit tests coverage
 - [X] Github wiki
 - [ ] Documentation
 - [X] Clang Format
