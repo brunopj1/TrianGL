@@ -30,3 +30,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 # Add the glm CMakeLists
 
 add_subdirectory(glm)
+
+# Macro Definitions
+
+target_compile_definitions(glm PUBLIC GLM_ENABLE_EXPERIMENTAL)
