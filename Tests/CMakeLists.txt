@@ -43,7 +43,7 @@ target_sources(Tests PRIVATE
 # Dependencies
 
 target_link_libraries(Tests PRIVATE Engine)
-target_link_libraries(Tests PRIVATE googletest)
+target_link_libraries(Tests PRIVATE gtest)
 
 # Copy assets to the binary directory
 

@@ -8,6 +8,10 @@ project(TrianGL VERSION 1.0 LANGUAGES C CXX)
 
 set(CMAKE_CONFIGURATION_TYPES Debug Release Testing CACHE STRING "Available configurations" FORCE)
 
+# Library type
+
+set(BUILD_SHARED_LIBS OFF)
+
 # C++ Standard
 
 set(CMAKE_CXX_STANDARD 20)
