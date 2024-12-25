@@ -16,8 +16,14 @@ Currently, **TrianGL** only supports Windows. Support for other platforms may be
 
 ## Installation
 
-When cloning this repository, make sure to use the `--recurse-submodules` flag to also clone the dependencies.
-If you have already cloned the repository without this flag, use the command `git submodule update --init --recursive` to clone the missing dependencies.
+In order to install **TrianGL**, you only need to clone the repository and run the `Setup.py` Python script.
+After doing so, you can open the project in any IDE that supports CMake.
+
+```bash
+git clone https://github.com/brunopj1/TrianGL.git
+cd TrianGL
+python Setup.py
+```
 
 ## Tutorials
 

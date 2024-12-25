@@ -1,10 +1,10 @@
-﻿add_library(IMGUI STATIC)
+﻿add_library(imgui STATIC)
 
-set_target_properties(IMGUI PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(imgui PROPERTIES LINKER_LANGUAGE CXX)
 
 # Include directories
 
-target_include_directories(IMGUI PUBLIC
+target_include_directories(imgui PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends/
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/misc/cpp/
@@ -12,7 +12,7 @@ target_include_directories(IMGUI PUBLIC
 
 # Source files
 
-target_sources(IMGUI PRIVATE
+target_sources(imgui PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imconfig.h
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_demo.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/imgui/imgui_draw.cpp
@@ -32,17 +32,11 @@ target_sources(IMGUI PRIVATE
 
 # Macro Definitions
 
-target_compile_definitions(IMGUI PUBLIC IMGUI_DEFINE_MATH_OPERATORS)
+target_compile_definitions(imgui PUBLIC IMGUI_DEFINE_MATH_OPERATORS)
 
-target_compile_definitions(IMGUI PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD)
-
-if (WIN32)
-    target_compile_definitions(IMGUI PRIVATE _IMGUI_WIN32)
-elseif (UNIX)
-    target_compile_definitions(IMGUI PRIVATE _IMGUI_X11)
-endif ()
+target_compile_definitions(imgui PRIVATE IMGUI_IMPL_OPENGL_LOADER_GLAD)
 
 # Dependencies
 
-target_link_libraries(IMGUI PRIVATE GLAD)
-target_link_libraries(IMGUI PRIVATE GLFW)
+target_link_libraries(imgui PRIVATE glad)
+target_link_libraries(imgui PRIVATE glfw)

@@ -111,16 +111,16 @@ target_sources(Engine PRIVATE
 
 # Dependencies
 
-target_link_libraries(Engine PUBLIC GLM)
+target_link_libraries(Engine PUBLIC glm)
 
-target_link_libraries(Engine PRIVATE STB-Image)
+target_link_libraries(Engine PRIVATE stb_image)
 
 if (NOT CMAKE_BUILD_TYPE STREQUAL "Testing")
-    target_link_libraries(Engine PRIVATE GLAD)
-    target_link_libraries(Engine PRIVATE GLFW)
-    target_link_libraries(Engine PRIVATE SoLoud)
+    target_link_libraries(Engine PRIVATE glad)
+    target_link_libraries(Engine PRIVATE glfw)
+    target_link_libraries(Engine PRIVATE soloud)
 endif ()
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_link_libraries(Engine PUBLIC IMGUI)
+    target_link_libraries(Engine PUBLIC imgui)
 endif ()

@@ -1,20 +1,20 @@
-﻿add_library(Google-Test STATIC)
+﻿add_library(googletest STATIC)
 
-set_target_properties(Google-Test PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(googletest PROPERTIES LINKER_LANGUAGE CXX)
 
 # Include directories
 
-target_include_directories(Google-Test PUBLIC
+target_include_directories(googletest PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/include/
 )
 
-target_include_directories(Google-Test PRIVATE
+target_include_directories(googletest PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/
 )
 
 # Source files
 
-target_sources(Google-Test PRIVATE
+target_sources(googletest PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/include/gtest/gtest-assertion-result.h
         ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/include/gtest/gtest-death-test.h
         ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/include/gtest/gtest-matchers.h

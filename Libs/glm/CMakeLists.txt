@@ -1,16 +1,16 @@
-﻿add_library(GLM STATIC)
+﻿add_library(glm STATIC)
 
-set_target_properties(GLM PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(glm PROPERTIES LINKER_LANGUAGE CXX)
 
 # Include directories
 
-target_include_directories(GLM PUBLIC
+target_include_directories(glm PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/glm/
 )
 
 # Source files
 
-target_sources(GLM PRIVATE
+target_sources(glm PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/glm/glm/common.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/glm/glm/detail/_features.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/glm/glm/detail/_fixes.hpp
@@ -432,11 +432,4 @@ target_sources(GLM PRIVATE
 
 # Macro Definitions
 
-target_compile_definitions(GLM PUBLIC GLM_ENABLE_EXPERIMENTAL)
-
-if (WIN32)
-    target_compile_definitions(GLM PRIVATE _GLM_WIN32)
-elseif (UNIX)
-    target_compile_definitions(GLM PRIVATE _GLM_X11)
-endif ()
-
+target_compile_definitions(glm PUBLIC GLM_ENABLE_EXPERIMENTAL)

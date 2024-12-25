@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.15)
 
 project(TrianGL VERSION 1.0 LANGUAGES C CXX)
 
+FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw.git
+        GIT_TAG latest # Replace with a specific tag or commit for stability
+)
+
 # Configurations
 
 set(CMAKE_CONFIGURATION_TYPES Debug Release Testing CACHE STRING "Available configurations" FORCE)

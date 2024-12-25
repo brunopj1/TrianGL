@@ -1,18 +1,18 @@
-﻿add_library(SoLoud STATIC)
+﻿add_library(soloud STATIC)
 
-set_target_properties(SoLoud PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(soloud PROPERTIES LINKER_LANGUAGE CXX)
 
-target_compile_options(SoLoud PRIVATE -Wno-unused-value)
+target_compile_options(soloud PRIVATE -Wno-unused-value)
 
 # Include directories
 
-target_include_directories(SoLoud PUBLIC
+target_include_directories(soloud PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/soloud/include/
 )
 
 # Source files
 
-target_sources(SoLoud PRIVATE
+target_sources(soloud PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/soloud/include/soloud.h
         ${CMAKE_CURRENT_SOURCE_DIR}/soloud/include/soloud_audiosource.h
         ${CMAKE_CURRENT_SOURCE_DIR}/soloud/include/soloud_bassboostfilter.h
@@ -102,6 +102,6 @@ target_sources(SoLoud PRIVATE
 
 # Macro Definitions
 
-target_compile_definitions(SoLoud PRIVATE WITH_MINIAUDIO)
+target_compile_definitions(soloud PRIVATE WITH_MINIAUDIO)
 
-target_compile_definitions(SoLoud PRIVATE _CRT_SECURE_NO_WARNINGS)
+target_compile_definitions(soloud PRIVATE _CRT_SECURE_NO_WARNINGS)
