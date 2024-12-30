@@ -11,6 +11,30 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 directories = ["Engine", "Games", "Playground", "Tests"]
 extensions = ("cpp", "hpp", "h")
 
+# Pre-compiling regex
+
+addTargetRegex = re.compile(r"add_(?:executable|library)\s*\(([^\)]*)\)")
+targetSourcesRegex = re.compile(r"target_sources\s*\(([^\)]*)\)")
+pathSplitRegex = re.compile(r'/|\\+')
+
+# Sorting functions
+
+def sort_func(s1 : str, s2 : str):
+    
+    comps1 = pathSplitRegex.split(s1)
+    len1 = len(comps1)
+
+    comps2 = pathSplitRegex.split(s2)
+    len2 = len(comps2)
+
+    for i in range(min(len1, len2) - 1):
+        if comps1[i] < comps2[i]:
+            return -1
+        if comps1[i] > comps2[i]:
+            return 1
+
+    return len2 - len1
+
 # Formatting functions
 
 def formatCppFile(path : str):
@@ -63,44 +87,16 @@ def formatCmakeFile(path : str):
     with open(path, "w") as file:
         content = file.write(content)
 
-# Format all cmake files
+# Run formatting
 
-splitToken = re.compile(r'/|\\+')
-
-def sort_func(s1 : str, s2 : str):
-    comps1 = splitToken.split(s1)
-    len1 = len(comps1)
-
-    comps2 = splitToken.split(s2)
-    len2 = len(comps2)
-
-    for i in range(min(len1, len2) - 1):
-        if comps1[i] < comps2[i]:
-            return -1
-        if comps1[i] > comps2[i]:
-            return 1
-
-    return len2 - len1
-
-addTargetRegex = re.compile(r"add_(?:executable|library)\s*\(([^\)]*)\)")
-targetSourcesRegex = re.compile(r"target_sources\s*\(([^\)]*)\)")
-
-for dir in directories:
-    for root, dirs, files in os.walk(dir):
-        for file in files:
-            if file == "CMakeLists.txt":
+if __name__ == "__main__":
+    for dir in directories:
+        for root, dirs, files in os.walk(dir):
+            for file in files:
                 fullpath = os.path.join(root, file)
-                print(f"Formatting file: {fullpath}")
-
-# Format all source files
-
-for dir in directories:
-    for root, dirs, files in os.walk(dir):
-        for file in files:
-            fullpath = os.path.join(root, file)
-            if file == "CMakeLists.txt":
-                print(f"Formatting file: {fullpath}")
-                formatCmakeFile(fullpath)
-            elif file.endswith(extensions):
-                print(f"Formatting file: {fullpath}")
-                formatCppFile(fullpath)
+                if file == "CMakeLists.txt":
+                    print(f"Formatting file: {fullpath}")
+                    formatCmakeFile(fullpath)
+                elif file.endswith(extensions):
+                    print(f"Formatting file: {fullpath}")
+                    formatCppFile(fullpath)
