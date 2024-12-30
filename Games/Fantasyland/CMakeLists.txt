@@ -9,14 +9,14 @@ target_include_directories(Fantasyland PUBLIC
 # Source files
 
 target_sources(Fantasyland PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Characters/CharacterDirection.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Characters/Player/Player.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Characters/Player/Player.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Characters/CharacterDirection.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/GameMode/FantasylandGameMode.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/GameMode/FantasylandGameMode.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Services/AssetCollection.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Services/AssetCollection.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
 )
         
 # Dependencies

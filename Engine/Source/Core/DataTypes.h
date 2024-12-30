@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include <limits>
 #include <climits>
 #include <cstdint>
+#include <limits>
 
 // NOLINTBEGIN(CppInconsistentNaming)
 

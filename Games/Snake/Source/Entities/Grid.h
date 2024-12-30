@@ -2,8 +2,8 @@
 
 #include "Game/Entity.h"
 #include "Memory/SharedPtr.h"
-#include "Util/RandomNumberGenerator.h"
 #include "Rendering/SpriteRenderer.h"
+#include "Util/RandomNumberGenerator.h"
 #include <optional>
 
 class Grid final : public TGL::Entity

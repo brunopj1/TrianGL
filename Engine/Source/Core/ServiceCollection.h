@@ -98,7 +98,7 @@ namespace TGL
 			else
 			{
 				// TODO this static assert is generating compile errors after updating Visual Studio
-				//static_assert(false, "Invalid service type");
+				// static_assert(false, "Invalid service type");
 			}
 		}
 	};

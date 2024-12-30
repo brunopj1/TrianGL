@@ -3,11 +3,11 @@
 #include "Assets/Internal/Quad.h"
 #include "Assets/MaterialUniforms.h"
 #include "Core/Internal/Macros/AssetFactoryMacros.h"
+#include "Exceptions/Assets/InvalidMaterialUniformException.h"
 #include <Assets/Internal/Shader.h>
 #include <Core/Internal/Concepts/MaterialConcepts.h>
 #include <Core/Service.h>
 #include <Memory/SharedPtr.h>
-#include "Exceptions/Assets/InvalidMaterialUniformException.h"
 #include <string>
 #include <unordered_map>
 

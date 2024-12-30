@@ -34,7 +34,7 @@ namespace TGL
 		SAMPLER2D = 0x8B5E, // GL_SAMPLER_2D
 		INVALID   = 0 // Used when an attribute or uniform does not exist
 	};
-	
+
 	// clang-format on
 	// NOLINTEND(CppInconsistentNaming)
 

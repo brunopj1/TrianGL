@@ -14,7 +14,7 @@ namespace TGL
 {
 	// Forward declarations
 	class Renderable;
-	
+
 	class EntityManager : public Service<EntityManager>
 	{
 	private:

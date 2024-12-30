@@ -24,9 +24,9 @@ target_sources(Snake PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/GameMode/RenderingOrder.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/GameMode/SnakeGameMode.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/GameMode/SnakeGameMode.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Materials/GrassMaterial.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Materials/GrassMaterial.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
 )
         
 # Dependencies

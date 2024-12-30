@@ -14,7 +14,7 @@ namespace TGL
 {
 	// Forward declarations
 	class AudioPlayer;
-	
+
 	class Audio final
 	{
 	private:

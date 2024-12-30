@@ -74,7 +74,7 @@ namespace TGL
 	using IVec3Uniform = MaterialUniformImpl<glm::ivec3, ShaderDataType::IVEC3>;
 
 	using IVec4Uniform = MaterialUniformImpl<glm::ivec4, ShaderDataType::IVEC4>;
-	
+
 	using UVec2Uniform = MaterialUniformImpl<glm::uvec2, ShaderDataType::UVEC2>;
 
 	using UVec3Uniform = MaterialUniformImpl<glm::uvec3, ShaderDataType::UVEC3>;

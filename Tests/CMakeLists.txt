@@ -9,12 +9,11 @@ target_include_directories(Tests PUBLIC
 # Source files
 
 target_sources(Tests PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Internal/Shader.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Internal/Sprite.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Animation.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/AnimationSprite.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Audio.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Internal/Shader.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Internal/Sprite.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Material.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/MaterialUniforms.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Assets/Texture.cpp
@@ -23,11 +22,11 @@ target_sources(Tests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Core/Services/Public/InputSystem.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Core/Services/Public/Window.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Events/WindowEvents.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/Internal/Renderable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/Component.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/Entity.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/GameMode.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/GameObject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/Internal/Renderable.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Game/Transform.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/General/Camera.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Memory/LazyPtr.cpp
@@ -38,6 +37,7 @@ target_sources(Tests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Rendering/SpriteRenderer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Tests/Util/RandomNumberGenerator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Util/GameTestAbstractions.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Main.cpp
 )
         
 # Dependencies
