@@ -32,8 +32,18 @@ def sort_func(s1 : str, s2 : str):
             return -1
         if comps1[i] > comps2[i]:
             return 1
+        
+    if len1 != len2:
+        return len2 - len1
+    
+    i = min(len1, len2) - 1
 
-    return len2 - len1
+    if comps1[i] < comps2[i]:
+        return -1
+    if comps1[i] > comps2[i]:
+        return 1
+    else:
+        return 0
 
 # Formatting functions
 
@@ -72,13 +82,17 @@ def formatCmakeFile(path : str):
     components = res.group(1).split()
     files.extend(components[2:])
 
+    for idx, file in enumerate(files):
+        if not file.startswith("${CMAKE_CURRENT_SOURCE_DIR}/"):
+            files[idx] = "${CMAKE_CURRENT_SOURCE_DIR}/" + file
+
+    files = list(set(files))
+
     targetSourcesStatement = "target_sources("
     targetSourcesStatement += components[0] + " " + components[1] + "\n"
+
     for file in sorted(files, key=cmp_to_key(sort_func)):
-        targetSourcesStatement += " " * 8
-        if not file.startswith("${CMAKE_CURRENT_SOURCE_DIR}/"):
-            targetSourcesStatement += "${CMAKE_CURRENT_SOURCE_DIR}/"
-        targetSourcesStatement += file + "\n"
+        targetSourcesStatement += " " * 8 + file + "\n"
     targetSourcesStatement += ")"
 
     content = targetSourcesRegex.sub(targetSourcesStatement, content, 1)
