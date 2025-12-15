@@ -64,7 +64,6 @@ target_sources(Engine PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/Application.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/DataTypes.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/InputCodes.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/MemoryLeakDetection.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/Service.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Core/ServiceCollection.h
         ${CMAKE_CURRENT_SOURCE_DIR}/Source/Events/WindowEvents.h

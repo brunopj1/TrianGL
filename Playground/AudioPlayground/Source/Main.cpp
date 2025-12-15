@@ -1,5 +1,4 @@
 #include "Core/Application.h"
-#include "Core/MemoryLeakDetection.h"
 #include <GameMode/AudioPlaygroundGameMode.h>
 
 i32 main()
@@ -9,7 +8,4 @@ i32 main()
 	config.Vsync = true;
 
 	TGL::Application::Run<AudioPlaygroundGameMode>(config);
-
-	// Detect memory leaks (Will only run in Debug configurations)
-	TGL::DetectMemoryLeaks();
 }

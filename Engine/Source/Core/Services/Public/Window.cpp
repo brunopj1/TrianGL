@@ -159,7 +159,7 @@ GLFWwindow* Window::Init(std::string title, const glm::ivec2 position, const glm
 	inputBackend.SetWindowMaximizeCallback(m_WindowPtr, MaximizeCallback);
 	inputBackend.SetWindowMinimizeCallback(m_WindowPtr, MinimizeCallback);
 
-	SetPosition(m_Position);
+	// SetPosition(m_Position);
 
 	if (fullscreen)
 	{

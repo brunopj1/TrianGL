@@ -20,7 +20,7 @@
 
 using namespace TGL;
 
-// NOLINTBEGIN(CppMemberFunctionMayBeStatic)
+// NOLINTBEGIN(CppMemberFunctionMayBeStatic, *-convert-member-functions-to-static)
 
 void RenderBackend::SetErrorCallback(void (*func)(i32, const char*))
 {
@@ -541,6 +541,6 @@ void RenderBackend::SetUniformMatrix4f(const i32 location, const glm::mat4& valu
 }
 
 // NOLINTEND(CppInconsistentNaming)
-// NOLINTEND(CppMemberFunctionMayBeStatic)
+// NOLINTEND(CppMemberFunctionMayBeStatic, *-convert-member-functions-to-static)
 
 #endif

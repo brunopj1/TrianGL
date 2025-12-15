@@ -13,7 +13,7 @@
 ## Engine
 
 - [X] Windows support
-- [ ] Linux support
+- [X] Linux support
 - [ ] MacOS support
 - [ ] WebGL support
 

@@ -12,7 +12,7 @@ If you find any bugs or have any suggestions feel free to open an issue.
 
 ## Platform Support
 
-Currently, **TrianGL** only supports Windows. Support for other platforms may be added in the future.
+**TrianGL** runs on both **Windows** and **Linux**.
 
 ## Installation
 
@@ -24,6 +24,8 @@ git clone https://github.com/brunopj1/TrianGL.git
 cd TrianGL
 python Setup.py
 ```
+
+If you have any issues running the engine, please check the [GLFW installation guide](https://www.glfw.org/docs/latest/compile.html), as you may be missing some dependencies required by GLFW.
 
 ## Tutorials
 
