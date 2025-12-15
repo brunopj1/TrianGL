@@ -28,11 +28,11 @@ jobs:
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
 
-      # Setup Clang
-      - name: Setup Clang
-        uses: KyleMayes/install-llvm-action@v2
-        with:
-          version: '20'
+      # Setup Clang and LLVM
+      - name: Setup Clang and LLVM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y llvm clang lld
 
       # Setup System Dependencies
       - name: Setup System Dependencies
