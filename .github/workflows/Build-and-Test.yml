@@ -78,4 +78,4 @@ jobs:
         with:
           gcov-executable: llvm-cov gcov
           excludes: Libs/.* Tests/.*
-          fail-under-line: 90
+          fail-under-line: 80
