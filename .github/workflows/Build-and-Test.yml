@@ -32,7 +32,7 @@ jobs:
       - name: Setup Clang
         uses: KyleMayes/install-llvm-action@v2
         with:
-          version: 'latest'
+          version: '20.0.0'
 
       # Setup System Dependencies
       - name: Setup System Dependencies
